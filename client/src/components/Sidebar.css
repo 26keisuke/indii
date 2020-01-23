@@ -1,0 +1,68 @@
+
+/*======side bar========*/
+
+@media only screen and (max-width: 670px) {
+    .side-bar-list{
+        display: none !important;
+    }
+}
+
+.side-bar-list{
+    margin: 0px;
+    padding-top:20px;
+    padding-left:30px;
+    width:168px;
+    height:100%;
+    top:56px;
+    bottom:0px;
+    position: fixed;
+    border-right: 1px solid #d2d2d2;
+    z-index:1;
+}
+
+
+.side-bar-row{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin-top: 15px;
+}
+
+.side-bar-row p{
+    padding-left:15px;
+    cursor: pointer;
+    margin-top:15px;
+}
+
+.side-bar-img:hover{
+    cursor: pointer;
+}
+
+.side-bar-img{
+    width:20px;
+    height:20px;
+    margin-top:12px;
+}
+
+.checked{
+    background-color: #9EAEE5;
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    left: 17px;
+    top:4px;
+    border-radius: 4px;
+}
+
+.selected{
+
+}
+
+.unselected{
+    color: #B3B3C8;
+}
+
+
+.hide {
+    display: none !important;
+}

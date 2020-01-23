@@ -1,0 +1,280 @@
+.search-res-space{
+    height: 20px;
+    background-color: #F9F9F9;
+    border-right: 1px solid #d2d2d2;
+}
+
+/*=== topic ====*/
+
+.search-res-topic{
+    display: flex;
+    flex-direction: row;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d2d2d2;
+    border-right: 1px solid #d2d2d2;
+    align-items: center;
+    height:135px;
+}
+
+.search-res-topic-right{
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0px;
+    padding-right:15px;
+}
+
+.search-res-topic-img{
+    height: 110px;
+    width:110px;
+    object-fit: contain;
+    padding: 0px 10px;
+    flex-shrink:0;
+}
+
+.search-res-topic-title{
+    color: #333333;
+    font-size:17px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.search-res-topic-content{
+    font-size:12px;
+    margin-bottom: 7px;
+    cursor: pointer;
+}
+
+.search-res-topic-likes{
+    color: #5a5a5a;
+    font-size: 13px;
+}
+
+/*=== post ====*/
+
+.search-res-post{
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #d2d2d2;
+    border-right: 1px solid #d2d2d2;
+    height: 123px;
+    background-color: #ffffff;
+}
+
+.search-res-post-content{
+    font-size: 12px;
+    color: #1c1c1c;
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+
+/*=== talk ===*/
+
+.search-result-talk{
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-right: 1px solid #d2d2d2;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.search-result-talk-top{
+    display: flex;
+    flex-direction: row;
+}
+
+.search-result-talk-topic{
+    font-size: 13px;
+    color: #767676;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.search-result-talk-date{
+    color: #737373;
+}
+
+.search-result-talk-tag{
+    position: absolute;
+    width:66px;
+    height:22px;
+    border-radius: 3px;
+    background-color: #636480;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right:10px;
+}
+
+.search-result-talk-tag p {
+    color: #ffffff;
+    margin-top:-3px;
+}
+
+.search-result-talk-title{
+    font-size: 17px;
+    color: #1C1C1C;
+    margin: 5px 0px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search-result-talk-content{
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+
+.search-result-talk-bottom{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.search-result-talk-star{
+    width:15px;
+    height:15px;
+    margin-right: 6px;
+}
+
+.search-result-talk-comment{
+    width:14px;
+    height:14px;
+    margin-left: 30px;
+    margin-right: 6px;
+}
+
+/*== search filter ==*/
+
+.search-filter{
+    border-bottom: 1px solid #d2d2d2;
+    border-left: 1px solid #d2d2d2;
+    border-right: 1px solid #d2d2d2;
+    padding: 30px;
+    margin-bottom: 40px;
+}
+
+.search-filter div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px 0px;
+}
+
+.search-filter input{
+    cursor: pointer;
+}
+
+.search-filter-sub{
+    margin-top:35px;
+}
+
+.search-filter-title {
+    color: #1c1c1c;
+    font-size:14px;
+}
+
+.search-filter-row{
+    color: #3C3C3C;
+}
+
+
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+}
+
+/*== people ===*/
+
+.search-people{
+    display: flex;
+    flex-direction: row;
+    padding: 10px 10px;
+    background-color: #ffffff;
+    border-right:1px solid #d2d2d2;
+    border-left:1px solid #d2d2d2;
+    border-bottom:1px solid #d2d2d2;
+    height:100px;
+}
+
+.search-people-follow{
+    height: 19px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border:1px solid #636480;
+    padding: 2px 10px;
+    margin-right:0px;
+    border-radius: 20px;
+    align-self: center;
+    margin-left:10px;
+    cursor: pointer;
+}
+
+.search-people-follow-icon{
+    width: 12px;
+    height: 12px;
+    margin-right:6px;
+}
+
+.search-people-follow p{
+    font-size: 11px;
+    color: #636480;
+}
+
+
+.search-people-intro{
+    font-size: 11px;
+}
+
+/*== filter button (from https://codepen.io/manabox/pen/raQmpL)===*/
+
+[type="radio"]:checked + label,
+[type="radio"]:not(:checked) + label
+{
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    display: inline-block;
+    color: #666;
+}
+[type="radio"]:checked + label:before,
+[type="radio"]:not(:checked) + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    background: #fff;
+}
+[type="radio"]:checked + label:after,
+[type="radio"]:not(:checked) + label:after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: #4CD964;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+[type="radio"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+[type="radio"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}

@@ -1,0 +1,57 @@
+.notif{
+    height: 50px;
+    position: relative;
+    padding: 15px 70px;
+    border-right: 1px solid #d2d2d2;
+    border-bottom: 1px solid #d2d2d2;
+    background-color: #ffffff;
+}
+
+.notif-people-img{
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+    object-fit: cover;
+    flex-shrink: 0;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.notif-people-name{
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.notif-people-name span{
+    font-weight: bold;
+}
+
+.notif-people-date{
+    color: #747474;
+    font-size: 12px;
+}
+
+.notif-profile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.notif-unread{
+    position: absolute;
+    width:10px;
+    height:10px;
+    background-color: #9EAEE5;
+    border-radius: 100%;
+    left:30px;
+    top:35px;
+}
+
+.notif-people-check{
+    width: 20px;
+    height: 22px;
+    position: absolute;
+    right:30px;
+    top:30px;
+    cursor: pointer;
+}
