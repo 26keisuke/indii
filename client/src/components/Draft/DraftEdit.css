@@ -1,0 +1,92 @@
+.draft-edit{
+    height: 100%;
+}
+
+.draft-edit-header{
+    position: absolute;
+    height:30px;
+    top:40px;
+    width: 100%;
+    left: -1px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d2d2d2;
+    border-right: 1px solid #d2d2d2;
+    display: flex;
+    justify-content: center;
+}
+
+.draft-edit-navi{
+    display: flex;
+    flex-direction: row;
+}
+
+.draft-edit-navi p{
+    font-size: 10px;
+    color: #767676;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.draft-edit-wrapper{
+    position: relative;
+}
+
+.draft-edit-title{
+    font-size: 19px;
+    color: #1C1C1C;
+    font-weight: bold;
+}
+
+.draft-edit-note{
+    position: absolute;
+    font-size: 10px;
+    color: #767676;
+    right: -200px;
+    bottom: 9px;
+}
+
+/*== draft area ==*/
+
+.draft-area-tools{
+    margin-top: 29px;
+    padding-left:15px;
+    padding-right: 15px;
+    border-right: 1px solid #d2d2d2;
+    display: flex;
+    justify-content: space-around;
+}
+
+.draft-area-textarea{
+    margin-left: -1px;
+    border: 1px solid #d2d2d2;
+    border-top: none;
+    background-color: rgba(233, 233, 238, 0.15);
+    padding: 20px;
+    font-size: 13px;
+    height: 700px;
+    overflow: scroll;
+}
+
+.draft-area-textarea a{
+    text-decoration: underline !important;
+    color: #0000FF !important;
+}
+
+/*== draft right ==*/
+
+.draft-right-wrapper .draft{
+    margin-left: 0px !important;
+}
+
+.draft-right-wrapper .draft-left-title{
+    font-size: 17px !important;
+}
+
+.draft-right-wrapper .draft-right{
+    width: 70px;
+    height: 70px;
+}
+
+.draft-right-wrapper .draft-left-content{
+    font-size: 10px;
+}

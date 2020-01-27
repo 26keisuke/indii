@@ -1,23 +1,33 @@
 import React, { Component } from "react"
 
 import sample from "../../images/sample0.jpg"
-import follow from "../../images/add.png"
+import { Link } from "react-router-dom"
+
+import PeopleFollow from "../PeopleFollow"
 
 class SearchResultPeople extends Component {
+
+    constructor(props){
+        super(props)
+    }
+
     render() {
         return (
-            <div className="search-people">
-                <img src={sample} className="people-img"/>
-                <div className="people-middle">
-                    <p className="people-name">飯塚　啓介</p>
-                    <p className="people-job">Chief株式会社 CEO</p>
-                    <p className="search-people-intro">2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなど...</p>
+            <Link to={"/profile/" + this.props.id}>
+                <div className="search-people">
+                    <div className="search-people-top">
+                        <img src={sample} className="people-img"/>
+                        <div className="people-middle">
+                            <p className="people-name">{this.props.name}</p>
+                            <p className="people-job">{this.props.job}</p>
+                        </div>
+                        <div className="search-people-follow-wrapper">
+                            <PeopleFollow/>
+                        </div>
+                    </div>
+                    <p className="search-people-intro">{this.props.intro}</p>
                 </div>
-                <div className="search-people-follow">
-                    <img src={follow} className="search-people-follow-icon"/>
-                    <p>Follow</p>
-                </div>
-            </div>
+            </Link>
         )
     }
 }

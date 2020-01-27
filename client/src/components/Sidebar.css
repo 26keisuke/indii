@@ -31,7 +31,10 @@
 .side-bar-row p{
     padding-left:15px;
     cursor: pointer;
-    margin-top:15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right:50px;
+    font-size: 12px;
 }
 
 .side-bar-img:hover{
@@ -41,8 +44,38 @@
 .side-bar-img{
     width:20px;
     height:20px;
-    margin-top:12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }
+
+.side-bar-row:hover::before{
+    display: block;
+}
+
+.side-bar-row::before{
+    content: "";
+    display: none;
+    position: absolute;
+    top:2px;
+    left:-16px;
+    background-color: #9EAEE5;
+    opacity: 0.1;
+    width:170px;
+    height:40px;
+    border-radius: 20px;
+    z-index:-1;
+}
+
+@keyframes fadein{
+    0% {
+    opacity: 1;
+    } 
+    100% {
+        opacity: 0;
+    }
+}
+
+
 
 .checked{
     background-color: #9EAEE5;

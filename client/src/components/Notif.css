@@ -5,6 +5,11 @@
     border-right: 1px solid #d2d2d2;
     border-bottom: 1px solid #d2d2d2;
     background-color: #ffffff;
+    cursor: pointer;
+}
+
+.notif:hover{
+    background-color: rgba(233, 233, 238, 0.25);
 }
 
 .notif-people-img{
@@ -50,8 +55,41 @@
 .notif-people-check{
     width: 20px;
     height: 22px;
+}
+
+/* == icon hover ==*/
+
+.notif-fake{
     position: absolute;
     right:30px;
     top:30px;
+}
+
+.notif-fake-fake{
+    position: relative;
+}
+
+.notif-fake-fake p::before{
+    content: "";
+    display: none;
+    background-color: #9EAEE5;
+    opacity: 0.1;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+}
+
+.notif-fake-fake p:hover::before{
+    display: block;
+}
+
+.notif-fake-fake p{
+    position: absolute;
+    right:-8px;
+    top: -10px;
+    width: 40px;
+    height: 40px;
+    display: block;
     cursor: pointer;
 }
+

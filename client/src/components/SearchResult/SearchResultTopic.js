@@ -8,16 +8,15 @@ class SearchResultTopic extends Component {
             <div className="search-res-topic">
                 <img src={sample} className="search-res-topic-img"/>
                 <div className="search-res-topic-right">
-                    <p className="search-res-topic-title">Apache Kafka</p>
-                    <p className="search-res-topic-content">
-                    BrokerはConsumerがメッセージを購読したかに関わらず設定された期間のみ保持してその後削除する．これはKafkaの大きな特徴の1つである．例えば保存期間を2日間に設定すれば配信後2日間のみデータは保持されその後削除される．
-
-このためConsumerサイドがメッセージをどこまで読んだがを自らが管理する（Brokerが管理する必要がない）．
-                    </p>
+                    <p className="search-res-topic-title">{this.props.title}</p>
+                    <p className="search-res-topic-content">{this.props.content}</p>
                     <div className="search-res-topic-bottom">
-                        <p className="search-res-topic-likes">
-                        102,301 Favorites
-                        </p>
+                        <p className="search-res-topic-likes">{this.props.likes} Favorites</p>
+                        <div className="search-res-topic-tags-wrapper">
+                            {this.props.tags.map(tag => {
+                                return <p>#{tag}</p>
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,116 +1,98 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom"
+import { connect } from "react-redux"
 
 import home from "../images/home.png";
-import home_gray from "../images/home-gray.png";
+import home_pressed from "../images/home-pressed.png";
 import draft from "../images/draft.png";
-import draft_gray from "../images/draft-gray.png";
+import draft_pressed from "../images/draft-pressed.png";
 import topic from "../images/topic.png";
-import topic_gray from "../images/topic-gray.png";
+import topic_pressed from "../images/topic-pressed.png";
 import post from "../images/post.png";
-import post_gray from "../images/post-gray.png";
+import post_pressed from "../images/post-pressed.png";
 import notif from "../images/notification.png";
-import notif_gray from "../images/notification-gray.png";
+import notif_pressed from "../images/notification-pressed.png";
 import setting from "../images/setting.png";
-import setting_gray from "../images/setting-gray.png";
+import setting_pressed from "../images/setting-pressed.png";
+
+import * as actions from "../actions"
 
 import "./Sidebar.css"
-
 
 // logicは、後でreduxに全部書き換える
 class Sidebar extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            home_notif: false,
-            draft_notif: false,
-            post_notif: true,
-            notif_notif: false,
-
-            // home_clicked: true,
-            // draft_clicked: false,
-            // topic_clicked: false,
-            // post_clicked: false,
-            // notif_clicked: false,
-            // settings_clicked: false,
-        }
-
         this.handleClick = this.handleClick.bind(this)
     }
 
-    handleClick(e) {
-        // switch(e.target.innerHTML){
-        //     case "HOME":
-        //         console.log("HOME")
-        //         return
-        //     case "DRAFT":
-        //         console.log("DRAFT")
-        //         return
-        //     case "CREATE TOPIC":
-        //         console.log("CREATE TOPIC")
-        //         return
-        //     case "CREATE POST":
-        //         console.log("CREATE POST")
-        //         return
-        //     case "NOTIFICATION":
-        //         console.log("NOTIFICATION")
-        //         return
-        //     case "SETTINGS":
-        //         console.log("SETTINGS")
-        //         return
-        //     default:
-        //         console.log("TRY AGAIN")
-        //         return
-        // }
+    handleClick(id) {
+        this.props.resetCategory()
+        this.props.setCategory(id)
+        this.props.nudgeCheck(id)
     }
 
-    notif_checker(notif) {
-        let hide = notif === false ? "hide" : ""
-        let cName = hide + " " + "checked"
+    nudgeRender(nudge) {
+        const show = nudge === true
+        const hide = show ? "" : "hide"
+        const cName = hide + " " + "checked"
         return cName
     }
 
     render() {
+        const cate = this.props.category
 
-        let home_notif = this.notif_checker(this.state.home_notif)
-        let draft_notif = this.notif_checker(this.state.draft_notif)
-        let post_notif = this.notif_checker(this.state.post_notif)
-        let notif_notif = this.notif_checker(this.state.home_notif)
-
+        const home_nudge = this.nudgeRender(this.props.nudge.home)
+        const draft_nudge = this.nudgeRender(this.props.nudge.draft)
+        const topic_nudge = this.nudgeRender(this.props.nudge.topic)
+        const post_nudge = this.nudgeRender(this.props.nudge.post)
+        const notif_nudge = this.nudgeRender(this.props.nudge.notification)
+        const setting_nudge = this.nudgeRender(this.props.nudge.setting)
+        
         return (
+
             <div className="side-bar-list">
-                <Link to={"/"} className="side-bar-row" onClick={this.handleClick}>
-                    <div className={home_notif}></div>
-                    <img src={home} className="side-bar-img"/>
-                    <p className="selected">HOME</p>
+                <Link to={"/"} className="side-bar-row" onClick={() => this.handleClick("home")}>
+                    <div className={home_nudge}></div>
+                    <img src={cate.home ? home_pressed : home} className="side-bar-img"/>
+                    <p className={cate.home ? "selected" : "unselected"}>ホーム</p>
                 </Link>
-                <Link to={"/draft"} className="side-bar-row" onClick={this.handleClick}>
-                    <div className={draft_notif}></div>
-                    <img src={draft} className="side-bar-img"/>
-                    <p className="unselected">DRAFT</p>
+                <Link to={"/draft"} className="side-bar-row" onClick={() => this.handleClick("draft")}>
+                    <div className={draft_nudge}></div>
+                    <img src={cate.draft ? draft_pressed : draft} className="side-bar-img"/>
+                    <p className={cate.draft ? "selected" : "unselected"}>下書き</p>
                 </Link>
-                <Link to={"/create/topic"} className="side-bar-row" onClick={this.handleClick}>
-                    <img src={topic} className="side-bar-img"/>
-                    <p className="unselected">CREATE TOPIC</p>
+                <Link to={"/create/topic"} className="side-bar-row" onClick={() => this.handleClick("topic")}>
+                    <div className={topic_nudge}></div>
+                    <img src={cate.topic ? topic_pressed : topic} className="side-bar-img"/>
+                    <p className={cate.topic ? "selected" : "unselected"}>トピックを作成</p>
                 </Link>
-                <Link to={"/create/post"} className="side-bar-row" onClick={this.handleClick}>
-                    <div className={post_notif}></div>
-                    <img src={post} className="side-bar-img"/>
-                    <p className="unselected">CREATE POST</p>
+                <Link to={"/create/post"} className="side-bar-row" onClick={() => this.handleClick("post")}>
+                    <div className={post_nudge}></div>
+                    <img src={cate.post ? post_pressed : post} className="side-bar-img"/>
+                    <p className={cate.post ? "selected" : "unselected"}>ポストを作成</p>
                 </Link>
-                <Link to={"/notification"} className="side-bar-row" onClick={this.handleClick}> 
-                    <div className={notif_notif}></div>
-                    <img src={notif} className="side-bar-img"/>
-                    <p className="unselected">NOTIFICATION</p>
+                <Link to={"/notification"} className="side-bar-row" onClick={() => this.handleClick("notification")}> 
+                    <div className={notif_nudge}></div>
+                    <img src={cate.notification ? notif_pressed : notif} className="side-bar-img"/>
+                    <p className={cate.notification ? "selected" : "unselected"}>通知</p>
                 </Link>
-                <Link to={"/settings"} className="side-bar-row" onClick={this.handleClick}>
-                    <img src={setting} className="side-bar-img"/>
-                    <p className="unselected">SETTINGS</p>
+                <Link to={"/settings"} className="side-bar-row" onClick={() => this.handleClick("setting")}>
+                    <div className={setting_nudge}></div>
+                    <img src={cate.setting ? setting_pressed : setting} className="side-bar-img"/>
+                    <p className={cate.setting ? "selected" : "unselected"}>設定</p>
                 </Link>
             </div>
         );
     }
 }
 
-export default Sidebar;
+function mapStateToProps(state) {
+    return{
+        category: state.category,
+        nudge: state.nudge
+    }
+}
+
+export default connect(mapStateToProps, actions)(Sidebar);

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+import { FaPencilAlt } from 'react-icons/fa';
+
 import back_arrow from "../images/back-arrow.png"
-import follow from "../images/add.png"
 import sample from "../images/sample0.jpg"
-import pen from "../images/pen.png"
 import love from "../images/love.png"
 import good from "../images/good.png"
 import nerd from "../images/nerd.png"
@@ -14,12 +14,14 @@ import close_gray from "../images/close-gray.png"
 import tick_gray from "../images/tick-gray.png"
 import absurd from "../images/absurd/07.png"
 
+import PeopleFollow from "./PeopleFollow"
+
 import "./Check.css"
 
 class Check extends Component {
     render() {
         return (
-            <div className="check">
+            <div className="content-full">
                 <div className="content-space-header">
                     <Link to={"/notification"} className="content-back-wrapper">
                         <img src={back_arrow} className="content-back"/>
@@ -41,11 +43,10 @@ class Check extends Component {
                             <div className="people-middle">
                                 <p className="people-name">飯塚　啓介</p>
                                 <p className="people-job">Chief株式会社 CEO</p>
-                                <p className="search-people-intro">2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなど。</p>
+                                {/* <p className="check-people-intro">2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなど。</p> */}
                             </div>
-                            <div className="check-people-follow">
-                                <img src={follow} className="search-people-follow-icon"/>
-                                <p>Follow</p>
+                            <div className="check-people-follow-wrapper">
+                                <PeopleFollow/>
                             </div>
                         </div>
                         <div className="check-change">
@@ -88,7 +89,7 @@ class Check extends Component {
                             </div>
                         </div>
                         <div className="check-change">
-                            <img src={pen} className="check-pen"/>
+                            <FaPencilAlt className="check-pen"/>
                             <p className="check-change-title">コメント<span>*必須ではありません</span></p>
                             <textarea className="check-comment" placeholder="ここにコメントを入力"></textarea>
                         </div>

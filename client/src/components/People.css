@@ -1,8 +1,13 @@
 .people{
     display: flex;
     flex-direction: row;
-    padding: 5px 20px;
-    background-color: #ffffff;
+    padding: 13px 15px;
+    background-color: rgba(0,0,0,0);
+    cursor: pointer;
+}
+
+.people:hover{
+    background-color: rgba(233, 233, 238, 0.25);
 }
 
 .people-job{
@@ -18,35 +23,4 @@
     object-fit: cover;
     flex-shrink: 0;
     margin-right: 10px;
-    cursor: pointer;
 }
-
-.people-name{
-    cursor: pointer;
-}
-
-.people-follow{
-    height: 19px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border:1px solid #636480;
-    padding: 2px 13px;
-    margin-right:15px;
-    border-radius: 20px;
-    align-self: center;
-    margin-left:40px;
-    cursor: pointer;
-}
-
-.people-follow-icon{
-    width: 14px;
-    height: 14px;
-    margin-right:6px;
-}
-
-.people-follow p{
-    font-size: 12px;
-    color: #636480;
-}
-

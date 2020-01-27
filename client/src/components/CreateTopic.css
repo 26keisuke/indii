@@ -1,0 +1,219 @@
+.topic-form-wrapper{
+    height: 100%;
+}
+
+.topic-form{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 1000px;
+}
+
+.topic-form-progress{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    top: 30px;
+}
+
+.topic-form-progress-circle {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 3;
+    
+    /*-- delete this later --*/
+    background-color: #c4c4c4 !important;
+}
+
+.topic-form-progress-circle p{
+    position: absolute;
+    color: #ffffff;
+    top:12px;
+    left:18px;
+    font-size: 17px;
+}
+
+/*-- delete this later --*/
+.topic-form-circle-1{
+    animation: themeGradient 25s ease infinite;
+    background: linear-gradient(270deg, #c4c4c4, #636480);
+    background-size: 400% 400%;
+}
+.topic-form-circle-2{
+    animation: themeGradient 25s ease infinite;
+    background: linear-gradient(270deg, #c4c4c4, #636480);
+    background-size: 400% 400%;
+}
+
+.topic-form-progress-bar {
+    z-index: 2;
+    width: 55px;
+    height: 8px;
+    margin-left: -2px;
+    margin-right: -2px;
+
+    /*-- delete this later --*/
+    background-color: #c4c4c4 !important;
+}
+
+/*-- delete this later --*/
+.topic-form-bar-1{
+    background-color: #636480 !important;
+}
+
+.topic-form-area{
+    display: flex;
+    flex-direction: column;
+    padding-top: 200px;
+    width: 800px;
+}
+
+.topic-form-area-top p{
+    color: #333333;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.topic-form-area-middle{
+    position: relative;
+}
+
+.topic-form-area-middle p {
+    color: #585858;
+    font-size: 10px;
+    margin-left: 9px;
+}
+
+.topic-form-area-wrapper{
+    padding-left: 22.5%;
+}
+
+.topic-form-area-middle-icon{
+    transform: rotate(180deg);
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 413px;
+    top: 27px;
+    color: #333333;
+    cursor: pointer;
+}
+
+/*== search ==*/
+
+.topic-form-area-middle .react-autosuggest__input{
+    width: 72%;
+    height: 36px;
+    border: none;
+    border-bottom: 0.5px solid #838383;
+    padding-left: 5px;
+    font-size: 14px;
+    margin-top: 4px;
+    font-family: "Gennokaku Gothic";
+}
+
+.topic-form-area-middle .react-autosuggest__container {
+    position: relative;
+    width: 100%;
+}
+  
+.topic-form-area-middle .react-autosuggest__suggestions-container--open {
+    display: block;
+    position: absolute;
+    width: 72.8%;
+    background-color: #fff;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
+    font-size: 12px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    z-index: 2;
+    overflow-x: hidden;
+}
+  
+.topic-form-area-middle .react-autosuggest__suggestions-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+  
+.topic-form-area-middle .react-autosuggest__suggestion {
+    cursor: pointer;
+}
+  
+.topic-form-area-middle .react-autosuggest__suggestion--highlighted {
+    background-color: rgba(62,62,62,0.1);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.topic-form-area-middle .react-autosuggest__input--focused {
+    outline: none;
+    border-bottom: 0.5px solid #9EAEE6;
+}
+
+@keyframes themeGradient {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+/*= gradient animation ==*/
+/*= from https://www.gradient-animator.com/
+
+その1
+
+background: linear-gradient(270deg, #c4c4c4, #636480);
+background-size: 400% 400%;
+
+-webkit-animation: AnimationName 25s ease infinite;
+-moz-animation: AnimationName 25s ease infinite;
+animation: AnimationName 25s ease infinite;
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+その2
+
+/* background: linear-gradient(271deg, #5056dc, #7ecaf2);
+background-size: 400% 400%;
+
+-webkit-animation: AnimationName 30s ease infinite;
+-moz-animation: AnimationName 30s ease infinite;
+animation: AnimationName 30s ease infinite;
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+} */

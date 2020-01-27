@@ -1,27 +1,33 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import accept from "../images/accept.png";
 import sample from "../images/sample0.jpg";
 
 import "./Notif.css";
 
 class NotifElement extends Component {
+
+    renderAction(action) {
+        switch(action){
+            case "EDIT_REQUEST":
+                return "あなたのポストへの編集要請を出しました。"
+        }
+    }
+
     render() {
         return(
-            <div className="notif">
-                <div className="notif-unread"/>
-                <div className="notif-profile">
-                    <img src={sample} className="notif-people-img"/>
-                    <div>
-                        <p className="notif-people-name"><span>飯塚　啓介</span>さんが、あなたのポストへの編集要請を出しました。</p>
-                        <p className="notif-people-date">May 25, 2018 6:34 PM</p>
+            <Link to={"/notification/check/" + this.props.id}>
+                <div className="notif">
+                    <div className="notif-unread"/>
+                    <div className="notif-profile">
+                        <img src={sample} className="notif-people-img"/>
+                        <div>
+                            <p className="notif-people-name"><span>{this.props.name}</span>さんが、{this.renderAction(this.props.action)}</p>
+                            <p className="notif-people-date">{this.props.date}</p>
+                        </div>
                     </div>
                 </div>
-                <Link to={"/notification/check"}>
-                <img src={accept} className="notif-people-check"/>
-                </Link>
-            </div>
+            </Link>
         )
     }
 }

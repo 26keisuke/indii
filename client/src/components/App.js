@@ -3,17 +3,20 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 
-import Header from "./Header";
+import Header from "./Header/Header";
 import Sidebar from "./Sidebar";
-import Feed from "./Feed";
+import Feed from "./Feed/Feed";
 import SearchResult from "./SearchResult/SearchResult"
 import Notification from "./Notif"
 import Check from "./Check"
-// import Draft from "./Draft"
+import Topic from "./Topic"
+import SurveyNew from "./surveys/SurveyNew"
+import Draft from "./Draft/DraftNavigation"
+import DraftEdit from "./Draft/DraftEdit"
+import CreateTopic from "./CreateTopic"
 
-const Draft = () => <h2>Draft</h2>
-const Topic = () => <h2>Topic</h2>
-const User = () => <h2>User</h2>
+const Profile = () => <h2>Profile</h2>
+const CreatePost = () => <h2>Post</h2>
 
 class App extends Component {
 
@@ -30,12 +33,15 @@ class App extends Component {
                         <Sidebar />
                         <div className="fakebox">
                             <Route exact path="/" component={Feed} />
-                            <Route path="/draft" component={Draft} />
+                            <Route exact path="/draft" component={Draft} />
+                            <Route path="/draft/edit/:id" component={DraftEdit} />
                             <Route path="/search" component={SearchResult} />
                             <Route exact path="/notification" component={Notification} />
-                            <Route path="/notification/check" component={Check} />
-                            <Route path="/topic" component={Topic} />
-                            <Route path="/user" component={User} />
+                            <Route path="/notification/check/:id" component={Check} />
+                            <Route path="/create/post" component={CreatePost} />
+                            <Route path="/create/topic" component={CreateTopic} />
+                            <Route path="/topic/:id" component={Topic} />
+                            <Route path="/profile/:id" component={Profile} />
                         </div>
                     </div>
                 </BrowserRouter>

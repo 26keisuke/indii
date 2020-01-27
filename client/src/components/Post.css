@@ -5,8 +5,15 @@
     align-items: center;
     border-bottom: 1px solid #d2d2d2;
     border-right: 1px solid #d2d2d2;
-    border-left: 1px solid #d2d2d2;
     background-color: #ffffff;
+}
+
+.post:hover {
+    background-color: rgba(233, 233, 238, 0.25);
+}
+
+.post-wrapper{
+    border-left: 1px solid #d2d2d2;
 }
 
 .post-left{

@@ -4,35 +4,54 @@ import NotifElement from "./NotifElement"
 
 import absurd from "../images/absurd/09.png"
 import NotifSearchFilter from "./NotifSearchFilter";
+import LeftAndRight from "./LeftAndRight";
 
 class Draft extends Component {
+
+    renderImgContent() {
+        return(
+            <img src={absurd} className="just-for-fun"/>
+        )
+    }
+
+    renderTopContent() {
+        return(
+            <p className="content-intro-title">通知</p>
+        )
+    }
+
+    renderLeftContent() {
+        return(
+            <div>
+                <NotifElement 
+                    id={"123123"}
+                    name={"飯塚啓介"}
+                    date={"May 25, 2018 6:34 PM"}
+                    action={"EDIT_REQUEST"}
+                />
+            </div>
+        )
+    }
+
+    renderRightContent() {
+        return(
+            <div>
+                <div className="content-right-card-title">
+                    <p>検索フィルター</p>
+                </div>
+                <NotifSearchFilter/>
+            </div>
+        )
+    }
+
     render() {
         return(
-            <div className="content">
-                <div className="content-left">
-                    <div className="content-intro">
-                        <p className="content-intro-title">通知</p>
-                    </div>
-                    <div className="content-space"/>
-                    <NotifElement/>
-                    <NotifElement/>
-                    <NotifElement/>
-                    <NotifElement/>
-                    <NotifElement/>
-                    <NotifElement/>
-                    <div className="content-bottom-space">
-                        <img src={absurd} className="just-for-fun"/>
-                    </div>
-                </div>
-                <div className="content-right">
-                    <div className="content-right-card">
-                        <div className="content-right-card-title">
-                            <p>検索フィルター</p>
-                        </div>
-                        <NotifSearchFilter/>
-                    </div>
-                </div>
-            </div>
+            <LeftAndRight
+                img={this.renderImgContent()}
+                top={this.renderTopContent()} 
+                left={this.renderLeftContent()} 
+                right={this.renderRightContent()}
+            />
         )
     }
 }
