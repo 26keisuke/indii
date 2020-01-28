@@ -65,7 +65,7 @@ class SearchBox extends Component {
         this.state = {
             value: "",
             suggestions: [],
-            selected: ""
+            // selected: ""
         }
         this.handleFocus = this.handleFocus.bind(this)
         this.handleBlur = this.handleBlur.bind(this)
@@ -124,11 +124,11 @@ class SearchBox extends Component {
         });
     };
 
-    onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {
-        this.setState({
-            selected: suggestion.name
-        })
-    }
+    // onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {
+    //     this.setState({
+    //         selected: suggestion.name
+    //     })
+    // }
 
     handleFocus() {
         this.props.onSearch()
@@ -167,7 +167,7 @@ class SearchBox extends Component {
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     getSuggestionValue={this.getSuggestionValue}
                     renderSuggestion={this.renderSuggestion}
-                    onSuggestionSelected={this.onSuggestionSelected}
+                    // onSuggestionSelected={this.onSuggestionSelected}
                     inputProps={inputProps} 
                 />
             </form>

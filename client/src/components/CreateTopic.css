@@ -18,15 +18,40 @@
     top: 30px;
 }
 
+.topic-form-progress-name{
+    position: absolute;
+    font-size: 10px;
+    color: #585858;
+    width: 100px;
+    bottom: -20px;
+    left: -27px;
+    text-align: center;
+}
+
 .topic-form-progress-circle {
     position: relative;
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    z-index: 3;
-    
-    /*-- delete this later --*/
-    background-color: #c4c4c4 !important;
+    z-index: 1;
+    opacity: 1;
+    background-color: #c4c4c4;
+}
+
+.topic-form-progress-circle-animation{
+    animation-name: progressCirclePop;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+.topic-form-progress-circle-done{
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 1;
+    opacity: 0;
+    background-color: #c4c4c4;
 }
 
 .topic-form-progress-circle p{
@@ -37,16 +62,25 @@
     font-size: 17px;
 }
 
-/*-- delete this later --*/
-.topic-form-circle-1{
-    animation: themeGradient 25s ease infinite;
-    background: linear-gradient(270deg, #c4c4c4, #636480);
-    background-size: 400% 400%;
+.topic-form-progress-circle-fake {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 1;
+    background-color: #646380;
 }
-.topic-form-circle-2{
-    animation: themeGradient 25s ease infinite;
-    background: linear-gradient(270deg, #c4c4c4, #636480);
-    background-size: 400% 400%;
+
+.topic-form-progress-circle-fake p{
+    position: absolute;
+    color: #ffffff;
+    top:12px;
+    left:18px;
+    font-size: 17px;
+}
+
+.topic-form-progress-fake{
+    position: relative;
 }
 
 .topic-form-progress-bar {
@@ -55,52 +89,162 @@
     height: 8px;
     margin-left: -2px;
     margin-right: -2px;
-
-    /*-- delete this later --*/
-    background-color: #c4c4c4 !important;
+    background-color: #c4c4c4;
 }
 
-/*-- delete this later --*/
-.topic-form-bar-1{
-    background-color: #636480 !important;
+.topic-form-progress-bar-fake {
+    position: absolute;
+    z-index: 1;
+    height: 8px;
+    background-color: #646380;
+    left: -2px;
+    top: 0px;
+}
+
+.topic-form-progress-bar-fake-animation{
+    animation-name: progressBarExtend;
+    animation-duration: 800ms;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+}
+
+.topic-form-progress-bar-fake-done {
+    position: absolute;
+    width:55px;
+    z-index: 1;
+    height: 8px;
+    background-color: #646380;
+    left: -2px;
+    top: 0px;
 }
 
 .topic-form-area{
     display: flex;
     flex-direction: column;
-    padding-top: 200px;
+    padding-top: 160px;
     width: 800px;
 }
 
-.topic-form-area-top p{
+.topic-form-area-wrapper{
+    padding-left: 22.5%;
+    width: 600px;   
+}
+
+/* .topic-form-area-wrapper-hide{
+    animation-name: topicHide1;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+} */
+
+.topic-form-area-wrapper-show{
+    animation-name: topicShow2;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+/* .topic-form-area-wrapper-back{
+    animation-name: topicBack2;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+} */
+
+.topic-form-area-wrapper-enter{
+    animation-name: topicEnter1;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.topic-form-area-top{
+    position: relative;
+}
+
+.topic-form-area-top-title{
     color: #333333;
     font-size: 14px;
     margin-bottom: 15px;
+}
+
+.topic-form-area-top-warning{
+    color: #747474;
+    font-size: 11px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    top: -38px;
+    width: 440px;
+}
+
+.topic-form-area-top-warning-circle{
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    margin-right: 10px;
+    background-color: #FF5F5F;
+}
+
+.topic-form-area-top-warning a{
+    text-decoration: underline !important;
+    text-decoration-style: dotted !important;
 }
 
 .topic-form-area-middle{
     position: relative;
 }
 
-.topic-form-area-middle p {
+.topic-form-area-input-title {
     color: #585858;
     font-size: 10px;
     margin-left: 9px;
 }
 
-.topic-form-area-wrapper{
-    padding-left: 22.5%;
-}
-
 .topic-form-area-middle-icon{
-    transform: rotate(180deg);
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     position: absolute;
     left: 413px;
     top: 27px;
     color: #333333;
     cursor: pointer;
+}
+
+.green{
+    color: #4CD964;
+}
+
+.red{
+    color: #FF5F5F;
+}
+
+/*== button ==*/
+
+.topic-form-button{
+    width: 444px;
+    display: flex;
+    justify-content: space-around;
+    margin-top:30px;
+}
+
+.topic-form-button-left{
+    width: 90px;
+    height:34px;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 0.5px solid #636480;
+    font-family: "Gennokaku Gothic";
+    outline:0;
+}
+
+.topic-form-button-right{
+    width: 90px;
+    height:34px;
+    cursor: pointer;
+    border: none;
+    background-color: #636480;
+    color: #ffffff;
+    font-family: "Gennokaku Gothic";
+    outline:0;
 }
 
 /*== search ==*/
@@ -159,10 +303,170 @@
     border-bottom: 0.5px solid #9EAEE6;
 }
 
-@keyframes themeGradient {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+
+/*== thumb preview ==*/
+
+.thumb-preview{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 444px;
+}
+
+.thumb-preview-wrapper{
+    position: relative;
+    margin: 0px 15px;
+    margin-top: 30px;
+}
+
+.thumb-preview-mobile-fake{
+    position: absolute;
+    width: 285px;
+    height: 150px;
+    border-bottom-right-radius: 35px;
+    border-bottom-left-radius: 35px;
+    border: 1px solid black;
+    border-style: dashed;
+    border-width: 2px;
+}
+
+.thumb-preview-mobile{
+    width: 285px;
+    height: 150px;
+    border-bottom-right-radius: 35px;
+    border-bottom-left-radius: 35px;
+    border: 1px solid #d2d2d2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    object-fit: none;
+}
+
+.thumb-preview-web-fake{
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 1px solid black;
+    border-style: dashed;
+    border-width: 2px;
+}
+
+.thumb-preview-web{
+    width: 120px;
+    height: 120px;
+    border: 1px solid #d2d2d2;
+    object-fit: contain;
+}
+
+/*== tags ==*/
+
+.topic-form-tags{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    left: 50px;
+    top: -2px;
+}
+
+.topic-form-tags-box{
+    position: relative;   
+}
+
+.topic-form-tags-box p {
+    padding: 2px;
+    border: 0.5px solid #646380;
+    border-radius: 3px;
+    padding-right: 15px;
+    margin-right: 10px;
+    font-size: 10px;
+    padding-left:4px;
+    cursor: pointer;
+}
+
+.topic-form-tags-icon{
+    position: absolute;
+    pointer-events: none;
+    top: 3px;
+    right: 13px;
+}
+
+/*-= friends =*/
+
+.topic-form-friends{
+    width: 420px;
+    border: 0.5px solid #d2d2d2;
+    height: 135px;
+    padding: 15px;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.topic-form-friends-wrapper{
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+}
+
+.topic-form-friends-close{
+    position: absolute;
+    right: 9px;
+    width:16px;
+    height:16px;
+    background-color: white;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 100%;
+    pointer-events: none;
+}
+
+.topic-form-friends-close-icon{
+    margin-left: 2px;
+    margin-top: 1px;
+    pointer-events: none;
+}
+
+.topic-form-friends-person{
+    width: 42px;
+    height: 42px;
+    border-radius: 5px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+@keyframes topicHide1{
+    0%{opacity: 1; padding-left: 22.5%}
+    100%{opacity: 0; padding-left: 0%;}
+}
+
+@keyframes topicShow2{
+    0%{opacity: 0; padding-left: 45%}
+    100%{opacity: 1; padding-left: 22.5%;}
+}
+
+@keyframes topicBack2{
+    0%{opacity: 1; padding-left: 22.5%}
+    100%{opacity: 0; padding-left: 45%;}
+}
+
+@keyframes topicEnter1{
+    0%{opacity: 0; padding-left: 0%}
+    100%{opacity: 1; padding-left: 22.5%;}
+}
+
+@keyframes progressCirclePop {
+    0%{opacity: 1}
+    100%{opacity: 0}
+}
+
+@keyframes progressBarExtend {
+    0%{width: 0px}
+    100%{width: 55px}
+}
+
+
+.disable{
+    opacity: 0.2;
+    pointer-events: none;
 }
 
 /*= gradient animation ==*/

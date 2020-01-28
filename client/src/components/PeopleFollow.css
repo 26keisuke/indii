@@ -24,8 +24,6 @@
 
 .people-follow:hover > .people-follow-text{
     color: #9aaee6;
-    animation-name: tiny-bounce;
-    animation-duration: 300ms;
 }
 
 .people-follow-icon{
