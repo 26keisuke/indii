@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux"
 import { Link } from "react-router-dom";
-import {Collapse} from 'react-collapse';
+import { Collapse } from 'react-collapse';
 
 import response from "../../images/response.png";
-import response_pressed from "../../images/response-pressed.png";
 import star_pressed from "../../images/star-pressed.png";
 import star from "../../images/star.png";
 import more from "../../images/more.png";
@@ -33,16 +32,10 @@ class PostFeed extends Component {
         this.state = {
             isOpened: true, btnClass: "post-feed-down",
             star: star,
-            response: response,
             showEmoji: false,
             showMore: false,
+            chosenResponse: -1
         }
-
-        this.handleCollapseClick = this.handleCollapseClick.bind(this)
-        this.handleStarClick = this.handleStarClick.bind(this)
-        this.handleResponseClick = this.handleResponseClick.bind(this)
-        this.handleEmojiClick = this.handleEmojiClick.bind(this)
-        this.handleMoreClick = this.handleMoreClick.bind(this)
     }
 
     componentDidMount() {
@@ -50,11 +43,15 @@ class PostFeed extends Component {
         this.checkForFeedbacks()
     }
 
-    checkForStars(){}
+    checkForStars(){
+        // database connection
+    }
 
-    checkForFeedbacks(){}
+    checkForFeedbacks(){
+        // database connection
+    }
 
-    handleCollapseClick(e) {
+    handleCollapseClick = (e) => {
         e.preventDefault()
         this.setState({showMore: false})
         this.setState({showEmoji: false})
@@ -66,7 +63,7 @@ class PostFeed extends Component {
         })
     }
 
-    handleStarClick(e) {
+    handleStarClick = (e) => {
         e.preventDefault()
         this.setState({showMore: false})
         this.setState({showEmoji: false})
@@ -83,27 +80,25 @@ class PostFeed extends Component {
         }
     }
 
-    handleResponseClick(e) {
+    handleResponseClick = (e) => {
         e.preventDefault()
         this.setState({showMore: false})
-        if (this.state.response != response_pressed){
-            this.setState({
-                showEmoji: !this.state.showEmoji
-            })
-        }
+        this.setState({
+            showEmoji: !this.state.showEmoji
+        })
     }
 
-    handleEmojiClick(e) {
+    handleEmojiClick = (e, id) => {
         e.preventDefault()
         this.setState({
-            response: response_pressed
+            chosenResponse: id
         })
         this.setState({
             showEmoji: false
         })
     }
 
-    handleMoreClick(e) {
+    handleMoreClick = (e) => {
         e.preventDefault()
         this.setState({showEmoji: false})
         this.setState({
@@ -111,7 +106,7 @@ class PostFeed extends Component {
         })
     }
 
-    actionRender(action) {
+    actionRender = (action) => {
         switch(action){
             case "CREATE_POST":
                 return message[0]
@@ -122,10 +117,48 @@ class PostFeed extends Component {
         }
     }
 
+    renderIcon = () => {
+        switch(this.state.chosenResponse){
+            case 0:
+                return <img className="post-feed-response"　src={love}/>
+            case 1:
+                return <img className="post-feed-response"　src={good}/>
+            case 2:
+                return <img className="post-feed-response"　src={nerd}/>
+            case 3:
+                return <img className="post-feed-response"　src={hmm}/>
+            default:
+                return <img className="post-feed-response"　src={response}/>
+        }
+    }
+
+    deletePost = (e) => {
+        e.preventDefault();
+        this.setState({showMore: false})
+        const id = this.props.id;
+        const action = "POST_DELETE"
+        const title = "ポストを削除";
+        const caution = ""
+        const message = "このポストを削除してもよろしいですか？";
+        const buttonMessage = "削除する";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage)
+        this.props.enableGray()
+    }
+
+    reportPost = (e) => {
+        e.preventDefault();
+        this.setState({showMore: false});
+        const id = this.props.id;
+        const action = "GIVE_FEEDBACK";
+        const title = "このポストへのフィードバック";
+        const message = "このポストについてどう思いましたか？";
+        const caution = "（このフィードバックは匿名で保存されます。）";
+        const buttonMessage = "送信する";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        this.props.enableGray();
+    };
+
     render() {
-
-        const responseClicked = this.state.response == response_pressed
-
         return (
                 <Link to={"/topic/" + this.props.id} className="post-feed">
                     <div className="post-feed-top">
@@ -169,22 +202,22 @@ class PostFeed extends Component {
                             <p className="post-feed-bottom-fake" onClick={this.handleStarClick}></p>
                             <img className="post-feed-star"　src={this.state.star}/>
                         </div>
-                        <div className={responseClicked ? "post-feed-bottom-wrapper no-events" : "post-feed-bottom-wrapper"}>
+                        <div className={"post-feed-bottom-wrapper"}>
                             <p className="post-feed-bottom-fake" onClick={this.handleResponseClick}></p>
                             <div className={ this.state.showEmoji ? "post-feed-bottom-emoji show-flex" : "post-feed-bottom-emoji"}>
-                                <img src={love} onClick={this.handleEmojiClick}/>
-                                <img src={good} onClick={this.handleEmojiClick}/>
-                                <img src={nerd} onClick={this.handleEmojiClick}/>
-                                <img src={hmm} onClick={this.handleEmojiClick}/>
-                                <img src={dissapointed} onClick={this.handleEmojiClick}/>
+                                <img src={love} onClick={(e) => this.handleEmojiClick(e,0)}/>
+                                <img src={good} onClick={(e) => this.handleEmojiClick(e,1)}/>
+                                <img src={nerd} onClick={(e) => this.handleEmojiClick(e,2)}/>
+                                <img src={hmm} onClick={(e) => this.handleEmojiClick(e,3)}/>
+                                <img src={dissapointed} onClick={(e) => this.handleEmojiClick(e,4)}/>
                             </div>
-                            <img className="post-feed-response"　src={this.state.response}/>
+                            {this.renderIcon()}
                         </div>
                         <div className="post-feed-bottom-wrapper">
                             <p className="post-feed-bottom-fake" onClick={this.handleMoreClick}></p>
                             <div className={this.state.showMore ? "post-feed-bottom-action show-flex" : "post-feed-bottom-action"}>
-                                <p>レポートする</p>
-                                <p>この投稿を削除する</p>
+                                <p onClick={this.reportPost}>フィードバックをする</p>
+                                <p onClick={this.deletePost}>この投稿を削除する</p>
                             </div>
                             <img className="post-feed-more"　src={more}/>
                         </div>

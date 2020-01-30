@@ -6,7 +6,11 @@ import { USER_IS_LOGGEDIN,
          ON_SEARCH, OFF_SEARCH, 
          RESET_CATEGORY, SET_CATEGORY,
          NUDGE_ADD, NUDGE_CHECK,
-         SEARCH_TERM } from "../actions/types"
+         SEARCH_TERM,
+         IS_FETCHING, END_FETCHING,
+         ENABLE_GRAY, DISABLE_GRAY, 
+         UPDATE_MESSAGE, RESET_MESSAGE,
+         SHOW_CONFIRMATION, HIDE_CONFIRMATION} from "../actions/types"
 
 const initialState = {
     category: {
@@ -40,22 +44,100 @@ const initialState = {
     form: {
 
     },
-    auth: {
+    auth: {},
+    notif: {
 
     },
-    notif: {
-        home: false,
-        draft: false,
-        post: false,
-        notif: false
-    },
-    check:{
-        feedBackClicked: false,
-    },
-    filter: {
+    update: {
         fetching: false,
+        grayBackground: false,
+        updateMessage: {
+            on: false,
+            type: "",
+            message: "",
+        },
+        confirmation: {
+            on: false,
+            id: 0,
+            action: "",
+            title: "",
+            message: "",
+            buttonMessage: "",
+            html: ""
+        },
     },
-    fetching: false,
+}
+
+function updateReducer(state=initialState.update, action){
+    switch(action.type){
+        case IS_FETCHING:
+            return {
+                ...state,
+                fetching: true,
+            }
+        case END_FETCHING:
+            return {
+                ...state,
+                fetching: false,
+            }
+        case ENABLE_GRAY:
+            return {
+                ...state,
+                grayBackground: true,
+            }
+        case DISABLE_GRAY:
+            return {
+                ...state,
+                grayBackground: false
+            }
+        case UPDATE_MESSAGE:
+            return {
+                ...state,
+                updateMessage: {
+                    on: true,
+                    type: action.payload.type,
+                    message: action.payload.message
+                }
+            }
+        case RESET_MESSAGE:
+            return {
+                ...state,
+                updateMessage: {
+                    on: false,
+                    type: "",
+                    message: ""
+                }
+            }
+        case SHOW_CONFIRMATION:
+            return {
+                ...state,
+                confirmation: {
+                    on: true,
+                    id: action.payload.id,
+                    action: action.payload.action,
+                    title: action.payload.title,
+                    caution: action.payload.caution,
+                    message: action.payload.message,
+                    buttonMessage: action.payload.buttonMessage
+                }
+            }
+        case HIDE_CONFIRMATION:
+            return {
+                ...state,
+                confirmation: {
+                    on: false,
+                    id: 0,
+                    action: "",
+                    title: "",
+                    caution: "",
+                    message: "",
+                    buttonMessage: "",
+                    html: ""
+                }
+            }
+        default:
+            return state
+    }
 }
 
 function nudgeReducer(state=initialState.nudge, action) {
@@ -204,7 +286,6 @@ function searchReducer(state=initialState.search, action) {
 function authReducer(state=initialState.auth, action) {
     switch(action.type) {
         case USER_IS_LOGGEDIN:
-            console.log("CURRENT USER")
             return action.payload || false;
         default:
             return state;
@@ -218,4 +299,5 @@ export default combineReducers({
     search: searchReducer,
     category: categoryReducer,
     nudge: nudgeReducer,
+    update: updateReducer,
 });

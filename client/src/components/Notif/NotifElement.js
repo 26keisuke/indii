@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import sample from "../images/sample0.jpg";
+import sample from "../../images/sample0.jpg";
 
 import "./Notif.css";
 

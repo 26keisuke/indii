@@ -75,16 +75,17 @@ class CreateDecideTopic extends Component {
             value: newValue
         });
         localStorage.setItem("topicName", newValue);
-        //==FOR LOGGING==//
-        const suggest = this.state.suggestions
-        const len = this.state.suggestions.length
 
-        console.log(this.state.suggestions)
-        if (this.state.suggestions.length > 0){
-            console.log(this.state.suggestions[0])
-        }
-        console.log(len > 0)
-        if(!!suggest[0]){console.log(!!suggest[0].added)}
+        //==FOR LOGGING (DELETE THIS LATER)==//
+        // const suggest = this.state.suggestions
+        // const len = this.state.suggestions.length
+
+        // console.log(this.state.suggestions)
+        // if (this.state.suggestions.length > 0){
+        //     console.log(this.state.suggestions[0])
+        // }
+        // console.log(len > 0)
+        // if(!!suggest[0]){console.log(!!suggest[0].added)}
         
         // // if(len > 0 && !!suggest[0].added){ //inputがある状態 && suggestions[0](addedの場所)がある状態 && addedがある状態
         //     console.log(true)
@@ -103,13 +104,13 @@ class CreateDecideTopic extends Component {
 
     renderSuggestion = suggestion => {
         if (suggestion.added) {
-          return (
-            <div onClick={() => this.handleClick(this.state.value)} className="search-result-wrapper">
-                <div className="search-result">
-                <IoIosAddCircleOutline/> 新しいトピック<span>"{this.state.value}"</span>を追加する
+            return (
+                <div onClick={() => this.handleClick(this.state.value)} className="search-result-wrapper">
+                    <div className="search-result">
+                    <IoIosAddCircleOutline/> 新しいトピック<span>"{this.state.value}"</span>を追加する
+                    </div>
                 </div>
-            </div>
-          );
+            );
         };
         return (
             <div className="search-result-wrapper">

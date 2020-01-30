@@ -36,7 +36,7 @@ html {
     height:100%;
     font-family: 'Roboto', sans-serif;
     font-family: "Gennokaku Gothic";
-    font-size: 12px;
+    font-size: 11px;
     color: #212121;
 }
 
@@ -93,7 +93,6 @@ input:focus{
     display: flex;
     flex-direction: row;
     overflow-x: hidden;
-    /* overflow-y: hidden; */
 }
 
 .content::-webkit-scrollbar {
@@ -237,7 +236,7 @@ input:focus{
     }
 
     .search-icon{
-        left:317px !important;
+        left:412px !important;
     }
 
     .search-box .react-autosuggest__input{
@@ -245,7 +244,7 @@ input:focus{
     }
 
     .search-box .react-autosuggest__container{
-        margin-left: 0px !important;
+        margin-left: 50px !important;
     }
 }
 
@@ -361,7 +360,146 @@ input:focus{
     left:70px;
 }
 
-/*== utils ==*/
+/*== message ==*/
+
+.message{
+    background: linear-gradient(-90deg, #fff 0%, #fff 98%, #4CD964 98%, #4CD964 100%);
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
+    height: 60px;
+    width: 330px;
+    opacity: 0;
+    padding: 10px;
+    border-radius: 3px;
+    animation: dangle 3s linear;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 13%;
+    margin: auto 0;
+    z-index: 10;
+    padding-left: 30px;
+}
+
+.message-check{
+    width:20px;
+    height: 20px;
+    background-color: #4CD964;
+    left: 18px;
+    border-radius: 100%;
+    position: absolute;
+}
+
+.message-check-icon{
+    color: white;
+    margin-left: 3px;
+    margin-top: 3px;
+}
+
+.message-title{
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 11px;
+    margin-left: 15px;
+}
+
+.message-content{
+    font-size: 11px;
+    margin-left: 9px;
+    margin-top: 3px;
+    color: #333333;
+}
+
+/*== confirm ==*/
+
+.confirm-box{
+    position: absolute;
+    width: 400px;
+    padding: 20px 30px;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    border-radius: 3px;;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.onEnter{
+    animation: onEnter 200ms ease-out;
+}
+
+.onLeave{
+    animation: onLeave 200ms ease-out forwards;
+}
+
+.confirm-box-row{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.confirm-box-close{
+    position: absolute;
+    right: -13px;
+    top: -13px;
+    transform: scale(1.2);
+    padding: 13px;
+    cursor: pointer;
+}
+
+.confirm-box-title{
+    font-size: 14px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.confirm-box-message{
+    margin-bottom: 15px;
+}
+
+.confirm-box-caution{
+    margin-top: -10px;
+    margin-bottom: 5px;
+    font-size: 10px;
+    color: #838383
+}
+
+.confirm-box-buttons{
+    align-self: flex-end;
+}
+
+.confirm-box-buttons-yes{
+    font-family: "Gennokaku Gothic";
+    background-color: #636480;
+    color: white;
+    border: none;
+    height:30px;
+    width: 80px;
+    border-radius: 3px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.confirm-box-buttons-no{
+    font-family: "Gennokaku Gothic";
+    border: 0.5px solid #838383;
+    height:30px;
+    width: 80px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+@keyframes onEnter{
+    0% { top: 60%; opacity: 0}
+    100% { top: 50%; opacity: 1}
+}
+
+@keyframes onLeave{
+    0% { top: 50%; opacity: 1}
+    100% { top: 60%; opacity: 0}
+}
+
+/*== util ==*/
 
 .loading {
     height: 0;
@@ -373,8 +511,21 @@ input:focus{
     animation: rotate 1s infinite linear;
     position: absolute;
     left: 50%;
-    top: 50%;
-  }
+    top: 40%;
+    z-index: 10;
+}
+
+.filter{
+    background-color: rgba(0,0,0,.1);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    transition: show .2s;
+    z-index: 10;
+}
 
 .no-border-top{
     border-top: none !important;
@@ -412,6 +563,13 @@ input:focus{
 
 /*== animation ==*/
 
+@keyframes dangle {
+    0% {opacity: 0; margin-top: -30px;}
+    10% {opacity: 1; margin-top: 0px;}
+    90% {opacity: 1; margin-top: 0px;}
+    100% {opacity: 0; margin-top: -30px;}
+}
+
 @keyframes tiny-bounce{
     0% {transform: scale(1);}
     10% {transform: scale(0.95);}
@@ -429,4 +587,9 @@ input:focus{
     100% {
       transform: rotate(360deg);
     }
+}
+
+@keyframes show {
+    0%{opacity: 1}
+    100%{opacity: 0}
 }

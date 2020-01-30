@@ -9,6 +9,7 @@ import { connect } from "react-redux"
 
 import * as actions from "../actions"
 
+import { IoIosAddCircleOutline } from "react-icons/io";
 import search from "../images/search.png";
 import searchClick from "../images/search-click.png";
 
@@ -98,7 +99,7 @@ class SearchBox extends Component {
             //　一見すると、何も変化がないように思えるがurlを変えてみると、ちゃんと動いてるのがわかる
             <Link to={"/search/from_direct"} onClick={() => this.handleClick(this.state.value)} className="search-result-wrapper">
                 <div className="search-result">
-                [+] <span>"{this.state.value}"</span>を検索する
+                <IoIosAddCircleOutline/> <span>"{this.state.value}"</span>を検索する
                 </div>
             </Link>
           );

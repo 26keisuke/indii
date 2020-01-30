@@ -23,7 +23,7 @@ class Feed extends Component {
                 <div className="content-left">
                     <div className="content-space"/>
                     <PostFeed
-                        id={"1"}
+                        id={1}
                         name={"飯塚　啓介"}
                         action={"CREATE_POST"}
                         date={"January 2, 2018 5:46 PM"}

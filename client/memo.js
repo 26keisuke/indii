@@ -30,3 +30,29 @@ animation: AnimationName 25s ease infinite;
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
 }
+
+
+<div className="confirm-report">
+    <div className="confirm-report-box">
+        <input className="confirm-report-radio" type="radio" name="0"/>
+        <label className="confirm-report-label" for="0">問題</label>
+    </div>
+        <input className="confirm-report-radio" type="radio" name="1"/>
+        <label className="confirm-report-label" for="1">問題</label>
+    <div className="confirm-report-box">
+        <input className="confirm-report-radio" type="radio" name="2"/>
+        <label className="confirm-report-label" for="2">問題</label>
+    </div>
+    <div className="confirm-report-box">
+        <input className="confirm-report-radio" type="radio" name="3"/>
+        <label className="confirm-report-label" for="3">問題</label>
+    </div>
+    <div className="confirm-report-box">
+        <input className="confirm-report-radio" type="radio" name="4"/>
+        <label className="confirm-report-label" for="4">問題</label>
+    </div>
+</div>
+
+
+// localhost:3000 からどうしてもauth/googleにいけなかった
+// solution => 一回http-middleware-proxyを消してもう一回インストールで直った

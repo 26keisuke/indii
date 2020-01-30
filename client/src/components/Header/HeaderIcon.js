@@ -27,6 +27,10 @@ class HeaderIcon extends Component {
                     <div className="nav-icon-check"></div>
                     <img src={notif} className="nav-icon-img"/>
                 </Link>
+                <Link to={"/settings"} className="nav-icon-row"> 
+                    <div className="nav-icon-check"></div>
+                    <img src={setting} className="nav-icon-img"/>
+                </Link>
             </div>
         )
     }

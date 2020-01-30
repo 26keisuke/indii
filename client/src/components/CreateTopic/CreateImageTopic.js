@@ -38,7 +38,6 @@ const rejectStyle = {
 
 function CreateImageTopic(props) {
 
-    const [end, setEnd] = useState(false);
     const [warning, setWarning] = useState("");
     const [files, setFiles] = useState([]);
 
@@ -107,7 +106,6 @@ function CreateImageTopic(props) {
     };
 
     const handleBack = () => {
-        setEnd(true);
         props.setBackward(true);
         props.setStep(0);
     };
@@ -139,10 +137,12 @@ function CreateImageTopic(props) {
                     <div>
                     <div className="thumb-preview">
                         <div className="thumb-preview-wrapper">
+                            <p className="thumb-preview-title">モバイルでの表示</p>
                             <div className={ !acceptedFiles.length ? "thumb-preview-mobile-fake" : "zero-opacity" }/>
                             <img src={thumbs} className={ !acceptedFiles.length ? "thumb-preview-mobile zero-opacity" : "thumb-preview-mobile"}/>
                         </div>
                         <div className="thumb-preview-wrapper">
+                        <p className="thumb-preview-title">PCでの表示</p>
                             <div className={ !acceptedFiles.length ? "thumb-preview-web-fake" : "zero-opacity" }/>
                             <img src={thumbs} className={ !acceptedFiles.length ? "thumb-preview-web zero-opacity" : "thumb-preview-web" }/>
                         </div>

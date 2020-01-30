@@ -10,6 +10,7 @@
     align-self: center;
     margin-left:40px;
     cursor: pointer;
+    width: 60px;
 }
 
 .people-follow:hover {

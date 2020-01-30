@@ -187,13 +187,6 @@
     color: #3C3C3C;
 }
 
-
-[type="radio"]:checked,
-[type="radio"]:not(:checked) {
-    position: absolute;
-    left: -9999px;
-}
-
 /*== people ===*/
 
 .search-people{
@@ -276,4 +269,10 @@
     opacity: 1;
     -webkit-transform: scale(1);
     transform: scale(1);
+}
+
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
 }

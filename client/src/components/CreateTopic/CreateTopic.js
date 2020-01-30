@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 
-
 // 将来的にはこれをconfiugrableにして、
 // ステップ名とjsxのpairを渡せば完成する感じにする
 
@@ -9,6 +8,7 @@ import CreateDecideTopic from "./CreateDecideTopic";
 import CreateImageTopic from "./CreateImageTopic";
 import CreateTagTopic from "./CreateTagTopic";
 import CreateFriendsTopic from "./CreateFriendsTopic"
+import CreatePreviewTopic from "./CreatePreviewTopic"
 
 class CreateTopic extends Component {
 
@@ -46,6 +46,7 @@ class CreateTopic extends Component {
                         setBackward={this.setBackward} 
                         setTags={this.setTags} 
                         setStep={this.setStep}
+                        max={6}
                         />
             case 3:
                 return <CreateFriendsTopic
@@ -53,13 +54,24 @@ class CreateTopic extends Component {
                         setBackward={this.setBackward} 
                         setFriends={this.setFriends} 
                         setStep={this.setStep}
+                        max={2}
+                        />
+            case 4:
+                return <CreatePreviewTopic
+                        back={this.state.back} 
+                        setBackward={this.setBackward} 
+                        topicName={this.state.topicName}
+                        img={this.state.img}
+                        tags={this.state.tags}
+                        friends={this.state.friends}
+                        setStep={this.setStep}
                         />
         }
     }
 
-    setTags = (tag) => {
+    setTags = (tags) => {
         this.setState({
-            tag
+            tags
         })
     }
 
@@ -89,7 +101,6 @@ class CreateTopic extends Component {
     }
 
     setImage = (img) => {
-        console.log(img)
         this.setState({
             img
         })
@@ -141,9 +152,9 @@ class CreateTopic extends Component {
         return (
             <div className="topic-form-wrapper">
                 <div className="topic-form">
+                    <div className="topic-form-progress-mount"/>
                     <div className="topic-form-progress">
-
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-circle">
                             <div className="topic-form-progress-circle-fake">
                                 <p>1</p>
                             </div>
@@ -151,12 +162,12 @@ class CreateTopic extends Component {
                             <p className="topic-form-progress-name">トピック名を決定</p>
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-bar">
                             <div className="topic-form-progress-bar"/>
                             {this.setBar(0)}
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-circle">
                             <div className="topic-form-progress-circle-fake">
                                 <p>2</p>
                             </div>
@@ -164,12 +175,12 @@ class CreateTopic extends Component {
                             <p className="topic-form-progress-name">写真を選択</p>
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-bar">
                             <div className="topic-form-progress-bar"/>
                             {this.setBar(1)}
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-circle">
                             <div className="topic-form-progress-circle-fake">
                                 <p>3</p>
                             </div>
@@ -177,12 +188,12 @@ class CreateTopic extends Component {
                             <p className="topic-form-progress-name">タグを追加</p>
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-bar">
                             <div className="topic-form-progress-bar"/>
                             {this.setBar(2)}
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-circle">
                             <div className="topic-form-progress-circle-fake">
                                 <p>4</p>
                             </div>
@@ -190,12 +201,12 @@ class CreateTopic extends Component {
                             <p className="topic-form-progress-name">友達を招待する</p>
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-bar">
                             <div className="topic-form-progress-bar"/>
                             {this.setBar(3)}
                         </div>
 
-                        <div className="topic-form-progress-fake">
+                        <div className="topic-form-progress-fake-for-circle">
                             <div className="topic-form-progress-circle-fake">
                                 <p>5</p>
                             </div>

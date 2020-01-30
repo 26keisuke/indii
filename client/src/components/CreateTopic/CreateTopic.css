@@ -2,12 +2,23 @@
     height: 100%;
 }
 
+.topic-form-wrapper ::-webkit-scrollbar {
+    width: 10px;  
+}
+
 .topic-form{
     position: relative;
     display: flex;
     justify-content: center;
     height: 100%;
-    width: 1000px;
+}
+
+.topic-form-progress-mount{
+    height: 110px;
+    width: 100%;
+    position: absolute;
+    background-color: #ffffff;
+    z-index:2;
 }
 
 .topic-form-progress{
@@ -23,6 +34,7 @@
     font-size: 10px;
     color: #585858;
     width: 100px;
+    z-index: 5;
     bottom: -20px;
     left: -27px;
     text-align: center;
@@ -33,13 +45,13 @@
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    z-index: 1;
+    z-index: 5;
     opacity: 1;
     background-color: #c4c4c4;
 }
 
 .topic-form-progress-circle-animation{
-    animation-name: progressCirclePop;
+    animation-name: show;
     animation-duration: 3s;
     animation-fill-mode: forwards;
 }
@@ -49,7 +61,7 @@
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    z-index: 1;
+    z-index: 2;
     opacity: 0;
     background-color: #c4c4c4;
 }
@@ -67,7 +79,7 @@
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    z-index: 1;
+    z-index: 4;
     background-color: #646380;
 }
 
@@ -79,8 +91,14 @@
     font-size: 17px;
 }
 
-.topic-form-progress-fake{
+.topic-form-progress-fake-for-circle{
     position: relative;
+    z-index: 5;
+}
+
+.topic-form-progress-fake-for-bar{
+    position: relative;
+    z-index: 3;
 }
 
 .topic-form-progress-bar {
@@ -94,7 +112,7 @@
 
 .topic-form-progress-bar-fake {
     position: absolute;
-    z-index: 1;
+    z-index: 3;
     height: 8px;
     background-color: #646380;
     left: -2px;
@@ -111,7 +129,7 @@
 .topic-form-progress-bar-fake-done {
     position: absolute;
     width:55px;
-    z-index: 1;
+    /* z-index: 3; */
     height: 8px;
     background-color: #646380;
     left: -2px;
@@ -130,26 +148,14 @@
     width: 600px;   
 }
 
-/* .topic-form-area-wrapper-hide{
-    animation-name: topicHide1;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-} */
-
 .topic-form-area-wrapper-show{
-    animation-name: topicShow2;
+    animation-name: topicShow;
     animation-duration: 1s;
     animation-fill-mode: forwards;
 }
 
-/* .topic-form-area-wrapper-back{
-    animation-name: topicBack2;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-} */
-
 .topic-form-area-wrapper-enter{
-    animation-name: topicEnter1;
+    animation-name: topicEnter;
     animation-duration: 1s;
     animation-fill-mode: forwards;
 }
@@ -158,10 +164,29 @@
     position: relative;
 }
 
+.topic-form-area-top-wrapper{
+    position: relative;
+}
+
+.topic-form-area-top-circle{
+    background-color: #9EAEE6;
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    position: absolute;
+    top: 4px;
+}
+
 .topic-form-area-top-title{
     color: #333333;
     font-size: 14px;
     margin-bottom: 15px;
+}
+
+.topic-form-area-top-title span{
+    color: #333333;
+    font-size: 9px;
+    margin-left: 20px;
 }
 
 .topic-form-area-top-warning{
@@ -184,6 +209,14 @@
     background-color: #FF5F5F;
 }
 
+.topic-form-area-top-warning-circle-green{
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    margin-right: 10px;
+    background-color: #4CD964;
+}
+
 .topic-form-area-top-warning a{
     text-decoration: underline !important;
     text-decoration-style: dotted !important;
@@ -197,6 +230,13 @@
     color: #585858;
     font-size: 10px;
     margin-left: 9px;
+    pointer-events: none;
+}
+
+.topic-form-area-preview-input-title{
+    margin-top: 22px;
+    margin-bottom: 7px;
+    font-size: 14px;
 }
 
 .topic-form-area-middle-icon{
@@ -313,10 +353,17 @@
     width: 444px;
 }
 
+.thumb-preview-title{
+    margin-bottom:10px;
+    color: #585858;
+    font-size: 10px;
+    margin-left: 5px;
+}
+
 .thumb-preview-wrapper{
     position: relative;
     margin: 0px 15px;
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 .thumb-preview-mobile-fake{
@@ -337,7 +384,6 @@
     border-bottom-left-radius: 35px;
     border: 1px solid #d2d2d2;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    object-fit: none;
 }
 
 .thumb-preview-web-fake{
@@ -362,7 +408,7 @@
     display: flex;
     flex-direction: row;
     position: absolute;
-    left: 50px;
+    left: 0px;
     top: -2px;
 }
 
@@ -370,15 +416,16 @@
     position: relative;   
 }
 
-.topic-form-tags-box p {
+.topic-form-tags-tags {
     padding: 2px;
-    border: 0.5px solid #646380;
+    border: 0.5px solid #636480;
     border-radius: 3px;
     padding-right: 15px;
     margin-right: 10px;
     font-size: 10px;
     padding-left:4px;
     cursor: pointer;
+    color: #646380;
 }
 
 .topic-form-tags-icon{
@@ -395,10 +442,16 @@
     border: 0.5px solid #d2d2d2;
     height: 135px;
     padding: 15px;
-    margin-top: 25px;
+    margin-top: 8px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.topic-form-friends-title{
+    margin-left: 9px;
+    margin-top: 20px;
+    color: #333333;
 }
 
 .topic-form-friends-wrapper{
@@ -410,7 +463,8 @@
 
 .topic-form-friends-close{
     position: absolute;
-    right: 9px;
+    right: 1px;
+    top: -7px;
     width:16px;
     height:16px;
     background-color: white;
@@ -433,29 +487,124 @@
     cursor: pointer;
 }
 
-@keyframes topicHide1{
-    0%{opacity: 1; padding-left: 22.5%}
-    100%{opacity: 0; padding-left: 0%;}
+.topic-form-friends-search{
+    width: auto;
+    padding: 0px 20px;
 }
 
-@keyframes topicShow2{
+.topic-form-friends-search-wrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    position: relative;
+}
+
+.topic-form-friends-search-img{
+    width: 34px;
+    height: 34px;
+    border: 1px solid black;
+    margin-right: 10px;
+}
+
+.topic-form-friends-name{
+    width: 160px;
+    font-size: 12px;
+}
+
+.topic-form-friends-job{
+    font-size: 11px;
+    width: 140px;
+    color: #606060;
+}
+
+.topic-form-friends-check{
+    border: 0.5px solid #a5a5a5;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right:20px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topic-form-friends-check-green{
+    border: 0.5px solid #4CD964;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right:20px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topic-form-friends-check-icon{
+    transform: scale(1.3);
+    color: #4CD964;
+}
+
+.topic-form-friends-none{
+    font-size: 11px;
+}
+
+/* == preview css ==*/
+
+.topic-form-preview-input{
+    width: 440px;
+    border-bottom: 1px solid #838383;
+    margin-bottom: 30px;
+}
+
+.thumb-preview-box{
+    margin-bottom:40px;
+}
+
+.topic-form-preview-tags{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    margin-left:3px;
+    width: 440px;
+}
+
+.topic-form-tags-preview-tags{
+    padding: 5px;
+    border: 0.5px solid #646380;
+    border-radius: 3px;
+    margin-right: 10px;
+    font-size: 11px;
+    cursor: pointer;
+    color: #646380;
+}
+
+.topic-form-preview-check{
+    font-size: 15px;
+}
+
+.topic-form-preview-check-help{
+    margin-left: 10px;
+    font-size: 10px;
+    color:#838383;
+}
+
+
+
+@keyframes topicShow{
     0%{opacity: 0; padding-left: 45%}
     100%{opacity: 1; padding-left: 22.5%;}
 }
 
-@keyframes topicBack2{
-    0%{opacity: 1; padding-left: 22.5%}
-    100%{opacity: 0; padding-left: 45%;}
-}
-
-@keyframes topicEnter1{
+@keyframes topicEnter{
     0%{opacity: 0; padding-left: 0%}
     100%{opacity: 1; padding-left: 22.5%;}
-}
-
-@keyframes progressCirclePop {
-    0%{opacity: 1}
-    100%{opacity: 0}
 }
 
 @keyframes progressBarExtend {
@@ -467,6 +616,23 @@
 .disable{
     opacity: 0.2;
     pointer-events: none;
+}
+
+.y-scrollable{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.cursor-disabled{
+    pointer-events: none;
+}
+
+.tiny-space{
+    height: 1px;
+}
+
+.space{
+    height: 220px;
 }
 
 /*= gradient animation ==*/

@@ -7,7 +7,15 @@ import { USER_IS_LOGGEDIN,
          RESET_CATEGORY,
          NUDGE_ADD,
          NUDGE_CHECK,
-         SEARCH_TERM } from "./types";
+         SEARCH_TERM,
+         IS_FETCHING,
+         END_FETCHING,
+         ENABLE_GRAY,
+         DISABLE_GRAY,
+         UPDATE_MESSAGE,
+         RESET_MESSAGE,
+         SHOW_CONFIRMATION,
+         HIDE_CONFIRMATION} from "./types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
@@ -24,27 +32,27 @@ export const starOff = (id) => async (dispatch) => {
     dispatch({type: STAR_OFF, payload: res.data})
 }
 
-export const onSearch = () => async (dispatch) => {
+export const onSearch = () => (dispatch) => {
     dispatch({type: ON_SEARCH})
 }
 
-export const offSearch = () => async (dispatch) => {
+export const offSearch = () => (dispatch) => {
     dispatch({type: OFF_SEARCH})
 }
 
-export const resetCategory = () => async (dispatch) => {
+export const resetCategory = () => (dispatch) => {
     dispatch({type: RESET_CATEGORY})
 }
 
-export const setCategory = (id) => async (dispatch) => {
+export const setCategory = (id) => (dispatch) => {
     dispatch({type: SET_CATEGORY, payload: id})
 }
 
-export const nudgeAdd = (id) => async (dispatch) => {
+export const nudgeAdd = (id) => (dispatch) => {
     dispatch({type: NUDGE_ADD, payload: id})
 }
 
-export const nudgeCheck = (id) => async (dispatch) => {
+export const nudgeCheck = (id) => (dispatch) => {
     dispatch({type: NUDGE_CHECK, payload: id})
 }
 
@@ -52,4 +60,42 @@ export const searchTerm = (term) => async (dispatch) => {
     const url = "/api/search/" + String(term)
     const res = await axios.get(url)
     dispatch({type: SEARCH_TERM, payload: res.data})
+}
+
+export const isFetching = () => (dispatch) => {
+    dispatch({type: IS_FETCHING})
+}
+
+export const endFetching = () => (dispatch) => {
+    dispatch({type: END_FETCHING})
+}
+
+export const enableGray = () => (dispatch) => {
+    dispatch({type: ENABLE_GRAY})
+}
+
+export const disableGray = () => (dispatch) => {
+    dispatch({type: DISABLE_GRAY})
+}
+
+export const updateMessage = (type, message) => (dispatch) => {
+    dispatch({type: UPDATE_MESSAGE, payload: {type: type, message: message}})
+}
+
+export const resetMessage = () => (dispatch) => {
+    dispatch({type: RESET_MESSAGE})
+}
+
+export const showConfirmation = (id, action, title, caution, message, buttonMessage) => (dispatch) => {
+    dispatch({type: SHOW_CONFIRMATION, payload: {
+                                                id: id,
+                                                action: action,
+                                                title: title,
+                                                caution: caution,
+                                                message: message, 
+                                                buttonMessage: buttonMessage}})
+}
+
+export const hideConfirmation = () => (dispatch) => {
+    dispatch({type: HIDE_CONFIRMATION})
 }

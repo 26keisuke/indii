@@ -16,5 +16,16 @@ export const NUDGE_ADD = "NUDGE_ADD"
 
 export const SEARCH_TERM = "SEARCH_TERM"
 
-// Hasnt implemented yet
 export const IS_FETCHING = "IS_FETCHING"
+export const END_FETCHING = "END_FETCHING"
+
+export const ENABLE_GRAY = "ENABLE_GRAY"
+export const DISABLE_GRAY = "DISABLE_GRAY"
+
+export const UPDATE_MESSAGE = "UPDATE_MESSAGE"
+export const RESET_MESSAGE = "RESET_MESSAGE"
+
+export const SHOW_CONFIRMATION = "SHOW_CONFIRMATION"
+export const HIDE_CONFIRMATION = "HIDE_CONFIRMATION"
+
+// Hasnt implemented yet

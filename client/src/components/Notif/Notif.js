@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 import NotifElement from "./NotifElement"
 
-import absurd from "../images/absurd/09.png"
+import absurd from "../../images/absurd/09.png"
 import NotifSearchFilter from "./NotifSearchFilter";
-import LeftAndRight from "./LeftAndRight";
+import LeftAndRight from "../LeftAndRight";
 
 class Draft extends Component {
 

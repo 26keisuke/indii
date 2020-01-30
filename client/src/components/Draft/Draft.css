@@ -48,14 +48,6 @@
     cursor: pointer;
 }
 
-.draft-navi-upload-icon-right:hover{
-    background-color: rgba(94, 99, 128, 0.03);
-}
-
-.draft-navi-upload-icon-left:hover{
-    background-color: rgba(94, 99, 128, 0.03);
-}
-
 .draft-navi-upload-icon-img{
     width: 17px;
     height: 17px;
