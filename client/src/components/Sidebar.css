@@ -75,15 +75,13 @@
     }
 }
 
-
-
 .checked{
     background-color: #9EAEE5;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     position: absolute;
-    left: 17px;
-    top:4px;
+    left: 19px;
+    top:7px;
     border-radius: 4px;
 }
 

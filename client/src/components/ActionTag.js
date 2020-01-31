@@ -47,11 +47,12 @@ const getSuggestions = value => {
   return suggestions;
 }
 
-class CreateTagTopic extends Component {
+class ActionTag extends Component {
 
     constructor(props){
         super(props)
-        const tags = this.initializeTags()
+        console.log(this.props.intialVal)
+        const tags = this.props.initialVal || this.initializeTags()
         this.state = {
             value: "",
             suggestions: [],
@@ -236,6 +237,12 @@ class CreateTagTopic extends Component {
         });
     }
 
+    handleRevert = () => {
+        this.setState({
+            tags: this.props.initialVal
+        })
+    }
+
     render() {
 
         const inputProps = {
@@ -254,6 +261,10 @@ class CreateTagTopic extends Component {
                         {this.state.limit ? this.renderWarning("limit") : ""}
                         {this.state.tags.length < max && this.state.illegal ? this.renderWarning("illegal"): ""}
                         <p className="topic-form-area-top-title">3. トピックに関するタグを追加</p>
+                        {   this.props.initialVal
+                        ? <p　onClick={this.handleRevert} className="topic-form-area-top-revert">元に戻す</p>
+                        : ""
+                        }
                     </div> 
                     <form onSubmit={this.formSubmit} className="topic-form-area-middle">
                         <div className="topic-form-tags">
@@ -286,4 +297,4 @@ class CreateTagTopic extends Component {
     }
 }
 
-export default CreateTagTopic;
+export default ActionTag;

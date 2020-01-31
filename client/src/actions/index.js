@@ -99,3 +99,4 @@ export const showConfirmation = (id, action, title, caution, message, buttonMess
 export const hideConfirmation = () => (dispatch) => {
     dispatch({type: HIDE_CONFIRMATION})
 }
+

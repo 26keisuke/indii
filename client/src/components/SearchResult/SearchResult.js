@@ -4,11 +4,11 @@ import absurd from "../../images/absurd/09.png"
 
 import sample from "../../images/sample1.png"
 
-import SearchResultTopic from "./SearchResultTopic"
 import SearchResultTalk from "./SearchResultTalk"
 import SearchFilter from "./SearchFilter"
-import SearchResultPeople from "./SearchResultPeople"
+import People from "../People"
 import Post from "../Post"
+import TopicElement from "../TopicElement"
 
 import LeftAndRightBack from "../LeftAndRightBack"
 
@@ -43,26 +43,30 @@ class SearchResult extends Component {
                     <div className="content-inside-header">
                         <p>トピック</p>
                     </div>
-                    <SearchResultTopic
-                        title={"Apache Kafka"}
-                        content={"BrokerはConsumerがメッセージを購読したかに関わらず設定された期間のみ保持してその後削除する．これはKafkaの大きな特徴の1つである．例えば保存期間を2日間に設定すれば配信後2日間のみデータは保持されその後削除される。このためConsumerサイドがメッセージをどこまで読んだがを自らが管理する（Brokerが管理する必要がない）。"}
-                        likes={212233}
-                        tags={["Computer Science", "Open Source", "Batch Processing"]}
-                    />
+                    <div className="search-res-topic-wrapper">
+                        <TopicElement
+                            title={"Apache Kafka"}
+                            content={"BrokerはConsumerがメッセージを購読したかに関わらず設定された期間のみ保持してその後削除する．これはKafkaの大きな特徴の1つである．例えば保存期間を2日間に設定すれば配信後2日間のみデータは保持されその後削除される。このためConsumerサイドがメッセージをどこまで読んだがを自らが管理する（Brokerが管理する必要がない）。"}
+                            likes={212233}
+                            tags={["Computer Science", "Open Source", "Batch Processing"]}
+                        />
+                    </div>
                 </div>
                 <div className="search-res-category">
                     <div className="search-res-space"/>
                     <div className="content-inside-header">
                         <p>ポスト</p>
                     </div>
-                    <Post
-                        topic={"Apache Kafka"}
-                        title={"Stream Processingとの関係"}
-                        content={"とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。 "}
-                        count={202}
-                        date={"August 21, 2013 5:36 AM"}
-                        img={sample}
-                    />
+                    <div className="search-post-wrapper">
+                        <Post
+                            topic={"Apache Kafka"}
+                            title={"Stream Processingとの関係"}
+                            content={"とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。 "}
+                            count={202}
+                            date={"August 21, 2013 5:36 AM"}
+                            img={sample}
+                        />
+                    </div>
                 </div>
                 <div className="search-res-category">
                     <div className="search-res-space"/>
@@ -96,12 +100,14 @@ class SearchResult extends Component {
                 <div className="content-right-card-title">
                     <p>あなたにおすすめのライター</p>
                 </div>
-                <SearchResultPeople 
-                    id={"123456789"}
-                    name={"飯塚啓介"} 
-                    job={"Chief株式会社 CEO"} 
-                    intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなど..."}
-                />
+                <div className="search-people-wrapper">
+                    <People
+                        id={"123456789"}
+                        name={"飯塚啓介"} 
+                        job={"Chief株式会社 CEO"} 
+                        intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなど..."}
+                    />
+                </div>
             </div>
         )
     }

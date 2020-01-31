@@ -30,7 +30,11 @@ class HeaderProfile extends Component {
                             {this.props.auth.name.givenName}
                         </div>
                         :
-                        <Link to={"/login"} className="nav-profile-name">Login</Link>
+                        <Link to={"/login"} className="nav-profile-name">
+                            <div className="nav-profile-btn">
+                                ログイン/サインアップ
+                            </div>
+                        </Link>
                     }
                 </Link>
             </div>

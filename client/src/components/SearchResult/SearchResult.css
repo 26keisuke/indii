@@ -6,68 +6,20 @@
 
 /*=== topic ====*/
 
-.search-res-topic{
-    display: flex;
-    flex-direction: row;
-    background-color: #ffffff;
+.search-res-topic-wrapper{
     border-bottom: 1px solid #d2d2d2;
     border-right: 1px solid #d2d2d2;
-    align-items: center;
-    height:135px;
-    cursor: pointer;
 }
 
-.search-res-topic:hover{
-    background-color: rgba(233, 233, 238, 0.25);
+/*== post ==*/
+.search-post-wrapper{
+    border-bottom: 1px solid #d2d2d2;
+    border-right: 1px solid #d2d2d2;
 }
 
-.search-res-topic-right{
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0px;
-    padding-right:15px;
-}
-
-.search-res-topic-img{
-    height: 110px;
-    width:110px;
-    object-fit: contain;
-    padding: 0px 10px;
-    flex-shrink:0;
-}
-
-.search-res-topic-title{
-    color: #333333;
-    font-size:17px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.search-res-topic-content{
-    margin-bottom: 7px;
-}
-
-.search-res-topic-likes{
-    color: #5a5a5a;
-    font-size: 13px;
-    margin-right: 20px;;
-}
-
-.search-res-topic-bottom{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.search-res-topic-tags-wrapper{
-    display: flex;
-    flex-direction: row;
-}
-
-.search-res-topic-tags-wrapper p{
-    margin-right: 5px;
-    font-size: 10px;
-    color: #8F8B8B;
+.search-post-wrapper .post-img{
+    width: 130px;
+    height: 130px;
 }
 
 /*=== talk ===*/
@@ -187,42 +139,15 @@
     color: #3C3C3C;
 }
 
-/*== people ===*/
+/*== people ==*/
 
-.search-people{
+.search-people-wrapper{
     border-right:1px solid #d2d2d2;
     border-left:1px solid #d2d2d2;
     border-bottom:1px solid #d2d2d2;
-    padding: 10px 10px;
-    cursor: pointer;
 }
 
-.search-people:hover{
-    background-color: rgba(233, 233, 238, 0.25);
-}
 
-.search-people:hover > .search-people-top{
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.search-people-top{
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 10px;
-    background-color: #ffffff;
-    height:37px;
-    position: relative;
-}
-
-.search-people-follow-wrapper{
-    position: absolute;
-    right: -12px;
-    top: 5px;
-}
-
-.search-people-intro{
-    font-size: 11px;
-}
 
 /*== filter button (from https://codepen.io/manabox/pen/raQmpL)===*/
 

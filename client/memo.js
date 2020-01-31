@@ -56,3 +56,69 @@ animation: AnimationName 25s ease infinite;
 
 // localhost:3000 からどうしてもauth/googleにいけなかった
 // solution => 一回http-middleware-proxyを消してもう一回インストールで直った
+
+other color themes
+rgb(112, 69, 81)
+rgb(#455964) => defaultのアカウントのバックグラウンド
+green: 4CD964
+red: FF5F5F
+
+{/* <div className="topic-form-progress-fake-for-circle">
+                    <div className="topic-form-progress-circle-fake">
+                        <p>1</p>
+                    </div>
+                    {this.setCircle(0)}
+                    <p className="topic-form-progress-name">トピック名を決定</p>
+                </div>
+
+                <div className="topic-form-progress-fake-for-bar">
+                    <div className="topic-form-progress-bar"/>
+                    {this.setBar(0)}
+                </div>
+
+                <div className="topic-form-progress-fake-for-circle">
+                    <div className="topic-form-progress-circle-fake">
+                        <p>2</p>
+                    </div>
+                    {this.setCircle(1)}
+                    <p className="topic-form-progress-name">写真を選択</p>
+                </div>
+
+                <div className="topic-form-progress-fake-for-bar">
+                    <div className="topic-form-progress-bar"/>
+                    {this.setBar(1)}
+                </div>
+
+                <div className="topic-form-progress-fake-for-circle">
+                    <div className="topic-form-progress-circle-fake">
+                        <p>3</p>
+                    </div>
+                    {this.setCircle(2)}
+                    <p className="topic-form-progress-name">タグを追加</p>
+                </div>
+
+                <div className="topic-form-progress-fake-for-bar">
+                    <div className="topic-form-progress-bar"/>
+                    {this.setBar(2)}
+                </div>
+
+                <div className="topic-form-progress-fake-for-circle">
+                    <div className="topic-form-progress-circle-fake">
+                        <p>4</p>
+                    </div>
+                    {this.setCircle(3)}
+                    <p className="topic-form-progress-name">友達を招待する</p>
+                </div>
+
+                <div className="topic-form-progress-fake-for-bar">
+                    <div className="topic-form-progress-bar"/>
+                    {this.setBar(3)}
+                </div>
+
+                <div className="topic-form-progress-fake-for-circle">
+                    <div className="topic-form-progress-circle-fake">
+                        <p>5</p>
+                    </div>
+                    {this.setCircle(4)}
+                    <p className="topic-form-progress-name">プレビュー</p>
+                </div> */}

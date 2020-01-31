@@ -30,7 +30,8 @@ class PostFeed extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isOpened: true, btnClass: "post-feed-down",
+            isOpened: true, 
+            btnClass: "post-feed-down",
             star: star,
             showEmoji: false,
             showMore: false,

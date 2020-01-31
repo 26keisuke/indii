@@ -1,10 +1,25 @@
 import React, { Component } from "react"
 
-import PeopleFollow from "./PeopleFollow"
+import PeopleFollow from "../PeopleFollow"
+import * as actions from "../../actions"
 
 import { FaTwitter, FaBlog, FaGithub, FaFacebookSquare } from "react-icons/fa"
 
 class ProfileTop extends Component {
+
+    toggleBar = (target) => {
+        if(this.props.toggle[target] === true){
+            return "selected"
+        }
+        return "unselected"
+    }
+
+    toggleElement = (target) => {
+        if(this.props.toggle[target] === true){
+            return "profile-underbar"
+        }
+        return "profile-underbar hide"
+    }
 
     render() {
         return (
@@ -34,25 +49,47 @@ class ProfileTop extends Component {
                         <div className="profile-record">
                             <div className="profile-stats">
                                 <p className="profile-number">{this.props.posts}</p>
-                                <p className="profile-category">Posts</p>
+                                <p className="profile-category">ポスト数</p>
                             </div>
                             <div className="profile-stats"> 
                                 <p className="profile-number">{this.props.edits}</p>
-                                <p className="profile-category">Edits</p>
+                                <p className="profile-category">編集回数</p>
                             </div>
                             <div className="profile-stats"> 
                                 <p className="profile-number">{this.props.follows}</p>
-                                <p className="profile-category">Follows</p>
+                                <p className="profile-category">フォロー</p>
                             </div>
                             <div className="profile-stats">
                                 <p className="profile-number">{this.props.followers}</p>
-                                <p className="profile-category">Followers</p>
+                                <p className="profile-category">フォロワー</p>
                             </div>
                         </div>
                     </div>
                     <div className="profile-bottom-right">
-                        <div className="profile-follow-wrapper">
+                        <div className="profile-follow-button-wrapper">
                             <PeopleFollow/>
+                        </div>
+                    </div>
+                    <div className="profile-toggle-box">
+                        <div onClick={() => this.props.setElement("owner")} className="profile-toggle-element">
+                            <p className={this.toggleBar("owner")}>オーナー</p>
+                            <div className={this.toggleElement("owner")}/>
+                        </div>
+                        <div onClick={() => this.props.setElement("favoriteTopic")} className="profile-toggle-element">
+                            <p className={this.toggleBar("favoriteTopic")}>お気に入りのトピック</p>
+                            <div className={this.toggleElement("favoriteTopic")}/>
+                        </div>
+                        <div onClick={() => this.props.setElement("favoritePost")} className="profile-toggle-element">
+                            <p className={this.toggleBar("favoritePost")}>お気に入りのポスト</p>
+                            <div className={this.toggleElement("favoritePost")}/>
+                        </div>
+                        <div onClick={() => this.props.setElement("follows")} className="profile-toggle-element">
+                            <p className={this.toggleBar("follows")}>フォロー</p>
+                            <div className={this.toggleElement("follows")}/>
+                        </div>
+                        <div onClick={() => this.props.setElement("followers")} className="profile-toggle-element">
+                            <p className={this.toggleBar("followers")}>フォロワー</p>
+                            <div className={this.toggleElement("followers")}/>
                         </div>
                     </div>
                 </div>

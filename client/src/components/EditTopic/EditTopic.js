@@ -1,48 +1,58 @@
-import React, { Component } from "react"
+import React, {Component} from "react"
+import axios from "axios"
 
-// 将来的にはこれをconfiugrableにして、
-// ステップ名とjsxのpairを渡せば完成する感じにする
-
-import CreateDecideTopic from "./CreateDecideTopic";
-import CreateFriendsTopic from "./CreateFriendsTopic"
-import CreatePreviewTopic from "./CreatePreviewTopic"
+import EditDecideTopic from "./EditDecideTopic";
+import EditIndexTopic from "./EditIndexTopic"
+import CreatePreviewTopic from "../CreateTopic/CreatePreviewTopic"
 
 import ActionProgress from "../ActionProgress"
 import ActionImage from "../ActionImage"
 import ActionTag from "../ActionTag"
 
-import "./CreateTopic.css";
 import Back from "../Back";
 
-class CreateTopic extends Component {
+import sample from "../../images/sample1.png"
+
+
+// 将来的にはeach componentのthis.setStep(1)の1の部分もpropsで決められるようにする
+class CreatePost extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
             step: 0,
             back: false,
-            topicName: "",
-            img: [],
-            tags: [],
-            friends: [],
+            topicId: "",
+            original: {
+                img: [],
+                tags: [],
+                index: [],
+            },
+            edited: {
+                img: [],
+                tags: [],
+                index: [],
+            },
         }
     }
 
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return <CreateDecideTopic 
+                return <EditDecideTopic 
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        storage="createTopicName"
-                        setTopicName={this.setTopicName} 
+                        storage="editTopicName"
+                        setTopicId={this.setTopicId} 
                         setStep={this.setStep}
                         />
             case 1:
                 return <ActionImage
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        storage="createTopicImage"
+                        // initialVal={this.state.original.img} 本来はこっち
+                        initialVal={sample}
+                        storage="editTopicImage"
                         setImage={this.setImage} 
                         setStep={this.setStep}
                         />
@@ -50,17 +60,21 @@ class CreateTopic extends Component {
                 return <ActionTag
                         back={this.state.back} 
                         setBackward={this.setBackward} 
+                        // initialVal={this.state.original.tags} 本来はこっち
+                        initialVal={["Hello", "World"]}
+                        storage="editTopicTags"
                         setTags={this.setTags} 
                         setStep={this.setStep}
                         max={6}
                         />
             case 3:
-                return <CreateFriendsTopic
+                return <EditIndexTopic
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        setFriends={this.setFriends} 
+                        // initialVal={this.state.original.index} 本来はこっち
+                        initialVal={[]}
+                        setIndex={this.setIndex} 
                         setStep={this.setStep}
-                        max={2}
                         />
             case 4:
                 return <CreatePreviewTopic
@@ -69,67 +83,86 @@ class CreateTopic extends Component {
                         topicName={this.state.topicName}
                         img={this.state.img}
                         tags={this.state.tags}
-                        friends={this.state.friends}
+                        index={this.state.index}
                         setStep={this.setStep}
                         />
         }
     }
 
+    setImage = (img) => {
+        this.setState({
+            edited: {
+                img
+            }
+        })
+    }
     setTags = (tags) => {
         this.setState({
-            tags
+            edited:{
+                tags
+            }
         })
     }
-    setFriends = (friends) => {
+    setIndex = (index) => {
         this.setState({
-            friends
+            edited: {
+                index
+            }
         })
     }
+
     setStep = (step) => {
         this.setState({
             step
         })
     }
+
     setBackward = (back) => {
         this.setState({
             back
         })
     }
-    setTopicName = (name) => {
+
+    setTopicId = (id) => {
         this.setState({
-            topicName: name
+            topicId: id
         })
-    }
-    setImage = (img) => {
-        this.setState({
-            img
+        const url = "/api/post/" + id
+        axios.get(url)
+        .then(res => {
+            this.setState({
+                original: {
+                    img: res.img,
+                    tags: res.tags,
+                    index: res.index,
+                }
+            })
+        })
+        .catch(err => {
+            console.log(err)
         })
     }
 
-    render() {
-         
+    render () {
         return (
             <div className="topic-form-wrapper">
                 <div className="topic-form">
-
                     <div className="topic-form-back-wrapper">
                         <Back
                             url="/action"
                             name="編集・作成一覧に戻る"
                         />
                     </div>
-                    <p className="topic-form-title">新しいトピックを作成する</p>
+                    <p　className="topic-form-title">既存のトピックを編集する</p>
                     <div className="topic-form-progress-mount"/>
-                    
-
                     <ActionProgress
                         step={this.state.step}
                         stepName={
                             [
-                                "トピック名を決定",
-                                "写真を選択",
-                                "タグを追加",
-                                "友達を招待する",
+                                "トピックを選択",
+                                "写真を変更",
+                                "タグを編集",
+                                "目次を編集",
                                 "プレビュー"
                             ]
                         }
@@ -143,4 +176,4 @@ class CreateTopic extends Component {
     }
 }
 
-export default CreateTopic;
+export default CreatePost

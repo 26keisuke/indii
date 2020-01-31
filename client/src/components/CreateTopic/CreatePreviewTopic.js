@@ -57,7 +57,7 @@ class CreatePreviewTopic extends Component {
     render(){
         return (
             <div className="topic-form-area y-scrollable">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper"}>
+                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
                     <div className="topic-form-area-top"> 
                         <p className="topic-form-area-top-title">プレビュー</p>
                     </div> 

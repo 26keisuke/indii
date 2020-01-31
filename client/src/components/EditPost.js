@@ -26,8 +26,7 @@ class CreatePost extends Component {
                         stepName={
                             [
                                 "トピックを選択",
-                                "ポスト名",
-                                "初期設定",
+                                "ポストを選択",
                                 "プレビュー"
                             ]
                         }

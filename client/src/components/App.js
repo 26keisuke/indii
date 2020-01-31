@@ -18,9 +18,11 @@ import Draft from "./Draft/DraftNavigation"
 import DraftEdit from "./Draft/DraftEdit"
 import CreateTopic from "./CreateTopic/CreateTopic"
 import Login from "./Login"
-import Profile from "./Profile"
-
-const CreatePost = () => <h2>Post</h2>
+import Profile from "./Profile/Profile"
+import CreatePost from "./CreatePost"
+import Create from "./Create"
+import EditTopic from "./EditTopic/EditTopic"
+import EditPost from "./EditPost"
 
 class App extends Component {
 
@@ -39,7 +41,6 @@ class App extends Component {
     }
 
     componentDidMount() {
-        console.log("LOADEDED")
         this.props.fetchUser();
     }
 
@@ -222,10 +223,13 @@ class App extends Component {
                             <Route path="/search" component={SearchResult} />
                             <Route exact path="/notification" component={Notification} />
                             <Route path="/notification/check/:id" component={Check} />
-                            <Route path="/create/post" component={CreatePost} />
-                            <Route path="/create/topic" component={CreateTopic} />
+                            <Route path="/action/post/create" component={CreatePost} />
+                            <Route path="/action/topic/create" component={CreateTopic} />
+                            <Route path="/action/post/edit" component={EditPost} />
+                            <Route path="/action/topic/edit" component={EditTopic} />
                             <Route path="/topic/:id" component={Topic} />
                             <Route path="/profile/:id" component={Profile} />
+                            <Route exact path="/action" component={Create} />
                         </div>
                     </div>
                 </BrowserRouter>

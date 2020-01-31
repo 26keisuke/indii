@@ -55,7 +55,7 @@
 .logo-name{
     font-family: 'Libre Baskerville', serif;
     font-size:26px;
-    color: #3D3D3D;
+    color: #455964;
     margin-right:20px;
 }
 
@@ -162,4 +162,9 @@
 
 .nav-profile-name-space{
     margin-right:5px;
+}
+
+.nav-profile-btn{
+    width: 125px;
+    font-size: 12px;
 }

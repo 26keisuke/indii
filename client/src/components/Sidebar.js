@@ -6,10 +6,10 @@ import home from "../images/home.png";
 import home_pressed from "../images/home-pressed.png";
 import draft from "../images/draft.png";
 import draft_pressed from "../images/draft-pressed.png";
-import topic from "../images/topic.png";
-import topic_pressed from "../images/topic-pressed.png";
-import post from "../images/post.png";
-import post_pressed from "../images/post-pressed.png";
+// import topic from "../images/topic.png";
+// import topic_pressed from "../images/topic-pressed.png";
+import action from "../images/post.png";
+import action_pressed from "../images/post-pressed.png";
 import notif from "../images/notification.png";
 import notif_pressed from "../images/notification-pressed.png";
 import setting from "../images/setting.png";
@@ -45,8 +45,8 @@ class Sidebar extends Component {
 
         const home_nudge = this.nudgeRender(this.props.nudge.home)
         const draft_nudge = this.nudgeRender(this.props.nudge.draft)
-        const topic_nudge = this.nudgeRender(this.props.nudge.topic)
-        const post_nudge = this.nudgeRender(this.props.nudge.post)
+        // const topic_nudge = this.nudgeRender(this.props.nudge.topic)
+        const action_nudge = this.nudgeRender(this.props.nudge.action)
         const notif_nudge = this.nudgeRender(this.props.nudge.notification)
         const setting_nudge = this.nudgeRender(this.props.nudge.setting)
         
@@ -63,15 +63,15 @@ class Sidebar extends Component {
                     <img src={cate.draft ? draft_pressed : draft} className="side-bar-img"/>
                     <p className={cate.draft ? "selected" : "unselected"}>下書き</p>
                 </Link>
-                <Link to={"/create/topic"} className="side-bar-row" onClick={() => this.handleClick("topic")}>
+                {/* <Link to={"/create/topic"} className="side-bar-row" onClick={() => this.handleClick("topic")}>
                     <div className={topic_nudge}></div>
                     <img src={cate.topic ? topic_pressed : topic} className="side-bar-img"/>
                     <p className={cate.topic ? "selected" : "unselected"}>トピックを作成</p>
-                </Link>
-                <Link to={"/create/post"} className="side-bar-row" onClick={() => this.handleClick("post")}>
-                    <div className={post_nudge}></div>
-                    <img src={cate.post ? post_pressed : post} className="side-bar-img"/>
-                    <p className={cate.post ? "selected" : "unselected"}>ポストを作成</p>
+                </Link> */}
+                <Link to={"/action"} className="side-bar-row" onClick={() => this.handleClick("action")}>
+                    <div className={action_nudge}></div>
+                    <img src={cate.action ? action_pressed : action} className="side-bar-img"/>
+                    <p className={cate.action ? "selected" : "unselected"}>編集・作成</p>
                 </Link>
                 <Link to={"/notification"} className="side-bar-row" onClick={() => this.handleClick("notification")}> 
                     <div className={notif_nudge}></div>

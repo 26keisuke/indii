@@ -6,7 +6,7 @@ import post from "../images/post.png"
 
 import "./Topic.css"
 
-class Topic extends Component {
+class TopicPage extends Component {
     render() {
         return (
             <div className="content-full">
@@ -84,4 +84,4 @@ class Topic extends Component {
     }
 }
 
-export default Topic;
+export default TopicPage;

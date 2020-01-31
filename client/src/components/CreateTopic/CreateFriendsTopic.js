@@ -100,7 +100,7 @@ class CreateFriendsTopic extends Component {
         return (
             <div key={suggestion.id} className="topic-form-friends-search-wrapper">
                 <img className="topic-form-friends-search-img" src={suggestion.imgUrl}/>
-                <div className=".topic-form-friends-search">
+                <div className="topic-form-friends-search">
                     <p className="topic-form-friends-name">{suggestion.name}</p>
                 </div>
                 <p className="topic-form-friends-job">{suggestion.job}</p>
@@ -223,7 +223,7 @@ class CreateFriendsTopic extends Component {
         const target = this.state.friends.map(friend => 
             <div key={friend.id} className="topic-form-friends-wrapper">
                 <div className="topic-form-friends-close">
-                    <IoMdClose className="topic-form-friends-close-icon"/>
+                    <IoMdClose onClick={() => this.deleteFromList(friend.id)} className="topic-form-friends-close-icon"/>
                 </div>
                 <img src={friend.imgUrl} onClick={() => this.deleteFromList(friend.id)} className="topic-form-friends-person"/>
             </div>
@@ -242,7 +242,7 @@ class CreateFriendsTopic extends Component {
         const max = this.props.max
 
         return (
-            <div className="topic-form-area">
+            <div className="topic-form-area y-scrollable">
                 <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
                     <div className="topic-form-area-top"> 
                         {this.state.friends.length < max && this.state.flag ? this.renderWarning("sameVal"): ""}
@@ -275,6 +275,7 @@ class CreateFriendsTopic extends Component {
                     <div className="topic-form-friends">
                         {this.renderFriends()}
                     </div>
+                    <div className="space"/>
                 </div>
             </div>
         )

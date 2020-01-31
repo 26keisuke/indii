@@ -16,8 +16,8 @@ const initialState = {
     category: {
         home: true,
         draft: false,
-        topic: false,
-        post: false,
+        // topic: false,
+        action: false,
         notification: false,
         setting: false
     },
@@ -36,8 +36,8 @@ const initialState = {
     nudge: {
         home: true,
         draft: false,
-        topic: true,
-        post: false,
+        // topic: true,
+        action: true,
         notification: false,
         setting: false
     },
@@ -157,15 +157,15 @@ function nudgeReducer(state=initialState.nudge, action) {
                         ...state,
                         draft: false
                     }
-                case "topic":
+                // case "topic":
+                //     return {
+                //         ...state,
+                //         topic: false
+                //     }
+                case "action":
                     return {
                         ...state,
-                        topic: false
-                    }
-                case "post":
-                    return {
-                        ...state,
-                        post: false
+                        action: false
                     }
                 case "notification":
                     return {
@@ -191,8 +191,8 @@ function categoryReducer(state=initialState.category, action) {
                 ...state,
                 home: false,
                 draft: false,
-                topic: false,
-                post: false,
+                // topic: false,
+                action: false,
                 notification: false,
                 setting: false
             }
@@ -209,15 +209,15 @@ function categoryReducer(state=initialState.category, action) {
                         ...state,
                         draft: true
                     }
-                case "topic":
+                // case "topic":
+                //     return {
+                //         ...state,
+                //         topic: true
+                //     }
+                case "action":
                     return {
                         ...state,
-                        topic: true
-                    }
-                case "post":
-                    return {
-                        ...state,
-                        post: true
+                        action: true
                     }
                 case "notification":
                     return {
