@@ -3,6 +3,8 @@ import Column from "../Column"
 import styled from "styled-components"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
+import InitialData from "./InitialData"
+
 const Container = styled.div`
     display: flex;
 `
@@ -10,42 +12,6 @@ const Container = styled.div`
 const Wrapper = styled.div`
 
 `
-
-const initialData = {
-    tasks: {
-        "task-1": { id: "task-1", index: [1,1], content: "1.1"},
-        "task-2": { id: "task-2", index: [1,2], content: "1.2"},
-        "task-3": { id: "task-3", index: [1,3], content: "1.3"},
-        "task-4": { id: "task-4", index: [1,3,1], content: "1.3.1"},
-        "task-5": { id: "task-5", index: [1,3,2], content: "1.3.2"},
-        "task-6": { id: "task-6", index: [1,3,3], content: "1.3.3"},
-        "task-7": { id: "task-7", index: [2,1], content: "2.1"},
-        "task-8": { id: "task-8", index: [2,2], content: "2.2"},
-        "task-9": { id: "task-9", index: [2,3], content: "2.3"},
-        "task-10": { id: "task-10", index: [3,1], content: "3.1"}
-    },
-    columns: {
-        "column-1": {
-            id: "column-1",
-            column: 1,
-            title: "ナポレオンの生涯",
-            taskIds: ["task-1","task-2","task-3","task-4","task-5","task-6"]
-        },
-        "column-2": {
-            id: "column-2",
-            column: 2,
-            title: "ナポレオンの影響",
-            taskIds: ["task-7","task-8","task-9"]
-        },
-        "column-3": {
-            id: "column-3",
-            column: 3,
-            title: "ナポレオンの逸話",
-            taskIds: ["task-10"]
-        }
-    },
-    columnOrder: ["column-1", "column-2", "column-3"]
-}
 
 class InnerList extends Component {
     shouldComponentUpdate(nextProps) {
@@ -71,56 +37,26 @@ class EditIndexTopic extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            index: initialData,
-            sorted: [], //store column index, two when exchanged between two columns eg) [1,2], [1], []
+            index: InitialData,
         }
-    }
-
-    createNewIndexes = (index, base, valueToChange) => {
-        const columnName = this.state.index.columnOrder[index]
-        const taskIds = this.state.index.columns[columnName].taskIds
-        // const columnIndex = this.state.index.columns[columnName].column
-
-        var newIndexes = {}
-
-        taskIds.forEach(id => {
-            const newArray = Array.from(this.state.index.tasks[id].index)
-            newArray[0] = base + valueToChange
-            newIndexes = {
-                ...newIndexes,
-                [id]: {
-                    ...this.state.index.tasks[id],
-                    index: newArray,
-                }
-            }
-        })
-
-        const columnChange = {
-            [columnName]: {
-                ...this.state.index.columns[columnName],
-                column:base + valueToChange,
-            }
-        }
-
-        return [columnChange, newIndexes]
     }
 
     sortColumnSwap = (newColumnOrder, start, end) => {
 
-        const targetResult = this.createNewIndexes(start, end, 1)
-
+        const targetResult = this.createNewIndexes(end, 1, 0, start)
+    
         const columnChange = targetResult[0]
         const newIndexes = targetResult[1]
-
+    
         if (end > start) {
             // eg) start => 0, end => 3の場合は、1~3の計3つのcolumnが１下がる
             var baseColumnChange = {}
             var baseNewIndexes = {}
-
+    
             for(var i = start+1; i <= end; i++){
                 const baseColumnName = this.state.index.columnOrder[i]
                 const baseIndex = this.state.index.columns[baseColumnName].column
-                const baseResult = this.createNewIndexes(i, baseIndex, -1)
+                const baseResult = this.createNewIndexes(baseIndex, -1, 0, i)
                 baseColumnChange = {
                     ...baseColumnChange,
                     ...baseResult[0]
@@ -130,13 +66,13 @@ class EditIndexTopic extends Component {
                     ...baseResult[1]
                 }
             }
-
+    
         } else if(start > end) {
             // eg) start => 3, end => 0の場合は、0~2の計3つのcolumnが１上がる
-            for(var i = start-1; i <= end; i++){
+            for(var i = end; i <= start-1; i++){
                 const baseColumnName = this.state.index.columnOrder[i]
                 const baseIndex = this.state.index.columns[baseColumnName].column
-                const baseResult = this.createNewIndexes(i, baseIndex, 1)
+                const baseResult = this.createNewIndexes(baseIndex, 1, 0, i)
                 baseColumnChange = {
                     ...baseColumnChange,
                     ...baseResult[0]
@@ -147,7 +83,7 @@ class EditIndexTopic extends Component {
                 }
             }
         }
-
+    
         const newIndex = {
             ...this.state.index,
             columns: {
@@ -162,11 +98,41 @@ class EditIndexTopic extends Component {
             },
             columnOrder: newColumnOrder,
         }
-
+    
         this.setState({
             index: newIndex
         })
-
+    }
+    
+    createNewIndexes = (baseIndex, valueToChange, level, columnIndex) => {
+    
+        var taskIds = []
+        var columnName = ""
+    
+        columnName = this.state.index.columnOrder[columnIndex]
+        taskIds = this.state.index.columns[columnName].taskIds
+    
+        var newIndexes = {}
+    
+        taskIds.forEach(id => {
+            const newArray = Array.from(this.state.index.tasks[id].index)
+            newArray[level] = baseIndex + valueToChange
+            newIndexes = {
+                ...newIndexes,
+                [id]: {
+                    ...this.state.index.tasks[id],
+                    index: newArray,
+                }
+            }
+        })
+    
+        const columnChange = {
+            [columnName]: {
+                ...this.state.index.columns[columnName],
+                column: baseIndex + valueToChange,
+            }
+        }
+        return [columnChange, newIndexes]
     }
 
     onDragEnd = result => {
@@ -183,40 +149,99 @@ class EditIndexTopic extends Component {
             return;
         }
 
+        ///////////////////////////////////
+        // もし、Column同士を入れ替えた場合 //
+        ///////////////////////////////////
+
         if(type === "column") {
             const newColumnOrder = Array.from(this.state.index.columnOrder);
             newColumnOrder.splice(source.index, 1);
             newColumnOrder.splice(destination.index, 0, draggableId);
-
-            const newState = {
-                ...this.state.index,
-                columnOrder: newColumnOrder,
-            }
-
-            // this.setState({
-            //     index: newState,
-            // })
 
             this.sortColumnSwap(newColumnOrder, source.index, destination.index) 
 
             return;
         }
 
-        const start = this.state.index.columns[source.droppableId]
-        const finish = this.state.index.columns[destination.droppableId]
+        const origin = this.state.index.columns[source.droppableId]
+        const target = this.state.index.columns[destination.droppableId]
 
-        if(start === finish) {
-            const newTaskIds = Array.from(start.taskIds);
+        ///////////////////////////////////
+        // もし、同じColumnから持ってきた場合 //
+        ///////////////////////////////////
+
+        if(origin === target) {
+            const newTaskIds = Array.from(origin.taskIds);
             newTaskIds.splice(source.index, 1);
             newTaskIds.splice(destination.index, 0, draggableId);
+    
+            var newIndexes = {}
+
+            if (destination.index > source.index) {
+                // 2{soure.index}を4{destination.index}の位置に持っていく場合は、前半（2~3）が-1され、4が3の値+1される
+                for (var i=source.index; i<=destination.index-1; i++){
+                    const taskId = newTaskIds[i]
+                    const newArray = Array.from(this.state.index.tasks[taskId].index)
+                    const baseIndex = this.state.index.tasks[taskId].index[1]
+                    newArray[1] = baseIndex-1
+                    newIndexes = {
+                        ...newIndexes,
+                        [taskId]: {
+                            ...this.state.index.tasks[taskId],
+                            index: newArray
+                        }
+                    }
+                }
+                const taskId = draggableId
+                const newArray = Array.from(this.state.index.tasks[taskId].index)
+                const baseIndex = this.state.index.tasks[taskId].index[1]
+                newArray[1] = baseIndex+destination.index-source.index
+                newIndexes = {
+                    ...newIndexes,
+                    [taskId]: {
+                        ...this.state.index.tasks[taskId],
+                        index: newArray
+                    }
+                }
+            } else if (destination.index < source.index) {
+                // 4{soure.index}を2{destination.index}の位置に持っていく場合は、前半（2~3）が+1され、4が3の値+1される
+                for (var i=destination.index+1; i<=source.index; i++){
+                    const taskId = newTaskIds[i]
+                    const newArray = Array.from(this.state.index.tasks[taskId].index)
+                    const baseIndex = this.state.index.tasks[taskId].index[1]
+                    newArray[1] = baseIndex+1
+                    newIndexes = {
+                        ...newIndexes,
+                        [taskId]: {
+                            ...this.state.index.tasks[taskId],
+                            index: newArray
+                        }
+                    }
+                }
+                const taskId = draggableId
+                const newArray = Array.from(this.state.index.tasks[taskId].index)
+                const baseIndex = this.state.index.tasks[taskId].index[1]
+                newArray[1] = baseIndex+destination.index-source.index
+                newIndexes = {
+                    ...newIndexes,
+                    [taskId]: {
+                        ...this.state.index.tasks[taskId],
+                        index: newArray
+                    }
+                }
+            }
 
             const newColumn = {
-                ...start,
+                ...origin,
                 taskIds: newTaskIds,
             };
 
             const newState = {
                 ...this.state.index,
+                tasks:{
+                    ...this.state.index.tasks,
+                    ...newIndexes
+                },
                 columns: {
                     ...this.state.index.columns,
                     [newColumn.id]: newColumn
@@ -227,31 +252,95 @@ class EditIndexTopic extends Component {
                 index: newState,
             });
 
-            // sort logic
-
             return;
         }
 
-        const startTaskIds = Array.from(start.taskIds);
-        startTaskIds.splice(source.index, 1)
-        const newStart = {
-            ...start,
-            taskIds: startTaskIds
+        ///////////////////////////////////
+        // もし、違うColumnから持ってきた場合 //
+        ///////////////////////////////////
+
+        // Sourceに残ったNodeのLogic
+        const sourceTaskIds = Array.from(origin.taskIds); // 始めのColumn
+        sourceTaskIds.splice(source.index, 1) 
+        const newSource = {
+            ...origin,
+            taskIds: sourceTaskIds
         }
 
-        const finishTaskIds = Array.from(finish.taskIds);
-        finishTaskIds.splice(destination.index, 0, draggableId);
-        const newFinish = {
-            ...finish,
-            taskIds: finishTaskIds,
+        const taskIdsAfterSource = sourceTaskIds.slice(source.index)
+
+        var newSourceIndex = {}
+
+        taskIdsAfterSource.forEach((taskId) => {
+            var newArray = Array.from(this.state.index.tasks[taskId].index)
+            newArray[1] = newArray[1] - 1
+            newSourceIndex = {
+                ...newSourceIndex,
+                [taskId]: {
+                    ...this.state.index.tasks[taskId],
+                    index: newArray,
+                }
+            }
+        })
+
+        // Sourceに追加されたNodeのロジック
+        var newAddedIndex = {}
+
+        const newArraySource = Array.from(this.state.index.tasks[draggableId].index)
+        //挿入する位置の一つ前のものか、一番最初の場合は1
+        const destinationTaskId = this.state.index.columns[destination.droppableId].taskIds[destination.index-1]
+        var destinationIndex = 0;
+        if (destinationTaskId) {
+            destinationIndex = this.state.index.tasks[destinationTaskId].index[1]   
         }
+
+        newArraySource[0] = target.column
+        newArraySource[1] = destinationIndex + 1
+        
+        newAddedIndex = {
+            ...newAddedIndex,
+            [draggableId]: {
+                ...this.state.index.tasks[draggableId],
+                index: newArraySource,
+            }
+        }
+
+        // Targetに元々あるNodeのロジック
+        const targetTaskIds = Array.from(target.taskIds); //　ターゲットのColumn
+        targetTaskIds.splice(destination.index, 0, draggableId);
+        const newTarget = {
+            ...target,
+            taskIds: targetTaskIds,
+        }
+
+        const taskIdsAfterTarget = targetTaskIds.slice(destination.index+1)
+
+        var newTargetIndex = {}
+
+        taskIdsAfterTarget.forEach((taskId) => {
+            var newArray = Array.from(this.state.index.tasks[taskId].index)
+            newArray[1] = newArray[1] + 1
+            newTargetIndex = {
+                ...newTargetIndex,
+                [taskId]: {
+                    ...this.state.index.tasks[taskId],
+                    index: newArray,
+                }
+            }
+        })
         
         const newState = {
             ...this.state.index,
             columns: {
                 ...this.state.index.columns,
-                [newStart.id]: newStart,
-                [newFinish.id]: newFinish,
+                [newSource.id]: newSource,
+                [newTarget.id]: newTarget,
+            },
+            tasks: {
+                ...this.state.index.tasks,
+                ...newTargetIndex,
+                ...newAddedIndex,
+                ...newSourceIndex,
             }
         }
 
@@ -259,8 +348,6 @@ class EditIndexTopic extends Component {
             index: newState,
         })
 
-        // sort logic
-    
     }
 
     addNewIndex = () => {
@@ -332,7 +419,7 @@ class EditIndexTopic extends Component {
                 <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
                     <div className="topic-form-area-top"> 
                         {/* {this.renderWarning()} */}
-                        <p className="topic-form-area-top-title">1. トピックを選択してください</p>
+                        <p className="topic-form-area-top-title">4. トピックの目次を編集</p>
                     </div> 
 
                     {this.renderTask()}
