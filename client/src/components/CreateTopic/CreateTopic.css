@@ -181,6 +181,7 @@
     text-decoration: underline;
     color: #747474;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .topic-form-area-top-wrapper{
@@ -200,6 +201,7 @@
     color: #333333;
     font-size: 14px;
     margin-bottom: 15px;
+    white-space: nowrap;
 }
 
 .topic-form-area-top-title span{
