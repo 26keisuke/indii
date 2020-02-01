@@ -1,5 +1,5 @@
-import React, { Component } from "react"
-import Column from "../Column"
+import React, { Component, PureComponent } from "react"
+import Column from "./Column"
 import styled from "styled-components"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 
@@ -7,27 +7,28 @@ import InitialData from "./InitialData"
 
 const Container = styled.div`
     display: flex;
+    height: 350px;
+`
+
+const Button = styled.button`
+    position: absolute;
 `
 
 const Wrapper = styled.div`
-
+    position: absolute;
+    width: 640px;
+    margin-left: -120px;
+    overflow: scroll;
 `
 
-class InnerList extends Component {
-    shouldComponentUpdate(nextProps) {
-        if (
-            nextProps.column === this.props.column &&
-            nextProps.taskMap === this.props.taskMap &&
-            nextProps.index === this.props.index
-        ) {
-            return false;
-        }
-        return true;
+class InnerList extends PureComponent {
+    constructor(props) {
+        super(props)
     }
 
     render () {
         const { column, taskMap, index } = this.props;
-        const tasks = column.taskIds.map(taskId => taskMap[taskId]);
+        const tasks = column.taskIds.map(taskId => (taskMap[taskId]));
         return <Column column={column} tasks={tasks} index={index}/>
     }
 }
@@ -39,6 +40,7 @@ class EditIndexTopic extends Component {
         this.state = {
             index: InitialData,
         }
+        document.documentElement.style.overflow = "hidden"
     }
 
     sortColumnSwap = (newColumnOrder, start, end) => {
@@ -412,6 +414,12 @@ class EditIndexTopic extends Component {
         )
     }
 
+    handleRevert = () => {
+        this.setState({
+            index: InitialData,
+        })
+    }
+
     render() {
         return (
             
@@ -420,11 +428,12 @@ class EditIndexTopic extends Component {
                     <div className="topic-form-area-top"> 
                         {/* {this.renderWarning()} */}
                         <p className="topic-form-area-top-title">4. トピックの目次を編集</p>
+                        <p　onClick={this.handleRevert} className="topic-form-area-top-revert">元に戻す</p>
                     </div> 
 
                     {this.renderTask()}
 
-                    <button onClick={this.addNewIndex}>ADD NEW COLUMN</button>
+                    <Button onClick={this.addNewIndex}>ADD NEW COLUMN</Button>
                     
                 </div>
             </div>

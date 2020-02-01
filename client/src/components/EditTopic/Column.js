@@ -1,10 +1,11 @@
-import React, { Component } from "react"
+import React, { Component, PureComponent } from "react"
 import styled from "styled-components"
 import Task from "./Task"
 import { Droppable, Draggable } from "react-beautiful-dnd"
 
 const Container = styled.div`
     margin: 8px;
+    flex-shrink: 0;
     border: 1px solid lightgrey;
     background-color: white;
     border-radius: 2px;
@@ -16,18 +17,43 @@ const Container = styled.div`
 
 const Title = styled.h3`
     padding: 8px;
+    font-size: 13px;
+    font-weight: normal;
+    margin-bottom: 0px;
+    margin-left: 8px;
+    margin-right: 8px;
+    border-bottom: 1px solid rgba(210,210,210,0.3);
 `
 
 const TaskList = styled.div`
     padding: 8px;
     transition: background-color 0.2s ease;
-    background-color: ${props => (props.isDraggingOver ? "skyblue" : "inherit")};
+    background-color: ${props => (props.isDraggingOver ? "rgba(233, 233, 238, 0.25)" : "inherit")};
+    min-height: 100px;
     flex-grow: 1;
-    min-height: 100px;
-    min-height: 100px;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        width: 0px !important;
+    }
 `
 
+class InnerList extends PureComponent {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        return this.props.tasks.map((task,index) => (
+            <Task key={task.id} task={task} index={index}/>
+        ))
+    }
+}
+
 class Column extends Component {
+    constructor(props) {
+        super(props)
+    }
+    
     render() {
         return (
             <Draggable
@@ -39,7 +65,7 @@ class Column extends Component {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                 >
-                    <Title {...provided.dragHandleProps}>{this.props.column.title}</Title>
+                    <Title {...provided.dragHandleProps}>{this.props.column.column}　{this.props.column.title}</Title>
                     <Droppable droppableId={this.props.column.id} type="task">
                         {(provided, snapshot) => (
                             <TaskList
@@ -47,9 +73,7 @@ class Column extends Component {
                                 {...provided.droppableProps}
                                 isDraggingOver={snapshot.isDraggingOver}
                             >
-                                {this.props.tasks.map((task,index) => (
-                                    <Task key={task.id} task={task} index={index}/>
-                                ))}
+                                <InnerList tasks={this.props.tasks}/>
                                 {provided.placeholder}
                             </TaskList>
                         )}
