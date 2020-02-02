@@ -1,8 +1,8 @@
-.topic{
+/* .topic{
     display: flex;
     flex-direction: column;
     height: 100%;
-}
+} */
 
 .topic-top{
     display: flex;
@@ -13,6 +13,17 @@
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 50px;
+}
+
+.topic-top-back-wrapper{
+    position: relative;
+}
+
+.topic-top-back{
+    position: absolute;
+    width: 300px;
+    top: -32px;
+    left: -11px;
 }
 
 .topic-top-left{
@@ -112,11 +123,12 @@
     flex-direction: column;
     cursor: pointer;
     flex-shrink: 0;
+    position: relative;
 }
 
 .topic-top-toggle-selected{
     color: #000000;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .topic-top-toggle-unselected{
@@ -125,6 +137,17 @@
 
 .topic-top-underline{
     background-color: #636480;
-    width:40px;
-    height:3px;
+    width:98%;
+    height:2px;
+    animation-name: extend-underline;
+    animation-duration: 250ms;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes extend-underline{
+    0% {
+        width: 0px;
+    } 100% {
+        width: 80%;
+    }
 }

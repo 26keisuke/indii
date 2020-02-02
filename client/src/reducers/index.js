@@ -10,7 +10,8 @@ import { USER_IS_LOGGEDIN,
          IS_FETCHING, END_FETCHING,
          ENABLE_GRAY, DISABLE_GRAY, 
          UPDATE_MESSAGE, RESET_MESSAGE,
-         SHOW_CONFIRMATION, HIDE_CONFIRMATION} from "../actions/types"
+         SHOW_CONFIRMATION, HIDE_CONFIRMATION,
+         ADD_COLUMN} from "../actions/types"
 
 const initialState = {
     category: {
@@ -48,6 +49,9 @@ const initialState = {
     notif: {
 
     },
+    index: {
+        columnName: ""
+    },
     update: {
         fetching: false,
         grayBackground: false,
@@ -66,6 +70,18 @@ const initialState = {
             html: ""
         },
     },
+}
+
+function indexReducer(state=initialState.index, action) {
+    switch(action.type){
+        case ADD_COLUMN:
+            return {
+                ...state,
+                columnName: action.payload.name,
+            }
+        default:
+            return state
+    }
 }
 
 function updateReducer(state=initialState.update, action){
@@ -143,40 +159,14 @@ function updateReducer(state=initialState.update, action){
 function nudgeReducer(state=initialState.nudge, action) {
     switch(action.type){
         case NUDGE_ADD:
-            // !!!! MUST BE ADDED LATER
-            return state
+            return {
+                ...state,
+                [action.payload]: true
+            }
         case NUDGE_CHECK:
-            switch(action.payload){
-                case "home":
-                    return {
-                        ...state,
-                        home: false
-                    }
-                case "draft":
-                    return {
-                        ...state,
-                        draft: false
-                    }
-                // case "topic":
-                //     return {
-                //         ...state,
-                //         topic: false
-                //     }
-                case "action":
-                    return {
-                        ...state,
-                        action: false
-                    }
-                case "notification":
-                    return {
-                        ...state,
-                        notification: false
-                    }
-                case "setting":
-                    return {
-                        ...state,
-                        setting: false
-                    }
+            return {
+                ...state,
+                [action.payload]: false
             }
         default:
             return state
@@ -191,44 +181,14 @@ function categoryReducer(state=initialState.category, action) {
                 ...state,
                 home: false,
                 draft: false,
-                // topic: false,
                 action: false,
                 notification: false,
                 setting: false
             }
         case SET_CATEGORY:
             console.log("CATEGORY SET")
-            switch(action.payload){
-                case "home":
-                    return {
-                        ...state,
-                        home: true
-                    }
-                case "draft":
-                    return {
-                        ...state,
-                        draft: true
-                    }
-                // case "topic":
-                //     return {
-                //         ...state,
-                //         topic: true
-                //     }
-                case "action":
-                    return {
-                        ...state,
-                        action: true
-                    }
-                case "notification":
-                    return {
-                        ...state,
-                        notification: true
-                    }
-                case "setting":
-                    return {
-                        ...state,
-                        setting: true
-                    }
+            return {
+                [action.payload]: true
             }
         default:
             return state
@@ -300,4 +260,5 @@ export default combineReducers({
     category: categoryReducer,
     nudge: nudgeReducer,
     update: updateReducer,
+    index: indexReducer,
 });

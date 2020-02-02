@@ -19,6 +19,7 @@ const Title = styled.h3`
     padding: 8px;
     font-size: 13px;
     font-weight: normal;
+    margin-top: 5px;
     margin-bottom: 0px;
     margin-left: 8px;
     margin-right: 8px;
@@ -28,7 +29,7 @@ const Title = styled.h3`
 const TaskList = styled.div`
     padding: 8px;
     transition: background-color 0.2s ease;
-    background-color: ${props => (props.isDraggingOver ? "rgba(233, 233, 238, 0.25)" : "inherit")};
+    background-color: ${props => (props.isDraggingOver ? "rgba(233, 233, 238, 0.50)" : "#fdfdfd")};
     min-height: 100px;
     flex-grow: 1;
     overflow: scroll;

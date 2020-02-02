@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 
+import { IoIosArrowDown } from "react-icons/io"
+
 // 将来的にはこれをconfiugrableにして、
 // ステップ名とjsxのpairを渡せば完成する感じにする
 
@@ -22,7 +24,7 @@ class CreateTopic extends Component {
             step: 0,
             back: false,
             topicName: "",
-            img: [],
+            img: {},
             tags: [],
             friends: [],
         }
@@ -118,10 +120,11 @@ class CreateTopic extends Component {
                             name="編集・作成一覧に戻る"
                         />
                     </div>
+
                     <p className="topic-form-title">新しいトピックを作成する</p>
+
                     <div className="topic-form-progress-mount"/>
                     
-
                     <ActionProgress
                         step={this.state.step}
                         stepName={
@@ -134,8 +137,9 @@ class CreateTopic extends Component {
                             ]
                         }
                     />
-
+                    
                     {this.renderStep()}
+                    
 
                 </div>
             </div>

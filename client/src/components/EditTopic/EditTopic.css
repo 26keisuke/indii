@@ -50,3 +50,98 @@
     font-size:10px;
     margin-left: 10px;
 }
+
+.topic-action-add-button{
+    border: none;
+    font-size: 11px;
+    width: 85px;
+    color: #333333;
+    margin-left: 28px;
+    cursor: pointer;
+    font-family: "Gennokaku Gothic";
+    white-space: nowrap;
+    background-color: #ffffff;
+}
+
+.topic-action-add-button:focus{
+    outline:none;
+}
+
+.topic-form-index{
+    width: 444px;
+}
+
+.topic-form-index-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.topic-form-index-top-left-text{
+    color: #585858;
+    font-size: 10px;
+    margin-right: 50px;
+}
+
+.topic-form-index-top-right-text{
+    color: #585858;
+    font-size: 10px;
+    margin-left: 50px;
+}
+
+.topic-form-preview-hr{
+    height:1px;
+    border: none;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.topic-form-index-box{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.topic-form-index-left{
+    text-align: left;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.topic-form-index-left p {
+    line-height: 25px;
+}
+
+.topic-form-index-right{
+    text-align: end;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.topic-form-index-right p {
+    line-height: 25px;
+}
+
+.topic-form-index-left-content{
+    margin-left: 10px;
+}
+
+.topic-form-index-left-number{
+    font-weight: bold;
+    color: #555555;
+}
+
+.topic-form-index-right-number{
+    font-weight: bold;
+    color: #555555;
+}
+
+.topic-form-index-right-content{
+    margin-right: 10px;
+}

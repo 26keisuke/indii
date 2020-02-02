@@ -37,6 +37,7 @@ html {
     font-family: 'Roboto', sans-serif;
     font-family: "Gennokaku Gothic";
     font-size: 11px;
+    line-height: normal;
     color: #212121;
 }
 
@@ -66,7 +67,7 @@ a {
 p {
     margin: 0px;
     font-feature-settings: "palt";
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
 }
 
 input:focus{
@@ -119,8 +120,12 @@ input:focus{
     background-color: #F9F9F9;
 }
 
+.content-back-arrow-wrapper{
+    margin-top:-20px;
+}
+
 .content-bottom-space{
-    height:400px;
+    height:80vh;
     background-color: #F9F9F9;
     border-right: 1px solid #d2d2d2;
     position: relative;
@@ -376,7 +381,7 @@ input:focus{
     transform: translate(-50%, -50%);
     top: 13%;
     margin: auto 0;
-    z-index: 10;
+    z-index: 100;
     padding-left: 30px;
 }
 
@@ -391,8 +396,8 @@ input:focus{
 
 .message-check-icon{
     color: white;
-    margin-left: 3px;
-    margin-top: 3px;
+    margin-left: 4px;
+    margin-top: 4px;
 }
 
 .message-title{
@@ -480,6 +485,10 @@ input:focus{
     cursor: pointer;
 }
 
+.confirm-box-buttons-yes:focus{
+    outline: none;
+}
+
 .confirm-box-buttons-no{
     font-family: "Gennokaku Gothic";
     border: 0.5px solid #838383;
@@ -487,6 +496,20 @@ input:focus{
     width: 80px;
     border-radius: 3px;
     cursor: pointer;
+}
+
+.confirm-box-buttons-no:focus{
+    outline: none;
+}
+
+.confirm-add-column-input{
+    width: 90%;
+    border: none;
+    border-bottom: 1px solid #d2d2d2;
+    margin-top: 10px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    font-family: "Gennokaku Gothic";
 }
 
 @keyframes onEnter{

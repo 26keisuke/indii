@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux"
 import { Link } from "react-router-dom";
 import { Collapse } from 'react-collapse';
+import { IoIosArrowDown } from "react-icons/io"
 
 import response from "../../images/response.png";
 import star_pressed from "../../images/star-pressed.png";
 import star from "../../images/star.png";
 import more from "../../images/more.png";
-import down from "../../images/down.png";
 import sample from "../../images/sample0.jpg";
 import dissapointed from "../../images/dissapointed.png";
 import love from "../../images/love.png";
@@ -179,8 +179,7 @@ class PostFeed extends Component {
                         </div>
                         <div className="post-feed-fake">
                             <p onClick={this.handleCollapseClick}></p>
-                            <img 
-                                src={down} 
+                            <IoIosArrowDown 
                                 className={this.state.btnClass}
                             />
                         </div>

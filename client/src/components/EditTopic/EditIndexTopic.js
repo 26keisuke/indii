@@ -1,23 +1,23 @@
 import React, { Component, PureComponent } from "react"
-import Column from "./Column"
+import { connect } from "react-redux"
 import styled from "styled-components"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
+import { GoPlusSmall } from "react-icons/go"
+
+import * as actions from "../../actions"
 
 import InitialData from "./InitialData"
+import Column from "./Column"
 
 const Container = styled.div`
     display: flex;
     height: 350px;
 `
 
-const Button = styled.button`
-    position: absolute;
-`
-
 const Wrapper = styled.div`
     position: absolute;
-    width: 640px;
-    margin-left: -120px;
+    width: 760px;
+    margin-left: -160px;
     overflow: scroll;
 `
 
@@ -40,7 +40,14 @@ class EditIndexTopic extends Component {
         this.state = {
             index: InitialData,
         }
-        document.documentElement.style.overflow = "hidden"
+        document.documentElement.style.position= "fixed"
+        document.documentElement.style.width= "100vw"
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if(prevProps.columnName != this.props.columnName){
+            this.addNewIndex()
+        }
     }
 
     sortColumnSwap = (newColumnOrder, start, end) => {
@@ -352,6 +359,18 @@ class EditIndexTopic extends Component {
 
     }
 
+    showAddIndex = (e) => {
+        e.preventDefault();
+        const id = "12341324";
+        const action = "ADD_COLUMN";
+        const title = "新しいコラムを追加する";
+        const message = "主題のタイトルを入力してください。";
+        const caution = "";
+        const buttonMessage = "追加する";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        this.props.enableGray();
+    }
+
     addNewIndex = () => {
         const len = this.state.index.columnOrder.length + 1
         const name = "column-" + String(len)
@@ -359,7 +378,7 @@ class EditIndexTopic extends Component {
         const newData = {
             id: name,
             column: String(len),
-            title: "ナポレオンの生涯",
+            title: this.props.columnName,
             taskIds: []
         }
 
@@ -379,38 +398,43 @@ class EditIndexTopic extends Component {
             index: newState,
         })
 
+        this.props.updateMessage("success", `コラム「${this.props.columnName}」を追加しました。`);
+        setTimeout(() => this.props.resetMessage(), 3000)
+
     }
 
     renderTask = () => {
 
         return (
-            <Wrapper>
-                <DragDropContext
-                    onDragEnd={this.onDragEnd}
-                >
-                    <Droppable droppableId="all-columns" direction="horizontal" type="column">
-                        {(provided) => (
-                            <Container
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                            {this.state.index.columnOrder.map((columnId,index) => {
-                                const column = this.state.index.columns[columnId];
-                                return (
-                                    <InnerList
-                                        key={column.id}
-                                        column={column}
-                                        taskMap={this.state.index.tasks}
-                                        index={index}
-                                    />
-                                )
-                            })}
-                            {provided.placeholder}
-                            </Container>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-            </Wrapper>
+            <div style={{position: `relative`, marginTop: `5px`}}>
+                <Wrapper>
+                    <DragDropContext
+                        onDragEnd={this.onDragEnd}
+                    >
+                        <Droppable droppableId="all-columns" direction="horizontal" type="column">
+                            {(provided) => (
+                                <Container
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                >
+                                {this.state.index.columnOrder.map((columnId,index) => {
+                                    const column = this.state.index.columns[columnId];
+                                    return (
+                                        <InnerList
+                                            key={column.id}
+                                            column={column}
+                                            taskMap={this.state.index.tasks}
+                                            index={index}
+                                        />
+                                    )
+                                })}
+                                {provided.placeholder}
+                                </Container>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </Wrapper>
+            </div>
         )
     }
 
@@ -420,25 +444,67 @@ class EditIndexTopic extends Component {
         })
     }
 
+    handleBack = () => {
+        this.props.setBackward(true);
+        this.props.setStep(2);
+    }  
+
+    handleForward = () => {
+        this.props.setBackward(false);
+        this.props.setStep(4);
+        this.props.setIndex(this.state.index);
+    }
+
     render() {
+
         return (
             
-            <div className="topic-form-area">
+            <div className="topic-form-area y-scrollable">
                 <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
                     <div className="topic-form-area-top"> 
                         {/* {this.renderWarning()} */}
                         <p className="topic-form-area-top-title">4. トピックの目次を編集</p>
                         <p　onClick={this.handleRevert} className="topic-form-area-top-revert">元に戻す</p>
+                        <button
+                            className="topic-action-add-button"
+                            onClick={(e) => this.showAddIndex(e)}
+                        >
+                            <GoPlusSmall/>コラムを追加
+                        </button>
                     </div> 
 
                     {this.renderTask()}
 
-                    <Button onClick={this.addNewIndex}>ADD NEW COLUMN</Button>
+                    <div className="space"/>
+
+                    <div className="topic-form-button">
+                        <button 
+                            style={{marginTop: `140px`}}
+                            className="topic-form-button-left" 
+                            onClick={this.handleBack}
+                        >
+                            戻る
+                        </button>
+                        <button
+                            className="topic-form-button-right" 
+                            style={{marginTop: `140px`}}
+                            onClick={this.handleForward}
+                        >
+                                次へ進む
+                        </button>
+                    </div>
                     
+                    <div className="space"/>
                 </div>
             </div>
         )
     }
 }
 
-export default EditIndexTopic
+function mapStateToProps(state) {
+    return {
+        columnName: state.index.columnName,
+    }
+}
+
+export default connect(mapStateToProps, actions)(EditIndexTopic)

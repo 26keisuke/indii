@@ -39,7 +39,7 @@ const rejectStyle = {
 function ActionImage(props) {
 
     const [warning, setWarning] = useState("");
-    const [files, setFiles] = useState([]);
+    const [file, setFile] = useState([]);
 
     const {
         acceptedFiles,
@@ -53,9 +53,28 @@ function ActionImage(props) {
         maxSize: 5242880,
         multiple: false,
         onDropAccepted: (acceptedFiles) => {
-            setFiles(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })));
+
+            const promise = new Promise((resolve, reject) => {
+                const reader = new FileReader()
+                reader.readAsDataURL(acceptedFiles[0])
+                reader.onload = () => {
+                    if(!!reader.result) {
+                        resolve(reader.result)
+                    } else {
+                        reject(Error("Failed converting to base64"))
+                    }
+                }
+            })
+            promise.then(result => {
+                setFile(Object.assign(acceptedFiles[0], {preview: result}))
+            }, err => {
+                console.log(err)
+            })
+
+            // setFiles(acceptedFiles.map(file => Object.assign(file, {
+            //     preview: URL.createObjectURL(file)
+            // })));
+
             // const uploader = acceptedFiles.map(file => {
             //     const formData = new FormData();
             //     formData.append("file", file);
@@ -72,13 +91,9 @@ function ActionImage(props) {
         }
     });
 
-    var thumbs = files.map(file => (
-        file.preview
-    ));
-
-    useEffect(() => {
-        return files.forEach(file => URL.revokeObjectURL(file.preview))
-    }, [files])
+    // useEffect(() => {
+    //     return files.forEach(file => URL.revokeObjectURL(file.preview))
+    // }, [files])
 
     const style = useMemo(() => ({
         ...baseStyle,
@@ -111,7 +126,10 @@ function ActionImage(props) {
     };
 
     const handleRevert = () => {
-        thumbs = []
+        setFile({
+            ...file,
+            preview: ""
+        })
     }
 
     const handleForward = () => {
@@ -120,9 +138,11 @@ function ActionImage(props) {
         }
         props.setBackward(false)
         props.setStep(2);
-        props.setImage(files.map(file => (
-            file
-        )));
+        if(file.length != 0) {
+            props.setImage(file)
+        } else if(props.initialVal) {
+            props.setImage(props.initialVal)
+        }
     };
 
     return (
@@ -147,12 +167,12 @@ function ActionImage(props) {
                         <div className="thumb-preview-wrapper">
                             <p className="thumb-preview-title">モバイルでの表示</p>
                             <div className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-mobile-fake" : "zero-opacity" }/>
-                            <img src={thumbs || props.initialVal} className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-mobile zero-opacity" : "thumb-preview-mobile"}/>
+                            <img src={file.preview || props.initialVal} className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-mobile zero-opacity" : "thumb-preview-mobile"}/>
                         </div>
                         <div className="thumb-preview-wrapper">
                         <p className="thumb-preview-title">PCでの表示</p>
                             <div className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-web-fake" : "zero-opacity" }/>
-                            <img src={thumbs || props.initialVal} className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-web zero-opacity" : "thumb-preview-web" }/>
+                            <img src={file.preview || props.initialVal} className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-web zero-opacity" : "thumb-preview-web" }/>
                         </div>
                     </div>
                     </div>

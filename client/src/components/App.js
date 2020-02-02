@@ -19,10 +19,10 @@ import DraftEdit from "./Draft/DraftEdit"
 import CreateTopic from "./CreateTopic/CreateTopic"
 import Login from "./Login"
 import Profile from "./Profile/Profile"
-import CreatePost from "./CreatePost"
+import CreatePost from "./CreatePost//CreatePost"
 import Create from "./Create"
 import EditTopic from "./EditTopic/EditTopic"
-import EditPost from "./EditPost"
+import EditPost from "./EditPost/EditPost"
 
 class App extends Component {
 
@@ -36,7 +36,8 @@ class App extends Component {
                 problem2: false,
                 problem3: false,
                 problem4: false,
-            }
+            },
+            addColumn: "",
         }
     }
 
@@ -59,10 +60,6 @@ class App extends Component {
             default:
                 return ""
         }
-    }
-    
-    onConfirm = (action, id) => {
-        this.postAction(action, id)
     }
 
     cancelAction = () => {
@@ -126,15 +123,26 @@ class App extends Component {
                     this.props.disableGray();
                 }
                 return false
+            case "ADD_COLUMN":
+                this.setState({confirmationCancel: true})
+                setTimeout(() => this.cancelAction(), 300)
+                if (id){
+                    this.props.addColumn(id, this.state.addColumn);
+                    this.props.disableGray();
+                } else {
+                    this.props.disableGray();
+                }
             default:
                 return false
         }
     }
 
-    renderConfirmContent = (action) => {
+    renderConfirmContent = (id, action) => {
         switch(action){
             case "GIVE_FEEDBACK":
                 return this.renderReport()
+            case "ADD_COLUMN":
+                return this.renderAddColumn(id, action)
         }
     }
 
@@ -143,6 +151,12 @@ class App extends Component {
             problems: {
                 [problemName]: e.target.checked
             }  
+        })
+    }
+
+    handleAddColumnChange = (e) => {
+        this.setState({
+            addColumn: e.target.value
         })
     }
 
@@ -173,6 +187,18 @@ class App extends Component {
         )
     }
 
+    renderAddColumn = (id, action) => {
+        return (
+            <form onSubmit={(e) => {e.preventDefault(); this.postAction(action, id)}}>
+                <input 
+                    onChange={(e) => this.handleAddColumnChange(e)}
+                    className="confirm-add-column-input" 
+                    type="text" 
+                    placeholder="タイトルを入力..."/>
+            </form>
+        )
+    }
+
     renderConfirmBox = (id, action, title, caution, message, buttonMessage) => {
         return (
             <div className={ this.state.confirmationCancel ? "confirm-box onLeave" : "confirm-box onEnter"}>
@@ -181,9 +207,9 @@ class App extends Component {
                     <p className="confirm-box-title">{title}</p>
                     <p className="confirm-box-message">{message}</p>
                     <p className="confirm-box-caution">{caution}</p>
-                    {this.renderConfirmContent(action)}
+                    {this.renderConfirmContent(id, action)}
                     <div className="confirm-box-buttons">
-                        <button className="confirm-box-buttons-yes" onClick={() => this.onConfirm(action, id)}>{buttonMessage}</button>
+                        <button className="confirm-box-buttons-yes" onClick={() => this.postAction(action, id)}>{buttonMessage}</button>
                         <button className="confirm-box-buttons-no" onClick={() => this.onCancel(action)}>キャンセル</button>
                     </div>
                 </div>

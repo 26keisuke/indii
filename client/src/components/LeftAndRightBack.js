@@ -1,9 +1,8 @@
 // 左と右に分けるやつ（Back付き）
 
 import React, { Component } from "react"
-import { Link } from "react-router-dom"
-
-import back_arrow from "../images/back-arrow.png"
+import { withRouter } from "react-router-dom"
+import Back from "./Back"
 
 class LeftAndRightBack extends Component {
 
@@ -17,10 +16,12 @@ class LeftAndRightBack extends Component {
             <div className="content">
                 <div className="content-left">
                     <div className="content-space-header">
-                        <Link to={this.props.url} className="content-back-wrapper">
-                            <img src={back_arrow} className="content-back"/>
-                            <p className="content-back-to">{this.props.backName}</p>
-                        </Link>
+                        <div className="content-back-arrow-wrapper">
+                            <Back
+                                back={() => this.props.history.goBack()}
+                                name="戻る"
+                            />
+                        </div>
                         <p className="content-header-title">
                             {this.props.title}
                         </p>
@@ -41,4 +42,4 @@ class LeftAndRightBack extends Component {
     }
 }
 
-export default LeftAndRightBack
+export default withRouter(LeftAndRightBack)

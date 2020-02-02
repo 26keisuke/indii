@@ -362,7 +362,8 @@
     display: flex;
     padding: 2px;
     width: 200px;
-    border-radius: 18px;;
+    border-radius: 18px;
+    margin-left: 18px;
     align-items: center;
     animation-name: bounce;
     animation-duration: 300ms;

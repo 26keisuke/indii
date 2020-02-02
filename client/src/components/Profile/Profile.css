@@ -147,8 +147,7 @@
 .profile-underbar{
     position: absolute;
     width: 90%;
-    height: 2.5px;
-    background-color: #646380;
+    border-bottom: 1px solid #646380;
     animation-name: extend-underbar;
     animation-duration: 250ms;
     animation-timing-function: ease-in-out;

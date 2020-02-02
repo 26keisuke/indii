@@ -28,7 +28,7 @@ class CreatePreviewTopic extends Component {
         this.props.resetCategory();
         localStorage.clear();
         this.props.setCategory("home");
-        setTimeout(() => this.props.updateMessage("success", `新しいトピック「${this.props.topicName}」を作成しました。`),1000);
+        setTimeout(() => this.props.updateMessage("success", `トピック「${this.props.topic.name}」を編集しました。`),1000);
         setTimeout(() => this.props.resetMessage(), 5000)
     }
 
@@ -41,21 +41,48 @@ class CreatePreviewTopic extends Component {
         return res;
     };
 
-    renderFriends = () => {
-        if(this.props.friends.length > 0){
-            var res = this.props.friends.map(friend => 
-                <div className="topic-form-friends-wrapper">
-                    <img src={friend.imgUrl} className="topic-form-friends-person"/>
-                </div>    
-            )
-        } else {
-            var res = <p className="topic-form-friends-none">誰も招待リストに追加されていません</p>
-        }
-        return res;
+    renderIndex = () => {
+        console.log(this.props)
+        return(
+            <div className="topic-form-index">
+                <div className="topic-form-index-top">
+                    <p className="topic-form-index-top-left-text">Before</p>
+                    <p className="topic-form-index-top-right-text">After</p>
+                </div>
+                <hr className="topic-form-preview-hr"/>
+                <div className="topic-form-index-box">
+                    <div className="topic-form-index-left">
+                        <div className="topic-form-index-left-number">
+                            <p>1</p>
+                            <p>1.1</p>
+                            <p>1.2</p>
+                        </div>
+                        <div className="topic-form-index-left-content">
+                            <p>コンテンツ</p>
+                            <p>コンテンツ</p>
+                            <p>コンテンツ</p>
+                        </div>
+                    </div> 
+                    <div className="topic-form-index-right">
+                        <div className="topic-form-index-right-content">
+                            <p>コンテンツ</p>
+                            <p>コンテンツ</p>
+                            <p>コンテンツ</p>
+                        </div>
+                        <div className="topic-form-index-right-number">
+                            <p>1</p>
+                            <p>1.1</p>
+                            <p>1.2</p>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        )
     }
 
+
     render(){
-        console.log(this.props)
+
         return (
             <div className="topic-form-area y-scrollable">
                 <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
@@ -76,11 +103,22 @@ class CreatePreviewTopic extends Component {
                         <div className="thumb-preview-box">
                             <div className="thumb-preview">
                                 <div className="thumb-preview-wrapper">
-                                    <img src={this.props.img.preview} className="thumb-preview-mobile"/>
+                                    <p className="thumb-preview-title">After: </p>
+                                    <img src={this.props.img} className="thumb-preview-mobile"/>
                                 </div>
                                 <div className="thumb-preview-wrapper">
                                     <p className="thumb-preview-title">　</p>
-                                    <img src={this.props.img.preview} className="thumb-preview-web"/>
+                                    <img src={this.props.img} className="thumb-preview-web"/>
+                                </div>
+                            </div>
+                            <div className="thumb-preview">
+                                <div className="thumb-preview-wrapper">
+                                    <p className="thumb-preview-title">Before: </p>
+                                    <img src={this.props.img} className="thumb-preview-mobile"/>
+                                </div>
+                                <div className="thumb-preview-wrapper">
+                                    <p className="thumb-preview-title">　</p>
+                                    <img src={this.props.img} className="thumb-preview-web"/>
                                 </div>
                             </div>
                         </div>
@@ -91,14 +129,15 @@ class CreatePreviewTopic extends Component {
                         <div className="topic-form-preview-tags">
                             {this.renderTags()}
                         </div>
+
                         <div className="topic-form-area-top-wrapper">
                             <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">このトピックに招待するフォロワー</p>
+                            <p className="topic-form-area-input-title">目次</p>
                         </div>
-                        <div className="topic-form-preview-tags">
-                            {this.renderFriends()}
-                        </div>
-                        <p className="topic-form-preview-check">この内容でよろしいですか？<span className="topic-form-preview-check-help">(作成後はいつでもトピックを消すことができます。)</span></p>
+
+                        {this.renderIndex()}
+                        
+                        <p className="topic-form-preview-check">この内容で編集を反映してよろしいですか？<span className="topic-form-preview-check-help"></span></p>
                         <div className="tiny-space"/>
                         <div className="topic-form-button">
                             <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>

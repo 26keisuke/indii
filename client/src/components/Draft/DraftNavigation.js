@@ -58,7 +58,7 @@ class DraftNavigation extends Component {
 
     renderImgContent() {
         return(
-            <img src={absurd} className="just-for-fun2"/>
+            <div></div>
         )
     }
 

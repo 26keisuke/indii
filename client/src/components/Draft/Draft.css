@@ -22,7 +22,7 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
-    padding: 2px;
+    padding: 3px;
     color: #646380;
     border-radius: 4px;
     align-items: center;
@@ -39,7 +39,7 @@
     display: flex;
     justify-content: center;
     flex-direction: row;
-    padding: 2px;
+    padding: 3px;
     color: #646380;
     border-radius: 4px;
     align-items: center;
@@ -49,8 +49,8 @@
 }
 
 .draft-navi-upload-icon-img{
-    width: 17px;
-    height: 17px;
+    width: 15px;
+    height: 15px;
     margin-left: 2px;
 }
 

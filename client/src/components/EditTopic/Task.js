@@ -7,8 +7,7 @@ const Container = styled.div`
     padding: 5px;
     margin-bottom: 8px;
     border-radius: 2px;
-    background-color: ${props => (props.isDragging ? "rgba(158, 174, 229)" : "white")};
-
+    background-color: ${props => (props.isDragging ? "#F8F8F8" : "white")};
 `
 
 class Task extends Component {
@@ -22,12 +21,27 @@ class Task extends Component {
                         ref={provided.innerRef}
                         isDragging={snapshot.isDragging}
                     >
-                        <p>
-                            {this.props.task.index.map((ind) => {
-                                return ind + "."
-                            })}
-                        </p>
-                        <p>Original: {this.props.task.content}</p>
+                        <div style={{display: `flex`, position: `relative`}}>
+                            <div>
+                                <p style={{fontSize: `12px`}}>
+                                    {this.props.task.index.map((ind) => {
+                                        return ind + "."
+                                    })}
+                                </p>
+                                <p>
+                                    <span style={{color: `#777777`, fontSize: '10px'}}>
+                                        Title:
+                                    </span> 
+                                    {this.props.task.content}
+                                </p>
+                            </div>
+                            <img src={this.props.task.imgUrl} style={{
+                                width: `31px`,
+                                height: `31px`, 
+                                position: `absolute`, 
+                                right: `0px`
+                            }}/>
+                        </div>
                     </Container>
                 )}
             </Draggable>

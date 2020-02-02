@@ -1,18 +1,72 @@
 import React, { Component } from "react"
+import { withRouter } from "react-router-dom"
 
 import sample from "../images/sample1.png"
 import question from "../images/question.png"
 import post from "../images/post.png"
 
 import "./Topic.css"
+import Back from "./Back"
+import Post from "./Post"
 
 class TopicPage extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            toggle: {
+                topic: true,
+                talk: false,
+                activity: false,
+            }
+        }
+    }
+
+    toggleState = (name) => {
+        this.setState({
+            toggle: {
+                topic: false,
+                talk: false,
+                activity: false,
+            } 
+        })
+        this.setState({
+            toggle: {
+                [name]: true,
+            }
+        })
+    }
+
+    toggleBar = (name) => {
+        if(this.state.toggle[name] == true) {
+            return ""
+        } 
+        return "hide"
+    }
+
+    toggleText = (name) => {
+        if(this.state.toggle[name] == true) {
+            return "topic-top-toggle-selected"
+        } 
+        return "topic-top-toggle-unselected"
+    }
+
     render() {
+        console.log(this.props.history)
         return (
             <div className="content-full">
                 <div className="topic">
                     <div className="topic-top">
+                    
                         <div className="topic-top-left">
+                            <div className="topic-top-back-wrapper">
+                                <div className="topic-top-back">
+                                    <Back
+                                        back={() => this.props.history.goBack()}
+                                        name="戻る"
+                                    />
+                                </div>
+                            </div>
                             <div className="topic-top-tags">
                                 <p># Apache</p>
                                 <p># Open Source</p>
@@ -39,17 +93,17 @@ class TopicPage extends Component {
                                 </div>
                             </div>
                             <div className="topic-top-toggle">
-                                <div className="topic-top-toggle-box">
-                                    <p className="topic-top-toggle-selected">トピック</p>
-                                    <div className="topic-top-underline"/>
+                                <div onClick={() => this.toggleState("topic")} className="topic-top-toggle-box">
+                                    <p className={this.toggleText("topic")}>トピック</p>
+                                    <div className={"topic-top-underline " + this.toggleBar("topic")}/>
                                 </div>
-                                <div className="topic-top-toggle-box">
-                                    <p className="topic-top-toggle-unselected">トーク</p>
-                                    <div className="topic-top-underline no-show"/>
+                                <div onClick={() => this.toggleState("talk")} className="topic-top-toggle-box">
+                                    <p className={this.toggleText("talk")}>トーク</p>
+                                    <div className={"topic-top-underline " + this.toggleBar("talk")}/>
                                 </div>
-                                <div className="topic-top-toggle-box"> 
-                                    <p className="topic-top-toggle-unselected">アクティビティー </p>
-                                    <div className="topic-top-underline no-show"/>
+                                <div onClick={() => this.toggleState("activity")} className="topic-top-toggle-box"> 
+                                    <p className={this.toggleText("activity")}>アクティビティー </p>
+                                    <div className={"topic-top-underline " + this.toggleBar("activity")}/>
                                 </div>
                             </div>
                         </div>
@@ -58,16 +112,16 @@ class TopicPage extends Component {
                     <div className="content-space"/>
                     <div className="topic-bottom">
                         <div className="topic-bottom-left">
-                            <div className="topic-summary-table">
+                            {/* <div className="topic-summary-table">
                                 <div className="topic-summary-table-header">
                                     <p>Quick Summary</p>
                                 </div>
                                 <div className="topic-summary-table-content">
-
+            
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="topic-contents">
-                                {/* ここにコンテンツが入る */}
+                                {/*ここにポストが入る*/}
                             </div>
                         </div>
                         <div className="topic-bottom-right">
@@ -84,4 +138,4 @@ class TopicPage extends Component {
     }
 }
 
-export default TopicPage;
+export default withRouter(TopicPage);

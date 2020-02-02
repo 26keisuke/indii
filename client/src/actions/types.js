@@ -28,4 +28,6 @@ export const RESET_MESSAGE = "RESET_MESSAGE"
 export const SHOW_CONFIRMATION = "SHOW_CONFIRMATION"
 export const HIDE_CONFIRMATION = "HIDE_CONFIRMATION"
 
+export const ADD_COLUMN = "ADD_COLUMN"
+
 // Hasnt implemented yet

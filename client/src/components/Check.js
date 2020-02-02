@@ -262,6 +262,7 @@ RDDの可用性は、ループ内で複数回データセットを参照する�
                         </div>
                     </div>
                 </div>
+                <div className="space"/>
                 {/* <div className="check-change-bottom-space">
                     <img src={absurd} className="just-for-fun-1"/>
                 </div> */}

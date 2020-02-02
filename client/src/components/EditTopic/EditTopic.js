@@ -1,13 +1,15 @@
 import React, {Component} from "react"
 import axios from "axios"
 
-import EditDecideTopic from "./EditDecideTopic";
+import ActionDecideTopic from "../ActionDecideTopic";
 import EditIndexTopic from "./EditIndexTopic"
-import CreatePreviewTopic from "../CreateTopic/CreatePreviewTopic"
+import EditPreviewTopic from "./EditPreviewTopic"
 
 import ActionProgress from "../ActionProgress"
 import ActionImage from "../ActionImage"
 import ActionTag from "../ActionTag"
+
+import "./EditTopic.css"
 
 import Back from "../Back";
 
@@ -22,7 +24,7 @@ class CreatePost extends Component {
         this.state = {
             step: 0,
             back: false,
-            topicId: "",
+            topic: {},
             original: {
                 img: [],
                 tags: [],
@@ -39,11 +41,11 @@ class CreatePost extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return <EditDecideTopic 
+                return <ActionDecideTopic 
                         back={this.state.back} 
                         setBackward={this.setBackward} 
                         storage="editTopicName"
-                        setTopicId={this.setTopicId} 
+                        setTopic={this.setTopic} 
                         setStep={this.setStep}
                         />
             case 1:
@@ -77,19 +79,23 @@ class CreatePost extends Component {
                         setStep={this.setStep}
                         />
             case 4:
-                return <CreatePreviewTopic
+                return <EditPreviewTopic
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        topicName={this.state.topicName}
-                        img={this.state.img}
-                        tags={this.state.tags}
-                        index={this.state.index}
+                        topic={this.state.topic}
+                        originalImg={this.state.original.img}
+                        originalTags={this.state.original.tags}
+                        originalIndex={this.state.original.index}
+                        editedImg={this.state.edited.img}
+                        editedTags={this.state.edited.tags}
+                        editedIndex={this.state.edited.index}
                         setStep={this.setStep}
                         />
         }
     }
 
     setImage = (img) => {
+        console.log(img)
         this.setState({
             edited: {
                 img
@@ -123,11 +129,11 @@ class CreatePost extends Component {
         })
     }
 
-    setTopicId = (id) => {
+    setTopic = (topic) => {
         this.setState({
-            topicId: id
+            topic: topic
         })
-        const url = "/api/post/" + id
+        const url = "/api/post/" + topic.id
         axios.get(url)
         .then(res => {
             this.setState({

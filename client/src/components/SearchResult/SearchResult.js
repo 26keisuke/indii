@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { withRouter } from "react-router-dom"
 
 import absurd from "../../images/absurd/09.png"
 
@@ -11,6 +12,7 @@ import Post from "../Post"
 import TopicElement from "../TopicElement"
 
 import LeftAndRightBack from "../LeftAndRightBack"
+import Back from "../Back"
 
 import "./SearchResult.css"
 
@@ -127,4 +129,4 @@ class SearchResult extends Component {
 }
 
 
-export default SearchResult
+export default withRouter(SearchResult)

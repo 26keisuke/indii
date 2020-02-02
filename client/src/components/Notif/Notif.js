@@ -10,7 +10,7 @@ class Draft extends Component {
 
     renderImgContent() {
         return(
-            <img src={absurd} className="just-for-fun"/>
+            <div></div>
         )
     }
 

@@ -15,7 +15,7 @@ const middlewares = [];
 middlewares.push(reduxThunk);
 
 if (process.env.NODE_ENV !== "production") {
-    middlewares.push(logger)
+    // middlewares.push(logger)
 }
 
 const store = createStore(reducers, {}, applyMiddleware(...middlewares))

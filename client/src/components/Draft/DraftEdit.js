@@ -51,9 +51,6 @@ class DraftEdit extends Component {
                     </div>
                 </div>
                 <DraftArea id={this.state.id}/>
-                <div class="content-bottom-space background-white no-border-right">
-                    <img src={absurd} className="just-for-fun"/>
-                </div>
             </div>
         )
     }

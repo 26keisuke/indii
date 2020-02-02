@@ -4,9 +4,9 @@ import Autosuggest from "react-autosuggest";
 import { Link } from "react-router-dom";
 import { IoIosAddCircleOutline, IoMdCheckmark, IoMdClose } from "react-icons/io";
 
-import "./EditTopic.css"
-import TopicSuggestion from "../TopicSuggestion";
+import TopicSuggestion from "./TopicSuggestion";
 
+//ここは全てのデータをとってくる。idとかimgだけにこだわらず。そして最後にコントローラーに送ることで後々楽になると思う
 const topics = [
     {
         id: "123",
@@ -69,7 +69,7 @@ const getSuggestions = value => {
   return suggestions;
 };
 
-class EditDecideTopic extends Component {
+class ActionDecideTopic extends Component {
 
     constructor(props){
         super(props)
@@ -88,7 +88,7 @@ class EditDecideTopic extends Component {
         });
         this.props.setBackward(false);
         this.props.setStep(1);
-        this.props.setTopicId(suggestion.id);
+        this.props.setTopic(suggestion);
     };
 
     onChange = (event, { newValue }) => {
@@ -111,7 +111,7 @@ class EditDecideTopic extends Component {
     };
 
     renderWarning = () => {
-        if(!this.state.value || this.state.blur) {
+        if(!this.state.value || this.state.blur) { // linkがblurのためクリックできない
             return false;
         } else {
             const success = () => {return false}
@@ -206,4 +206,4 @@ class EditDecideTopic extends Component {
     }
 }
 
-export default EditDecideTopic;
+export default ActionDecideTopic;

@@ -41,12 +41,15 @@ export default class DraftArea extends React.Component {
 
     handleEditorChange = (editorState) => {
         this.setState({ editorState })
-        const contentState = editorState.getCurrentContent();
+        // const contentState = editorState.getCurrentContent();
         // save in stringified html format since localstorage only accepts string
         localStorage.setItem("content", JSON.stringify(editorState.toHTML()))
     }
 
   render () {
+    if(this.state.editorState){
+        console.log(this.state.editorState.toHTML())
+    }
 
     const { editorState } = this.state
 

@@ -51,7 +51,6 @@ class ActionTag extends Component {
 
     constructor(props){
         super(props)
-        console.log(this.props.intialVal)
         const tags = this.props.initialVal || this.initializeTags()
         this.state = {
             value: "",
@@ -66,13 +65,10 @@ class ActionTag extends Component {
     initializeTags = () => {
         const cache = localStorage.getItem(this.props.storage)
         if (cache === null){
-            console.log("1")
             return []
         } else if (cache != "undefined"){
-            console.log("2")
             return []
         } else {
-            console.log("3")
             return JSON.parse(cache)
         }
     }
