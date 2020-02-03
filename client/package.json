@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "braft-editor": "^2.3.8",
+    "classnames": "^2.2.6",
     "http-proxy-middleware": "^0.20.0",
     "lodash": "^4.17.15",
     "passport-google-oauth20": "^2.0.0",
@@ -28,6 +29,7 @@
     "redux-form": "^8.2.6",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "sass": "^1.25.0",
     "styled-components": "^5.0.0"
   },
   "scripts": {

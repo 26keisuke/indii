@@ -8,7 +8,7 @@ import { MdCheck } from "react-icons/md"
 import { IoMdClose } from "react-icons/io"
 
 import Header from "./Header/Header";
-import Sidebar from "./Sidebar";
+import Navigation from "./Navigation/Navigation";
 import Feed from "./Feed/Feed";
 import SearchResult from "./SearchResult/SearchResult"
 import Notification from "./Notif/Notif"
@@ -23,6 +23,7 @@ import CreatePost from "./CreatePost//CreatePost"
 import Create from "./Create"
 import EditTopic from "./EditTopic/EditTopic"
 import EditPost from "./EditPost/EditPost"
+import WorkSpace from "./WorkSpace"
 
 class App extends Component {
 
@@ -224,7 +225,7 @@ class App extends Component {
                 <BrowserRouter>
                     <div className="router">
                         <Header />                        
-                        <Sidebar />
+                        <Navigation />
                         <div className={this.props.update.fetching ? "loading" : ""}/>
                         <div className={this.props.update.grayBackground ? "filter" : ""}/>
                         {this.props.update.confirmation.on
@@ -256,6 +257,7 @@ class App extends Component {
                             <Route path="/topic/:id" component={Topic} />
                             <Route path="/profile/:id" component={Profile} />
                             <Route exact path="/action" component={Create} />
+                            <Route exact path="/workspace" component={WorkSpace} />
                         </div>
                     </div>
                 </BrowserRouter>

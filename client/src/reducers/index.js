@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { reducer as reduxForm } from "redux-form";
+// import { reducer as reduxForm } from "redux-form";
 
 import { USER_IS_LOGGEDIN,
          STAR_OFF, STAR_ON, 
@@ -254,7 +254,7 @@ function authReducer(state=initialState.auth, action) {
 
 export default combineReducers({
     auth: authReducer,
-    form: reduxForm,
+    // form: reduxForm,
     response: responseReducer,
     search: searchReducer,
     category: categoryReducer,

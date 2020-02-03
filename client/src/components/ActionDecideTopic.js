@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import axios from "axios"
 
 import Autosuggest from "react-autosuggest";
 import { Link } from "react-router-dom";
-import { IoIosAddCircleOutline, IoMdCheckmark, IoMdClose } from "react-icons/io";
 
 import TopicSuggestion from "./TopicSuggestion";
 
@@ -97,6 +97,22 @@ class ActionDecideTopic extends Component {
         });
         localStorage.setItem(this.props.storage, newValue);
     };
+
+    ///////////////////////////////////
+
+    getTopics = (term) => {
+        const url = "/api/topic/" + term
+        axios.get(url)
+            .then(res => {
+
+            })
+            .catch(err => {
+                console.err(err)
+            })
+    }
+
+    ///////////////////////////////////
+
 
     getSuggestionValue = suggestion => {
         return suggestion.name;

@@ -3,13 +3,13 @@ import mongoose from "mongoose"
 const { Schema } = mongoose
 
 const draftSchema = new Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId, ref: "User"
+    topic: {
+        type: mongoose.Schema.Types.ObjectId, ref:"Topic"
     },
-    // topic: {
-    //     type: mongoose.Schema.Types.ObjectId, ref:"Topic"
-    // },
-    content: String
+    version: [{
+        content: String,
+    }],
+    user: {type: mongoose.Schema.Types.ObjectId, ref: "User"}
 })
 
 const Draft = mongoose.model("Draft", draftSchema)

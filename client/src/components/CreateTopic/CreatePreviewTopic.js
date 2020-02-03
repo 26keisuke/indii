@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import axios from "axios"
 
 import * as actions from "../../actions"
 
@@ -18,7 +19,17 @@ class CreatePreviewTopic extends Component {
         this.props.setBackward(false);
         this.props.isFetching();
         this.props.enableGray();
-        setTimeout(() => this.onExit(), 1500);
+
+        axios.post("/api/topic", {
+            img: this.props.img.preview,
+            tags: this.props.tags,
+            topicName: this.props.topicName,
+        })
+        .then(res => {
+            this.onExit()
+        })
+
+        // もしfriendsが招待されている場合はnotificationのrequestもする
     };
 
     onExit = () => {
@@ -28,7 +39,7 @@ class CreatePreviewTopic extends Component {
         this.props.resetCategory();
         localStorage.clear();
         this.props.setCategory("home");
-        setTimeout(() => this.props.updateMessage("success", `新しいトピック「${this.props.topicName}」を作成しました。`),1000);
+        setTimeout(() => this.props.updateMessage("success", `新しいトピック「${this.props.topicName}」を作成しました。`), 1000);
         setTimeout(() => this.props.resetMessage(), 5000)
     }
 
@@ -55,7 +66,6 @@ class CreatePreviewTopic extends Component {
     }
 
     render(){
-        console.log(this.props)
         return (
             <div className="topic-form-area y-scrollable">
                 <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>

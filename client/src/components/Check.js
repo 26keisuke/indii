@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 
 import { FaPencilAlt } from 'react-icons/fa';
@@ -101,10 +100,12 @@ class Check extends Component {
         return (
             <div className="content-full">
                 <div className="content-space-header">
-                    <Back
-                        url="/notification"
-                        name="通知一覧へ戻る"
-                    />
+                    <div className="content-check-back-wrapper">
+                        <Back
+                            url="/notification"
+                            name="通知一覧へ戻る"
+                        />
+                    </div>
                 </div>
                 <div className="content-space"/>
                 <div className="check-box">
@@ -202,7 +203,7 @@ class Check extends Component {
                         </div>
                         <div className="check-change">
                             <FaPencilAlt className={this.state.textareaFocus ? "check-pen-focus" : "check-pen"}/>
-                            <p className="check-change-title">コメント<span>*必須ではありません</span></p>
+                            <p className="check-change-title">編集者へのコメント<span>*必須ではありません</span></p>
                             <textarea 
                                 onFocus={this.handleFocus} 
                                 onChange={(e) => this.handleChange(e)}

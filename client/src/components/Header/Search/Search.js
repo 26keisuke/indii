@@ -7,34 +7,56 @@ import Autosuggest from "react-autosuggest";
 import { Link, withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 
-import * as actions from "../actions"
+import * as actions from "../../../actions"
 
 import { IoIosAddCircleOutline } from "react-icons/io";
-import search from "../images/search.png";
-import searchClick from "../images/search-click.png";
+import search from "../../../images/search.png";
+import searchClick from "../../../images/search-click.png";
+
+import TopicSuggestion from "../../TopicSuggestion";
 
 const topics = [
     {
+        id: "123",
         imgUrl: "",
-        name: "C"
+        name: "C",
+        likes: 123132,
+        posts: 123,
+        tags: ["Computer Science"],
     },
     {
+        id: "123",
         imgUrl: "",
-        name: "C0"
+        name: "C0",
+        likes: 123132,
+        posts: 123,
+        tags: ["Computer Science"],
     },
     {
+        id: "123",
         imgUrl: "",
-        name: "C00"
+        name: "C00",
+        likes: 123132,
+        posts: 123,
+        tags: ["Computer Science"],
     },
     {
+        id: "123",
         imgUrl: "",
-        name: "C000"
+        name: "C000",
+        likes: 123132,
+        posts: 123,
+        tags: ["Computer Science"],
     },
     {
+        id: "123",
         imgUrl: "",
-        name: "C0000"
+        name: "C0000",
+        likes: 123132,
+        posts: 123,
+        tags: ["Computer Science"],
     }
-]
+];
 
 // '\\$&'は文字列全体を意味する
 const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -59,14 +81,13 @@ const getSuggestions = value => {
   return suggestions;
 }
 
-class SearchBox extends Component {
+class Search extends Component {
 
     constructor(props){
         super(props)
         this.state = {
             value: "",
             suggestions: [],
-            // selected: ""
         }
         this.handleFocus = this.handleFocus.bind(this)
         this.handleBlur = this.handleBlur.bind(this)
@@ -96,19 +117,18 @@ class SearchBox extends Component {
     renderSuggestion = suggestion => {
         if (suggestion.added) {
           return (
-            //　一見すると、何も変化がないように思えるがurlを変えてみると、ちゃんと動いてるのがわかる
             <Link to={"/search/from_direct"} onClick={() => this.handleClick(this.state.value)} className="search-result-wrapper">
                 <div className="search-result">
-                <IoIosAddCircleOutline/> <span>"{this.state.value}"</span>を検索する
+                <IoIosAddCircleOutline/><span>"{this.state.value}"</span>を検索する
                 </div>
             </Link>
           );
         }
         return (
             <Link to={"/search/from_suggestion"} onClick={() => this.handleClick(suggestion.name)} className="search-result-wrapper">
-                <div className="search-result">
-                    {suggestion.name}
-                </div>
+                <TopicSuggestion
+                    suggestion={suggestion}
+                />
             </Link>
         )
     };
@@ -124,12 +144,6 @@ class SearchBox extends Component {
           suggestions: []
         });
     };
-
-    // onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {
-    //     this.setState({
-    //         selected: suggestion.name
-    //     })
-    // }
 
     handleFocus() {
         this.props.onSearch()
@@ -168,7 +182,6 @@ class SearchBox extends Component {
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     getSuggestionValue={this.getSuggestionValue}
                     renderSuggestion={this.renderSuggestion}
-                    // onSuggestionSelected={this.onSuggestionSelected}
                     inputProps={inputProps} 
                 />
             </form>
@@ -183,4 +196,4 @@ function mapStateToProps(state){
 }
 
 // Routerから離れたnested componentsのため、propsをwithRouterで獲得しなくてはいけない
-export default connect(mapStateToProps, actions)(withRouter(SearchBox))
+export default connect(mapStateToProps, actions)(withRouter(Search))

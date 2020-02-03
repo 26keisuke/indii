@@ -66,7 +66,7 @@ class ActionTag extends Component {
         const cache = localStorage.getItem(this.props.storage)
         if (cache === null){
             return []
-        } else if (cache != "undefined"){
+        } else if (cache === "undefined"){
             return []
         } else {
             return JSON.parse(cache)

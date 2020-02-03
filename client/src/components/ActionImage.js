@@ -39,7 +39,7 @@ const rejectStyle = {
 function ActionImage(props) {
 
     const [warning, setWarning] = useState("");
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState({preview: localStorage.getItem(props.storage)} || {});
 
     const {
         acceptedFiles,
@@ -66,7 +66,7 @@ function ActionImage(props) {
                 }
             })
             promise.then(result => {
-                setFile(Object.assign(acceptedFiles[0], {preview: result}))
+                setFile({preview: result})
             }, err => {
                 console.log(err)
             })
@@ -91,9 +91,11 @@ function ActionImage(props) {
         }
     });
 
-    // useEffect(() => {
-    //     return files.forEach(file => URL.revokeObjectURL(file.preview))
-    // }, [files])
+    useEffect (() => {
+        if(file !== "undefined" || file === undefined){
+            localStorage.setItem(props.storage, file.preview)
+        }
+    },[props.storage, file])
 
     const style = useMemo(() => ({
         ...baseStyle,
@@ -133,12 +135,12 @@ function ActionImage(props) {
     }
 
     const handleForward = () => {
-        if(!acceptedFiles.length && !props.initialVal){
+        if(!file.preview && !props.initialVal){
             console.log("Illegal attempt to bypass sending a file");
         }
         props.setBackward(false)
         props.setStep(2);
-        if(file.length != 0) {
+        if(file.preview) {
             props.setImage(file)
         } else if(props.initialVal) {
             props.setImage(props.initialVal)
@@ -166,13 +168,13 @@ function ActionImage(props) {
                     <div className="thumb-preview">
                         <div className="thumb-preview-wrapper">
                             <p className="thumb-preview-title">モバイルでの表示</p>
-                            <div className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-mobile-fake" : "zero-opacity" }/>
-                            <img src={file.preview || props.initialVal} className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-mobile zero-opacity" : "thumb-preview-mobile"}/>
+                            <div className={ !file.preview && !props.initialVal ? "thumb-preview-mobile-fake" : "zero-opacity" }/>
+                            <img src={file.preview || props.initialVal} className={ !file.preview && !props.initialVal ? "thumb-preview-mobile zero-opacity" : "thumb-preview-mobile"}/>
                         </div>
                         <div className="thumb-preview-wrapper">
                         <p className="thumb-preview-title">PCでの表示</p>
-                            <div className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-web-fake" : "zero-opacity" }/>
-                            <img src={file.preview || props.initialVal} className={ !acceptedFiles.length && !props.initialVal ? "thumb-preview-web zero-opacity" : "thumb-preview-web" }/>
+                            <div className={ !file.preview && !props.initialVal ? "thumb-preview-web-fake" : "zero-opacity" }/>
+                            <img src={file.preview || props.initialVal} className={ !file.preview && !props.initialVal ? "thumb-preview-web zero-opacity" : "thumb-preview-web" }/>
                         </div>
                     </div>
                     </div>
@@ -180,7 +182,7 @@ function ActionImage(props) {
                 <div className="topic-form-button">
                     <button className="topic-form-button-left" onClick={handleBack}>戻る</button>
                     <button 
-                        className={!acceptedFiles.length && !props.initialVal ? "topic-form-button-right disable" : "topic-form-button-right"} 
+                        className={!file.preview && !props.initialVal ? "topic-form-button-right disable" : "topic-form-button-right"} 
                         onClick={handleForward}
                     >
                             次へ進む

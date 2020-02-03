@@ -220,7 +220,7 @@ class CreateDecideTopic extends Component {
 
         const { value, suggestions } = this.state;
         const inputProps = {
-            placeholder: "トピック名を入力...",
+            placeholder: "ポスト名を入力...",
             value,
             onChange: this.onChange,
             onFocus: this.handleFocus,

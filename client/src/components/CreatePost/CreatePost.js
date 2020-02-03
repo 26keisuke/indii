@@ -55,7 +55,6 @@ class CreatePost extends Component {
                         postName={this.state.postName}
                         selectedTopic={this.state.selectedTopic}
                         config={this.state.config.editWo}
-                        setTags={this.setTags} 
                         setStep={this.setStep}
                         max={6}
                         />
@@ -92,12 +91,13 @@ class CreatePost extends Component {
         this.setState({
             selectedTopic: topic
         })
-        const url = "/api/post/" + topic.id
+        const url = "/api/topic/" + topic.id
         axios.get(url)
         .then(res => {
-            this.setState({
-                posts: res.posts
-            })
+            // this.setState({
+            //     posts: res.posts
+            // })
+            console.log(res)
         })
         .catch(err => {
             console.log(err)

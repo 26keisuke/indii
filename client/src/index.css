@@ -124,6 +124,7 @@ input:focus{
     margin-top:-20px;
 }
 
+
 .content-bottom-space{
     height:80vh;
     background-color: #F9F9F9;
@@ -241,7 +242,7 @@ input:focus{
     }
 
     .search-icon{
-        left:412px !important;
+        left:362px !important;
     }
 
     .search-box .react-autosuggest__input{
@@ -249,7 +250,7 @@ input:focus{
     }
 
     .search-box .react-autosuggest__container{
-        margin-left: 50px !important;
+        margin-left: 0px !important;
     }
 }
 
@@ -582,6 +583,10 @@ input:focus{
     opacity: 0;
 }
 
+.hide {
+    display: none !important;
+}
+
 /*===========*/
 
 /*== animation ==*/
@@ -626,3 +631,12 @@ input:focus{
     0%{opacity: 1}
     100%{opacity: 0}
 }
+
+/* @keyframes fadein{
+    0% {
+    opacity: 1;
+    } 
+    100% {
+        opacity: 0;
+    }
+} */

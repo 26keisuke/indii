@@ -8,15 +8,21 @@ import bodyParser from "body-parser";
 import path from "path";
 
 import User from "./models/User"
+import Topic from "./models/Topic"
+import Post from "./models/Post"
 import Draft from "./models/Draft"
+
+const dbName = "indii";
 
 mongoose.connect(keys.mongoURI, err => {
     if (err){
-        throw new Error(err)
+        console.err(err)
     } else {
         console.log("DB CONNECTED!")
     }
-});
+}).catch(err => {
+    console.err(err)
+})
 
 const app = express();
 
@@ -69,8 +75,8 @@ passport.use(new GoogleStrategy({
     })
 }));
 
-app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
+app.use(bodyParser.json({limit: '50mb'}))
 
 app.get("/auth/google", passport.authenticate("google", {scope: ["profile", "email"]}))
 
@@ -95,6 +101,23 @@ app.post("/api/star_on", (req, res) => {
 
 app.post("/api/star_off", (req, res) => {
     res.send("")
+})
+
+// app.get("/api/topic/:id", (req, res) => {
+//     Topic.findById(req.body.id)
+//         .then()
+// })
+
+app.post("/api/topic", (req, res) => {
+    new Topic(req.body)
+        .save()
+        .then(topic => {
+            res.send("Success: POST /api/topic")
+        })
+        .catch(err => {
+            console.log(err)
+            res.send("Fail: POST /api/topic")
+        })
 })
 
 app.get("/api/draft/:id", (req, res) => {

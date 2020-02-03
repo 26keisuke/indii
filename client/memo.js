@@ -63,62 +63,37 @@ rgb(#455964) => defaultのアカウントのバックグラウンド
 green: 4CD964
 red: FF5F5F
 
-{/* <div className="topic-form-progress-fake-for-circle">
-                    <div className="topic-form-progress-circle-fake">
-                        <p>1</p>
-                    </div>
-                    {this.setCircle(0)}
-                    <p className="topic-form-progress-name">トピック名を決定</p>
-                </div>
 
-                <div className="topic-form-progress-fake-for-bar">
-                    <div className="topic-form-progress-bar"/>
-                    {this.setBar(0)}
-                </div>
+他の組み合わせ
+light blue  #379af2
+dark blue   #111350
+gray        #aeadae
+light gray  #e1e0e2
+white       #ffffff
 
-                <div className="topic-form-progress-fake-for-circle">
-                    <div className="topic-form-progress-circle-fake">
-                        <p>2</p>
-                    </div>
-                    {this.setCircle(1)}
-                    <p className="topic-form-progress-name">写真を選択</p>
-                </div>
 
-                <div className="topic-form-progress-fake-for-bar">
-                    <div className="topic-form-progress-bar"/>
-                    {this.setBar(1)}
-                </div>
-
-                <div className="topic-form-progress-fake-for-circle">
-                    <div className="topic-form-progress-circle-fake">
-                        <p>3</p>
-                    </div>
-                    {this.setCircle(2)}
-                    <p className="topic-form-progress-name">タグを追加</p>
-                </div>
-
-                <div className="topic-form-progress-fake-for-bar">
-                    <div className="topic-form-progress-bar"/>
-                    {this.setBar(2)}
-                </div>
-
-                <div className="topic-form-progress-fake-for-circle">
-                    <div className="topic-form-progress-circle-fake">
-                        <p>4</p>
-                    </div>
-                    {this.setCircle(3)}
-                    <p className="topic-form-progress-name">友達を招待する</p>
-                </div>
-
-                <div className="topic-form-progress-fake-for-bar">
-                    <div className="topic-form-progress-bar"/>
-                    {this.setBar(3)}
-                </div>
-
-                <div className="topic-form-progress-fake-for-circle">
-                    <div className="topic-form-progress-circle-fake">
-                        <p>5</p>
-                    </div>
-                    {this.setCircle(4)}
-                    <p className="topic-form-progress-name">プレビュー</p>
-                </div> */}
+                {/* <Link to={"/"} className="side-bar-row" onClick={() => this.handleClick("home")}>
+                    <div className={nudge["home"]}></div>
+                    <img src={cate["home"] ? images.pressed["home"] : images.unpressed["home"]} className="side-bar-img"/>
+                    <p className={cate.home ? "" : "unselected"}>ホーム</p>
+                </Link>
+                <Link to={"/draft"} className="side-bar-row" onClick={() => this.handleClick("draft")}>
+                    <div className={nudge.draft}></div>
+                    <img src={cate.draft ? draft_pressed : draft} className="side-bar-img"/>
+                    <p className={cate.draft ? "" : "unselected"}>下書き</p>
+                </Link>
+                <Link to={"/action"} className="side-bar-row" onClick={() => this.handleClick("action")}>
+                    <div className={nudge.action}></div>
+                    <img src={cate.action ? action_pressed : action} className="side-bar-img"/>
+                    <p className={cate.action ? "" : "unselected"}>編集・作成</p>
+                </Link>
+                <Link to={"/notification"} className="side-bar-row" onClick={() => this.handleClick("notification")}> 
+                    <div className={nudge.notification}></div>
+                    <img src={cate.notification ? notification_pressed : notification} className="side-bar-img"/>
+                    <p className={cate.notification ? "" : "unselected"}>通知</p>
+                </Link>
+                <Link to={"/setting"} className="side-bar-row" onClick={() => this.handleClick("setting")}>
+                    <div className={nudge.setting}></div>
+                    <img src={cate.setting ? setting_pressed : setting} className="side-bar-img"/>
+                    <p className={cate.setting ? "" : "unselected"}>設定</p>
+                </Link> */}

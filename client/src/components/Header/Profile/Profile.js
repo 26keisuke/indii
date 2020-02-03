@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
 
-import account from "../../images/account.png";
+import account from "../../../images/account.png";
 
-class HeaderProfile extends Component {
+class Profile extends Component {
     render() {
         const flag = !_.isEmpty(this.props.auth) 
         return (
@@ -48,4 +48,4 @@ function mapStateToProps({auth}) {
     }
 }
 
-export default connect(mapStateToProps, null)(HeaderProfile)
+export default connect(mapStateToProps, null)(Profile)

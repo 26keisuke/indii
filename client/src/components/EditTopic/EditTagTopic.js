@@ -51,7 +51,6 @@ class CreateTagTopic extends Component {
 
     constructor(props){
         super(props)
-        console.log(this.props.intialVal)
         const tags = this.props.initialVal || this.initializeTags()
         this.state = {
             value: "",

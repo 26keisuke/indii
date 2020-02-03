@@ -18,7 +18,18 @@ class CreatePreviewTopic extends Component {
         this.props.setBackward(false);
         this.props.isFetching();
         this.props.enableGray();
-        setTimeout(() => this.onExit(), 1500);
+
+        console.log(this.props.config, this.props.selectedTopic, this.props.postName)
+        
+        // axios.post("/api/post", {
+        //     img: this.props.img.preview,
+        //     tags: this.props.tags,
+        //     topicName: this.props.topicName,
+        // })
+        // .then(res => {
+        //     this.onExit()
+        // })
+
     };
 
     onExit = () => {

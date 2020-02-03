@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import "./HeaderProfile";
+import "./Profile/Profile";
 
 import indii from "../../images/indii.png";
 
-import HeaderProfile from "./HeaderProfile";
-import HeaderLang from "./HeaderLang";
-import HeaderIcon from "./HeaderIcon";
-import SearchBox from "../SearchBox";
+import HeaderProfile from "./Profile/Profile";
+import Navigation from "./Navigation"
+import Search from "./Search/Search";
 
 import "./Header.css"
 
@@ -21,10 +20,9 @@ class Header extends Component {
                 <img src={indii} className="logo-image"/>
                 <p className="logo-name">Indii</p>
             </Link>
-            <HeaderIcon/>
-            <SearchBox/>
+            <Navigation/>
+            <Search/>
             <div className="nav-right">
-                <HeaderLang/>
                 <HeaderProfile/>
             </div>
         </nav>

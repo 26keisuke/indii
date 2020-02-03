@@ -52,6 +52,7 @@ class CreateTopic extends Component {
                 return <ActionTag
                         back={this.state.back} 
                         setBackward={this.setBackward} 
+                        storage="createTopicTag"
                         setTags={this.setTags} 
                         setStep={this.setStep}
                         max={6}
