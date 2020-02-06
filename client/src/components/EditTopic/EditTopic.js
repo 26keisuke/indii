@@ -1,7 +1,6 @@
-import React, {Component} from "react"
+import React, { Component } from "react"
 import axios from "axios"
 
-import ActionDecideTopic from "../ActionDecideTopic";
 import EditIndexTopic from "./EditIndexTopic"
 import EditPreviewTopic from "./EditPreviewTopic"
 
@@ -9,14 +8,17 @@ import ActionProgress from "../ActionProgress"
 import ActionImage from "../ActionImage"
 import ActionTag from "../ActionTag"
 
+import Select from "../Action/Controller/Select"
+import topics from "../__Mock__/data/topic"
+
 import "./EditTopic.css"
 
 import Back from "../Back";
 
 import sample from "../../images/sample1.png"
 
+import { FormWrapper, FormMount, BackWrapper } from "../Action/Form/Form"
 
-// 将来的にはeach componentのthis.setStep(1)の1の部分もpropsで決められるようにする
 class CreatePost extends Component {
 
     constructor(props) {
@@ -41,12 +43,27 @@ class CreatePost extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return <ActionDecideTopic 
-                        back={this.state.back} 
-                        setBackward={this.setBackward} 
-                        storage="editTopicName"
-                        setTopic={this.setTopic} 
-                        setStep={this.setStep}
+                // return <ActionDecideTopic 
+                //         back={this.state.back} 
+                //         setBackward={this.setBackward} 
+                //         storage="editTopicName"
+                //         setTopic={this.setTopic} 
+                //         setStep={this.setStep}
+                //         />
+                return <Select
+                            placeholder="トピックを入力..."
+                            index="1"
+                            title="トピックを選択してください"
+                            subTitle="トピック名"
+                            type="Match"
+                            content="Topic"
+                            data={topics}
+                            searchByVariable="name"
+                            storage="editTopicName"
+                            back={this.state.back} 
+                            setBackward={this.setBackward} 
+                            setValue={this.setTopic} 
+                            setStep={this.setStep}
                         />
             case 1:
                 return <ActionImage
@@ -151,16 +168,16 @@ class CreatePost extends Component {
 
     render () {
         return (
-            <div className="topic-form-wrapper">
-                <div className="topic-form">
-                    <div className="topic-form-back-wrapper">
+            <FormWrapper>
+                <div>
+                    <BackWrapper>
                         <Back
                             url="/action"
                             name="編集・作成一覧に戻る"
                         />
-                    </div>
-                    <p　className="topic-form-title">既存のトピックを編集する</p>
-                    <div className="topic-form-progress-mount"/>
+                    </BackWrapper>
+                    <p>既存のトピックを編集する</p>
+                    <FormMount/>
                     <ActionProgress
                         step={this.state.step}
                         stepName={
@@ -173,11 +190,9 @@ class CreatePost extends Component {
                             ]
                         }
                     />
-
                     {this.renderStep()}
-
                 </div>
-            </div>
+            </FormWrapper>
         )
     }
 }

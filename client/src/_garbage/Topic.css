@@ -1,20 +1,20 @@
-.topic-action-search-wrapper{
+/* .topic-action-search-wrapper{
     display: flex;
     flex-direction: row;
     padding: 10px;
     align-items: center;
     width: 100%;
     justify-content: flex-start;
-}
+} */
 
-.topic-action-search-img{
-    width: 35px;
+/* .topic-action-search-img{ */
+    /* width: 35px;
     height: 35px;
     border: 1px solid black;
     margin-right: 10px;
-}
+} */
 
-.topic-action-search-text{
+/* .topic-action-search-text{
     font-size: 12px;
     color: #333333;
 }
@@ -25,13 +25,13 @@
     margin-left: auto;
     margin-right: 20px;
     justify-content: flex-end;
-}
+} */
 
-.topic-action-search-tag-row{
+/* .topic-action-search-tag-row{
     display: flex;
     flex-direction: row;
     align-items: center;
-}
+} */
 
 .topic-action-search-tag{
     font-size:10px;
@@ -40,11 +40,11 @@
     margin-left: auto;
 }
 
-.topic-action-search-stats-row{
+/* .topic-action-search-stats-row{
     display: flex;
     flex-direction: row;
     margin-left: auto
-}
+} */
 
 .topic-action-search-stats{
     font-size:10px;

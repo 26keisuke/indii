@@ -1,48 +1,13 @@
-.post-suggestion{
-    width: 100%;
-    padding: 10px;
-}
 
-.post-suggestion-row{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-}
 
-.post-suggestion-left{
-    font-size: 14px;
-    color: #333333;
-}
-
-.post-suggestion-index{
-    margin-right: 15px;
-}
-
-.post-suggestion-title{
-    font-size: 13px;
-    margin-bottom: 5px;
-}
-
-.post-suggestion-middle{
-    display: flex;
-    flex-direction: column;
-}
-
-.post-suggestion-bottom{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.post-suggestion-star{
+/* .post-suggestion-star{
     color: #646380;
     transform: scale(1.1);
     margin-right:3px;
     margin-top: -1px;
-}
+} */
 
-.post-suggestion-likes{
+/* .post-suggestion-likes{
     font-size: 10px;
     margin-right:10px;
 }
@@ -56,21 +21,21 @@
 .post-suggestion-date{
     color: #777777;
     font-size: 10px;
-}
+} */
 
-.post-suggestion-right{
+/* .post-suggestion-right{
     width: 40px;
     height: 40px;
     position: absolute;
     right: 22px;
-}
+} */
 
-.post-suggestion-permission{
+/* .post-suggestion-permission{
     position: absolute;
     right: 90px;
     transform: scale(1.1);
     color: #9EAEE5;
-}
+} */
 
 /* 
 .post-suggestion-level-red{

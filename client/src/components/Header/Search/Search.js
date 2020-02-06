@@ -2,6 +2,10 @@
 // https://github.com/moroshko/react-autosuggest/blob/master/FAQ.md#how-do-i-get-the-input-element
 // https://codepen.io/moroshko/pen/WryOMP
 
+// 初めて使う場合はこれを参考にすべき
+// https://codepen.io/moroshko/pen/vpBzMr
+// https://codepen.io/moroshko/pen/OXwgqg?editors=0010
+
 import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
 import { Link, withRouter } from "react-router-dom"
@@ -9,11 +13,12 @@ import { connect } from "react-redux"
 
 import * as actions from "../../../actions"
 
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosSearch } from "react-icons/io";
 import search from "../../../images/search.png";
 import searchClick from "../../../images/search-click.png";
 
-import TopicSuggestion from "../../TopicSuggestion";
+import Topic from "./Suggestion/Topic";
+import New from "./Suggestion/New"
 
 const topics = [
     {
@@ -89,17 +94,11 @@ class Search extends Component {
             value: "",
             suggestions: [],
         }
-        this.handleFocus = this.handleFocus.bind(this)
-        this.handleBlur = this.handleBlur.bind(this)
     }
 
     handleClick = (term) => {
         this.props.searchTerm(term)
     }
-
-    // Mostly from 
-    // https://codepen.io/moroshko/pen/vpBzMr
-    // https://codepen.io/moroshko/pen/OXwgqg?editors=0010
 
     onChange = (event, { newValue, method }) => {
         this.setState({
@@ -117,19 +116,23 @@ class Search extends Component {
     renderSuggestion = suggestion => {
         if (suggestion.added) {
           return (
-            <Link to={"/search/from_direct"} onClick={() => this.handleClick(this.state.value)} className="search-result-wrapper">
-                <div className="search-result">
-                <IoIosAddCircleOutline/><span>"{this.state.value}"</span>を検索する
-                </div>
-            </Link>
+            <New
+                url="/search/from_direct"
+                text={["", "を検索する"]}
+                value={this.state.value}
+                handleClick={this.handleClick}
+            >
+                <IoIosSearch/>
+            </New>
           );
         }
         return (
-            <Link to={"/search/from_suggestion"} onClick={() => this.handleClick(suggestion.name)} className="search-result-wrapper">
-                <TopicSuggestion
-                    suggestion={suggestion}
-                />
-            </Link>
+            <Topic
+                url="/search/from_suggestion"
+                handleClick={this.handleClick}
+                suggestion={suggestion}
+                target="name"
+            />
         )
     };
 
@@ -145,11 +148,11 @@ class Search extends Component {
         });
     };
 
-    handleFocus() {
+    handleFocus = () =>{
         this.props.onSearch()
     }
 
-    handleBlur() {
+    handleBlur = () =>{
         this.props.offSearch()
     }
 
@@ -195,5 +198,4 @@ function mapStateToProps(state){
     }
 }
 
-// Routerから離れたnested componentsのため、propsをwithRouterで獲得しなくてはいけない
 export default connect(mapStateToProps, actions)(withRouter(Search))

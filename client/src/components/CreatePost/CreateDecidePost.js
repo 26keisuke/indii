@@ -3,50 +3,10 @@ import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
 import { Link } from "react-router-dom";
 import { IoIosAddCircleOutline, IoMdCheckmark, IoMdClose } from "react-icons/io";
-import PostSuggestion from "../PostSuggestion";
+import Post from "../Header/Search/Suggestion/Post";
+import Warning from "../Header/Search/Warning/Warning"
 
-const topics = [
-    {
-        id: "123",
-        imgUrl: "",
-        index: [1,2,3],
-        permission: true,
-        likes: "2141",
-        editLevel: "red",
-        title: "C",
-        lastEdited: "Auguest 2019-11-1 10:22PM"
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        index: [1,2,3],
-        permission: true,
-        likes: "2141",
-        editLevel: "red",
-        title: "Ccccsf",
-        lastEdited: "Auguest 2019-11-1 10:22PM"
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        index: [1,2,3],
-        permission: false,
-        likes: "2141",
-        editLevel: "red",
-        title: "Ccc3sfas",
-        lastEdited: "Auguest 2019-11-1 10:22PM"
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        index: [1,2,3],
-        permission: false,
-        likes: "2141",
-        editLevel: "red",
-        title: "Cc",
-        lastEdited: "Auguest 2019-11-1 10:22PM"
-    }
-];
+import posts from "../__Mock__/data/post"
 
 const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -58,7 +18,7 @@ const getSuggestions = value => {
   }
 
   const regex = new RegExp('^' + escapedValue, 'i');
-  const suggestions = topics.filter(topic => regex.test(topic.title));
+  const suggestions = posts.filter(post => regex.test(post.title));
   
   if (suggestions.length === 0) {
     return [
@@ -116,7 +76,7 @@ class CreateDecideTopic extends Component {
             );
         };
         return (
-            <PostSuggestion
+            <Post
                 suggestion={suggestion}
             />
         );
@@ -145,12 +105,11 @@ class CreateDecideTopic extends Component {
             const success = () => {return false}
             const fail = () => {
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle"/>
+                    <Warning>
                         <p>
                             既にポスト名<Link to={"/topic/1123"}>"{this.state.value}"</Link>は存在しています。代わりに<Link to={"/action/post/create"}>新しいポスト</Link>を追加しますか？
                         </p>
-                    </div>
+                    </Warning>
                 )
             };
             if(this.state.value) {

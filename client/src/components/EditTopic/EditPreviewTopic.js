@@ -4,6 +4,19 @@ import { connect } from "react-redux";
 
 import * as actions from "../../actions"
 
+import sample from "../../images/sample1.png"
+
+import {Box, BoxTransition,
+        PreviewSection, PreviewTitle, PreviewUnderline,
+        ButtonWrapper, ButtonLeft, ButtonRight,
+        FinalCheck,
+        TagElement,
+        PreviewList,
+        PreviewIndex, IndexBox } from "../Action/Element/Box"
+
+import { Space } from "../Theme"
+import Img from "../Action/Preview/Img"
+
 class CreatePreviewTopic extends Component {
     constructor(props){
         super(props)
@@ -35,48 +48,47 @@ class CreatePreviewTopic extends Component {
     renderTags = () => {
         if(this.props.tags && this.props.tags.length > 0){
             var res = this.props.tags.map((tag) => 
-                <p className="topic-form-tags-preview-tags">{tag}</p>  
+                <TagElement key={tag}>{tag}</TagElement>  
             );
         }; 
         return res;
     };
 
     renderIndex = () => {
-        console.log(this.props)
         return(
-            <div className="topic-form-index">
-                <div className="topic-form-index-top">
-                    <p className="topic-form-index-top-left-text">Before</p>
-                    <p className="topic-form-index-top-right-text">After</p>
+            <PreviewIndex>
+                <div>
+                    <p>Before</p>
+                    <p>After</p>
                 </div>
-                <hr className="topic-form-preview-hr"/>
-                <div className="topic-form-index-box">
-                    <div className="topic-form-index-left">
-                        <div className="topic-form-index-left-number">
+                <hr/>
+                <IndexBox>
+                    <div>
+                        <div>
                             <p>1</p>
                             <p>1.1</p>
                             <p>1.2</p>
                         </div>
-                        <div className="topic-form-index-left-content">
+                        <div>
                             <p>コンテンツ</p>
                             <p>コンテンツ</p>
                             <p>コンテンツ</p>
                         </div>
                     </div> 
-                    <div className="topic-form-index-right">
-                        <div className="topic-form-index-right-content">
+                    <div>
+                        <div>
                             <p>コンテンツ</p>
                             <p>コンテンツ</p>
                             <p>コンテンツ</p>
                         </div>
-                        <div className="topic-form-index-right-number">
+                        <div>
                             <p>1</p>
                             <p>1.1</p>
                             <p>1.2</p>
                         </div>
                     </div> 
-                </div>
-            </div>
+                </IndexBox>
+            </PreviewIndex>
         )
     }
 
@@ -84,74 +96,50 @@ class CreatePreviewTopic extends Component {
     render(){
 
         return (
-            <div className="topic-form-area y-scrollable">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
-                    <div className="topic-form-area-top"> 
-                        <p className="topic-form-area-top-title">プレビュー</p>
+            <Box scroll={true}>
+                <BoxTransition back={this.props.back} transition={true}>
+                    <div> 
+                        <p>プレビュー</p>
                     </div> 
-                    <div className="topic-form-area-middle">
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">トピック名</p>
-                        </div>
-                        <p className="topic-form-area-preview-input-title">{this.props.topicName}</p>
-                        <div className="topic-form-preview-input"/>
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">トピックの画像</p>
-                        </div>
-                        <div className="thumb-preview-box">
-                            <div className="thumb-preview">
-                                <div className="thumb-preview-wrapper">
-                                    <p className="thumb-preview-title">After: </p>
-                                    <img src={this.props.img} className="thumb-preview-mobile"/>
-                                </div>
-                                <div className="thumb-preview-wrapper">
-                                    <p className="thumb-preview-title">　</p>
-                                    <img src={this.props.img} className="thumb-preview-web"/>
-                                </div>
-                            </div>
-                            <div className="thumb-preview">
-                                <div className="thumb-preview-wrapper">
-                                    <p className="thumb-preview-title">Before: </p>
-                                    <img src={this.props.img} className="thumb-preview-mobile"/>
-                                </div>
-                                <div className="thumb-preview-wrapper">
-                                    <p className="thumb-preview-title">　</p>
-                                    <img src={this.props.img} className="thumb-preview-web"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">このトピックに関連するタグ</p>
-                        </div>
-                        <div className="topic-form-preview-tags">
-                            {this.renderTags()}
-                        </div>
+                    <div>
+                        <PreviewSection>
+                            <div/>
+                            <p>トピック名</p>
+                        </PreviewSection>
+                        <PreviewTitle>{this.props.topicName}</PreviewTitle>
+                        <PreviewUnderline/>
 
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">目次</p>
-                        </div>
+                        <PreviewSection>
+                            <div/>
+                            <p>トピックの画像</p>
+                        </PreviewSection>
+                        
+                        <Img originalImg={sample} newImg={sample}/>
+
+                        <PreviewSection>
+                            <div/>
+                            <p>このトピックに関連するタグ</p>
+                        </PreviewSection>
+                        <PreviewList>
+                            {this.renderTags()}
+                        </PreviewList>
+
+                        <PreviewSection>
+                            <div/>
+                            <p>目次</p>
+                        </PreviewSection>
 
                         {this.renderIndex()}
                         
-                        <p className="topic-form-preview-check">この内容で編集を反映してよろしいですか？<span className="topic-form-preview-check-help"></span></p>
-                        <div className="tiny-space"/>
-                        <div className="topic-form-button">
-                            <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>
-                            <button 
-                                className={"topic-form-button-right"} 
-                                onClick={this.handleForward}
-                            >
-                                    作成する
-                            </button>
-                        </div>
-                        <div className="space"/>
+                        <FinalCheck>この内容で編集を反映してよろしいですか？<span></span></FinalCheck>
+                        <ButtonWrapper>
+                            <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
+                            <ButtonRight onClick={this.handleForward}>作成する</ButtonRight>
+                        </ButtonWrapper>
+                        <Space height="220px"/>
                     </div>
-                </div>
-            </div>
+                </BoxTransition>
+            </Box>
         )
     }
 

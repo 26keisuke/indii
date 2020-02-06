@@ -166,17 +166,17 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border: 1px solid #ddd;
-    border-radius: 100%;
+    /* border-radius: 100%; */
     background: #fff;
 }
 [type="radio"]:checked + label:after,
 [type="radio"]:not(:checked) + label:after {
     content: '';
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     background: #4CD964;
     position: absolute;
     top: 4px;

@@ -1,43 +1,91 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import styled from "styled-components"
 import _ from "lodash";
 
 import account from "../../../images/account.png";
+
+const ProfileArea = styled.div`
+    @media only screen and (max-width: 670px) {
+        padding-left: 15px !important;
+    }   
+
+    display: flex;
+    justify-content: center;
+    margin-right:50px;
+    align-items: center;
+    padding-left:40px;
+
+    & > div {
+        @media only screen and (max-width: 670px) {
+            margin-right:-35px;
+        } 
+        display: flex;
+        align-items: center;
+    }
+
+    & img {
+        @media only screen and (max-width: 670px) {
+            width: 26px !important;
+            height: 26px !important;
+        } 
+        width:32px;
+        height:32px;
+        margin-right:10px;
+    }
+`
+
+const Name = styled(Link)`
+    @media only screen and (max-width: 670px) {
+        display: none;
+    } 
+    display: flex;
+    & > p {
+        margin: 0px 2px;
+    }
+`
+
+const LogInButton = styled.div`
+    @media only screen and (max-width: 670px) {
+        font-size: 10px;
+        margin-right: -20px;
+    }   
+    width: 125px;
+    font-size: 12px;
+    cursor: pointer;
+`
 
 class Profile extends Component {
     render() {
         const flag = !_.isEmpty(this.props.auth) 
         return (
-            <div className="nav-profile-wrapper">
-                <Link to="/profile" className="nav-profile">
+            <ProfileArea>
+                <div>
                     {
                         flag
                         ?
                         this.props.auth.photo
                         ?
-                        <div><img src={this.props.auth.photo} className="nav-profile-img"/></div>
+                        <Link to="/profile"><img src={this.props.auth.photo}/></Link>
                         :
-                        <div><img src={account} className="nav-profile-img"/></div>
+                        <Link to="/profile"><img src={account}/></Link>
                         :
                         ""
                     }
                     {   flag
                         ? 
-                        <div className="nav-profile-name">
-                            {this.props.auth.name.familyName} 
-                            <span className="nav-profile-name-space"/>
-                            {this.props.auth.name.givenName}
-                        </div>
+                        <Name to="/profile">
+                            <p>{this.props.auth.name.familyName}</p>
+                            <p>{this.props.auth.name.givenName}</p>
+                        </Name>
                         :
-                        <Link to={"/login"} className="nav-profile-name">
-                            <div className="nav-profile-btn">
-                                ログイン/サインアップ
-                            </div>
-                        </Link>
+                        <LogInButton onClick={(e) => this.props.click(e)}>
+                            ログイン/サインアップ
+                        </LogInButton>
                     }
-                </Link>
-            </div>
+                </div>
+            </ProfileArea>
         )
     }
 }

@@ -123,12 +123,12 @@
     flex-direction: column;
     cursor: pointer;
     flex-shrink: 0;
+    align-items: center;
     position: relative;
 }
 
 .topic-top-toggle-selected{
     color: #000000;
-    /* font-weight: bold; */
 }
 
 .topic-top-toggle-unselected{
@@ -137,9 +137,9 @@
 
 .topic-top-underline{
     background-color: #636480;
-    width:98%;
-    height:2px;
-    animation-name: extend-underline;
+    width:100%;
+    height:1px;
+    animation-name: extend-underbar;
     animation-duration: 250ms;
     animation-timing-function: ease-in-out;
 }

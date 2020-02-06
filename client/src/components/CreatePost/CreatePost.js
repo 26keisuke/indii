@@ -2,11 +2,15 @@ import React, {Component} from "react"
 import axios from "axios"
 
 import ActionProgress from "../ActionProgress"
-import ActionDecideTopic from "../ActionDecideTopic"
-import CreateDecidePost from "./CreateDecidePost"
 import CreateConfigurationPost from "./CreateConfigurationPost"
 import CreatePreviewPost from "./CreatePreviewPost"
 import Back from "../Back";
+
+import Select from "../Action/Controller/Select"
+import topics from "../__Mock__/data/topic"
+import posts from "../__Mock__/data/post"
+
+import { FormWrapper, FormMount, BackWrapper } from "../Action/Form/Form"
 
 class CreatePost extends Component {
 
@@ -26,19 +30,50 @@ class CreatePost extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return <ActionDecideTopic 
+                // return <ActionDecideTopic 
+                //         back={this.state.back} 
+                //         setBackward={this.setBackward} 
+                //         storage="editPostTopic"
+                //         setTopic={this.setTopic}
+                //         setStep={this.setStep}
+                //         />
+                return  <Select
+                        placeholder="トピックを入力..."
+                        index="1"
+                        title="トピックを選択してください"
+                        subTitle="トピック名"
+                        type="Match"
+                        content="Topic"
+                        data={topics}
+                        searchByVariable="name"
+                        storage="editPostTopic"
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        storage="editPostTopic"
-                        setTopic={this.setTopic}
+                        setValue={this.setTopic} 
                         setStep={this.setStep}
                         />
             case 1:
-                return <CreateDecidePost
+                // return <CreateDecidePost
+                //         back={this.state.back} 
+                //         setBackward={this.setBackward} 
+                //         storage="editPostPost"
+                //         setPost={this.setPost}
+                //         setStep={this.setStep}
+                //         />
+                return  <Select
+                        placeholder="ポスト名を入力..."
+                        index="2"
+                        title="ポスト名を入力してください"
+                        subTitle="ポスト名"
+                        type="Unique"
+                        content="Post"
+                        data={posts}
+                        transition={true}
+                        searchByVariable="title"
+                        storage="editPostPost"
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        storage="editPostPost"
-                        setPost={this.setPost}
+                        setValue={this.setPost} 
                         setStep={this.setStep}
                         />
             case 2:
@@ -94,9 +129,6 @@ class CreatePost extends Component {
         const url = "/api/topic/" + topic.id
         axios.get(url)
         .then(res => {
-            // this.setState({
-            //     posts: res.posts
-            // })
             console.log(res)
         })
         .catch(err => {
@@ -106,16 +138,16 @@ class CreatePost extends Component {
 
     render () {
         return (
-            <div className="topic-form-wrapper">
-                <div className="topic-form">
-                    <div className="topic-form-back-wrapper">
+            <FormWrapper>
+                <div>
+                    <BackWrapper>
                         <Back
                             url="/action"
                             name="編集・作成一覧に戻る"
                         />
-                    </div>
-                    <p　className="topic-form-title">新しいポストを作成する</p>
-                    <div className="topic-form-progress-mount"/>
+                    </BackWrapper>
+                    <p>新しいポストを作成する</p>
+                    <FormMount/>
                     <ActionProgress
                         step={this.state.step}
                         stepName={
@@ -127,11 +159,9 @@ class CreatePost extends Component {
                             ]
                         }
                     />
-
                     {this.renderStep()}
-
                 </div>
-            </div>
+            </FormWrapper>
         )
     }
 }

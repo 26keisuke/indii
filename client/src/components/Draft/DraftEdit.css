@@ -67,7 +67,7 @@
     overflow: scroll;
 }
 
-.draft-area-textarea a{
+.draft-area-textarea span a{
     text-decoration: underline !important;
 }
 

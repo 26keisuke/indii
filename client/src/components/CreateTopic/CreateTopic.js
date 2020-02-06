@@ -1,13 +1,11 @@
 import React, { Component } from "react"
 
-import { IoIosArrowDown } from "react-icons/io"
 
-// 将来的にはこれをconfiugrableにして、
-// ステップ名とjsxのpairを渡せば完成する感じにする
-
-import CreateDecideTopic from "./CreateDecideTopic";
 import CreateFriendsTopic from "./CreateFriendsTopic"
 import CreatePreviewTopic from "./CreatePreviewTopic"
+
+import Select from "../Action/Controller/Select"
+import topics from "../__Mock__/data/topic"
 
 import ActionProgress from "../ActionProgress"
 import ActionImage from "../ActionImage"
@@ -15,6 +13,8 @@ import ActionTag from "../ActionTag"
 
 import "./CreateTopic.css";
 import Back from "../Back";
+
+import { FormWrapper, FormMount, BackWrapper } from "../Action/Form/Form"
 
 class CreateTopic extends Component {
 
@@ -33,12 +33,27 @@ class CreateTopic extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return <CreateDecideTopic 
-                        back={this.state.back} 
-                        setBackward={this.setBackward} 
-                        storage="createTopicName"
-                        setTopicName={this.setTopicName} 
-                        setStep={this.setStep}
+                // return <CreateDecideTopic 
+                //         back={this.state.back} 
+                //         setBackward={this.setBackward} 
+                //         storage="createTopicName"
+                //         setTopicName={this.setTopicName} 
+                //         setStep={this.setStep}
+                //         />
+                return  <Select
+                            placeholder="トピックを入力"
+                            index="1"
+                            title="トピック名を入力してください"
+                            subTitle="トピック名"
+                            type="Unique"
+                            content="Topic"
+                            data={topics}
+                            searchByVariable="name"
+                            storage="createTopicName"
+                            back={this.state.back} 
+                            setBackward={this.setBackward} 
+                            setValue={this.setTopicName} 
+                            setStep={this.setStep}
                         />
             case 1:
                 return <ActionImage
@@ -112,20 +127,16 @@ class CreateTopic extends Component {
     render() {
          
         return (
-            <div className="topic-form-wrapper">
-                <div className="topic-form">
-
-                    <div className="topic-form-back-wrapper">
+            <FormWrapper>
+                <div>
+                    <BackWrapper>
                         <Back
                             url="/action"
                             name="編集・作成一覧に戻る"
                         />
-                    </div>
-
-                    <p className="topic-form-title">新しいトピックを作成する</p>
-
-                    <div className="topic-form-progress-mount"/>
-                    
+                    </BackWrapper>
+                    <p>新しいトピックを作成する</p>
+                    <FormMount/>
                     <ActionProgress
                         step={this.state.step}
                         stepName={
@@ -140,10 +151,8 @@ class CreateTopic extends Component {
                     />
                     
                     {this.renderStep()}
-                    
-
                 </div>
-            </div>
+            </FormWrapper>
         )
     }
 }

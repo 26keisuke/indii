@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import axios from "axios";
@@ -17,10 +17,9 @@ import Topic from "./Topic"
 import Draft from "./Draft/DraftNavigation"
 import DraftEdit from "./Draft/DraftEdit"
 import CreateTopic from "./CreateTopic/CreateTopic"
-import Login from "./Login"
 import Profile from "./Profile/Profile"
 import CreatePost from "./CreatePost//CreatePost"
-import Create from "./Create"
+import Action from "./Action/Action"
 import EditTopic from "./EditTopic/EditTopic"
 import EditPost from "./EditPost/EditPost"
 import WorkSpace from "./WorkSpace"
@@ -243,7 +242,6 @@ class App extends Component {
                         } 
                         <div className="fakebox">
                             <Route exact path="/" component={Feed} />
-                            <Route path="/login" component={Login} />
                             <Route path="/profile" component={Profile} />
                             <Route exact path="/draft" component={Draft} />
                             <Route path="/draft/edit/:id" component={DraftEdit} />
@@ -256,7 +254,7 @@ class App extends Component {
                             <Route path="/action/topic/edit" component={EditTopic} />
                             <Route path="/topic/:id" component={Topic} />
                             <Route path="/profile/:id" component={Profile} />
-                            <Route exact path="/action" component={Create} />
+                            <Route exact path="/action" component={Action} />
                             <Route exact path="/workspace" component={WorkSpace} />
                         </div>
                     </div>

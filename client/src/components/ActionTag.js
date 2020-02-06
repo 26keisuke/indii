@@ -3,6 +3,8 @@ import React, { Component } from "react"
 import Autosuggest from "react-autosuggest";
 import { IoIosClose } from "react-icons/io"
 
+import Warning from "./Header/Search/Warning/Warning"
+
 const topics = [
     {
         imgUrl: "",
@@ -105,30 +107,27 @@ class ActionTag extends Component {
         switch(flag){
             case "limit":
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle"/>
+                    <Warning>
                         <p>
                             選択できるタグの上限は{this.props.max}つまでです。
                         </p>
-                    </div>
+                    </Warning>
                 )
             case "sameVal":
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle"/>
+                    <Warning>
                         <p>
                             既に同じタグが追加されています。
                         </p>
-                    </div>
+                    </Warning>
                 )
             case "illegal":
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle"/>
+                    <Warning>
                         <p>
                             タグに無効な文字が含まれています。
                         </p>
-                    </div>
+                    </Warning>
                 )
             default:
                 return false;

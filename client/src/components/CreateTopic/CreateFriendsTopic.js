@@ -4,6 +4,8 @@ import Autosuggest from "react-autosuggest";
 import { IoMdClose } from "react-icons/io"
 import { MdCheck } from "react-icons/md"
 
+import Warning from "../Header/Search/Warning/Warning"
+
 const topics = [
     {
         id: "12323",
@@ -115,21 +117,19 @@ class CreateFriendsTopic extends Component {
         switch(flag){
             case "limit":
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle"/>
+                    <Warning>
                         <p>
                             招待できるフォロワーの上限は{this.props.max}人までです。
                         </p>
-                    </div>
+                    </Warning>
                 )
             case "sameVal":
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle-green"/>
+                    <Warning>
                         <p>
                             既に同じ招待リストに追加されています。
                         </p>
-                    </div>
+                    </Warning>
                 )
             default:
                 return false;

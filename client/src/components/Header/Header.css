@@ -1,6 +1,6 @@
 /*===navbar====*/
 
-.nav-bar{
+/* .nav-bar{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -11,19 +11,19 @@
     position: absolute;
     top: 0px;
     width: 100%;
-    z-index: 2;
-}
+    z-index: 100;
+} */
 
-.nav-right{
+/* .nav-right{
     display: flex;
     justify-content: center;
     margin-right:50px;
     align-items: center;
-}
+} */
 
 
 /*=====logo=====*/
-
+/* 
 @media only screen and (max-width: 670px) {
     .logo{
         margin-bottom:-5px;
@@ -57,45 +57,7 @@
     font-size:26px;
     color: #455964;
     margin-right:20px;
-}
-
-
-/*====nav-icon=====*/
-
-@media only screen and (max-width: 670px) {
-    .nav-icon-list{
-        display: flex !important;
-    }
-
-    .nav-icon-check{
-        background-color: #9EAEE5;
-        border-radius: 3px;
-        top:-3px;
-        right:20px;
-        width: 6px;
-        height: 6px;
-        position: absolute;
-    }
-
-}
-
-.nav-icon-list{
-    display: none;
-    padding: 0px;
-}
-
-.nav-icon-img{
-    width:20px;
-    height:20px;
-    margin-right:25px;
-    cursor: pointer;
-}
-
-.nav-icon-row{
-    display: flex;
-    flex-direction: row;
-    position: relative;
-}
+} */
 
 /*====language=====*/
 
@@ -125,45 +87,45 @@
 /*===profile===*/
 
 @media only screen and (max-width: 670px) {
-    .nav-profile{
+    /* .nav-profile{
         margin-right:-45px;
-    }
+    } */
 
-    .nav-profile-wrapper{
+    /* .nav-profile-wrapper{
         padding-left: 15px !important;
-    }
+    } */
 
-    .nav-profile-name{
+    /* .nav-profile-name{
         display: none;
-    }
+    } */
 
-    .nav-profile-img{
+    /* .nav-profile-img{
         width: 26px !important;
         height: 26px !important;
-    }
+    } */
 
 }
 
-.nav-profile{
+/* .nav-profile{
     display: flex;
     align-items: center;
-}
+} */
 
-.nav-profile-wrapper{
+/* .nav-profile-wrapper{
     padding-left:40px;
-}
+} */
 
-.nav-profile-img{
+/* .nav-profile-img{
     width:32px;
     height:32px;
     margin-right:10px;
-}
+} */
 
-.nav-profile-name-space{
+/* .nav-profile-name-space{
     margin-right:5px;
-}
+} */
 
-.nav-profile-btn{
+/* .nav-profile-btn{
     width: 125px;
     font-size: 12px;
-}
+} */

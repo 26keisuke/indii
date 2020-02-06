@@ -2,72 +2,15 @@ import React, { Component } from "react";
 
 import Autosuggest from "react-autosuggest";
 import { Link } from "react-router-dom";
-import { IoIosAddCircleOutline, IoMdCheckmark, IoMdClose } from "react-icons/io";
-import TopicSuggestion from "../TopicSuggestion";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import Topic from "../Header/Search/Suggestion/Topic";
+import New from "../Header/Search/Suggestion/New"
+import Warning from "../Header/Search/Warning/Warning"
 
-const topics = [
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C0",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C00",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C000",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C0000",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    }
-];
+import { Box, BoxTransition, GreenMark, RedMark } from "../Action/Element/Box"
 
-const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const getSuggestions = value => {
-  const escapedValue = escapeRegexCharacters(value.trim());
-  
-  if (escapedValue === '') {
-    return [];
-  }
-
-  const regex = new RegExp('^' + escapedValue, 'i');
-  const suggestions = topics.filter(topic => regex.test(topic.name));
-  
-  if (suggestions.length === 0) {
-    return [
-      { added: true } 
-    ];
-  };
-  
-  return suggestions;
-};
+import topics from "../__Mock__/data/topic"
+import getSuggestions from "../__Mock__/method/getSuggestions"
 
 class CreateDecideTopic extends Component {
 
@@ -82,6 +25,9 @@ class CreateDecideTopic extends Component {
     };
 
     handleClick = (term) => {
+        if(this.state.suggestions.length === 0 || !this.state.suggestions[0].added){ 
+            return null;
+        }
         this.setState({
             blur: true,
             end: true,
@@ -108,26 +54,30 @@ class CreateDecideTopic extends Component {
     renderSuggestion = suggestion => {
         if (suggestion.added) {
             return (
-                <div onClick={() => this.handleClick(this.state.value)} className="search-result-wrapper">
-                    <div className="search-result">
-                    <IoIosAddCircleOutline/> 新しいトピック<span>"{this.state.value}"</span>を追加する
-                    </div>
-                </div>
+                <New
+                    handleClick={this.handleClick}
+                    text={["新しいトピック","を追加する"]}
+                    value={this.state.value}
+                >
+                    <IoIosAddCircleOutline/>
+                </New>
             );
         };
         return (
-            <TopicSuggestion
+            <Topic
+                handleClick={this.handleClick}
                 suggestion={suggestion}
+                target="name"
             />
         );
     };
 
     renderMark = () =>{
         if(!this.state.value || this.state.blur) {
-            return ""
+            return null;
         } else {
-            const success = () => {return <IoMdCheckmark className="topic-form-area-middle-icon green"/>}
-            const fail = () => {return <IoMdClose className="topic-form-area-middle-icon red"/>}
+            const success = () => {return <GreenMark/>}
+            const fail = () => {return <RedMark/>}
             if(this.state.value) {
                 if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
                     return success();
@@ -140,17 +90,16 @@ class CreateDecideTopic extends Component {
 
     renderWarning = () => {
         if(!this.state.value || this.state.blur) {
-            return false;
+            return null;
         } else {
-            const success = () => {return false}
+            const success = () => { return null; }
             const fail = () => {
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle"/>
+                    <Warning>
                         <p>
                             既にトピック名<Link to={"/topic/1123"}>"{this.state.value}"</Link>は存在しています。代わりに<Link to={"/action/post/create"}>新しいポスト</Link>を追加しますか？
                         </p>
-                    </div>
+                    </Warning>
                 )
             };
             if(this.state.value) {
@@ -165,7 +114,7 @@ class CreateDecideTopic extends Component {
 
     onSuggestionsFetchRequested = ({ value }) => {
         this.setState({
-          suggestions: getSuggestions(value)
+          suggestions: getSuggestions(value, "Unique", topics, "name")
         });
     };
 
@@ -177,7 +126,7 @@ class CreateDecideTopic extends Component {
 
     onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {
         if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
-            this.handleClick(this.state.value)
+            this.handleClick(this.state.value);
         } else {
             this.setState({
                 value: suggestion.name,
@@ -200,7 +149,7 @@ class CreateDecideTopic extends Component {
     formSubmit = (e) => {
         e.preventDefault();
         const success = () => this.handleClick(this.state.value);
-        const fail = () => console.log("Duplicate");
+        const fail = () => { return null; }
 
         if(this.state.value) {
             if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
@@ -223,16 +172,15 @@ class CreateDecideTopic extends Component {
         };
 
         return (
-            <div className="topic-form-area">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper"}>
-                    <div className="topic-form-area-top"> 
+            <Box>
+                <BoxTransition back={this.props.back}>
+                    <div> 
                         {this.renderWarning()}
-                        <p className="topic-form-area-top-title">1. トピック名を入力してください</p>
+                        <p>1. トピック名を入力してください</p>
                     </div> 
-                    <form onSubmit={this.formSubmit} className="topic-form-area-middle">
-                        <p className="topic-form-area-input-title">トピック名</p>
+                    <form onSubmit={(e) => this.formSubmit(e)}>
+                        <p>トピック名</p>
                         <Autosuggest
-                            className="topic-form-area-search" 
                             suggestions={suggestions}
                             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
@@ -243,8 +191,8 @@ class CreateDecideTopic extends Component {
                         />
                         {this.renderMark()}
                     </form>
-                </div>
-            </div>
+                </BoxTransition>
+            </Box>
         )
     }
 }

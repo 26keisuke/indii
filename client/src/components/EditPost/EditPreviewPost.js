@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 
 import * as actions from "../../actions"
 
+import { Box, BoxTransition, PreviewSection, PreviewTitle, PreviewUnderline, ButtonWrapper, ButtonLeft, ButtonRight, FinalCheck } from "../Action/Element/Box"
+import { Space } from "../Theme"
+
 class EditPreviewTopic extends Component {
     constructor(props){
         super(props)
@@ -34,43 +37,36 @@ class EditPreviewTopic extends Component {
     }
 
     render(){
-
         return (
-            <div className="topic-form-area y-scrollable">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
-                    <div className="topic-form-area-top"> 
-                        <p className="topic-form-area-top-title">プレビュー</p>
+            <Box scroll={true}>
+                <BoxTransition back={this.props.back} transition={true}>
+                    <div> 
+                        <p>プレビュー</p>
                     </div> 
-                    <div className="topic-form-area-middle">
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">トピック名</p>
-                        </div>
-                        <p className="topic-form-area-preview-input-title">{this.props.selectedTopic.name}</p>
-                        <div className="topic-form-preview-input"/>
+                    <div>
+                        <PreviewSection>
+                            <div/>
+                            <p>トピック名</p>
+                        </PreviewSection>
+                        <PreviewTitle>{this.props.selectedTopic.name}</PreviewTitle>
+                        <PreviewUnderline/>
 
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">ポスト名</p>
-                        </div>
-                        <p className="topic-form-area-preview-input-title">{this.props.selectedPost.title}</p>
-                        <div className="topic-form-preview-input"/>
+                        <PreviewSection>
+                            <div/>
+                            <p>ポスト名</p>
+                        </PreviewSection>
+                        <PreviewTitle>{this.props.selectedPost.title}</PreviewTitle>
+                        <PreviewUnderline/>
                         
-                        <p className="topic-form-preview-check">このポストを編集しますか？<span className="topic-form-preview-check-help"></span></p>
-                        <div className="tiny-space"/>
-                        <div className="topic-form-button">
-                            <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>
-                            <button 
-                                className={"topic-form-button-right"} 
-                                onClick={this.handleForward}
-                            >
-                                    作成する
-                            </button>
-                        </div>
-                        <div className="space"/>
+                        <FinalCheck>このポストを編集しますか？<span></span></FinalCheck>
+                        <ButtonWrapper>
+                            <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
+                            <ButtonRight onClick={this.handleForward}>作成する</ButtonRight>
+                        </ButtonWrapper>
+                        <Space height="220px"/>
                     </div>
-                </div>
-            </div>
+                </BoxTransition>
+            </Box>
         )
     }
 

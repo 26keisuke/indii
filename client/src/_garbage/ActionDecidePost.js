@@ -1,52 +1,52 @@
 import React, { Component } from "react";
-import axios from "axios"
 
 import Autosuggest from "react-autosuggest";
 import { Link } from "react-router-dom";
+import { FaUserCheck } from "react-icons/fa"
 
-import TopicSuggestion from "./TopicSuggestion";
+import Post from "./Header/Search/Suggestion/Post";
+import Warning from "./Header/Search/Warning/Warning"
 
-//ここは全てのデータをとってくる。idとかimgだけにこだわらず。そして最後にコントローラーに送ることで後々楽になると思う
-const topics = [
+const posts = [
     {
         id: "123",
         imgUrl: "",
-        name: "C",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
+        index: [1,2,3],
+        permission: true,
+        likes: "2141",
+        editLevel: "red",
+        title: "C",
+        lastEdited: "Auguest 2019-11-1 10:22PM"
     },
     {
         id: "123",
         imgUrl: "",
-        name: "C0",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
+        index: [1,2,3],
+        permission: true,
+        likes: "2141",
+        editLevel: "red",
+        title: "Ccccsf",
+        lastEdited: "Auguest 2019-11-1 10:22PM"
     },
     {
         id: "123",
         imgUrl: "",
-        name: "C00",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
+        index: [1,2,3],
+        permission: false,
+        likes: "2141",
+        editLevel: "red",
+        title: "Ccc3sfas",
+        lastEdited: "Auguest 2019-11-1 10:22PM"
     },
     {
         id: "123",
         imgUrl: "",
-        name: "C000",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C0000",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
+        index: [1,2,3],
+        permission: false,
+        likes: "2141",
+        editLevel: "red",
+        title: "Cc",
+        lastEdited: "Auguest 2019-11-1 10:22PM"
     }
 ];
 
@@ -60,7 +60,7 @@ const getSuggestions = value => {
   }
 
   const regex = new RegExp('^' + escapedValue, 'i');
-  const suggestions = topics.filter(topic => regex.test(topic.name));
+  const suggestions = posts.filter(post => regex.test(post.title));
   
   if (suggestions.length === 0) {
     return [];
@@ -86,9 +86,10 @@ class ActionDecideTopic extends Component {
             blur: true,
             end: true,
         });
+        localStorage.setItem(this.props.storage,this.state.value)
         this.props.setBackward(false);
-        this.props.setStep(1);
-        this.props.setTopic(suggestion);
+        this.props.setStep(2);
+        this.props.setPost(suggestion);
     };
 
     onChange = (event, { newValue }) => {
@@ -98,29 +99,13 @@ class ActionDecideTopic extends Component {
         localStorage.setItem(this.props.storage, newValue);
     };
 
-    ///////////////////////////////////
-
-    getTopics = (term) => {
-        const url = "/api/topic/" + term
-        axios.get(url)
-            .then(res => {
-
-            })
-            .catch(err => {
-                console.err(err)
-            })
-    }
-
-    ///////////////////////////////////
-
-
     getSuggestionValue = suggestion => {
-        return suggestion.name;
+        return suggestion.title;
     };
 
     renderSuggestion = suggestion => {
         return (
-            <TopicSuggestion
+            <Post
                 suggestion={suggestion}
             />
         )
@@ -133,12 +118,11 @@ class ActionDecideTopic extends Component {
             const success = () => {return false}
             const fail = () => {
                 return (
-                    <div className="topic-form-area-top-warning">
-                        <div className="topic-form-area-top-warning-circle"/>
+                    <Warning>
                         <p>
-                            トピック「{this.state.value}」はまだ作られていません。<Link to={"/action/topic/create"}>新しく作成しますか？</Link>
+                            ポスト「{this.state.value}」はまだ作られていません。<Link to={"/action/post/create"}>新しく作成しますか？</Link>
                         </p>
-                    </div>
+                    </Warning>
                 )
             };
             if(this.state.value) {
@@ -181,6 +165,11 @@ class ActionDecideTopic extends Component {
         });
     };
 
+    handleBack = () => {
+        this.props.setBackward(true);
+        this.props.setStep(0);
+    }   
+
     formSubmit = (e) => {
         e.preventDefault();
     }
@@ -189,7 +178,7 @@ class ActionDecideTopic extends Component {
 
         const { value, suggestions } = this.state;
         const inputProps = {
-            placeholder: "トピック名を入力...",
+            placeholder: "ポスト名を入力...",
             value,
             onChange: this.onChange,
             onFocus: this.handleFocus,
@@ -198,13 +187,17 @@ class ActionDecideTopic extends Component {
 
         return (
             <div className="topic-form-area">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper"}>
+                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
                     <div className="topic-form-area-top"> 
                         {this.renderWarning()}
-                        <p className="topic-form-area-top-title">1. トピックを選択してください</p>
+                        <p className="topic-form-area-top-title">2. ポストを選択してください</p>
+                        <div className="topic-form-helper">
+                            <FaUserCheck　className="topic-form-helper-icon"/>
+                            <p className="topic-form-helper-text">: オーナーが最終確認するポスト</p>
+                        </div>
                     </div> 
                     <form onSubmit={(e) => this.formSubmit(e)} className="topic-form-area-middle">
-                        <p className="topic-form-area-input-title">トピック名</p>
+                        <p className="topic-form-area-input-title">ポスト名</p>
                         <Autosuggest
                             className="topic-form-area-search" 
                             suggestions={suggestions}
@@ -216,6 +209,9 @@ class ActionDecideTopic extends Component {
                             inputProps={inputProps} 
                         />
                     </form>
+                    <div className="topic-form-button">
+                        <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>
+                    </div>
                 </div>
             </div>
         )

@@ -21,7 +21,7 @@
     top: -23px;
 }
 
-.topic-form-helper{
+/* .topic-form-helper{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -38,7 +38,7 @@
     transform: scale(1.2);
     margin-left: 86px;
     margin-right: 10px;
-}
+} */
 
 .topic-form-back-wrapper{
     margin-top:-30px;
@@ -230,39 +230,6 @@
     margin-left: 20px;
 }
 
-.topic-form-area-top-warning{
-    color: #747474;
-    font-size: 11px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: absolute;
-    top: -28px;
-    width: 440px;
-}
-
-.topic-form-area-top-warning-circle{
-    width: 10px;
-    height: 10px;
-    border-radius: 100%;
-    margin-right: 10px;
-    background-color: #FF5F5F;
-}
-
-.topic-form-area-top-warning-circle-green{
-    width: 10px;
-    height: 10px;
-    border-radius: 100%;
-    margin-right: 10px;
-    background-color: #4CD964;
-}
-
-.topic-form-area-top-warning a{
-    text-decoration: underline !important;
-    text-decoration-style: dotted !important;
-}
-
 .topic-form-area-middle{
     position: relative;
 }
@@ -329,6 +296,7 @@
 }
 
 /*== search ==*/
+
 
 .topic-form-area-middle .react-autosuggest__input{
     width: 435px;

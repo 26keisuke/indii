@@ -5,6 +5,18 @@ import axios from "axios"
 
 import * as actions from "../../actions"
 
+import {Box, BoxTransition,
+    PreviewSection, PreviewTitle, PreviewUnderline,
+    ButtonWrapper, ButtonLeft, ButtonRight,
+    FinalCheck,
+    PreviewList,
+    TagElement,
+    FriendWrapper, FriendNone } from "../Action/Element/Box"
+
+import { Space } from "../Theme"
+import Img from "../Action/Preview/Img"
+
+
 class CreatePreviewTopic extends Component {
     constructor(props){
         super(props)
@@ -46,7 +58,7 @@ class CreatePreviewTopic extends Component {
     renderTags = () => {
         if(this.props.tags && this.props.tags.length > 0){
             var res = this.props.tags.map((tag) => 
-                <p className="topic-form-tags-preview-tags">{tag}</p>  
+                <TagElement key={tag}>{tag}</TagElement>  
             );
         }; 
         return res;
@@ -55,74 +67,60 @@ class CreatePreviewTopic extends Component {
     renderFriends = () => {
         if(this.props.friends.length > 0){
             var res = this.props.friends.map(friend => 
-                <div className="topic-form-friends-wrapper">
-                    <img src={friend.imgUrl} className="topic-form-friends-person"/>
-                </div>    
+                <FriendWrapper>
+                    <img src={friend.imgUrl}/>
+                </FriendWrapper>    
             )
         } else {
-            var res = <p className="topic-form-friends-none">誰も招待リストに追加されていません</p>
+            var res = <FriendNone>誰も招待リストに追加されていません</FriendNone>
         }
         return res;
     }
 
     render(){
         return (
-            <div className="topic-form-area y-scrollable">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
-                    <div className="topic-form-area-top"> 
-                        <p className="topic-form-area-top-title">プレビュー</p>
+            <Box scroll={true}>
+                <BoxTransition back={this.props.back} transition={true}>
+                    <div> 
+                        <p>プレビュー</p>
                     </div> 
-                    <div className="topic-form-area-middle">
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">トピック名</p>
-                        </div>
-                        <p className="topic-form-area-preview-input-title">{this.props.topicName}</p>
-                        <div className="topic-form-preview-input"/>
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">トピックの画像</p>
-                        </div>
-                        <div className="thumb-preview-box">
-                            <div className="thumb-preview">
-                                <div className="thumb-preview-wrapper">
-                                    <img src={this.props.img.preview} className="thumb-preview-mobile"/>
-                                </div>
-                                <div className="thumb-preview-wrapper">
-                                    <p className="thumb-preview-title">　</p>
-                                    <img src={this.props.img.preview} className="thumb-preview-web"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">このトピックに関連するタグ</p>
-                        </div>
-                        <div className="topic-form-preview-tags">
+                    <div>
+                        <PreviewSection>
+                            <div/>
+                            <p>トピック名</p>
+                        </PreviewSection>
+                        <PreviewTitle>{this.props.topicName}</PreviewTitle>
+                        <PreviewUnderline/>
+                        <PreviewSection>
+                            <div/>
+                            <p>トピックの画像</p>
+                        </PreviewSection>
+                        
+                        <Img newImg={this.props.img}/>
+
+                        <PreviewSection>
+                            <div/>
+                            <p>このトピックに関連するタグ</p>
+                        </PreviewSection>
+                        <PreviewList>
                             {this.renderTags()}
-                        </div>
-                        <div className="topic-form-area-top-wrapper">
-                            <div className="topic-form-area-top-circle"/>
-                            <p className="topic-form-area-input-title">このトピックに招待するフォロワー</p>
-                        </div>
-                        <div className="topic-form-preview-tags">
+                        </PreviewList>
+                        <PreviewSection>
+                            <div/>
+                            <p>このトピックに招待するフォロワー</p>
+                        </PreviewSection>
+                        <PreviewList>
                             {this.renderFriends()}
-                        </div>
-                        <p className="topic-form-preview-check">この内容でよろしいですか？<span className="topic-form-preview-check-help">(作成後はいつでもトピックを消すことができます。)</span></p>
-                        <div className="tiny-space"/>
-                        <div className="topic-form-button">
-                            <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>
-                            <button 
-                                className={"topic-form-button-right"} 
-                                onClick={this.handleForward}
-                            >
-                                    作成する
-                            </button>
-                        </div>
-                        <div className="space"/>
+                        </PreviewList>
+                        <FinalCheck>この内容でよろしいですか？<span>(作成後はいつでもトピックを消すことができます。)</span></FinalCheck>
+                        <ButtonWrapper>
+                            <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
+                            <ButtonRight onClick={this.handleForward}>作成する</ButtonRight>
+                        </ButtonWrapper>
+                        <Space height="220px"/>
                     </div>
-                </div>
-            </div>
+                </BoxTransition>
+            </Box>
         )
     }
 

@@ -6,6 +6,7 @@ import reduxThunk from "redux-thunk";
 import logger from "redux-logger"
 
 import App from "./components/App";
+import Theme from "./components/Theme";
 import reducers from "./reducers";
 
 import "./index.css";
@@ -22,7 +23,9 @@ const store = createStore(reducers, {}, applyMiddleware(...middlewares))
 
 ReactDOM.render(
     <Provider store={store}>
-        <App/>
+        <Theme>
+            <App/>
+        </Theme>
     </Provider>,
     document.getElementById("root")
 )

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom"
 
-// import home from "../../images/home.png";
-// import draft from "../../images/draft.png";
-// import post from "../../images/post.png";
-// import notif from "../../images/notification.png";
-// import setting from "../../images/setting.png";
+import home from "../../images/home.png";
+import draft from "../../images/draft.png";
+import post from "../../images/post.png";
+import notif from "../../images/notification.png";
+import setting from "../../images/setting.png";
 
 class HeaderIcon extends Component {
     render() {

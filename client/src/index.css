@@ -267,6 +267,7 @@ input:focus{
     display: flex;
     align-items: center;
     width:100%;
+    z-index: 5;
 }
 
 .search-result{
@@ -307,7 +308,6 @@ input:focus{
     border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    z-index: 5;
     overflow-x: hidden;
 }
   
@@ -319,7 +319,6 @@ input:focus{
   
 .search-box .react-autosuggest__suggestion {
     cursor: pointer;
-    
 }
   
 .search-box .react-autosuggest__suggestion--highlighted {

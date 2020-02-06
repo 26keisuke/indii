@@ -2,8 +2,6 @@ import React, {Component} from "react"
 import { Link } from "react-router-dom"
 import styled, {css} from "styled-components"
 
-import classnames from "classnames"
-
 import home from "../../../images/home.png";
 import home_pressed from "../../../images/home-pressed.png";
 import draft from "../../../images/draft.png";
@@ -14,8 +12,6 @@ import notification from "../../../images/notification.png";
 import notification_pressed from "../../../images/notification-pressed.png";
 import setting from "../../../images/setting.png";
 import setting_pressed from "../../../images/setting-pressed.png";
-
-import "./List.css"
 
 const images = {
     unpressed: {
@@ -115,18 +111,35 @@ const ListImg = styled.img`
     padding-bottom: 12px;
 `
 
+const NudgeMark = styled.div`
+    ${ 
+        props => props.nudge && css`
+        background-color: #9EAEE5;
+        width: 6px;
+        height: 6px;
+        position: absolute;
+        left: 19px;
+        top:7px;
+        border-radius: 4px;
+    `}
+`
+
+const TextSelected = styled.p`
+    ${
+        props => props.selected && css`
+            color: #B3B3C8;
+        `
+    }
+`
+
 class List extends Component {
 
-    constructor(props) {
-        super(props)
-    }
-
     // tertinary expressionで書くと見にくくなる
-    renderText = (index, textClass) => {
+    renderText = (index, selected) => {
         if(this.props.display === "header"){
             return null
         } else {
-            return <p className={textClass}>{screenName[index]}</p>
+            return <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
         }
     }
 
@@ -136,27 +149,29 @@ class List extends Component {
         const nudgeProps = this.props.nudge
 
         const nudge = {
-            home: classnames({"checked": nudgeProps.home === true}),
-            draft: classnames({"checked": nudgeProps.draft === true}),
-            action: classnames({"checked": nudgeProps.action === true}),
-            notification: classnames({"checked": nudgeProps.notification === true}),
-            setting: classnames({"checked": nudgeProps.setting === true}),
+            home: nudgeProps.home === true,
+            draft: nudgeProps.draft === true,
+            action: nudgeProps.action === true,
+            notification: nudgeProps.notification === true,
+            setting: nudgeProps.setting === true,
         };
 
         const subject = variableName.map((name, index) => {
-            const textClass = classnames({"unselected": !cate[name]})
+            var url = ""
 
-            if (name != "home") {
-                var url = "/" + name;
+            if (name !== "home") {
+                url = "/" + name;
             } else {
-                var url = "/"
+                url = "/"
             }
             
             return (
-                <ListElement to={url} className="side-bar-row" onClick={() => this.props.handleClick(name)}>
-                    <div className={nudge[name]}></div>
-                    <ListImg src={cate[name] ? images.pressed[name] : images.unpressed[name]} className="side-bar-img"/>
-                    {this.renderText(index, textClass)}
+                <ListElement key={name} to={url} onClick={() => this.props.handleClick(name)}>
+                    <NudgeMark key={name} nudge={nudge[name]}/>
+                    <ListImg 
+                        src={cate[name] ? images.pressed[name] : images.unpressed[name]} 
+                    />
+                    {this.renderText(index, cate[name])}
                 </ListElement>
             )
         })
