@@ -16,7 +16,8 @@ import { USER_IS_LOGGEDIN,
          RESET_MESSAGE,
          SHOW_CONFIRMATION,
          HIDE_CONFIRMATION,
-         ADD_COLUMN} from "./types";
+         ADD_COLUMN,
+         SHOW_LOGIN, HIDE_LOGIN} from "./types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
@@ -105,3 +106,10 @@ export const addColumn = (id, name) => (dispatch) => {
     dispatch({type: ADD_COLUMN, payload: {id: id, name: name}})
 }
 
+export const showLogin = () => (dispatch) => {
+    dispatch({type: SHOW_LOGIN})
+}
+
+export const hideLogin = () => (dispatch) => {
+    dispatch({type: HIDE_LOGIN})
+}

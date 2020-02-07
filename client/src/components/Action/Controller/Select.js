@@ -84,6 +84,8 @@ class Select extends Component {
             case "2":
                 this.props.setStep(0);
                 break
+            default:
+                return null;
         }
     }
 
@@ -104,6 +106,8 @@ class Select extends Component {
             case "2":
                 this.props.setStep(2);
                 break
+            default:
+                return null;
         }
         this.props.setValue(suggestion);
     };
@@ -141,9 +145,9 @@ class Select extends Component {
 
     renderUniqueSuggestion = suggestion => {
         var words = ""
-        if(this.props.content == "Topic") {
+        if(this.props.content === "Topic") {
             words = "トピック"
-        } else if (this.props.content == "Post") {
+        } else if (this.props.content === "Post") {
             words = "ポスト"
         }
         if (suggestion.added) {
@@ -157,7 +161,7 @@ class Select extends Component {
                 </New>
             );
         };
-        if (this.props.content == "Topic") {
+        if (this.props.content === "Topic") {
             return (
                 <Topic
                     handleClick={this.handleClick}
@@ -165,7 +169,7 @@ class Select extends Component {
                     target={this.props.searchByVariable}
                 />
             );
-        } else if (this.props.content == "Post") {
+        } else if (this.props.content === "Post") {
             return (
                 <Post
                     suggestion={suggestion}
@@ -175,7 +179,7 @@ class Select extends Component {
     };
 
     renderMatchSuggestion = suggestion => {
-        if(this.props.content == "Topic") {
+        if(this.props.content === "Topic") {
             return (
                 <Topic
                     handleClick={this.handleClick}
@@ -183,7 +187,7 @@ class Select extends Component {
                     target={this.props.searchByVariable}
                 />
             )
-        } else if (this.props.content == "Post") {
+        } else if (this.props.content === "Post") {
             return (
                 <Post
                     suggestion={suggestion}

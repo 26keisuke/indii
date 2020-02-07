@@ -11,13 +11,13 @@ import { USER_IS_LOGGEDIN,
          ENABLE_GRAY, DISABLE_GRAY, 
          UPDATE_MESSAGE, RESET_MESSAGE,
          SHOW_CONFIRMATION, HIDE_CONFIRMATION,
-         ADD_COLUMN} from "../actions/types"
+         ADD_COLUMN, 
+         SHOW_LOGIN, HIDE_LOGIN, } from "../actions/types"
 
 const initialState = {
     category: {
         home: true,
         draft: false,
-        // topic: false,
         action: false,
         notification: false,
         setting: false
@@ -37,7 +37,6 @@ const initialState = {
     nudge: {
         home: true,
         draft: false,
-        // topic: true,
         action: true,
         notification: false,
         setting: false
@@ -45,7 +44,17 @@ const initialState = {
     form: {
 
     },
-    auth: {},
+    auth: {
+        showForm: false,
+        loggedIn: false,
+        info: {
+            name: {
+                familyName: "",
+                givenName: "",
+            },
+            photo: "",
+        }
+    },
     notif: {
 
     },
@@ -244,9 +253,33 @@ function searchReducer(state=initialState.search, action) {
 }
 
 function authReducer(state=initialState.auth, action) {
+    console.log(action.payload)
     switch(action.type) {
         case USER_IS_LOGGEDIN:
-            return action.payload || false;
+            if(action.payload) {
+                return {
+                    ...state,
+                    loggedIn: true,
+                    info: {
+                        name: {
+                            familyName: action.payload.name.familyName,
+                            givenName: action.payload.name.givenName,
+                        },
+                        photo: action.payload.photo,
+                    }
+                }
+            }
+            return state;
+        case SHOW_LOGIN:
+            return {
+                ...state,
+                showForm: true,
+            }
+        case HIDE_LOGIN:
+            return {
+                ...state,
+                showForm: false,
+            }
         default:
             return state;
     }

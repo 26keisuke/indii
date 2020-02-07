@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { GoPlusSmall } from "react-icons/go"
 
-import * as actions from "../../actions"
+import * as actions from "../../../../actions"
 
 import InitialData from "./InitialData"
 import Column from "./Column"
@@ -78,10 +78,10 @@ class EditIndexTopic extends Component {
     
         } else if(start > end) {
             // eg) start => 3, end => 0の場合は、0~2の計3つのcolumnが１上がる
-            for(var i = end; i <= start-1; i++){
-                const baseColumnName = this.state.index.columnOrder[i]
+            for(var j = end; j <= start-1; j++){
+                const baseColumnName = this.state.index.columnOrder[j]
                 const baseIndex = this.state.index.columns[baseColumnName].column
-                const baseResult = this.createNewIndexes(baseIndex, 1, 0, i)
+                const baseResult = this.createNewIndexes(baseIndex, 1, 0, j)
                 baseColumnChange = {
                     ...baseColumnChange,
                     ...baseResult[0]
@@ -214,8 +214,8 @@ class EditIndexTopic extends Component {
                 }
             } else if (destination.index < source.index) {
                 // 4{soure.index}を2{destination.index}の位置に持っていく場合は、前半（2~3）が+1され、4が3の値+1される
-                for (var i=destination.index+1; i<=source.index; i++){
-                    const taskId = newTaskIds[i]
+                for (var k=destination.index+1; k<=source.index; k++){
+                    const taskId = newTaskIds[k]
                     const newArray = Array.from(this.state.index.tasks[taskId].index)
                     const baseIndex = this.state.index.tasks[taskId].index[1]
                     newArray[1] = baseIndex+1

@@ -4,7 +4,7 @@ import Autosuggest from "react-autosuggest";
 import { IoMdClose } from "react-icons/io"
 import { MdCheck } from "react-icons/md"
 
-import Warning from "../Header/Search/Warning/Warning"
+import Warning from "../../../Header/Search/Warning/Warning"
 
 const topics = [
     {

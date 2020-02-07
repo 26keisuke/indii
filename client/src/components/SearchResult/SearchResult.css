@@ -24,7 +24,7 @@
 
 /*=== talk ===*/
 
-.search-result-talk{
+/* .search-result-talk{
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -35,13 +35,13 @@
 
 .search-result-talk:hover{
     background-color: rgba(233, 233, 238, 0.25);
-}
+} */
 
-.search-result-talk-top{
+/* .search-result-talk-top{
     display: flex;
     flex-direction: row;
-}
-
+} */
+/* 
 .search-result-talk-topic{
     font-size: 13px;
     color: #767676;
@@ -68,29 +68,29 @@
 .search-result-talk-tag p {
     color: #ffffff;
     margin-top:-3px;
-}
+} */
 
-.search-result-talk-title{
+/* .search-result-talk-title{
     font-size: 17px;
     color: #1C1C1C;
     margin: 5px 0px;
     font-weight: bold;
     cursor: pointer;
-}
+} */
 
-.search-result-talk-content{
+/* .search-result-talk-content{
     margin-bottom: 10px;
     cursor: pointer;
-}
+} */
 
 
-.search-result-talk-bottom{
+/* .search-result-talk-bottom{
     display: flex;
     flex-direction: row;
     align-items: center;
-}
+} */
 
-.search-result-talk-star{
+/* .search-result-talk-star{
     width:15px;
     height:15px;
     margin-right: 6px;
@@ -101,29 +101,29 @@
     height:14px;
     margin-left: 30px;
     margin-right: 6px;
-}
+} */
 
 /*== search filter ==*/
 
-.search-filter{
+/* .search-filter{
     border-bottom: 1px solid #d2d2d2;
     border-left: 1px solid #d2d2d2;
     border-right: 1px solid #d2d2d2;
     padding: 18px;
     margin-bottom: 40px;
-}
+} */
 
-.search-filter div{
+/* .search-filter div{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     margin: 15px 0px;
-}
+} */
 
-.search-filter input{
+/* .search-filter input{
     cursor: pointer;
-}
+} */
 
 .search-filter-sub{
     margin-top:35px;
@@ -134,9 +134,9 @@
     font-size:13px;
 }
 
-.search-filter-row{
+/* .search-filter-row{
     color: #3C3C3C;
-}
+} */
 
 /*== people ==*/
 

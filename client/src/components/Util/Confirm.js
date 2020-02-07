@@ -38,11 +38,11 @@ class Confirm extends Component {
 
     render () {
 
-        const {id, action, title, caution, message,
+        const {innerRef, id, action, title, caution, message,
              buttonMessage, cancel, postAction} = this.props
 
         return (
-            <ConfirmBox cancel={cancel}>
+            <ConfirmBox ref={innerRef} cancel={cancel}>
                 <div>
                     <ConfirmIcon onClick={() => postAction(action)}/>
                     <p>{title}</p>

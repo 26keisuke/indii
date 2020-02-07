@@ -1,13 +1,12 @@
 import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
 
-import sample from "../images/sample1.png"
-import question from "../images/question.png"
-import post from "../images/post.png"
+import sample from "../../images/sample1.png"
+import question from "../../images/question.png"
+import post from "../../images/post.png"
 
 import "./Topic.css"
-import Back from "./Util/Back"
-import Post from "./Post"
+import Back from "./../Util/Back"
 
 class TopicPage extends Component {
 
@@ -38,14 +37,14 @@ class TopicPage extends Component {
     }
 
     toggleBar = (name) => {
-        if(this.state.toggle[name] == true) {
+        if(this.state.toggle[name] === true) {
             return ""
         } 
         return "hide"
     }
 
     toggleText = (name) => {
-        if(this.state.toggle[name] == true) {
+        if(this.state.toggle[name] === true) {
             return "topic-top-toggle-selected"
         } 
         return "topic-top-toggle-unselected"
@@ -86,10 +85,10 @@ class TopicPage extends Component {
                             <p className="topic-top-edited">Last Edited: 2019/2/12 9:20PM</p>
                             <div className="topic-top-options">
                                 <div className="topic-top-icon-box">
-                                    <img className="topic-top-icon-request" src={question}/>
+                                    <img className="topic-top-icon-request" src={question} alt="ポストリクエストのボタン"/>
                                 </div>
                                 <div className="topic-top-icon-box">
-                                    <img className="topic-top-icon-create" src={post}/>
+                                    <img className="topic-top-icon-create" src={post} alt="ポスト作成のボタン"/>
                                 </div>
                             </div>
                             <div className="topic-top-toggle">
@@ -107,7 +106,7 @@ class TopicPage extends Component {
                                 </div>
                             </div>
                         </div>
-                        <img src={sample} className="topic-top-right"/>
+                        <img src={sample} className="topic-top-right" alt="トピックを代表する写真"/>
                     </div>
                     <div className="content-space"/>
                     <div className="topic-bottom">

@@ -1,20 +1,20 @@
 import React, { Component } from "react"
 
 
-import CreateFriendsTopic from "./CreateFriendsTopic"
-import CreatePreviewTopic from "./CreatePreviewTopic"
+import CreateFriendsTopic from "./Friend"
+import CreatePreviewTopic from "./Preview"
 
-import Select from "../Action/Controller/Select"
-import topics from "../__Mock__/data/topic"
+import Select from "../../Controller/Select"
+import topics from "../../../__Mock__/data/topic"
 
-import ActionProgress from "../Action/Progress/Progress"
-import ActionImage from "../ActionImage"
-import ActionTag from "../ActionTag"
+import ActionProgress from "../../Progress/Progress"
+import ActionImage from "../../../ActionImage"
+import Tag from "../../Tag/Tag"
 
 import "./CreateTopic.css";
-import Back from "../Util/Back";
+import Back from "../../../Util/Back";
 
-import { FormWrapper, FormMount, BackWrapper } from "../Action/Form/Form"
+import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
 class CreateTopic extends Component {
 
@@ -64,7 +64,7 @@ class CreateTopic extends Component {
                         setStep={this.setStep}
                         />
             case 2:
-                return <ActionTag
+                return <Tag
                         back={this.state.back} 
                         setBackward={this.setBackward} 
                         storage="createTopicTag"

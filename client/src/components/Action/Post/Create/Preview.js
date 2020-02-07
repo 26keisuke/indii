@@ -2,20 +2,17 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
-import * as actions from "../../actions"
+import * as actions from "../../../../actions"
 
 import {Box, BoxTransition,
         PreviewSection, PreviewTitle, PreviewUnderline,
         ButtonWrapper, ButtonLeft, ButtonRight,
         FinalCheck,
-        PreviewConfig, ConfigUnderline } from "../Action/Element/Box"
+        PreviewConfig, ConfigUnderline } from "../../Element/Box"
 
-import { Space } from "../Theme"
+import { Space } from "../../../Theme"
 
 class CreatePreviewTopic extends Component {
-    constructor(props){
-        super(props)
-    }
 
     handleBack = () => {
         this.props.setBackward(true);

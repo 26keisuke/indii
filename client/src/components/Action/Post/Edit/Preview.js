@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
-import * as actions from "../../actions"
+import * as actions from "../../../../actions"
 
-import { Box, BoxTransition, PreviewSection, PreviewTitle, PreviewUnderline, ButtonWrapper, ButtonLeft, ButtonRight, FinalCheck } from "../Action/Element/Box"
-import { Space } from "../Theme"
+import { Box, BoxTransition,
+         PreviewSection, PreviewTitle, PreviewUnderline,
+         ButtonWrapper, ButtonLeft, ButtonRight,
+         FinalCheck } from "../../Element/Box"
+import { Space } from "../../../Theme"
 
 class EditPreviewTopic extends Component {
-    constructor(props){
-        super(props)
-    }
 
     handleBack = () => {
         this.props.setBackward(true);

@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import styled, { css, keyframes } from "styled-components"
 import { Link } from "react-router-dom"
 
-import Button from "../../Util/Button"
+import Button from "../Util/Button"
 
 import { IoMdMail, IoIosLock } from "react-icons/io"
-import google from "../../../images/google-logo.png"
-import facebook from "../../../images/facebook-logo.png"
+import google from "../../images/google-logo.png"
+import facebook from "../../images/facebook-logo.png"
 
 
 class LogIn extends Component {
     render () {
         return (
-            <LogInCard show={true}>
+            <LogInCard ref={this.props.innerRef} show={true}>
                 <div>
                     <Toggle>
                         <p>ログイン</p>
@@ -44,7 +44,7 @@ class LogIn extends Component {
                     </Input>
                     <Remember>
                         <input type="radio" id="remember" value="remember" name="remember"/>
-                        <label for="remember">次から入力を省略</label>
+                        <label htmlFor="remember">次から入力を省略</label>
                     </Remember>
                     <BottomWrapper>
                         <Button>ログイン</Button>

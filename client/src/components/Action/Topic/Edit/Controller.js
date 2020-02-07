@@ -1,23 +1,23 @@
 import React, { Component } from "react"
 import axios from "axios"
 
-import EditIndexTopic from "./EditIndexTopic"
-import EditPreviewTopic from "./EditPreviewTopic"
+import EditIndexTopic from "./Index"
+import EditPreviewTopic from "./Preview"
 
-import ActionProgress from "../Action/Progress/Progress"
-import ActionImage from "../ActionImage"
-import ActionTag from "../ActionTag"
+import ActionProgress from "../../Progress/Progress"
+import ActionImage from "../../../ActionImage"
+import Tag from "../../Tag/Tag"
 
-import Select from "../Action/Controller/Select"
-import topics from "../__Mock__/data/topic"
+import Select from "../../Controller/Select"
+import topics from "../../../__Mock__/data/topic"
 
 import "./EditTopic.css"
 
-import Back from "../Util/Back";
+import Back from "../../../Util/Back";
 
-import sample from "../../images/sample1.png"
+import sample from "../../../../images/sample1.png"
 
-import { FormWrapper, FormMount, BackWrapper } from "../Action/Form/Form"
+import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
 class CreatePost extends Component {
 
@@ -76,7 +76,7 @@ class CreatePost extends Component {
                         setStep={this.setStep}
                         />
             case 2:
-                return <ActionTag
+                return <Tag
                         back={this.state.back} 
                         setBackward={this.setBackward} 
                         // initialVal={this.state.original.tags} 本来はこっち

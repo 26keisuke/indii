@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
-import * as actions from "../actions";
 import axios from "axios";
+
+import * as actions from "../actions";
 
 import Header from "./Header/Header";
 import Navigation from "./Navigation/Navigation";
@@ -10,21 +11,29 @@ import Feed from "./Feed/Feed";
 import SearchResult from "./SearchResult/SearchResult"
 import Notification from "./Notif/Notif"
 import EditConfirm from "./Notif/Confirm/Confirm"
-import Topic from "./Topic"
+import Topic from "./Topic/Topic"
 import Draft from "./Draft/Draft"
 import DraftEditor from "./Draft/Editor/Editor"
-import CreateTopic from "./CreateTopic/CreateTopic"
+import CreateTopic from "./Action/Topic/Create/Controller"
 import Profile from "./Profile/Profile"
-import CreatePost from "./CreatePost//CreatePost"
+import CreatePost from "./Action/Post/Create/Controller"
 import Action from "./Action/Action"
-import EditTopic from "./EditTopic/EditTopic"
-import EditPost from "./EditPost/EditPost"
+import EditTopic from "./Action/Topic/Edit/Controller"
+import EditPost from "./Action/Post/Edit/Controller"
 import WorkSpace from "./WorkSpace"
-
 import Message from "./Util/Message"
 import Confirm from "./Util/Confirm"
 import Loading from "./Util/Loading"
 import Filter from "./Util/Filter"
+import Auth from "./Auth/Auth"
+
+const ConfirmWrapper = React.forwardRef((props, ref) => (
+     <Confirm innerRef={ref} {...props}/>
+))
+
+const AuthWrapper = React.forwardRef((props, ref) => (
+    <Auth innerRef={ref} {...props}/>
+))
 
 class App extends Component {
 
@@ -41,6 +50,42 @@ class App extends Component {
             },
             addColumn: "",
         }
+        this.confirmRef = React.createRef()
+        this.authRef = React.createRef()
+    }
+
+    componentDidUpdate() {
+        if (this.props.update.confirmation.on || this.props.auth.showForm) {
+            document.addEventListener("mousedown", this.outsideClick)
+        } else {
+            document.removeEventListener("mousedown", this.outsideClick)
+        }
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.outsideClick)
+    }
+
+    outsideClick = (e) => {
+
+        if(this.props.auth.showForm) {
+            if(this.authRef.current.contains(e.target)) {
+                return null;
+            }
+
+            this.props.hideLogin();
+        }
+
+        if(this.props.update.confirmation.on) {
+            if(this.confirmRef.current.contains(e.target)) {
+                return null;
+            }
+            
+            this.setState({confirmationCancel: true});
+            setTimeout(() => this.cancelAction(), 300);
+        }
+        
+        this.props.disableGray();        
     }
 
     componentDidMount() {
@@ -48,7 +93,7 @@ class App extends Component {
     }
 
     cancelAction = () => {
-        this.setState({confirmationCancel: false}) // onEnter状態で待機させる（まだDOMとしては残っている）
+        this.setState({confirmationCancel: false}) // onEnter状態で待機させる（まだDOMとしては残っている）=> animationを適用させるため
         this.props.hideConfirmation(); // DOMとしても消して、全て値(this.props.update.confirmation)を初期化する
     }
 
@@ -73,10 +118,11 @@ class App extends Component {
                 } else {
                     this.props.disableGray();
                 }
-                return false
+                return null;
+
             case "GIVE_FEEDBACK":
-                this.setState({confirmationCancel: true})
                 this.setState({
+                    confirmationCancel: true,
                     problems: {
                         problem0: false,
                         problem1: false,
@@ -103,7 +149,8 @@ class App extends Component {
                 } else {
                     this.props.disableGray();
                 }
-                return false
+                return null;
+
             case "ADD_COLUMN":
                 this.setState({confirmationCancel: true})
                 setTimeout(() => this.cancelAction(), 300)
@@ -112,9 +159,12 @@ class App extends Component {
                     this.props.disableGray();
                 } else {
                     this.props.disableGray();
-                }
+                };
+                return null;
+
             default:
-                return false
+                return null;
+
         }
     }
 
@@ -134,7 +184,8 @@ class App extends Component {
 
     renderConfirmBox = (id, action, title, caution, message, buttonMessage) => {
         return (
-            <Confirm
+            <ConfirmWrapper
+                ref={this.confirmRef}
                 id={id}
                 action={action}
                 title={title}
@@ -143,7 +194,6 @@ class App extends Component {
                 buttonMessage={buttonMessage}
                 cancel={this.state.confirmationCancel}
                 postAction={this.postAction}
-
                 reportChange={this.handleReportChange}
                 addColumnChange={this.handleAddColumnChange}
             />
@@ -163,27 +213,26 @@ class App extends Component {
 
     render() {
 
+        const { update, auth } = this.props
+
         return (
             <div className="browser">
                 <BrowserRouter>
                     <div className="router">
                         <Header />                        
                         <Navigation />
-                        { this.props.update.fetching ? <Loading/> : ""}
-                        { this.props.update.grayBackground ? <Filter/> : ""}
-                        {this.props.update.confirmation.on
-                        ? this.renderConfirmBox(this.props.update.confirmation.id,
-                                                this.props.update.confirmation.action,
-                                                this.props.update.confirmation.title,
-                                                this.props.update.confirmation.caution,
-                                                this.props.update.confirmation.message,
-                                                this.props.update.confirmation.buttonMessage)
-                        : ""
+                        { auth.showForm && <AuthWrapper ref={this.authRef}/> }
+                        { update.fetching && <Loading/>}
+                        { update.grayBackground && <Filter/>}
+                        { update.confirmation.on && 
+                        this.renderConfirmBox(update.confirmation.id,
+                                            update.confirmation.action,
+                                            update.confirmation.title,
+                                            update.confirmation.caution,
+                                            update.confirmation.message,
+                                            update.confirmation.buttonMessage)
                         }
-                        {this.props.update.updateMessage.on 
-                        ? this.renderMessage()
-                        : ""
-                        } 
+                        { update.updateMessage.on && this.renderMessage()} 
                         <div className="fakebox">
                             <Route exact path="/" component={Feed} />
                             <Route path="/profile" component={Profile} />
@@ -210,7 +259,8 @@ class App extends Component {
 
 function mapStateToProps(state){
     return {
-        update: state.update
+        update: state.update,
+        auth: state.auth
     }
 }
 

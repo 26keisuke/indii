@@ -39,10 +39,39 @@ class PostFeed extends Component {
             showMore: false,
             chosenResponse: -1
         }
+        this.emojiRef = React.createRef();
+        this.actionRef = React.createRef();
+    }
+
+    componentDidUpdate() {
+        if (this.state.showEmoji || this.state.showMore) {
+            document.addEventListener("mousedown", this.outsideClick)
+        } else {
+            document.removeEventListener("mousedown", this.outsideClick)
+        }
     }
 
     componentDidMount() {
         // checkForStars and checkForFeedbacks
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.outsideClick)
+    }
+
+    outsideClick = (e) => {
+        if(this.emojiRef.current.contains(e.target)) {
+            return null;
+        }
+
+        if(this.actionRef.current.contains(e.target)) {
+            return null;
+        }
+
+        this.setState({
+            showEmoji: false,
+            showMore: false,
+        })
     }
 
     handleCollapseClick = (e) => {
@@ -187,7 +216,7 @@ class PostFeed extends Component {
                             <p onClick={this.handleStarClick}></p>
                             <img className="post-feed-star"　src={this.state.star} alt={"星マーク"}/>
                         </div>
-                        <div>
+                        <div ref={this.emojiRef}>
                             <p onClick={this.handleResponseClick}></p>
                             <Emoji show={this.state.showEmoji}>
                                 <img alt={"ものすごく良い"} src={love} onClick={(e) => this.handleEmojiClick(e,0)}/>
@@ -198,7 +227,7 @@ class PostFeed extends Component {
                             </Emoji>
                             {this.renderIcon()}
                         </div>
-                        <div>
+                        <div ref={this.actionRef}>
                             <p onClick={this.handleMoreClick}></p>
                             <Action show={this.state.showMore}>
                                 <p onClick={this.reportPost}>フィードバックをする</p>

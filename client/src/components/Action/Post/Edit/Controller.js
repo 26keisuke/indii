@@ -1,29 +1,26 @@
 import React, {Component} from "react"
 import axios from "axios"
 
-import ActionProgress from "../Action/Progress/Progress"
-import CreateConfigurationPost from "./CreateConfigurationPost"
-import CreatePreviewPost from "./CreatePreviewPost"
-import Back from "../Util/Back";
+import ActionProgress from "../../Progress/Progress"
+import Back from "../../../Util/Back";
+import EditPreviewPost from "./Preview"
 
-import Select from "../Action/Controller/Select"
-import topics from "../__Mock__/data/topic"
-import posts from "../__Mock__/data/post"
+import Select from "../../Controller/Select"
+import topics from "../../../__Mock__/data/topic"
+import posts from "../../../__Mock__/data/post"
 
-import { FormWrapper, FormMount, BackWrapper } from "../Action/Form/Form"
+import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
-class CreatePost extends Component {
+class EditPost extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
             step: 0,
             back: false,
-            selectedTopic: {}, 
-            config: {
-                editWo: true,
-            },
-            postName: ""
+            selectedTopic: {},
+            posts: [],
+            selectedPost: {}
         }
     }
 
@@ -37,7 +34,7 @@ class CreatePost extends Component {
                 //         setTopic={this.setTopic}
                 //         setStep={this.setStep}
                 //         />
-                return  <Select
+                return <Select
                         placeholder="トピックを入力..."
                         index="1"
                         title="トピックを選択してください"
@@ -53,21 +50,23 @@ class CreatePost extends Component {
                         setStep={this.setStep}
                         />
             case 1:
-                // return <CreateDecidePost
+                // return <ActionDecidePost
                 //         back={this.state.back} 
                 //         setBackward={this.setBackward} 
+                //         posts={this.state.posts}
                 //         storage="editPostPost"
                 //         setPost={this.setPost}
                 //         setStep={this.setStep}
                 //         />
-                return  <Select
+                return <Select
                         placeholder="ポスト名を入力..."
                         index="2"
-                        title="ポスト名を入力してください"
+                        title="ポストを選択してください"
                         subTitle="ポスト名"
-                        type="Unique"
+                        type="Match"
                         content="Post"
                         data={posts}
+                        helper="owner"
                         transition={true}
                         searchByVariable="title"
                         storage="editPostPost"
@@ -77,19 +76,12 @@ class CreatePost extends Component {
                         setStep={this.setStep}
                         />
             case 2:
-                return <CreateConfigurationPost
+                return <EditPreviewPost
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        setConfig={this.setConfig}
-                        setStep={this.setStep}
-                        />
-            case 3:
-                return <CreatePreviewPost
-                        back={this.state.back} 
-                        setBackward={this.setBackward} 
-                        postName={this.state.postName}
+                        selectedPost={this.state.selectedPost}
                         selectedTopic={this.state.selectedTopic}
-                        config={this.state.config.editWo}
+                        setTags={this.setTags} 
                         setStep={this.setStep}
                         max={6}
                         />
@@ -110,15 +102,7 @@ class CreatePost extends Component {
 
     setPost = (post) => {
         this.setState({
-            postName: post
-        })
-    }
-
-    setConfig = (config) => {
-        this.setState({
-            config: {
-                editWo: config.editWo.on
-            }
+            selectedPost: post
         })
     }
 
@@ -126,10 +110,12 @@ class CreatePost extends Component {
         this.setState({
             selectedTopic: topic
         })
-        const url = "/api/topic/" + topic.id
+        const url = "/api/post/" + topic.id
         axios.get(url)
         .then(res => {
-            console.log(res)
+            this.setState({
+                posts: res.posts
+            })
         })
         .catch(err => {
             console.log(err)
@@ -146,7 +132,7 @@ class CreatePost extends Component {
                             name="編集・作成一覧に戻る"
                         />
                     </BackWrapper>
-                    <p>新しいポストを作成する</p>
+                    <p>既存のポストを編集する</p>
                     <FormMount/>
                     <ActionProgress
                         step={this.state.step}
@@ -154,7 +140,6 @@ class CreatePost extends Component {
                             [
                                 "トピックを選択",
                                 "ポストを選択",
-                                "初期設定",
                                 "プレビュー"
                             ]
                         }
@@ -166,4 +151,4 @@ class CreatePost extends Component {
     }
 }
 
-export default CreatePost
+export default EditPost

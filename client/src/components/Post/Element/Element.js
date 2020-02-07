@@ -2,9 +2,9 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
-import "./Post.css"
+import "./Element.css"
 
-import star_pressed from "../images/star-pressed.png"
+import star_pressed from "../../../images/star-pressed.png"
 
 const PostElement = styled(Link)`
     padding: 15px;
@@ -12,7 +12,6 @@ const PostElement = styled(Link)`
     flex-direction: row;
     align-items: center;
     background-color: #ffffff;
-    border-right: 1px solid ${props => props.theme.borderColor};
 
     &:hover{
         background-color: ${props => props.theme.hover};

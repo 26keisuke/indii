@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 import "./Profile/Profile";
 import * as actions from "../../actions"
@@ -11,8 +11,6 @@ import indii from "../../images/indii.png";
 import Profile from "./Profile/Profile";
 import Navigation from "./Navigation/Navigation"
 import Search from "./Search/Search";
-
-import LogIn from "./LogIn/LogIn";
 
 const NavBar = styled.nav`
     display: flex;
@@ -63,25 +61,10 @@ const Logo = styled(Link)`
 
 class Header extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            showLogIn: false,
-        }
-    }
-
     logInClicked = (e) => {
         e.preventDefault()
-        this.setState({
-            showLogIn: true,
-        })
+        this.props.showLogin()
         this.props.enableGray()
-    }
-
-    logInClosed = () => {
-        this.setState({
-            showLogIn: false,
-        })
     }
 
     render() {
@@ -94,13 +77,6 @@ class Header extends Component {
             <Navigation/>
             <Search/>
             <Profile click={this.logInClicked}/>
-            { this.state.showLogIn 
-            ?
-            <LogIn/>
-            :
-            ""
-            }
-
         </NavBar>
         );
     }

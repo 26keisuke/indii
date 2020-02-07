@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
-import * as actions from "../../actions"
+import * as actions from "../../../../actions"
 
-import sample from "../../images/sample1.png"
+import sample from "../../../../images/sample1.png"
 
 import {Box, BoxTransition,
         PreviewSection, PreviewTitle, PreviewUnderline,
@@ -12,15 +12,12 @@ import {Box, BoxTransition,
         FinalCheck,
         TagElement,
         PreviewList,
-        PreviewIndex, IndexBox } from "../Action/Element/Box"
+        PreviewIndex, IndexBox } from "../../Element/Box"
 
-import { Space } from "../Theme"
-import Img from "../Action/Preview/Img"
+import { Space } from "../../../Theme"
+import Image from "../../Preview/Image"
 
 class CreatePreviewTopic extends Component {
-    constructor(props){
-        super(props)
-    }
 
     handleBack = () => {
         this.props.setBackward(true);
@@ -114,7 +111,7 @@ class CreatePreviewTopic extends Component {
                             <p>トピックの画像</p>
                         </PreviewSection>
                         
-                        <Img originalImg={sample} newImg={sample}/>
+                        <Image originalImg={sample} newImg={sample}/>
 
                         <PreviewSection>
                             <div/>

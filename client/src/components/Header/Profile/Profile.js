@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components"
-import _ from "lodash";
 
 import account from "../../../images/account.png";
 
@@ -58,16 +57,20 @@ const LogInButton = styled.div`
 
 class Profile extends Component {
     render() {
-        const flag = !_.isEmpty(this.props.auth) 
+
+        const flag = this.props.auth.loggedIn
+        const { photo, name } = this.props.auth.info
+
+        console.log(this.props.auth)
+
         return (
             <ProfileArea>
                 <div>
-                    {
-                        flag
+                    {   flag
                         ?
-                        this.props.auth.photo
+                        photo
                         ?
-                        <Link to="/profile"><img src={this.props.auth.photo}/></Link>
+                        <Link to="/profile"><img src={photo}/></Link>
                         :
                         <Link to="/profile"><img src={account}/></Link>
                         :
@@ -76,8 +79,8 @@ class Profile extends Component {
                     {   flag
                         ? 
                         <Name to="/profile">
-                            <p>{this.props.auth.name.familyName}</p>
-                            <p>{this.props.auth.name.givenName}</p>
+                            <p>{name.familyName}</p>
+                            <p>{name.givenName}</p>
                         </Name>
                         :
                         <LogInButton onClick={(e) => this.props.click(e)}>

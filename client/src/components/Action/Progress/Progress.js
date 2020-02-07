@@ -6,7 +6,7 @@ class Progress extends Component {
 
     setCircle = (idx) => {
         const now = this.props.step
-        if(now == idx){
+        if(now === idx){
             return (
                 <div className="topic-form-progress-circle topic-form-progress-circle-animation">
                     <p>{idx+1}</p>
@@ -30,7 +30,7 @@ class Progress extends Component {
     setBar = (idx) => {
         const now = this.props.step
         const target = idx + 1
-        if(now == target){
+        if(now === target){
             return (
                 <div className="topic-form-progress-bar-fake topic-form-progress-bar-fake-animation"/>
             )

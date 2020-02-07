@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import Autosuggest from "react-autosuggest";
 import { IoIosClose } from "react-icons/io"
 
-import Warning from "./Header/Search/Warning/Warning"
+import Warning from "../../Header/Search/Warning/Warning"
 
 const topics = [
     {

@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 
 import sample from "../../images/sample1.png"
 
-import Post from "../Post"
+import Post from "../Post/Element/Element"
 
 class ProfileHome extends Component {
 

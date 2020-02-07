@@ -6,7 +6,7 @@ import sample1 from "../../images/sample1.png";
 
 import PostFeed from "./Post/PostFeed";
 import PeopleFeed from "./People/PeopleFeed";
-import Post from "../Post"
+import Post from "../Post/Element/Element"
 
 import { Space } from "../Theme"
 

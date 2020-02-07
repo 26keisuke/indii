@@ -7,8 +7,8 @@ import sample from "../../images/sample1.png"
 import SearchResultTalk from "./Talk/Talk"
 import SearchFilter from "./Filter/Filter"
 import People from "../People"
-import Post from "../Post"
-import TopicElement from "../TopicElement"
+import Post from "../Post/Element/Element"
+import TopicElement from "../Topic/Element/Element"
 
 import Screen from "../Util/Screen"
 

@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import axios from "axios"
 
-import * as actions from "../../actions"
+import * as actions from "../../../../actions"
 
 import {Box, BoxTransition,
     PreviewSection, PreviewTitle, PreviewUnderline,
@@ -11,16 +11,13 @@ import {Box, BoxTransition,
     FinalCheck,
     PreviewList,
     TagElement,
-    FriendWrapper, FriendNone } from "../Action/Element/Box"
+    FriendWrapper, FriendNone } from "../../Element/Box"
 
-import { Space } from "../Theme"
-import Img from "../Action/Preview/Img"
+import { Space } from "../../../Theme"
+import Image from "../../Preview/Image"
 
 
 class CreatePreviewTopic extends Component {
-    constructor(props){
-        super(props)
-    }
 
     handleBack = () => {
         this.props.setBackward(true);
@@ -96,7 +93,7 @@ class CreatePreviewTopic extends Component {
                             <p>トピックの画像</p>
                         </PreviewSection>
                         
-                        <Img newImg={this.props.img}/>
+                        <Image newImg={this.props.img}/>
 
                         <PreviewSection>
                             <div/>

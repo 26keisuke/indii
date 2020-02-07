@@ -3,10 +3,10 @@ import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
 import { Link } from "react-router-dom";
 import { IoIosAddCircleOutline, IoMdCheckmark, IoMdClose } from "react-icons/io";
-import Post from "../Header/Search/Suggestion/Post";
-import Warning from "../Header/Search/Warning/Warning"
+import Post from "../../../Header/Search/Suggestion/Post";
+import Warning from "../../../Header/Search/Warning/Warning"
 
-import posts from "../__Mock__/data/post"
+import posts from "../../../__Mock__/data/post"
 
 const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
