@@ -1,10 +1,10 @@
 import React, {Component} from "react"
 import axios from "axios"
 
-import ActionProgress from "../ActionProgress"
+import ActionProgress from "../Action/Progress/Progress"
 import CreateConfigurationPost from "./CreateConfigurationPost"
 import CreatePreviewPost from "./CreatePreviewPost"
-import Back from "../Back";
+import Back from "../Util/Back";
 
 import Select from "../Action/Controller/Select"
 import topics from "../__Mock__/data/topic"

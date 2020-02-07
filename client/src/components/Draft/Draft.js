@@ -1,38 +1,62 @@
 import React, { Component } from "react"
-import { Link } from "react-router-dom"
 
-import sample from "../../images/sample1.png"
+import Screen from "../Util/Screen"
 
-import "./Draft.css"
+import upload from "../../images/upload.png"
+import { MdDelete } from "react-icons/md"
 
-class Draft extends Component {
+import Draft from "./Element/DraftElement"
+import { Border } from "../Theme"
 
-    renderType(type){
-        switch(type){
-            case "edit":
-                return "編集"
-            case "new":
-                return "新規作成 "
-        }
+class DraftNavigation extends Component {
+
+    renderTopContent = () => {
+        return(
+            <div className="draft-navi-title-wrapper">
+                <p className="content-intro-title">下書き</p>
+                <div className="draft-navi-upload-icon-left">
+                    <p>削除</p>
+                    <MdDelete className="draft-navi-upload-icon-img"/>
+                </div>
+                <div className="draft-navi-upload-icon-right">
+                    <p>アップロード</p>
+                    <img src={upload} className="draft-navi-upload-icon-img"/>
+                </div>
+            </div>
+        )
+    }
+
+    renderLeftContent = () => {
+        return (
+            <div>
+                <Border bottom={true}/>
+                <Draft
+                    id={"111"}
+                    topic={"Recurrent Neural Network"}
+                    title={"Transformer Network"}
+                    content={"本紙は RNN や CNN を使わず Attention のみ使用したニューラル機械翻訳 Transformer を提案している．わずかな訓練で圧倒的な State-of-the-Art を達成し，華麗にタイトル回収した．また注意を非常にシンプルな数式に一般化したうえで，加法注意・内積注意・ソースターゲット注意・自己注意に分類した．このうち自己注意はかなり汎用的かつ強力な手法であり他のあらゆるニューラルネットに転用できる．"}
+                    date={"August 21, 2013 5:36 AM"}
+                    type={"edit"}
+                />
+            </div>
+        )
+    }
+
+    renderRightContent() {
+        return (
+            <div></div>
+        )
     }
 
     render(){
         return(
-            <Link to={"/draft/edit/" + this.props.id} id={this.props.id} className="draft">
-                <div className="draft-left">
-                    <div className="draft-left-top">
-                        <p>ポスト ></p>
-                        <p>{this.renderType(this.props.type) + " >"}</p>
-                        <p>{this.props.topic}</p>
-                    </div>
-                    <p className="draft-left-title">{this.props.title}</p>
-                    <p className="draft-left-content">{this.props.content}</p>
-                    <p className="draft-left-date">前回の編集日: {this.props.date}</p>
-                </div>
-                <img src={sample} className="draft-right"/>
-            </Link>
+            <Screen>
+                {this.renderTopContent()} 
+                {this.renderLeftContent()} 
+                {this.renderRightContent()}
+            </Screen>
         )
     }
 }
 
-export default Draft
+export default DraftNavigation

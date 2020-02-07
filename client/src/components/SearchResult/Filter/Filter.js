@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-class SearchFilter extends Component {
+class Filter extends Component {
     render() {
         return (
             <div className="search-filter">
@@ -40,4 +40,4 @@ class SearchFilter extends Component {
     }
 }
 
-export default SearchFilter
+export default Filter

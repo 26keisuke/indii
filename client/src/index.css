@@ -88,19 +88,19 @@ input:focus{
     margin-top:56px;
 }
 
-.content{
+/* .content{
     height: 100%;
     overflow: scroll;
     display: flex;
     flex-direction: row;
     overflow-x: hidden;
-}
+} */
 
-.content::-webkit-scrollbar {
+/* .content::-webkit-scrollbar {
     width: 0 !important 
-}
+} */
 
-.content-left{
+/* .content-left{
     width: 675px;
     flex-shrink: 0;
     height:100%;
@@ -111,43 +111,43 @@ input:focus{
     width:100%;
     margin: 0px 15px;
     margin-top: 20px;
-}
+} */
 
-.content-space{
+/* .content-space{
     height:10px;
     border-right: 1px solid #d2d2d2;
     border-bottom: 1px solid #d2d2d2;
     background-color: #F9F9F9;
-}
+} */
 
 .content-back-arrow-wrapper{
     margin-top:-20px;
 }
 
 
-.content-bottom-space{
+/* .content-bottom-space{
     height:80vh;
     background-color: #F9F9F9;
     border-right: 1px solid #d2d2d2;
     position: relative;
-}
+} */
 
-.content-right-card {
+/* .content-right-card {
     width: 360px;
     height: 100%;
     margin: 0px auto;
-}
+} */
 
-.content-right-card-title {
+/* .content-right-card-title {
     height:35px;
     padding-left:30px;
     border: 1px solid #d2d2d2;
     font-size: 16px;
     display: flex;
     align-items: center;
-}
+} */
 
-.content-space-header{
+/* .content-space-header{
     height:40px;
     background-color: #ffffff;
     position: relative;
@@ -158,7 +158,7 @@ input:focus{
     border-bottom: 1px solid #d2d2d2;
     margin-left: -1px;
     width: 100%;
-}
+} */
 
 .content-back-wrapper{
     display: flex;
@@ -199,19 +199,19 @@ input:focus{
     color: #878787;
 }
 
-.content-header-title-bold{
+/* .content-header-title-bold{
     color: #464646;
     font-size: 14px;
     margin: 0px 10px;
-}
+} */
 
-.content-people-wrapper{
+/* .content-people-wrapper{
     border-bottom: 1px solid #d2d2d2;
     border-right: 1px solid #d2d2d2;
     background-color: #ffffff;
-}
+} */
 
-.content-inside-header{
+/* .content-inside-header{
     height: 40px;
     background-color: #ffffff;
     display: flex;
@@ -220,11 +220,11 @@ input:focus{
     border-top: 1px solid #d2d2d2;
     border-bottom: 1px solid #d2d2d2;
     border-right: 1px solid #d2d2d2;
-}
+} */
 
-.content-inside-header p{
+/* .content-inside-header p{
     font-size: 14px;
-}
+} */
 
 .content-full{
     width:100%;
@@ -338,7 +338,7 @@ input:focus{
 }
 
 /*== absurd ==*/
-
+/* 
 .just-for-fun{
     width:270px;
     height:270px;
@@ -363,10 +363,10 @@ input:focus{
     position: absolute;
     top:40px;
     left:70px;
-}
+} */
 
 /*== message ==*/
-
+/* 
 .message{
     background: linear-gradient(-90deg, #fff 0%, #fff 98%, #4CD964 98%, #4CD964 100%);
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
@@ -412,11 +412,11 @@ input:focus{
     margin-left: 9px;
     margin-top: 3px;
     color: #333333;
-}
+} */
 
 /*== confirm ==*/
 
-.confirm-box{
+/* .confirm-box{
     position: absolute;
     width: 400px;
     padding: 20px 30px;
@@ -427,7 +427,7 @@ input:focus{
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
-}
+} */
 
 .onEnter{
     animation: onEnter 200ms ease-out;
@@ -437,12 +437,12 @@ input:focus{
     animation: onLeave 200ms ease-out forwards;
 }
 
-.confirm-box-row{
+/* .confirm-box-row{
     position: relative;
     display: flex;
     flex-direction: column;
-}
-
+} */
+/* 
 .confirm-box-close{
     position: absolute;
     right: -13px;
@@ -450,9 +450,9 @@ input:focus{
     transform: scale(1.2);
     padding: 13px;
     cursor: pointer;
-}
+} */
 
-.confirm-box-title{
+/* .confirm-box-title{
     font-size: 14px;
     margin-bottom: 15px;
     font-weight: bold;
@@ -467,9 +467,9 @@ input:focus{
     margin-bottom: 5px;
     font-size: 10px;
     color: #838383
-}
+} */
 
-.confirm-box-buttons{
+/* .confirm-box-buttons{
     align-self: flex-end;
 }
 
@@ -500,8 +500,8 @@ input:focus{
 
 .confirm-box-buttons-no:focus{
     outline: none;
-}
-
+} */
+/* 
 .confirm-add-column-input{
     width: 90%;
     border: none;
@@ -510,7 +510,7 @@ input:focus{
     font-size: 13px;
     margin-bottom: 18px;
     font-family: "Gennokaku Gothic";
-}
+} */
 
 @keyframes onEnter{
     0% { top: 60%; opacity: 0}
@@ -524,7 +524,7 @@ input:focus{
 
 /*== util ==*/
 
-.loading {
+/* .loading {
     height: 0;
     width: 0;
     padding: 15px;
@@ -536,9 +536,9 @@ input:focus{
     left: 50%;
     top: 40%;
     z-index: 10;
-}
+} */
 
-.filter{
+/* .filter{
     background-color: rgba(0,0,0,.1);
     position: absolute;
     top: 0px;
@@ -548,7 +548,7 @@ input:focus{
     z-index: 100;
     transition: show .2s;
     z-index: 10;
-}
+} */
 
 .no-border-top{
     border-top: none !important;
@@ -558,9 +558,9 @@ input:focus{
     display: none;
 }
 
-.show-flex{
+/* .show-flex{
     display: flex;
-}
+} */
 
 .no-events{
     pointer-events: none !important;
@@ -600,12 +600,12 @@ input:focus{
     }
 }
 
-@keyframes dangle {
+/* @keyframes dangle {
     0% {opacity: 0; margin-top: -30px;}
     10% {opacity: 1; margin-top: 0px;}
     90% {opacity: 1; margin-top: 0px;}
     100% {opacity: 0; margin-top: -30px;}
-}
+} */
 
 @keyframes tiny-bounce{
     0% {transform: scale(1);}
@@ -620,11 +620,11 @@ input:focus{
     100% {transform: scale(1.02);}
 }
 
-@keyframes rotate {
+/* @keyframes rotate {
     100% {
       transform: rotate(360deg);
     }
-}
+} */
 
 @keyframes show {
     0%{opacity: 1}

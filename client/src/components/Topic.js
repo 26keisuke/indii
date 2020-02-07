@@ -6,7 +6,7 @@ import question from "../images/question.png"
 import post from "../images/post.png"
 
 import "./Topic.css"
-import Back from "./Back"
+import Back from "./Util/Back"
 import Post from "./Post"
 
 class TopicPage extends Component {

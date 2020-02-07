@@ -2,7 +2,7 @@ import React, { Component } from "react"
 
 
 // input => currentStep: Int, stepName: []
-class ActionProgress extends Component {
+class Progress extends Component {
 
     setCircle = (idx) => {
         const now = this.props.step
@@ -77,4 +77,4 @@ class ActionProgress extends Component {
 
 }
 
-export default ActionProgress
+export default Progress

@@ -7,12 +7,12 @@ import CreatePreviewTopic from "./CreatePreviewTopic"
 import Select from "../Action/Controller/Select"
 import topics from "../__Mock__/data/topic"
 
-import ActionProgress from "../ActionProgress"
+import ActionProgress from "../Action/Progress/Progress"
 import ActionImage from "../ActionImage"
 import ActionTag from "../ActionTag"
 
 import "./CreateTopic.css";
-import Back from "../Back";
+import Back from "../Util/Back";
 
 import { FormWrapper, FormMount, BackWrapper } from "../Action/Form/Form"
 

@@ -1,29 +1,39 @@
 import React, { Component } from "react";
+import styled from "styled-components"
 
-import NotifElement from "./NotifElement"
+import Element from "./Element/Element"
+import Filter from "./Filter/Filter";
 
-import absurd from "../../images/absurd/09.png"
-import NotifSearchFilter from "./NotifSearchFilter";
-import LeftAndRight from "../LeftAndRight";
+import Screen from "../Util/Screen"
+import { Border } from "../Theme"
 
-class Draft extends Component {
+const Title = styled.p`
+    font-size:16px;
+    color: #434343;
+`
 
-    renderImgContent() {
-        return(
-            <div></div>
-        )
-    }
+const RightInsideTitle = styled.div`
+    height:35px;
+    padding-left:30px;
+    border: 1px solid #d2d2d2;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+`
+
+class Notif extends Component {
 
     renderTopContent() {
         return(
-            <p className="content-intro-title">通知</p>
+            <Title>通知</Title>
         )
     }
 
     renderLeftContent() {
         return(
             <div>
-                <NotifElement 
+                <Border bottom={true}/>
+                <Element 
                     id={"123123"}
                     name={"飯塚啓介"}
                     date={"May 25, 2018 6:34 PM"}
@@ -36,24 +46,23 @@ class Draft extends Component {
     renderRightContent() {
         return(
             <div>
-                <div className="content-right-card-title">
+                <RightInsideTitle>
                     <p>検索フィルター</p>
-                </div>
-                <NotifSearchFilter/>
+                </RightInsideTitle>
+                <Filter/>
             </div>
         )
     }
 
     render() {
         return(
-            <LeftAndRight
-                img={this.renderImgContent()}
-                top={this.renderTopContent()} 
-                left={this.renderLeftContent()} 
-                right={this.renderRightContent()}
-            />
+            <Screen>
+                {this.renderTopContent()} 
+                {this.renderLeftContent()} 
+                {this.renderRightContent()}
+            </Screen>
         )
     }
 }
 
-export default Draft;
+export default Notif;

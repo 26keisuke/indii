@@ -1,4 +1,4 @@
-.post{
+/* .post{
     padding: 15px;
     display: flex;
     flex-direction: row;
@@ -8,7 +8,7 @@
 
 .post:hover {
     background-color: rgba(233, 233, 238, 0.25);
-}
+} */
 
 .post-wrapper{
     border-left: 1px solid #d2d2d2;
@@ -16,13 +16,13 @@
     border-right: 1px solid #d2d2d2;
 }
 
-.post-left{
+/* .post-left{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     margin-right:10px;
-}
-
+} */
+/* 
 .post-topic{
     margin-top: -7px;
     font-size:13px;
@@ -40,14 +40,14 @@
     font-size: 11px;
     margin-bottom: 6px;
     color: #1c1c1c;
-}
-
+} */
+/* 
 .post-bottom{
     display: flex;
     flex-direction: row;
-}
+} */
 
-.post-star{
+/* .post-star{
     width: 13px;
     height: 13px;
     margin-right:6px;
@@ -60,10 +60,10 @@
 .post-edit-date{
     font-size: 10px;
     color: #8F8B8B;
-}
+} */
 
-.post-img{
+/* .post-img{
     width: 87px;
     height: 87px;
     object-fit: contain;
-}
+} */

@@ -1,12 +1,12 @@
-.check-box{
+/* .check-box{
     padding: 20px 20px;
     padding-top:60px;
     display: flex;
     flex-direction: row;
     overflow-x: hidden;
     position: relative;
-}
-
+} */
+/* 
 .check-header-wrapper{
     position: absolute;
     top: 17px;
@@ -22,16 +22,16 @@
     color: #464646;
     font-size: 14px;
     margin: 0px 10px;
-}
+} */
 
-.check-left{
+/* .check-left{
     width: 250px;
     margin-right: 15px;
     flex-shrink: 0;
     overflow: hidden;
-}
+} */
 
-.check-left-hide{
+/* .check-left-hide{
     animation-name: toggleInfoHide;
     animation-duration: 300ms;
     animation-timing-function: ease-in-out;
@@ -43,12 +43,12 @@
     animation-duration: 300ms;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
-}
+} */
 
-.check-left p {
+/* .check-left p {
     white-space: nowrap
-}
-
+} */
+/* 
 @keyframes toggleInfoHide{
     0% {width: 250px}
     100% {width: 0px}
@@ -57,9 +57,9 @@
 @keyframes toggleInfoShow{
     0% {width: 0px}
     100% {width: 250px}
-}
+} */
 
-.check-middle{
+/* .check-middle{
     width: 50%;
     min-width:300px;
     margin-right:20px;
@@ -70,9 +70,9 @@
     width: 50%;
     min-width:300px;
     position: relative;
-}
+} */
 
-.check-top-title{
+/* .check-top-title{
     font-size:14px;
     font-weight: bold;
     margin-bottom: 12px;
@@ -81,9 +81,9 @@
 .check-top{
     font-size:13px;
     color: #4B4B4B;
-}
+} */
 
-.check-change-content-text {
+/* .check-change-content-text {
     margin-top:10px;
     border: 0.5px solid #838383;
     height:76.5%;
@@ -92,26 +92,26 @@
 
 .check-change-content-text p{
     padding: 5px 10px;
-}
+} */
 
-.check-people{
+/* .check-people{
     display: flex;
     flex-direction: row;
     padding: 10px 0px;
     background-color: #ffffff;
     height: 100px;
     position: relative;
-}
+} */
 
-.check-collapse-wrapper{
+/* .check-collapse-wrapper{
     position: absolute;
     top: 21px;
     display: flex;
     flex-direction: row;
     align-items: center;
-}
+} */
 
-.check-collapse-btn{
+/* .check-collapse-btn{
     width: 13px;
     height: 13px;
     margin-right: 6px;
@@ -119,13 +119,13 @@
     pointer-events: none;
     top:0px;
     right:0px;
-}
+} */
 
-.check-collapse-text{
+/* .check-collapse-text{
     margin-left: 10px;
     cursor: pointer;
-}
-
+} */
+/* 
 .check-collapse-fake{
     position: relative;
 }
@@ -152,7 +152,7 @@
     height: 40px;
     display: block;
     cursor: pointer;
-}
+} */
 
 .check-people-intro{
     font-size: 11px;
@@ -164,12 +164,12 @@
     left: -40px;
 }
 
-.check-change{
+/* .check-change{
     margin-bottom:20px;
     position: relative;
-}
+} */
 
-.check-change-mark-before{
+/* .check-change-mark-before{
     background-color: #9EAEE5;
     width: 8px;
     height: 8px;
@@ -187,9 +187,9 @@
     left: 125px;
     top: 6px;
     border-radius: 4px;
-}
+} */
 
-.check-change-mark-before-content{
+/* .check-change-mark-before-content{
     background-color: #9EAEE5;
     width: 8px;
     height: 8px;
@@ -207,45 +207,45 @@
     left: 55px;
     top: 5px;
     border-radius: 4px;
-}
+} */
 
-.check-change-content{
+/* .check-change-content{
     color: #333333;
     font-size: 13px;
     margin-bottom: 5px;
-}
+} */
 
-.check-change-people{
+/* .check-change-people{
     display: flex;
     flex-direction: row;
     padding: 10px 0px;
     background-color: #ffffff;
     position: relative;
-}
+} */
 
-.check-change-underline{
+/* .check-change-underline{
     border: 0.5px solid #838383;
-}
+} */
 
-.check-change-title{
+/* .check-change-title{
     color: #4B4B4B;
     font-size: 13px;
     margin-bottom: 12px;
-}
+} */
 
-.check-change-button{
+/* .check-change-button{
     position: relative;
-}
+} */
 
-.check-change-confirm{
+/* .check-change-confirm{
     color: #4B4B4B;
     font-weight: bold;
     font-size: 13px;
     margin-bottom: 22px;
     margin-top:45px;
-}
+} */
 
-.check-change-warning::before{
+/* .check-change-warning::before{
     content: "";
     background-color: #FF5F5F;
     width: 8px;
@@ -255,24 +255,24 @@
     position: absolute;
     left: -12px;
     top: 3px;
-}
+} */
 
-.check-change-warning{
+/* .check-change-warning{
     position: absolute;
     color: #747474;
     width: 180px;
     font-size: 10px;
     top: -19px;
     left: 13px;
-}
+} */
 
-.check-change-title span {
+/* .check-change-title span {
     font-size: 10px;
     color: #747474;
     margin-left: 10px;
-}
+} */
 
-.check-comment{
+/* .check-comment{
     width: 221px;
     height: 120px;
     padding-left: 25px;
@@ -280,16 +280,16 @@
     font-size: 12px;
     padding-top: 4px;
     font-family: "Gennokaku Gothic";
-}
+} */
 
-.check-comment:focus{
+/* .check-comment:focus{
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
     outline: 0;
     border: 0.5px solid #9EAEE5;
-}
-
+} */
+/* 
 .check-pen{
     position: absolute;
     top: 39px;
@@ -305,7 +305,7 @@
     left:7px;
     width:14px;
     height:14px;
-}
+} */
 
 .check-change-result{
     display: flex;
@@ -314,7 +314,7 @@
     width: 250px;
 }
 
-.check-change-result-circle{
+/* .check-change-result-circle{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -324,18 +324,18 @@
     height:80px;
     margin: 0px 20px;
     cursor: pointer;
-}
+} */
 
-.check-change-result-circle-green{
+/* .check-change-result-circle-green{
     border: 0.5px solid #4CD964;
 }
 
 .check-change-result-circle-red{
     border: 0.5px solid #FF5F5F;
-}
+} */
 
 
-.check-confirm{
+/* .check-confirm{
     height: 50px;
     width: 50px;
 }
@@ -343,7 +343,7 @@
 .check-reject{
     height: 45px;
     width: 40px;
-}
+} */
 
 .check-change-bottom-space{
     height:400px;
@@ -351,7 +351,7 @@
     border-bottom: 1px solid #d2d2d2;
 }
 
-.check-change-feedback img{
+/* .check-change-feedback img{
     width: 21px;
     height: 21px;
     margin-right:20px;
@@ -369,9 +369,9 @@
     animation-duration: 300ms;
     animation-fill-mode: forwards;
     z-index:1;
-}
+} */
 
-.check-change-feedback-pressed{
+/* .check-change-feedback-pressed{
     margin: 0px 5px !important;
     padding:5px;
     cursor: pointer;
@@ -393,8 +393,8 @@
     animation-fill-mode: forwards;
     background-color: rgba(158, 175, 229, 0.3);
     border-radius: 100%;
-}
+} */
 
-.content-check-back-wrapper{
+/* .content-check-back-wrapper{
     margin-top:-19px;
-}
+} */

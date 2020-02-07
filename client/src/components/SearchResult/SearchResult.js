@@ -1,65 +1,101 @@
 import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
-
-import absurd from "../../images/absurd/09.png"
+import styled from "styled-components"
 
 import sample from "../../images/sample1.png"
 
-import SearchResultTalk from "./SearchResultTalk"
-import SearchFilter from "./SearchFilter"
+import SearchResultTalk from "./Talk/Talk"
+import SearchFilter from "./Filter/Filter"
 import People from "../People"
 import Post from "../Post"
 import TopicElement from "../TopicElement"
 
-import LeftAndRightBack from "../LeftAndRightBack"
-import Back from "../Back"
+import Screen from "../Util/Screen"
+
+import { Space } from "../Theme"
 
 import "./SearchResult.css"
 
+const Title = styled.div`
+    display: flex;
+    flex-direction: row;
+    & p:nth-child(1){
+        color: #464646;
+        font-size: 14px;
+        margin: 0px 10px;
+    }
+`
+
+const ResultInsideHeader = styled.div`
+    height: 40px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    padding-left: 35px;
+    border-top: 1px solid #d2d2d2;
+    border-bottom: 1px solid #d2d2d2;
+
+    & > p {
+        font-size: 14px;
+    }
+`
+
+const TopicWrapper = styled.div`
+    border-bottom: 1px solid #d2d2d2;
+`
+
+const PostWrapper = styled.div`
+    border-bottom: 1px solid #d2d2d2;
+`
+
+const PeopleWrapper = styled.div`
+    border-right:1px solid #d2d2d2;
+    border-left:1px solid #d2d2d2;
+    border-bottom:1px solid #d2d2d2;
+`
+
+const RightInsideTitle = styled.div`
+    height:35px;
+    padding-left:30px;
+    border: 1px solid #d2d2d2;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+`
+
 class SearchResult extends Component {
 
-    constructor(props) {
-        super(props)
-
-        this.renderLeft = this.renderLeft.bind(this)
-        this.renderRight = this.renderRight.bind(this)
-        this.renderTitle = this.renderTitle.bind(this)
-    }
-
-    renderTitle() {
+    renderTitle = () => {
         return (
-            <div>
-                <span className="content-header-title-bold">
-                    "Neural Networks"
-                </span>
-                の検索結果
-            </div>
+            <Title>
+                <p>"Neural Networks"</p>
+                <p>の検索結果</p>
+            </Title>
         )
     }
 
-    renderLeft() {
+    renderLeft = () => {
         return (
             <div>
-                <div className="search-res-category">
-                    <div className="search-res-space"/>
-                    <div className="content-inside-header">
+                <div>
+                    <ResultInsideHeader>
                         <p>トピック</p>
-                    </div>
-                    <div className="search-res-topic-wrapper">
+                    </ResultInsideHeader>
+                    <TopicWrapper>
                         <TopicElement
                             title={"Apache Kafka"}
                             content={"BrokerはConsumerがメッセージを購読したかに関わらず設定された期間のみ保持してその後削除する．これはKafkaの大きな特徴の1つである．例えば保存期間を2日間に設定すれば配信後2日間のみデータは保持されその後削除される。このためConsumerサイドがメッセージをどこまで読んだがを自らが管理する（Brokerが管理する必要がない）。"}
                             likes={212233}
                             tags={["Computer Science", "Open Source", "Batch Processing"]}
                         />
-                    </div>
+                    </TopicWrapper>
                 </div>
-                <div className="search-res-category">
-                    <div className="search-res-space"/>
-                    <div className="content-inside-header">
+                <Space height="10px" backgroundColor="#f9f9f9"/>
+                <div>
+                    <ResultInsideHeader>
                         <p>ポスト</p>
-                    </div>
-                    <div className="search-post-wrapper">
+                    </ResultInsideHeader>
+                    <PostWrapper>
                         <Post
                             topic={"Apache Kafka"}
                             title={"Stream Processingとの関係"}
@@ -68,13 +104,13 @@ class SearchResult extends Component {
                             date={"August 21, 2013 5:36 AM"}
                             img={sample}
                         />
-                    </div>
+                    </PostWrapper>
                 </div>
-                <div className="search-res-category">
-                    <div className="search-res-space"/>
-                    <div className="content-inside-header">
+                <Space height="10px" backgroundColor="#f9f9f9"/>
+                <div>
+                    <ResultInsideHeader>
                         <p>トーク</p>
-                    </div>
+                    </ResultInsideHeader>
                     <SearchResultTalk
                         topic={"Apache Kafka"}
                         date={"September 29, 2014"}
@@ -85,45 +121,39 @@ class SearchResult extends Component {
                         comment={12}
                     />
                 </div>
-                <div className="content-bottom-space">
-                    <img src={absurd} className="just-for-fun"/>
-                </div>
             </div>
         )
     }
 
-    renderRight() {
+    renderRight = () => {
         return (
             <div>
-                <div className="content-right-card-title">
+                <RightInsideTitle>
                     <p>検索フィルター</p>
-                </div>
+                </RightInsideTitle>
                 <SearchFilter/>
-                <div className="content-right-card-title">
+                <RightInsideTitle>
                     <p>あなたにおすすめのライター</p>
-                </div>
-                <div className="search-people-wrapper">
+                </RightInsideTitle>
+                <PeopleWrapper>
                     <People
                         id={"123456789"}
                         name={"飯塚啓介"} 
                         job={"Chief株式会社 CEO"} 
                         intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなど..."}
                     />
-                </div>
+                </PeopleWrapper>
             </div>
         )
     }
 
-
     render() {
         return (
-            <LeftAndRightBack
-                url="/"
-                backName="ホーム"
-                title={this.renderTitle()}
-                left={this.renderLeft()}
-                right={this.renderRight()}
-            />
+            <Screen back={true}>
+                {this.renderTitle()}
+                {this.renderLeft()}
+                {this.renderRight()}
+            </Screen>
         )
     }
 }

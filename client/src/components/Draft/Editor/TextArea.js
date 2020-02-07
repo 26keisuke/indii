@@ -1,10 +1,12 @@
+// localstorageが最終的にAPIで上書きされている。もしlocalstorageがなければ、APIというロジックにする
+
 import React from 'react'
 import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/index.css'
 
 import axios from "axios";
 
-export default class DraftArea extends React.Component {
+class TextArea extends React.Component {
 
     constructor(props) {
         super(props)
@@ -47,9 +49,9 @@ export default class DraftArea extends React.Component {
     }
 
   render () {
-    if(this.state.editorState){
-        console.log(this.state.editorState.toHTML())
-    }
+    // if(this.state.editorState){
+    //     console.log(this.state.editorState.toHTML())
+    // }
 
     const { editorState } = this.state
 
@@ -85,3 +87,5 @@ export default class DraftArea extends React.Component {
   }
 
 }
+
+export default TextArea

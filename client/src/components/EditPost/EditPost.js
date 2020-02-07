@@ -1,8 +1,8 @@
 import React, {Component} from "react"
 import axios from "axios"
 
-import ActionProgress from "../ActionProgress"
-import Back from "../Back";
+import ActionProgress from "../Action/Progress/Progress"
+import Back from "../Util/Back";
 import EditPreviewPost from "./EditPreviewPost"
 
 import Select from "../Action/Controller/Select"

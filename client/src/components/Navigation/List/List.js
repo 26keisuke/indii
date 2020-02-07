@@ -71,7 +71,7 @@ const ListElement = styled(Link)`
     & > p {
         padding-left:15px;
         cursor: pointer;
-        padding-top: 15px;
+        padding-top: 13px;
         padding-bottom: 15px;
         padding-right:50px;
         font-size: 12px;

@@ -1,14 +1,10 @@
 import React, { Component } from "react"
 
-import star_pressed from "../../images/star-pressed.png"
-import feedback from "../../images/comment.png"
+import star_pressed from "../../../images/star-pressed.png"
+import feedback from "../../../images/comment.png"
 
-class SearchResultTalk extends Component {
-
-    constructor(props) {
-        super(props)
-    }
-
+class Talk extends Component {
+    
     tagRender(tag) {
         switch(tag){
             case "question":
@@ -39,4 +35,4 @@ class SearchResultTalk extends Component {
     }
 }
 
-export default SearchResultTalk
+export default Talk

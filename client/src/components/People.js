@@ -1,34 +1,83 @@
 import React, { Component } from "react"
-
+import styled from "styled-components"
 import sample from "../images/sample0.jpg"
 import { Link } from "react-router-dom"
 
 import PeopleFollow from "./PeopleFollow"
 
-import "./People.css"
+const PeopleElement = styled.div`
+    padding: 10px 10px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(233, 233, 238, 0.25);
+    }
+
+    &:hover > div {
+        background-color: rgba(0, 0, 0, 0);
+    }
+
+    & > p {
+        font-size: 11px;
+        margin: 0px 1px;
+    }
+
+    & > div {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 10px;
+        background-color: #ffffff;
+        height:37px;
+        position: relative;
+
+        & > img {
+            width: 37px;
+            height: 37px;
+            border-radius: 5px;
+            object-fit: cover;
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+
+        & > div:nth-child(2) {
+
+            & > p:nth-child(1) {
+                font-size: 12px;
+            }
+
+            & > p:nth-child(2) {
+                color: #747474;
+                font-size: 11px;
+                margin-bottom: 5px;
+            }
+        }
+
+        & > div:nth-child(3) {
+            position: absolute;
+            right: -12px;
+            top: 5px;
+        }
+    }
+`
 
 class People extends Component {
-
-    constructor(props){
-        super(props)
-    }
 
     render() {
         return (
             <Link to={"/profile/" + this.props.id}>
-                <div className="people-elem">
-                    <div className="people-top">
-                        <img src={sample} className="people-img"/>
-                        <div className="people-middle">
-                            <p className="people-name">{this.props.name}</p>
-                            <p className="people-job">{this.props.job}</p>
+                <PeopleElement>
+                    <div>
+                        <img src={sample}/>
+                        <div>
+                            <p>{this.props.name}</p>
+                            <p>{this.props.job}</p>
                         </div>
-                        <div className="people-follow-button-wrapper">
+                        <div>
                             <PeopleFollow/>
                         </div>
                     </div>
-                    <p className="people-intro">{this.props.intro}</p>
-                </div>
+                    <p>{this.props.intro}</p>
+                </PeopleElement>
             </Link>
         )
     }

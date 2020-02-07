@@ -43,7 +43,7 @@ class LogIn extends Component {
                         <input placeholder="パスワード" type="text"/>
                     </Input>
                     <Remember>
-                        <input type="radio" id="remember" value="remember"/>
+                        <input type="radio" id="remember" value="remember" name="remember"/>
                         <label for="remember">次から入力を省略</label>
                     </Remember>
                     <BottomWrapper>

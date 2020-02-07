@@ -1,4 +1,4 @@
-
+/* 
 .post-feed{
     display: flex;
     flex-direction: column;
@@ -7,19 +7,19 @@
     padding: 20px;
     border-bottom: 1px solid #d2d2d2;
     border-right: 1px solid #d2d2d2
-}
+} */
 
-.post-feed:hover{  
+/* .post-feed:hover{  
     background-color: rgba(233, 233, 238, 0.25);
-}
+} */
 
-.post-feed-top{
+/* .post-feed-top{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 10px;
-}
-
+} */
+/* 
 .post-feed-fake{
     position: relative;
 }
@@ -46,13 +46,13 @@
     height: 40px;
     display: block;
     cursor: pointer;
-}
+} */
 
-.post-feed-down{
+/* .post-feed-down{
     margin-right: 8px;
     pointer-events: none;
-}
-
+} */
+/* 
 .post-feed-topic{
     font-size: 14px;
     font-weight: bold;
@@ -62,8 +62,8 @@
 
 .post-feed-topic:hover{
     color: #565656;
-}
-
+} */
+/* 
 .post-feed-title{
     font-size: 18px;
     color: #1C1C1C;
@@ -75,62 +75,62 @@
     color: #2B2B2b;
     margin-bottom: 10px;
     cursor: pointer;
-}
+} */
 
-.post-feed-profile{
+/* .post-feed-profile{
     display: flex;
     flex-direction: row;
     align-items: center;
-}
+} */
 
-.post-feed-profile-img{
+/* .post-feed-profile-img{
     width: 37px;
     height: 37px;
     border-radius: 5px;
     object-fit: cover;
     margin-right:10px;
     cursor: pointer;
-}
+} */
 
-
+/* 
 .post-feed-profile-top{
     display: flex;
     flex-direction: row;
-    margin-bottom: 3px;;
-}
+    margin-bottom: 3px;
+} */
 
-.post-feed-profile-name{
+/* .post-feed-profile-name{
     margin-right: 5px;
     color: #4B4B4B;
     cursor: pointer;
-}
+} */
 
-.post-feed-profile-action{
+/* .post-feed-profile-action{
     color: #252525;
-}
+} */
 
-.post-feed-profile-bottom{
+/* .post-feed-profile-bottom{
     color: #747474;
-}
+} */
 
-.post-feed-bottom{
+/* .post-feed-bottom{
     display: flex;
     justify-content: flex-end;
     z-index:2;
-}
+} */
 
-.post-feed-bottom img{
+/* .post-feed-bottom img{
     width:18px;
     height:18px;
     margin-right:65px;
-}
+} */
 
 /* == icon hover ==*/
 
-.post-feed-bottom-wrapper{
+/* .post-feed-bottom-wrapper{
     position: relative;
-}
-
+} */
+/* 
 .post-feed-bottom .post-feed-bottom-fake{
     width:40px;
     height:40px;
@@ -152,12 +152,12 @@
     height:40px;
     background-color: #9EAEE5;
     opacity: 0.1;
-    border-radius: 100%;
-}
+    border-radius: 100%;shsadfsfdsdfsfdsafdfdssdf
+} */
 
 /*== emoji ==*/
 
-.post-feed-bottom-emoji{
+/* .post-feed-bottom-emoji{
     background-color: white;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     display: none;
@@ -185,11 +185,11 @@
     animation-fill-mode: forwards;
     background-color: rgba(158, 175, 229, 0.3);
     border-radius: 100%;
-}
+} */
 
 /*== feed action ==*/
 
-.post-feed-bottom-action{
+/* .post-feed-bottom-action{
     position: absolute;
     width:180px;
     background-color: white;
@@ -217,7 +217,7 @@
 
 .post-feed-bottom-action div {
     height:30px;
-}
+} */
 
 /*== icon animation ==*/
 
@@ -227,7 +227,7 @@
     pointer-events: none;
 }
 
-.post-feed-bottom p:hover ~ .post-feed-star{
+/* .post-feed-bottom p:hover ~ .post-feed-star{
     animation-name: bounce;
     animation-duration: 300ms;
     animation-fill-mode: forwards;
@@ -243,7 +243,7 @@
     animation-name: bounce;
     animation-duration: 300ms;
     animation-fill-mode: forwards;
-}
+} */
 
 
 /*==Collapse==*/
@@ -252,7 +252,7 @@
     transition: height 200ms;
 }
 
-.rotate {
+/* .rotate {
     animation-name: spin;
     animation-duration: 400ms;
     animation-fill-mode: forwards;
@@ -262,9 +262,9 @@
     animation-name: spin-1;
     animation-duration: 400ms;
     animation-fill-mode: forwards;
-}
+} */
 
-.rotate-2 {
+/* .rotate-2 {
     animation-name: spin-2;
     animation-duration: 400ms;
     animation-fill-mode: forwards;
@@ -274,9 +274,9 @@
     animation-name: spin-3;
     animation-duration: 400ms;
     animation-fill-mode: forwards;
-}
+} */
 
-@keyframes spin {
+/* @keyframes spin {
     from {
         transform: rotate(0deg)
     }
@@ -292,8 +292,8 @@
     to {
         transform: rotate(360deg)
     }
-}
-
+} */
+/* 
 @keyframes spin-2 {
     from {
         transform: rotate(270deg)
@@ -310,14 +310,14 @@
     to {
         transform: rotate(270deg)
     }
-}
+} */
 
 /*== report ==*/
 
-.confirm-report{
+/* .confirm-report{
     margin-bottom: 15px;
-}
-
+} */
+/* 
 .confirm-report-box{
     margin: 10px 0px;
     margin-right: 10px;
@@ -372,4 +372,4 @@
 [type="checkbox"]:not(:checked) {
     position: absolute;
     left: -9999px;
-}
+} */

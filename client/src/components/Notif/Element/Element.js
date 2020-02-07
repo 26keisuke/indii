@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import sample from "../../images/sample0.jpg";
+import sample from "../../../images/sample0.jpg";
 
-import "./Notif.css";
+import "../Notif.css";
 
-class NotifElement extends Component {
+class Element extends Component {
 
     renderAction(action) {
         switch(action){
@@ -32,4 +32,4 @@ class NotifElement extends Component {
     }
 }
 
-export default NotifElement;
+export default Element;

@@ -1,4 +1,4 @@
-.people-follow{
+/* .people-follow{
     height: 19px;
     display: flex;
     flex-direction: row;
@@ -11,9 +11,9 @@
     margin-left:40px;
     cursor: pointer;
     width: 60px;
-}
+} */
 
-.people-follow:hover {
+/* .people-follow:hover {
     border:1px solid #9aaee6;
 }
 
@@ -25,20 +25,20 @@
 
 .people-follow:hover > .people-follow-text{
     color: #9aaee6;
-}
+} */
 
-.people-follow-icon{
+/* .people-follow-icon{
     width: 14px;
     height: 14px;
     margin-right:6px;
     color:#636480;
-}
+} */
 
-.people-follow-text{
+/* .people-follow-text{
     font-size: 12px;
     color: #636480;
-}
-
+} */
+/* 
 .people-followed{
     height: 19px;
     display: flex;
@@ -51,17 +51,17 @@
     align-self: center;
     margin-left:40px;
     cursor: pointer;
-}
+} */
 
 
-.people-followed-icon{
+/* .people-followed-icon{
     width: 14px;
     height: 14px;
     margin-right:6px;
-    color:#ffffff;
+    color:#ffffff; */
 }
 
-.people-followed-text{
+/* .people-followed-text{
     font-size: 11px;
     color: #ffffff;
-}
+} */

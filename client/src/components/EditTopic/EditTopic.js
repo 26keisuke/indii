@@ -4,7 +4,7 @@ import axios from "axios"
 import EditIndexTopic from "./EditIndexTopic"
 import EditPreviewTopic from "./EditPreviewTopic"
 
-import ActionProgress from "../ActionProgress"
+import ActionProgress from "../Action/Progress/Progress"
 import ActionImage from "../ActionImage"
 import ActionTag from "../ActionTag"
 
@@ -13,7 +13,7 @@ import topics from "../__Mock__/data/topic"
 
 import "./EditTopic.css"
 
-import Back from "../Back";
+import Back from "../Util/Back";
 
 import sample from "../../images/sample1.png"
 
