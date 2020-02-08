@@ -253,7 +253,6 @@ function searchReducer(state=initialState.search, action) {
 }
 
 function authReducer(state=initialState.auth, action) {
-    console.log(action.payload)
     switch(action.type) {
         case USER_IS_LOGGEDIN:
             if(action.payload) {

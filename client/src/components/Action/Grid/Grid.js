@@ -3,6 +3,14 @@ import styled from "styled-components"
 
 import Card from "../Card/Card"
 
+export const GridWrapper = styled.div`
+    overflow: scroll;
+    height: 100%;
+    &::-webkit-scrollbar{ 
+        width: 0px !important;
+    }
+`
+
 const GridBox = styled.div`
     padding: 35px 50px;
     position: relative;

@@ -2,6 +2,8 @@ import express from "express";
 import passport from "passport";
 import cookieSession from "cookie-session";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
+import { Strategy as FacebookStrategy } from "passport-facebook"
+import { Strategy as LocalStrategy } from "passport-local"
 import mongoose from "mongoose";
 import keys from "./config/keys";
 import bodyParser from "body-parser";
@@ -36,6 +38,9 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
+app.use(bodyParser.json({limit: '50mb'}))
+
 passport.serializeUser((user, done) => {
     done(null, user.id)
 })
@@ -45,6 +50,51 @@ passport.deserializeUser((id, done) => {
         done(null, user)
     })
 })
+
+passport.use(new LocalStrategy({
+    usernameField: "email",
+    passwordField: "password", 
+    passReqToCallback : true,  
+}, (req, email, password, done) => {
+    User.findOne({email: email})
+        .then(user => {
+            if(user){
+                done(null, user)
+            } else {
+                const value = {
+                    userName: req.body.userName,
+                    name: {
+                        familyName: req.body.familyName,
+                        givenName: req.body.givenName
+                    },
+                    email: req.body.email,
+                    password: req.body.password,
+                }
+
+                new User(value)
+                    .save()
+                    .then(user => {
+                        done(null,user)
+                    .catch(err => {
+                        console.log(err)
+                    })
+                })
+            }
+        })
+        .catch(err => {
+            return done(err)
+        })  
+}))
+
+passport.use(new FacebookStrategy({
+    clientID: keys.FACEBOOK_CLIENT_ID,
+    clientSecret: keys.FACEBOOK_CLIENT_SECRET,
+    callbackURL: "/auth/facebook/callback",
+    proxy: true
+}, (accessToken, refreshToken, profile, done) => {
+    console.log(profile)
+    }
+))
 
 passport.use(new GoogleStrategy({
     clientID: keys.GOOGLE_CLIENT_ID,
@@ -70,17 +120,33 @@ passport.use(new GoogleStrategy({
                     .save()
                     .then(user => {
                         done(null,user)
+                    .catch(err => {
+                        console.log(err)
+                    })
                 })
-        }
-    })
-}));
-
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
-app.use(bodyParser.json({limit: '50mb'}))
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+));
 
 app.get("/auth/google", passport.authenticate("google", {scope: ["profile", "email"]}))
+app.get("/auth/google/callback", passport.authenticate("google", {failureRedirect: "/"}), 
+    (req, res) => {
+        res.redirect("/")
+    }
+)
 
-app.get("/auth/google/callback", passport.authenticate("google", {failureRedirect: "/login"}), 
+app.get("/auth/facebook", passport.authenticate("facebook"))
+app.get("/auth/facebook/callback", passport.authenticate("facebook", {failureRedirect: "/"}),
+    (req, res) => {
+        res.redirect("/")
+    }
+)
+
+app.post("/api/login", passport.authenticate("local", {failureRedirect: "/"}), 
     (req, res) => {
         res.redirect("/")
     }
@@ -102,11 +168,6 @@ app.post("/api/star_on", (req, res) => {
 app.post("/api/star_off", (req, res) => {
     res.send("")
 })
-
-// app.get("/api/topic/:id", (req, res) => {
-//     Topic.findById(req.body.id)
-//         .then()
-// })
 
 app.post("/api/topic", (req, res) => {
     new Topic(req.body)
@@ -144,6 +205,13 @@ app.post("/api/feeback", (req, res) => {
     console.log("Feedback Received! \n",req.body)
     res.send("")
 })
+
+function isLoggedIn(req,res,next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    return res.redirect("/")
+}
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));

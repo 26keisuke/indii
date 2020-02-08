@@ -61,8 +61,6 @@ class Profile extends Component {
         const flag = this.props.auth.loggedIn
         const { photo, name } = this.props.auth.info
 
-        console.log(this.props.auth)
-
         return (
             <ProfileArea>
                 <div>

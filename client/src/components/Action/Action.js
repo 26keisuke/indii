@@ -8,7 +8,8 @@ import post_edit from "../../images/post-edit.png"
 import topic_create from "../../images/topic-create.png"
 import topic_edit from "../../images/topic-edit.png"
 
-import Grid from "./Grid/Grid"
+import Grid, { GridWrapper } from "./Grid/Grid"
+import { Space } from "../Theme"
 
 const config = {
     screenName: ["トピック", "ポスト"],
@@ -28,13 +29,14 @@ const config = {
 
 class Create extends Component {
 
-    constructor(props){
-        super(props)
-    }
 
     render () {
         return (
-            <Grid config={config}/>
+            <GridWrapper>
+                <Grid config={config}/>
+                <Space height="150px"/>
+            </GridWrapper>
+            
         )
     }
 }
