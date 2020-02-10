@@ -22,7 +22,7 @@ import EditTopic from "./Action/Topic/Edit/Controller"
 import EditPost from "./Action/Post/Edit/Controller"
 import WorkSpace from "./WorkSpace"
 import Message from "./Util/Message"
-import Confirm from "./Util/Confirm"
+import Confirm from "./Confirm/Confirm"
 import Loading from "./Util/Loading"
 import Filter from "./Util/Filter"
 import Auth from "./Auth/Auth"
@@ -40,7 +40,12 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            // この二つは将来的にreact-transition-groupなどで完結にする
+            // onExitのアニメーションを適用させるためにある
             confirmationCancel: false,
+            logInFormShow: true,
+
+            // ポストをレポートする際のradio button
             problems: {
                 problem0: false,
                 problem1: false,
@@ -49,12 +54,18 @@ class App extends Component {
                 problem4: false,
             },
             addColumn: "",
+
+            logInError: false,
         }
         this.confirmRef = React.createRef()
         this.authRef = React.createRef()
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
+        this.props.fetchUser();
+    }
+
+    componentDidUpdate(prevProps) {
         if (this.props.update.confirmation.on || this.props.auth.showForm) {
             document.addEventListener("mousedown", this.outsideClick)
         } else {
@@ -72,8 +83,8 @@ class App extends Component {
             if(this.authRef.current.contains(e.target)) {
                 return null;
             }
-
-            this.props.hideLogin();
+            this.setState({logInFormShow: false})
+            setTimeout(() => this.cancelAction("logIn"), 300)
         }
 
         if(this.props.update.confirmation.on) {
@@ -82,26 +93,32 @@ class App extends Component {
             }
             
             this.setState({confirmationCancel: true});
-            setTimeout(() => this.cancelAction(), 300);
+            setTimeout(() => this.cancelAction("confirm"), 300);
         }
         
         this.props.disableGray();        
     }
 
-    componentDidMount() {
-        this.props.fetchUser();
+    cancelAction = (type) => {
+        switch(type) {
+            case "confirm":
+                this.setState({confirmationCancel: false}) // onEnter状態で待機させる（まだDOMとしては残っている）=> animationを適用させるため
+                this.props.hideConfirmation(); // DOMとしても消して、全て値(this.props.update.confirmation)を初期化する
+                return;
+            case "logIn":
+                this.setState({logInFormShow: true});
+                this.props.hideLogin();
+                return;
+            default:
+                return;
+        }   
     }
 
-    cancelAction = () => {
-        this.setState({confirmationCancel: false}) // onEnter状態で待機させる（まだDOMとしては残っている）=> animationを適用させるため
-        this.props.hideConfirmation(); // DOMとしても消して、全て値(this.props.update.confirmation)を初期化する
-    }
-
-    postAction = (action, id) => {
+    postAction = (action, id, value) => {
         switch(action){
             case "POST_DELETE":
                 this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction(), 300)
+                setTimeout(() => this.cancelAction("confirm"), 300)
                 if (id){
                     this.props.isFetching()
                     axios.post("/api/post/delete", {id})
@@ -121,17 +138,8 @@ class App extends Component {
                 return null;
 
             case "GIVE_FEEDBACK":
-                this.setState({
-                    confirmationCancel: true,
-                    problems: {
-                        problem0: false,
-                        problem1: false,
-                        problem2: false,
-                        problem3: false,
-                        problem4: false,
-                    }
-                })
-                setTimeout(() => this.cancelAction(), 300)
+                this.setState({confirmationCancel: true})
+                setTimeout(() => this.cancelAction("confirm"), 300)
                 if (id){
                     this.props.isFetching()
                     axios.post("/api/feeback", {id: id, problems: this.state.problems})
@@ -153,31 +161,94 @@ class App extends Component {
 
             case "ADD_COLUMN":
                 this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction(), 300)
+                setTimeout(() => this.cancelAction("confirm"), 300)
                 if (id){
                     this.props.addColumn(id, this.state.addColumn);
-                    this.props.disableGray();
-                } else {
-                    this.props.disableGray();
-                };
+                }
+                this.props.disableGray();
+                return null;
+            
+            case "DELETE_DRAFT":
+                this.setState({confirmationCancel: true})
+                setTimeout(() => this.cancelAction("confirm"), 300)
+                if (id){
+                    //ここにロジックが入る
+                } 
+                this.props.disableGray();
+                return null;
+
+            case "UPLOAD_DRAFT":
+                this.setState({confirmationCancel: true})
+                setTimeout(() => this.cancelAction("confirm"), 300)
+                if (id){
+                    //ここにロジックが入る
+                } 
+                this.props.disableGray();
+                return null;
+            case "SIGN_UP":
+                this.props.isFetching()
+            
+                axios.post("/api/login", value)
+                .then(user => {
+                    setTimeout(() => {
+                        this.props.disableGray()
+                        this.props.endFetching()
+                        this.setState({logInFormShow: false})
+                        setTimeout(() => this.cancelAction("logIn"), 300)
+                        this.props.updateMessage("success", `"${user.data.email}"に確認メールを送信しました。`);
+                        setTimeout(() => this.props.resetMessage(), 7000)
+                        this.props.fetchUser();
+                    }, 2500)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
+                return null;
+                
+            case "LOG_IN":
+                this.props.isFetching()
+            
+                axios.post("/api/login", value)
+                .then(user => {
+                    if(!user.data.userName) { // if user is not found, return error message
+                        this.props.endFetching()
+                        this.setState({ logInError: true })
+                        return false;
+                    }
+                    this.props.disableGray()
+                    this.props.endFetching()
+                    this.setState({logInFormShow: false})
+                    setTimeout(() => this.cancelAction("logIn"), 300)
+                    this.props.updateMessage("success", `${user.data.userName}さん、お帰りなさい。`);
+                    setTimeout(() => this.props.resetMessage(), 3000)
+                    this.props.fetchUser();
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
                 return null;
 
             default:
+                this.setState({confirmationCancel: true})
+                setTimeout(() => this.cancelAction("confirm"), 300)
+                this.props.disableGray();
                 return null;
 
         }
     }
 
-    handleReportChange = (e, problemName) => {
+    handleReportChange = (state) => {
         this.setState({
-            problems: {
-                [problemName]: e.target.checked
-            }  
+            ...this.state,
+            problems: state,
         })
     }
 
     handleAddColumnChange = (e) => {
         this.setState({
+            ...this.state,
             addColumn: e.target.value
         })
     }
@@ -207,7 +278,7 @@ class App extends Component {
                     <Message message={this.props.update.updateMessage.message}/>
                 )
             default:
-                return ""
+                return;
         }
     }
 
@@ -221,7 +292,13 @@ class App extends Component {
                     <div className="router">
                         <Header />                        
                         <Navigation />
-                        { auth.showForm && <AuthWrapper ref={this.authRef}/> }
+                        { auth.showForm && <AuthWrapper 
+                                                ref={this.authRef} 
+                                                show={this.state.logInFormShow}
+                                                postAction={this.postAction}
+                                                error={this.state.logInError}
+                                            /> 
+                        }
                         { update.fetching && <Loading/>}
                         { update.grayBackground && <Filter/>}
                         { update.confirmation.on && 

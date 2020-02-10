@@ -5,7 +5,7 @@ import EditIndexTopic from "./Index"
 import EditPreviewTopic from "./Preview"
 
 import ActionProgress from "../../Progress/Progress"
-import ActionImage from "../../../ActionImage"
+import Image from "../../Controller/Image"
 import Tag from "../../Tag/Tag"
 
 import Select from "../../Controller/Select"
@@ -66,7 +66,7 @@ class CreatePost extends Component {
                             setStep={this.setStep}
                         />
             case 1:
-                return <ActionImage
+                return <Image
                         back={this.state.back} 
                         setBackward={this.setBackward} 
                         // initialVal={this.state.original.img} 本来はこっち
@@ -108,6 +108,8 @@ class CreatePost extends Component {
                         editedIndex={this.state.edited.index}
                         setStep={this.setStep}
                         />
+            default:
+                return;
         }
     }
 

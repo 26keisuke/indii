@@ -37,7 +37,6 @@ class Select extends Component {
 
     // stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
     componentDidUpdate = (prevProps) => {
-        console.log(this.props)
         if (prevProps.storage !== this.props.storage){
             this.setState({
                 value: localStorage.getItem(this.props.storage) || ""
@@ -324,8 +323,6 @@ class Select extends Component {
         const formSubmit = flag ? this.formUniqueSubmit : this.formMatchSubmit
         const renderWarning = flag ? this.renderUniqueWarning : this.renderMatchWarning
         const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
-
-        console.log(renderWarning)
 
         return ( 
             <Box>

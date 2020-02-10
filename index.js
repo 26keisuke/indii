@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
-import cookieSession from "cookie-session";
+// import cookieSession from "cookie-session";
+import session from "express-session"
 import { Strategy as GoogleStrategy } from "passport-google-oauth20"
 import { Strategy as FacebookStrategy } from "passport-facebook"
 import { Strategy as LocalStrategy } from "passport-local"
@@ -8,6 +9,8 @@ import mongoose from "mongoose";
 import keys from "./config/keys";
 import bodyParser from "body-parser";
 import path from "path";
+import bcrypt from "bcrypt";
+// import uid from "uid2";
 
 import User from "./models/User"
 import Topic from "./models/Topic"
@@ -28,12 +31,19 @@ mongoose.connect(keys.mongoURI, err => {
 
 const app = express();
 
-app.use(
-    cookieSession({
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        keys: [keys.cookieKey]
-    })
-);
+// app.use(
+//     cookieSession({
+//         secret: "im a genius", // must be changed later
+//         maxAge: 30 * 24 * 60 * 60 * 1000,
+//         keys: [keys.cookieKey]
+//     })
+// );
+
+app.use(session({
+    secret: [keys.cookieKey],
+    resave: true,
+    saveUninitialized: true,
+}))
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -59,26 +69,49 @@ passport.use(new LocalStrategy({
     User.findOne({email: email})
         .then(user => {
             if(user){
-                done(null, user)
-            } else {
-                const value = {
-                    userName: req.body.userName,
-                    name: {
-                        familyName: req.body.familyName,
-                        givenName: req.body.givenName
-                    },
-                    email: req.body.email,
-                    password: req.body.password,
-                }
 
-                new User(value)
-                    .save()
-                    .then(user => {
-                        done(null,user)
-                    .catch(err => {
-                        console.log(err)
+                bcrypt.compare(password, user.password)
+                    .then(res => {
+                        if(res === false) {
+                            console.log("NO")
+                            return done(null, false)
+                        } else {
+                            console.log("YES")
+                            return done(null, user)
+                        }
                     })
-                })
+
+            } else {
+
+                // signUpとloginをここで分けている。果たしてこれが適切かは疑問
+                if(!req.body.username || !req.body.familyName || !req.body.givenName) {
+                    console.log("HEY")
+                    return done(null, false)
+                }
+                
+                bcrypt.genSalt(10)
+                    .then(salt => {
+                        bcrypt.hash(password, salt)
+                        .then(hash => {
+                            const hashedPassword = hash
+
+                            const value = {
+                                userName: req.body.username,
+                                name: {
+                                    familyName: req.body.familyName,
+                                    givenName: req.body.givenName
+                                },
+                                email: email,
+                                password: hashedPassword,
+                            }
+
+                            new User(value)
+                                .save()
+                                .then(user => {
+                                    done(null, user)
+                                })            
+                        })
+                    })
             }
         })
         .catch(err => {
@@ -86,48 +119,80 @@ passport.use(new LocalStrategy({
         })  
 }))
 
+// facebookの場合は正式名がない
 passport.use(new FacebookStrategy({
     clientID: keys.FACEBOOK_CLIENT_ID,
     clientSecret: keys.FACEBOOK_CLIENT_SECRET,
     callbackURL: "/auth/facebook/callback",
-    proxy: true
+    profileFields: ['id', 'displayName', 'photos', 'email'],
+    proxy: true,
 }, (accessToken, refreshToken, profile, done) => {
-    console.log(profile)
+    User.findOne({facebookId: profile.id})
+        .then(user => {
+            if(user){
+                done(null, user)
+            } else {
+
+                const { id, displayName, familyName, givenName, emails, photos } = profile
+
+                const value = {
+                    facebookId: id,
+                    userName: displayName,
+                    name: {
+                        familyName: familyName,
+                        givenName: givenName
+                    },
+                    email: emails[0].value,
+                    photo: photos[0].value,
+                }
+
+                new User(value)
+                    .save()
+                    .then(user => {
+                        done(null,user)
+                    })
+            }
+        })
+        .catch(err => {
+            return done(err)
+        })  
     }
 ))
 
+// googleの場合はusernameがない
 passport.use(new GoogleStrategy({
     clientID: keys.GOOGLE_CLIENT_ID,
     clientSecret: keys.GOOGLE_CLIENT_SECRET,
     callbackURL: "/auth/google/callback",
     proxy: true
 }, (accessToken, refreshToken, profile, done) => {
-    console.log(profile)
     User.findOne({googleId: profile.id})
         .then(user => {
             if(user){
                 done(null, user)
             } else {
+
+                const {id, displayName, name, emails, photos} = profile
+
                 const value = {
-                    googleId: profile.id || "",
+                    googleId: id || "",
+                    userName: displayName,
                     name: {
-                        familyName: profile.name.familyName || "",
-                        givenName: profile.name.givenName || ""
+                        familyName: name.familyName || "",
+                        givenName: name.givenName || ""
                     },
-                    photo: profile.photos[0].value || "",
+                    email: emails[0].value,
+                    photo: photos[0].value || "",
                 }
                 new User(value)
                     .save()
                     .then(user => {
                         done(null,user)
-                    .catch(err => {
-                        console.log(err)
                     })
-                })
             }
         })
         .catch(err => {
-            console.log(err)
+            done(err)
         })
     }
 ));
@@ -148,13 +213,18 @@ app.get("/auth/facebook/callback", passport.authenticate("facebook", {failureRed
 
 app.post("/api/login", passport.authenticate("local", {failureRedirect: "/"}), 
     (req, res) => {
-        res.redirect("/")
+        if(req.body.remember) {
+            req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; 
+        } else {
+            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+        }
+        res.send(req.user)
     }
 )
 
 app.get("/api/logout", (req, res) => {
     req.logout();
-    res.send(req.user);
+    res.redirect("/")
 })
 
 app.get("/api/current_user", (req, res) => {
@@ -167,6 +237,20 @@ app.post("/api/star_on", (req, res) => {
 
 app.post("/api/star_off", (req, res) => {
     res.send("")
+})
+
+app.get("/api/friend/:name", (req, res) => {
+    console.log(req.params)
+})
+
+app.get("/api/email/:id", (req, res) => {
+    User.findOne({email: req.params.id})
+        .then(result => {
+            res.send(result === null)
+        })
+        .catch(err => {
+            console.error(err)
+        })
 })
 
 app.post("/api/topic", (req, res) => {

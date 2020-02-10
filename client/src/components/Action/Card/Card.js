@@ -59,7 +59,7 @@ const CardIconBox = styled.div`
 
 const ArrowWrapper = styled.div`
     position: absolute;
-    top: 0px;
+    top: -10px;
     right: 0px;
 
     & > div {

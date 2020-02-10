@@ -7,6 +7,9 @@ const SearchBox = styled(Link)`
     & > div {
         width: auto;
         padding: 10px 20px;
+        & > span {
+            margin-right: 3px;
+        }
     }
 `
 
@@ -18,7 +21,7 @@ class New extends Component {
         return (
             <SearchBox to={url} onClick={() => handleClick(value)}>
                 <div>
-                    {children}{text[0]}<span>"{value}"</span>{text[1]}
+                    {children}<span/>{text[0]}"{value}"{text[1]}
                 </div>
             </SearchBox>
         )

@@ -42,6 +42,7 @@ const Name = styled(Link)`
     display: flex;
     & > p {
         margin: 0px 2px;
+        white-space: nowrap;
     }
 `
 
@@ -59,7 +60,7 @@ class Profile extends Component {
     render() {
 
         const flag = this.props.auth.loggedIn
-        const { photo, name } = this.props.auth.info
+        const { photo, userName } = this.props.auth.info
 
         return (
             <ProfileArea>
@@ -77,8 +78,7 @@ class Profile extends Component {
                     {   flag
                         ? 
                         <Name to="/profile">
-                            <p>{name.familyName}</p>
-                            <p>{name.givenName}</p>
+                            <p>{userName}</p>
                         </Name>
                         :
                         <LogInButton onClick={(e) => this.props.click(e)}>

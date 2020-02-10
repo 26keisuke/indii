@@ -93,6 +93,8 @@ class CreatePost extends Component {
                         setStep={this.setStep}
                         max={6}
                         />
+            default:
+                return;
         }
     }
 

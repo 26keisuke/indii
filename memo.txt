@@ -1,0 +1,45 @@
+APIメモとその他のデザインに関すること
+
+===========================
+============JS=============
+===========================
+
+<React ComponentのNaming Convention[1][2]>
+InterfaceとControllerとComponentに分けてみる（左からユーザーに近い）
+
+Controller
+・Component同士のcoordinationを助ける
+・変数（screen上の名前や画像を変えられるようにする）
+・継承されないことが前提（Reusableなのはcomponentのみ）
+
+<Single Responsibility Principle[3]>
+
+<Stateless Components[3]>
+Stateはparentsで管理し、Componentsにpropとして渡すのがBest practice
+
+
+<Logic>
+
+Logic should not be handled locally
+
+[1]https://hackernoon.com/structuring-projects-and-naming-components-in-react-1261b6e18d76
+[2]https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0
+[3]https://engineering.sift.com/best-practices-for-building-large-react-applications/
+
+===========================
+============CSS============
+===========================
+
+<Styled Componentを使う>
+
+<CSSのNaming Convention>
+BEM(Block Element Modifier)を用いる
+
+<ClassNames>
+
+===========================
+============DB=============
+===========================
+
+<Projetion>
+Always use projection

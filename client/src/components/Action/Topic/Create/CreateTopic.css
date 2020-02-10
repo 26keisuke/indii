@@ -195,14 +195,14 @@
     display: flex;
     align-items: center;
 }
-
+/* 
 .topic-form-area-top-revert{
     margin-left: 185px;
     text-decoration: underline;
     color: #747474;
     cursor: pointer;
     white-space: nowrap;
-}
+} */
 
 .topic-form-area-top-wrapper{
     position: relative;
@@ -355,14 +355,14 @@
 
 /*== thumb preview ==*/
 
-.thumb-preview{
+/* .thumb-preview{
     display: flex;
     flex-direction: row;
     justify-content: center;
     width: 444px;
-}
+} */
 
-.thumb-preview-title{
+/* .thumb-preview-title{
     margin-bottom:10px;
     color: #585858;
     font-size: 10px;
@@ -373,8 +373,8 @@
     position: relative;
     margin: 0px 15px;
     margin-top: 25px;
-}
-
+} */
+/* 
 .thumb-preview-mobile-fake{
     position: absolute;
     width: 285px;
@@ -402,7 +402,7 @@
     height: 120px;
     border: 1px solid black;
     border-style: dashed;
-    border-width: 2px;
+    border-width: 1px;
 }
 
 .thumb-preview-web{
@@ -410,7 +410,7 @@
     height: 120px;
     border: 1px solid #d2d2d2;
     object-fit: contain;
-}
+} */
 
 /*== tags ==*/
 
@@ -428,6 +428,7 @@
 
 .topic-form-tags-tags {
     padding: 2px;
+    height: 15px;
     border: 0.5px solid #636480;
     border-radius: 3px;
     padding-right: 15px;
@@ -441,13 +442,13 @@
 .topic-form-tags-icon{
     position: absolute;
     pointer-events: none;
-    top: 3px;
+    top: 4px;
     right: 13px;
 }
 
 /*-= friends =*/
 
-.topic-form-friends{
+/* .topic-form-friends{
     width: 420px;
     border: 0.5px solid #d2d2d2;
     height: 135px;
@@ -462,9 +463,9 @@
     margin-left: 9px;
     margin-top: 20px;
     color: #333333;
-}
+} */
 
-.topic-form-friends-wrapper{
+/* .topic-form-friends-wrapper{
     position: relative;
     width: 50px;
     height: 50px;
@@ -480,9 +481,9 @@
     background-color: white;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     border-radius: 100%;
-}
+} */
 
-.topic-form-friends-close-icon{
+/* .topic-form-friends-close-icon{
     margin-left: 2.5px;
     margin-top: 1.5px;
     transform: scale(1.2);
@@ -495,9 +496,9 @@
     border-radius: 5px;
     object-fit: cover;
     cursor: pointer;
-}
+} */
 
-.topic-form-friends-search{
+/* .topic-form-friends-search{
     width: auto;
     padding: 0px 20px;
 }
@@ -516,10 +517,10 @@
     width: 34px;
     height: 34px;
     border: 1px solid black;
-    margin-right: 10px;
-}
+    margin-right: 10px; */
+/* } */
 
-.topic-form-friends-name{
+/* .topic-form-friends-name{
     width: 160px;
     font-size: 12px;
 }
@@ -528,9 +529,9 @@
     font-size: 11px;
     width: 140px;
     color: #606060;
-}
+} */
 
-.topic-form-friends-check{
+/* .topic-form-friends-check{
     border: 0.5px solid #a5a5a5;
     width: 30px;
     height: 30px;
@@ -552,12 +553,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
+} */
 
-.topic-form-friends-check-icon{
+/* .topic-form-friends-check-icon{
     transform: scale(1.3);
     color: #4CD964;
-}
+} */
 
 .topic-form-friends-none{
     font-size: 11px;
@@ -613,22 +614,22 @@
     margin-bottom: 30px;
 }
 
-.topic-form-config-text{
+/* .topic-form-config-text{
     margin-top: 15px;
     margin-left: 9px;
     margin-bottom: 7px;
     font-size: 14px;
-}
+} */
 
-.topic-form-config-box{
+/* .topic-form-config-box{
     display: flex;
     flex-direction: row;
     width: 433px;
     align-items: center;
     justify-content: space-between;
-}
+} */
 
-.topic-form-config-toggle{
+/* .topic-form-config-toggle{
     position:absolute;
     top: -10px;
     right: 3px; 
@@ -640,9 +641,9 @@
     border: none;
     border-radius: 100%;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
-}
+} */
 
-@keyframes left-to-right{
+/* @keyframes left-to-right{
     0% {
         right: 20px;
     }
@@ -658,9 +659,9 @@
     100% {
         right: 20px;
     }
-}
+} */
 
-.config-left-to-right{
+/* .config-left-to-right{
     animation-name: left-to-right;
     animation-duration: 300ms;
     animation-fill-mode: forwards;
@@ -671,7 +672,7 @@
     animation-duration: 300ms;
     animation-fill-mode: forwards;
     background-color: #d2d2d2 !important;
-}
+} */
 
 .topic-form-config-toggle-on{
     position:absolute;
@@ -701,17 +702,17 @@
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
 }
 
-.topic-form-config-layer{
+/* .topic-form-config-layer{
     border: 1px solid #d2d2d2;
     width: 48px;
     height: 30px;
     cursor: pointer;
     border-radius: 50px;
-}
+} */
 
-.topic-form-config-button{
+/* .topic-form-config-button{
     position: relative;
-}
+} */
 
 @keyframes topicShow{
     0%{opacity: 0; padding-left: 45%}

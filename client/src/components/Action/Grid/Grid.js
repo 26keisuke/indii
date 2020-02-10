@@ -13,6 +13,7 @@ export const GridWrapper = styled.div`
 
 const GridBox = styled.div`
     padding: 35px 50px;
+    padding-right: 10px;
     position: relative;
     display: flex;
     flex-direction: column;

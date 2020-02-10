@@ -1,4 +1,8 @@
 import React, { Component } from "react"
+import styled from "styled-components"
+
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, ConfigUnderline } from "../../Element/Box"
+import ToggleBtn from "../../../Util/ToggleBtn"
 
 class CreateConfigurationPost extends Component {
 
@@ -7,7 +11,6 @@ class CreateConfigurationPost extends Component {
         this.state = {
             editWo: {   // edit without
                 on: true, 
-                button: "topic-form-config-toggle"
             },
         }
     }
@@ -24,55 +27,80 @@ class CreateConfigurationPost extends Component {
     }
 
     toggleButton = (configName) => {
-        if(this.state[configName].on){
-            this.setState({
-                [configName]: {
-                    button: "topic-form-config-toggle" + " " + "config-right-to-left",
-                    on: false
-                }
-            })
-        } else {
-            this.setState({
-                [configName]: {
-                    button: "topic-form-config-toggle" + " " + "config-left-to-right",
-                    on: true
-                }
-            })
-        }
+        this.setState({
+            [configName]: {
+                on: !this.state[configName].on
+            }
+        })
     }
 
     render() {
         return (
-            <div className="topic-form-area">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
-                    <div className="topic-form-area-top"> 
-                        <p className="topic-form-area-top-title">3. 初期設定</p>
+            <Box>
+                <BoxTransition back={this.props.back} transition={true}>
+                    <div> 
+                        <p>3. 初期設定</p>
                     </div> 
 
-                    <form onSubmit={this.formSubmit} className="topic-form-area-middle">
-                        <p className="topic-form-area-input-title">承認無しに変更を許可する</p>
-                        <div className="topic-form-config-box">
-                            <p className="topic-form-config-text">{this.state.editWo.on ? "許可" : "許可しない"}</p>
-                            <div className="topic-form-config-button" onClick={() => this.toggleButton("editWo")}>
-                                <input type="button" className={this.state.editWo.button}/>
-                                <div className="topic-form-config-layer"/>
+                    <form onSubmit={this.formSubmit}>
+                        <ConfigInput>承認無しに変更を許可する</ConfigInput>
+                        <ConfigBox>
+                            <div>
+                                <p>{this.state.editWo.on ? "許可" : "許可しない"}</p>
+                                <span>{this.state.editWo.on && "(推奨)"}</span>
                             </div>
-                        </div>
-                        <div className="topic-form-config-input"/>
+                            <ToggleBtn
+                                on={this.state.editWo.on}
+                                handleClick={() => this.toggleButton("editWo")}
+                            />
+                        </ConfigBox>
+                        <ConfigUnderline/>
                     </form>
 
 
-                    <div className="topic-form-button">
-                        <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>
-                        <button onClick={this.handleForward} className="topic-form-button-right">
-                            次へ進む
-                        </button>
-                    </div>
-                </div>
-            </div>
+                    <ButtonWrapper>
+                        <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
+                        <ButtonRight onClick={this.handleForward}>次へ進む</ButtonRight>
+                    </ButtonWrapper>
+                </BoxTransition>
+            </Box>
         )
     }
-
 }
+
+
+const ConfigBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    width: 433px;
+    align-items: center;
+    justify-content: space-between;
+
+    & > div:nth-child(1) {
+
+        display: flex;
+        align-items: center;
+
+        & > p {
+            margin-top: 15px;
+            margin-left: 9px;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        & > span {
+            color: #666666;
+            font-size: 10px;
+            margin-top: 10px;
+            margin-left: 7px;
+        }
+    }
+`
+
+
+const ConfigInput = styled.p`
+    color: #333333 !important;
+    font-size: 11px !important;
+`
 
 export default CreateConfigurationPost

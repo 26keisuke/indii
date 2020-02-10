@@ -85,6 +85,8 @@ class EditPost extends Component {
                         setStep={this.setStep}
                         max={6}
                         />
+            default:
+                return;
         }
     }
 

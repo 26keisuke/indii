@@ -32,5 +32,3 @@ export const ADD_COLUMN = "ADD_COLUMN"
 
 export const SHOW_LOGIN = "SHOW_LOGIN"
 export const HIDE_LOGIN = "HIDE_LOGIN"
-
-// Hasnt implemented yet

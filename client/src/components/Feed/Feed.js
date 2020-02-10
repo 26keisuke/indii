@@ -4,8 +4,8 @@ import styled from "styled-components"
 import sample from "../../images/sample0.jpg"
 import sample1 from "../../images/sample1.png";
 
-import PostFeed from "./Post/PostFeed";
-import PeopleFeed from "./People/PeopleFeed";
+import PostFeed from "./Post/Post";
+import People from "./People/People";
 import Post from "../Post/Element/Element"
 
 import { Space } from "../Theme"
@@ -78,6 +78,7 @@ const PeopleWrapper = styled.div`
 
 const PostWrapper = styled.div`
     border-left: 1px solid #d2d2d2;
+    border-right: 1px solid #d2d2d2;
     border-bottom: 1px solid #d2d2d2;
 `
 
@@ -102,21 +103,21 @@ class Feed extends Component {
                         <p>データベース関連のライター</p>
                     </FeedInsideHeader>
                     <PeopleWrapper>
-                        <PeopleFeed 
+                        <People 
                             id={"123"}
                             img={sample} 
                             name={"飯塚　啓介"} 
                             job={"Chief株式会社 CEO"} 
                             intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなどから発せられる大容量のデータ（e.g., ログやイベント）を高スループット/低レイテンシに収集/配信することを目的に開発されている．"}
                         />
-                        <PeopleFeed 
+                        <People 
                             id={"123"}
                             img={sample} 
                             name={"飯塚　啓介"} 
                             job={"Chief株式会社 CEO"} 
                             intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなどから発せられる大容量のデータ（e.g., ログやイベント）を高スループット/低レイテンシに収集/配信することを目的に開発されている．"}
                         />
-                        <PeopleFeed
+                        <People
                             id={"123"} 
                             img={sample} 
                             name={"飯塚　啓介"} 

@@ -1,4 +1,6 @@
 import React, { Component } from "react"
+import styled from "styled-components"
+import axios from "axios"
 
 import Autosuggest from "react-autosuggest";
 import { IoMdClose } from "react-icons/io"
@@ -6,38 +8,9 @@ import { MdCheck } from "react-icons/md"
 
 import Warning from "../../../Header/Search/Warning/Warning"
 
-const topics = [
-    {
-        id: "12323",
-        imgUrl: "",
-        name: "飯塚啓介です。",
-        job: "Chief株式会社 CEO"
-    },
-    {   
-        id: "123123",
-        imgUrl: "",
-        name: "飯塚啓介",
-        job: "Chief株式会社 CEO"
-    },
-    {
-        id: "12123123",
-        imgUrl: "",
-        name: "飯塚啓介なのか",
-        job: "Chief株式会社 CEO"
-    },
-    {
-        id: "12333123",
-        imgUrl: "",
-        name: "飯塚啓介でした",
-        job: "Chief株式会社 CEO"
-    },
-    {
-        id: "1212343123",
-        imgUrl: "",
-        name: "飯塚啓介だと思います。",
-        job: "Chief株式会社 CEO"
-    }
-]
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../../Element/Box"
+
+import friends from "../../../__Mock__/data/friend"
 
 const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -49,7 +22,7 @@ const getSuggestions = value => {
   }
 
   const regex = new RegExp('^' + escapedValue, 'i');
-  const suggestions = topics.filter(topic => regex.test(topic.name));
+  const suggestions = friends.filter(friend => regex.test(friend.name));
   
   if (suggestions.length === 0) {
     return [
@@ -90,9 +63,7 @@ class CreateFriendsTopic extends Component {
 
     renderSuggestion = suggestion => {
 
-        if (suggestion.added) {
-            return false;
-        } 
+        if (suggestion.added) { return false; } 
 
         // WARNING: DONT USE this.state.suggestion since this is stale value. Use (suggestion)
         if(this.state.friends.length > 0　&& this.state.suggestions.length > 0){
@@ -100,16 +71,16 @@ class CreateFriendsTopic extends Component {
         }
 
         return (
-            <div key={suggestion.id} className="topic-form-friends-search-wrapper">
-                <img className="topic-form-friends-search-img" src={suggestion.imgUrl}/>
-                <div className="topic-form-friends-search">
-                    <p className="topic-form-friends-name">{suggestion.name}</p>
+            <FriendSearch key={suggestion.id}　checked={flag}>
+                <img src={suggestion.imgUrl} alt={"友達検索結果の参考画像"}/>
+                <div>
+                    <p>{suggestion.name}</p>
                 </div>
-                <p className="topic-form-friends-job">{suggestion.job}</p>
-                <div className={ flag ? "topic-form-friends-check-green" : "topic-form-friends-check"}>
-                    <MdCheck className={ flag ? "topic-form-friends-check-icon" : "topic-form-friends-check-icon hide"}/>
+                <p>{suggestion.job}</p>
+                <div>
+                    <CheckIcon checked={flag}/>
                 </div>
-            </div>
+            </FriendSearch>
         )
     };
 
@@ -118,17 +89,13 @@ class CreateFriendsTopic extends Component {
             case "limit":
                 return (
                     <Warning>
-                        <p>
-                            招待できるフォロワーの上限は{this.props.max}人までです。
-                        </p>
+                        <p>招待できるフォロワーの上限は{this.props.max}人までです。</p>
                     </Warning>
                 )
             case "sameVal":
                 return (
                     <Warning>
-                        <p>
-                            既に同じ招待リストに追加されています。
-                        </p>
+                        <p>既に同じ招待リストに追加されています。</p>
                     </Warning>
                 )
             default:
@@ -137,6 +104,14 @@ class CreateFriendsTopic extends Component {
     }
 
     onSuggestionsFetchRequested = ({ value }) => {
+
+        axios.get(`/api/friend/${value}`)
+        .then(res => {
+            console.log(res)
+        })
+
+
+
         this.setState({
           suggestions: getSuggestions(value)
         });
@@ -171,7 +146,7 @@ class CreateFriendsTopic extends Component {
 
     // simply checking for lowercase duplicates might not be the best idea.
     // some terms may have different meanings based on capitalization.
-    // Also this function is reaking the immutability constraint!!
+    // Also this function is breaking the immutability constraint!!
     deleteFriend = (e) => {
         const html = e.target.innerHTML;
         const res = this.state.tags.filter((tag) => 
@@ -187,7 +162,7 @@ class CreateFriendsTopic extends Component {
         const friends = this.state.friends;
         if(suggestion){
             friends.forEach(function(friend){
-                if(suggestion.id == friend.id){
+                if(suggestion.id === friend.id){
                     isDuplicate = true;
                 } ;
             });
@@ -221,12 +196,16 @@ class CreateFriendsTopic extends Component {
 
     renderFriends = () => {
         const target = this.state.friends.map(friend => 
-            <div key={friend.id} className="topic-form-friends-wrapper">
-                <div className="topic-form-friends-close">
-                    <IoMdClose onClick={() => this.deleteFromList(friend.id)} className="topic-form-friends-close-icon"/>
+            <FriendElement key={friend.id}>
+                <div>
+                    <CloseIcon onClick={() => this.deleteFromList(friend.id)}/>
                 </div>
-                <img src={friend.imgUrl} onClick={() => this.deleteFromList(friend.id)} className="topic-form-friends-person"/>
-            </div>
+                <img 
+                    src={friend.imgUrl} 
+                    onClick={() => this.deleteFromList(friend.id)} 
+                    alt={"選んだ友達の画像"}
+                />
+            </FriendElement>
         );
         return target;
     };
@@ -239,18 +218,16 @@ class CreateFriendsTopic extends Component {
             onChange: this.onChange,
         };
 
-        const max = this.props.max
-
         return (
-            <div className="topic-form-area y-scrollable">
-                <div className={this.props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
-                    <div className="topic-form-area-top"> 
-                        {this.state.friends.length < max && this.state.flag ? this.renderWarning("sameVal"): ""}
+            <Box>
+                <BoxTransition back={this.props.back} transition={true}>
+                    <div> 
+                        {this.state.friends.length < this.props.max && this.state.flag ? this.renderWarning("sameVal"): ""}
                         {this.state.limit ? this.renderWarning("limit") : ""}
-                        <p className="topic-form-area-top-title">4. フォロワーを招待<span>*任意</span></p>
+                        <p>4. フォロワーを招待<span>*任意</span></p>
                     </div> 
-                    <form onSubmit={this.formSubmit} className="topic-form-area-middle">
-                        <p className="topic-form-area-input-title">フォロワーを検索</p>
+                    <form onSubmit={this.formSubmit}>
+                        <p>フォロワーを検索</p>
                         <Autosuggest
                             className="topic-form-area-search" 
                             suggestions={this.state.suggestions}
@@ -262,24 +239,121 @@ class CreateFriendsTopic extends Component {
                             inputProps={inputProps} 
                         />
                     </form>
-                    <div className="topic-form-button">
-                        <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>
-                        <button 
-                            className="topic-form-button-right" 
-                            onClick={this.handleForward}
-                        >
-                                次へ進む
-                        </button>
-                    </div>
-                    <p className="topic-form-friends-title">招待リスト</p>
-                    <div className="topic-form-friends">
+                    <ButtonWrapper>
+                        <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
+                        <ButtonRight onClick={this.handleForward}>次へ進む</ButtonRight>
+                    </ButtonWrapper>
+                    <FriendTitle>招待リスト</FriendTitle>
+                    <FriendBox>
                         {this.renderFriends()}
-                    </div>
+                    </FriendBox>
                     <div className="space"/>
-                </div>
-            </div>
+                </BoxTransition>
+            </Box>
         )
     }
 }
+
+const FriendTitle = styled.div`
+    margin-left: 9px;
+    margin-top: 20px;
+    color: #333333;
+`
+
+const FriendBox = styled.div`
+    width: 420px;
+    border-top: 0.5px solid #d2d2d2;
+    height: 135px;
+    padding: 15px;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+`
+
+const FriendElement = styled.div`
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+
+    & > div {
+        position: absolute;
+        right: 1px;
+        top: -7px;
+        width:16px;
+        height:16px;
+        background-color: white;
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 100%;
+    }
+
+    & > img {
+        width: 42px;
+        height: 42px;
+        border-radius: 5px;
+        object-fit: cover;
+        cursor: pointer;
+    }
+`
+
+const CloseIcon = styled(IoMdClose)`
+    margin-left: 2.5px;
+    margin-top: 1.5px;
+    transform: scale(1.2);
+    cursor: pointer;
+`
+
+const FriendSearch = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    position: relative;
+
+    & > img {
+        width: 34px;
+        height: 34px;
+        border: 1px solid black;
+        margin-right: 10px;
+    }
+
+    & > div:nth-child(2) {
+        width: auto;
+        padding: 0px 20px;
+
+        & > p {
+            width: 160px;
+            font-size: 12px;
+        }
+    }
+
+    & > p {
+        font-size: 11px;
+        width: 140px;
+        color: #606060;
+    }
+
+    & > div:nth-child(4) {
+        border: ${props => props.checked ? "0.5px solid #4CD964" : "0.5px solid #a5a5a5"};
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        right:20px;
+        border-radius: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+`
+
+const CheckIcon = styled(MdCheck)`
+    transform: scale(1.3);
+    color: #4CD964;
+    opacity: ${props => props.checked ? 1 : 0};
+    
+`
 
 export default CreateFriendsTopic;

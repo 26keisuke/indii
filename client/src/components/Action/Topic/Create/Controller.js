@@ -8,13 +8,15 @@ import Select from "../../Controller/Select"
 import topics from "../../../__Mock__/data/topic"
 
 import ActionProgress from "../../Progress/Progress"
-import ActionImage from "../../../ActionImage"
+import Image from "../../Controller/Image"
 import Tag from "../../Tag/Tag"
 
 import "./CreateTopic.css";
 import Back from "../../../Util/Back";
 
 import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
+
+import indii from "../../../../images/indii.png"
 
 class CreateTopic extends Component {
 
@@ -56,9 +58,10 @@ class CreateTopic extends Component {
                             setStep={this.setStep}
                         />
             case 1:
-                return <ActionImage
+                return <Image
                         back={this.state.back} 
                         setBackward={this.setBackward} 
+                        initialVal={indii}
                         storage="createTopicImage"
                         setImage={this.setImage} 
                         setStep={this.setStep}
@@ -90,6 +93,8 @@ class CreateTopic extends Component {
                         friends={this.state.friends}
                         setStep={this.setStep}
                         />
+            default:
+                return;
         }
     }
 

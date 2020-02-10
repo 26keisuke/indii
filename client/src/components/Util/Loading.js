@@ -18,7 +18,7 @@ const LoadingElement = styled.div`
     position: absolute;
     left: 50%;
     top: 40%;
-    z-index: 10;
+    z-index: 100;
 `
 
 class Loading extends Component {

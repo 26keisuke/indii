@@ -23,18 +23,6 @@ class CreatePreviewTopic extends Component {
         this.props.setBackward(false);
         this.props.isFetching();
         this.props.enableGray();
-
-        console.log(this.props.config, this.props.selectedTopic, this.props.postName)
-        
-        // axios.post("/api/post", {
-        //     img: this.props.img.preview,
-        //     tags: this.props.tags,
-        //     topicName: this.props.topicName,
-        // })
-        // .then(res => {
-        //     this.onExit()
-        // })
-
     };
 
     onExit = () => {
@@ -72,7 +60,7 @@ class CreatePreviewTopic extends Component {
                         <PreviewTitle>{this.props.postName}</PreviewTitle>
                         <PreviewUnderline/>
                         
-                        <form className="topic-form-area-middle">
+                        <form>
                             <PreviewSection>
                                 <div/>
                                 <p>承認無しに変更を許可する</p>

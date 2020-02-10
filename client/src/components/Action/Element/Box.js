@@ -26,7 +26,7 @@ export const Box = styled.div`
         overflow-y: scroll;
         overflow-x: hidden;
         &::-webkit-scrollbar {
-            height: 0px;
+            width: 0px !important;
         }
     `};
 `
@@ -63,11 +63,11 @@ export const BoxTransition = styled.div`
             margin-bottom: 15px;
             white-space: nowrap;
 
-            /* & > span {
+            & > span {
                 color: #333333;
                 font-size: 9px;
                 margin-left: 20px;
-            } */
+            }
         }
     }
 
@@ -208,6 +208,11 @@ export const ButtonRight = styled.button`
     color: #ffffff;
     font-family: "Gennokaku Gothic";
     outline:0;
+
+    ${props => props.disabled && css`
+        opacity: 0.2;
+        pointer-events: none;
+    `}
 `
 
 export const PreviewSection = styled.div`
@@ -402,7 +407,7 @@ export const FriendNone = styled.p`
 `
 
 export const TagElement = styled.p`
-    padding: 5px;
+    padding: 2px 5px;
     border: 0.5px solid #646380;
     border-radius: 3px;
     margin-right: 10px;

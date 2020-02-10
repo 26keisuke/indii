@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
+import { IoIosArrowRoundBack } from "react-icons/io"
+
 import back from "../../images/back-arrow.png"
 
 const BackNormalElement = styled(Link)`
@@ -13,10 +15,34 @@ const BackNormalElement = styled(Link)`
     left: 11px;
     cursor: pointer;
 
-    & > img {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
+    & > div {
+
+        position:relative;
+
+        & > p {
+            position: absolute;
+            right: 1px;
+            top: -9px;
+            width: 30px;
+            height: 30px;
+            display: block;
+            cursor: pointer;
+
+            &::before {
+                content: "";
+                display: none;
+                background-color: #1C1C1C;
+                opacity: 0.1;
+                border-radius: 100%;
+                width: 30px;
+                height: 30px;
+            }
+
+            &:hover::before {
+                display: block;
+            }
+
+        }
     }
 
     & > p {
@@ -34,10 +60,34 @@ const BackGivenElement = styled.div`
     left: 11px;
     cursor: pointer;
 
-    & > img {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
+    & > div {
+
+        position:relative;
+
+        & > p {
+            position: absolute;
+            right: 1px;
+            top: -9px;
+            width: 30px;
+            height: 30px;
+            display: block;
+            cursor: pointer;
+
+            &::before {
+                content: "";
+                display: none;
+                background-color: #1C1C1C;
+                opacity: 0.1;
+                border-radius: 100%;
+                width: 30px;
+                height: 30px;
+            }
+
+            &:hover::before {
+                display: block;
+            }
+
+        }
     }
 
     & > p {
@@ -46,12 +96,21 @@ const BackGivenElement = styled.div`
     }
 `
 
+const BackIcon = styled(IoIosArrowRoundBack)`
+    transform: scale(2.8, 1.7);
+    margin-right: 10px;
+    pointer-events: none;
+`
+
 class Back extends Component {
 
     renderNormal = () => {
         return (
             <BackNormalElement to={this.props.url}>
-                <img src={back} alt={"矢印戻るボタン"}/>
+                <div>
+                    <p></p>
+                    <BackIcon alt={"矢印戻るボタン"}/>
+                </div>
                 <p>{this.props.name}</p>
             </BackNormalElement>
         )
@@ -60,7 +119,10 @@ class Back extends Component {
     renderGiven = () => {
         return (
             <BackGivenElement onClick={this.props.back}>
-                <img src={back} alt={"矢印戻るボタン"}/>
+                <div>
+                    <p></p>
+                    <BackIcon alt={"矢印戻るボタン"}/>
+                </div>
                 <p>{this.props.name}</p>
             </BackGivenElement>
         )

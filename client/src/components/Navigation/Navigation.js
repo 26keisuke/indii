@@ -7,10 +7,6 @@ import List from "./List/List"
 
 class Navigation extends Component {
 
-    constructor(props) {
-        super(props)
-    }
-
     handleClick = (id) => {
         this.props.resetCategory()
         this.props.setCategory(id)

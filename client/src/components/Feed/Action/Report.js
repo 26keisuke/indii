@@ -67,27 +67,51 @@ const ReportBox = styled.form`
 `
 
 class Report extends Component {
+
+    constructor(props) {
+        super(props) 
+        this.state = {
+            problem0: false,
+            problem1: false,
+            problem2: false,
+            problem3: false,
+            problem4: false,
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState !== this.state) {
+            this.props.handleChange(this.state)
+        }
+    }
+
+    toggleChange = (e, subject) => {
+        this.setState({
+            [subject]: e.target.checked,
+        })
+    }
+
     render () {
         return (
             <ReportBox>
                 <div>
-                    <input onChange={(e) => this.props.handleChange(e, "problem0")} type="checkbox" id="0" name="p0"/>
+                    <input onChange={(e) => this.toggleChange(e, "problem0")} checked={this.state.problem0} type="checkbox" id="0" name="p0"/>
                     <label htmlFor="0">理解するのが難しいです。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.props.handleChange(e, "problem1")} type="checkbox" id="1" name="p1"/>
+                    <input onChange={(e) => this.toggleChange(e, "problem1")} checked={this.state.problem1} type="checkbox" id="1" name="p1"/>
                     <label htmlFor="1">書かれている内容が不適切です。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.props.handleChange(e, "problem2")} type="checkbox" id="2" name="p2"/>
+                    <input onChange={(e) => this.toggleChange(e, "problem2")} checked={this.state.problem2} type="checkbox" id="2" name="p2"/>
                     <label htmlFor="2">書かれている内容が間違っています。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.props.handleChange(e, "problem3")} type="checkbox" id="3" name="p3"/>
+                    <input onChange={(e) => this.toggleChange(e, "problem3")} checked={this.state.problem3} type="checkbox" id="3" name="p3"/>
                     <label htmlFor="3">タイトルを変えるべきです。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.props.handleChange(e, "problem4")} type="checkbox" id="4" name="p4"/>
+                    <input onChange={(e) => this.toggleChange(e, "problem4")} checked={this.state.problem4}type="checkbox" id="4" name="p4"/>
                     <label htmlFor="4">同じようなポストが既にあります。</label>
                 </div>
             </ReportBox>

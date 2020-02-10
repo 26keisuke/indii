@@ -17,7 +17,7 @@ import good from "../../../images/good.png";
 import nerd from "../../../images/nerd.png";
 import hmm from "../../../images/hmm.png";
 
-import "./PostFeed.css";
+import "./Post.css";
 
 import * as actions from "../../../actions";
 
@@ -27,7 +27,7 @@ const message = [
     "さんが、ポストにスターを付けました。" ,
 ]
 
-class PostFeed extends Component {
+class Post extends Component {
 
     constructor(props) {
         super(props)
@@ -88,7 +88,7 @@ class PostFeed extends Component {
         e.preventDefault()
         this.setState({showMore: false})
         this.setState({showEmoji: false})
-        if (this.state.star == star) {
+        if (this.state.star === star) {
             this.props.starOn(this.props.id)
             this.setState({
                 star: star_pressed
@@ -135,6 +135,8 @@ class PostFeed extends Component {
                 return message[1]
             case "STAR_POST":
                 return message[2]
+            default:
+                return;
         }
     }
 
@@ -254,7 +256,7 @@ const PostBox = styled(Link)`
         background-color: rgba(233, 233, 238, 0.25);    
     }
 `
-
+// 詰め込みすぎ
 const PostTop = styled.div`
     display: flex;
     flex-direction: row;
@@ -524,4 +526,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, actions)(PostFeed);
+export default connect(mapStateToProps, actions)(Post);

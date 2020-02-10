@@ -10,7 +10,7 @@ import { USER_IS_LOGGEDIN,
          IS_FETCHING, END_FETCHING,
          ENABLE_GRAY, DISABLE_GRAY, 
          UPDATE_MESSAGE, RESET_MESSAGE,
-         SHOW_CONFIRMATION, HIDE_CONFIRMATION,
+         SHOW_CONFIRMATION, HIDE_CONFIRMATION, CONFIRM_NEXT,
          ADD_COLUMN, 
          SHOW_LOGIN, HIDE_LOGIN, } from "../actions/types"
 
@@ -48,6 +48,8 @@ const initialState = {
         showForm: false,
         loggedIn: false,
         info: {
+            userName: "",
+            email: "",
             name: {
                 familyName: "",
                 givenName: "",
@@ -76,7 +78,7 @@ const initialState = {
             title: "",
             message: "",
             buttonMessage: "",
-            html: ""
+            next: "",
         },
     },
 }
@@ -143,7 +145,8 @@ function updateReducer(state=initialState.update, action){
                     title: action.payload.title,
                     caution: action.payload.caution,
                     message: action.payload.message,
-                    buttonMessage: action.payload.buttonMessage
+                    buttonMessage: action.payload.buttonMessage,
+                    next: action.payload.next,
                 }
             }
         case HIDE_CONFIRMATION:
@@ -157,7 +160,7 @@ function updateReducer(state=initialState.update, action){
                     caution: "",
                     message: "",
                     buttonMessage: "",
-                    html: ""
+                    next: "",
                 }
             }
         default:
@@ -256,15 +259,20 @@ function authReducer(state=initialState.auth, action) {
     switch(action.type) {
         case USER_IS_LOGGEDIN:
             if(action.payload) {
+
+                const { name, photo, email, userName } = action.payload
+
                 return {
                     ...state,
                     loggedIn: true,
                     info: {
+                        email: email,
                         name: {
-                            familyName: action.payload.name.familyName,
-                            givenName: action.payload.name.givenName,
+                            familyName: name ? name.familyName : "",
+                            givenName: name ? name.givenName : "",
                         },
-                        photo: action.payload.photo,
+                        userName: userName,
+                        photo: photo,
                     }
                 }
             }

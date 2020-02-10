@@ -8,7 +8,7 @@
 
 import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
-import { Link, withRouter } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 
 import * as actions from "../../../actions"
@@ -177,6 +177,7 @@ class Search extends Component {
                 <img 
                     src={this.props.search.onSearch ? searchClick : search}  
                     className="search-icon"
+                    alt={"検索バーにある検索アイコン"}
                 />
                 <Autosuggest
                     className="search-input" 

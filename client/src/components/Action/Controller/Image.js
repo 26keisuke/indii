@@ -1,10 +1,15 @@
+//全てに大してdefault valueを適用したらfakeの点線のやつはいらなくなる
+
 import React, {useState, useMemo, useEffect} from "react"
 import axios from "axios"
 import Dropzone, { useDropzone } from "react-dropzone"
+import styled, { css } from "styled-components"
+
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../Element/Box"
 
 // For uploading on Cloudinary
-const CLOUDINARY_UPLOAD_PRESET = 'glgcswc0';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dgc4swpmv/upload';
+// const CLOUDINARY_UPLOAD_PRESET = 'glgcswc0';
+// const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dgc4swpmv/upload';
 
 // Styling
 const baseStyle = {
@@ -33,12 +38,8 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
-// Props
-// back, setBackward, initialVal, storage, setImage, setStep, warning
-
 function ActionImage(props) {
 
-    const [warning, setWarning] = useState("");
     const [file, setFile] = useState({preview: localStorage.getItem(props.storage)} || {});
 
     const {
@@ -107,21 +108,6 @@ function ActionImage(props) {
         isDragReject
     ]);
 
-
-    const renderWarning = ()  => {
-        if(warning){
-            return (
-                <div className="topic-form-area-top-warning">
-                    <div className="topic-form-area-top-warning-circle"/>
-                    <p>
-                        {warning}
-                    </p>
-                </div>
-            );
-        };
-        return false;
-    };
-
     const handleBack = () => {
         props.setBackward(true);
         props.setStep(0);
@@ -130,7 +116,7 @@ function ActionImage(props) {
     const handleRevert = () => {
         setFile({
             ...file,
-            preview: ""
+            preview: "null"
         })
     }
 
@@ -147,52 +133,128 @@ function ActionImage(props) {
         }
     };
 
+    const display = ((file.preview === "null") || (file.preview === "")) ? props.initialVal : file.preview
+
     return (
-        <div className="topic-form-area y-scrollable">
-            <div className={props.back ? "topic-form-area-wrapper-enter" : "topic-form-area-wrapper-show"}>
-                <div className="topic-form-area-top"> 
-                    {renderWarning()}
-                    <p className="topic-form-area-top-title">2. アイコンと背景用の写真を選択</p>
+        <Box>
+            <BoxTransition back={props.back} transition={true}>
+                <div> 
+                    <p>2. アイコンと背景用の写真を選択</p>
                     {   props.initialVal
-                        ? <p　onClick={handleRevert} className="topic-form-area-top-revert">元に戻す</p>
+                        ? <RevertBtn　onClick={handleRevert}>元に戻す</RevertBtn>
                         : ""
                     }
                 </div> 
-                <section className="container">
+                <div>
                     <div {...getRootProps({style})}>
                         <input {...getInputProps()} />
                         <p>このボックスに画像をドラッグするか、ボックスをクリックしてください</p>
                         <em>(*.jpegと*.pngのみ)</em>
                     </div>
                     <div>
-                    <div className="thumb-preview">
-                        <div className="thumb-preview-wrapper">
-                            <p className="thumb-preview-title">モバイルでの表示</p>
-                            <div className={ !file.preview && !props.initialVal ? "thumb-preview-mobile-fake" : "zero-opacity" }/>
-                            <img src={file.preview || props.initialVal} className={ !file.preview && !props.initialVal ? "thumb-preview-mobile zero-opacity" : "thumb-preview-mobile"}/>
-                        </div>
-                        <div className="thumb-preview-wrapper">
-                        <p className="thumb-preview-title">PCでの表示</p>
-                            <div className={ !file.preview && !props.initialVal ? "thumb-preview-web-fake" : "zero-opacity" }/>
-                            <img src={file.preview || props.initialVal} className={ !file.preview && !props.initialVal ? "thumb-preview-web zero-opacity" : "thumb-preview-web" }/>
-                        </div>
+                    <PreviewBox>
+                        <PreviewElement mobile={true} hide={!file.preview && !props.initialVal}>
+                            <p>モバイルでの表示</p>
+                            <div/>
+                            <img 
+                                src={display} 
+                                alt={"モバイル用のトピックの画像プレビュー"}/>
+                        </PreviewElement>
+                        <PreviewElement hide={ !file.preview && !props.initialVal}>
+                            <p>PCでの表示</p>
+                            <div/>
+                            <img 
+                                src={display} 
+                                alt={"ウェブ用のトピックの画像プレビュー"}
+                            />
+                        </PreviewElement>
+                    </PreviewBox>
                     </div>
-                    </div>
-                </section>
-                <div className="topic-form-button">
-                    <button className="topic-form-button-left" onClick={handleBack}>戻る</button>
-                    <button 
-                        className={!file.preview && !props.initialVal ? "topic-form-button-right disable" : "topic-form-button-right"} 
-                        onClick={handleForward}
-                    >
-                            次へ進む
-                    </button>
                 </div>
+                <ButtonWrapper>
+                    <ButtonLeft onClick={handleBack}>戻る</ButtonLeft>
+                    <ButtonRight disabled={!file.preview && !props.initialVal} onClick={handleForward}>次へ進む</ButtonRight>
+                    {/* <ButtonRight disabled={!file.preview && !props.initialVal ? "topic-form-button-right disable" : "topic-form-button-right"} onClick={handleForward}>次へ進む</ButtonRight> */}
+                </ButtonWrapper>
                 <div className="space"/>
-            </div>
-        </div>
+            </BoxTransition>
+        </Box>
     );
 };
 
+const RevertBtn = styled.p`
+    margin-left: 185px;
+    text-decoration: underline;
+    color: #747474 !important;
+    font-size: 11px !important;
+    cursor: pointer;
+    white-space: nowrap;
+`
+
+const PreviewBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 444px;
+`
+
+const PreviewElement = styled.div`
+    position: relative;
+    margin: 0px 15px;
+    margin-top: 25px;
+
+    & > p {
+        margin-bottom:10px;
+        color: #585858;
+        font-size: 10px;
+        margin-left: 5px;
+    }
+
+    & > div {
+        position: absolute;
+        border: 1px solid black;
+        border-style: dashed;
+        border-width: 1px;
+
+        ${props => props.mobile 
+        ? css`
+            width: 285px;
+            height: 150px;
+            border-bottom-right-radius: 35px;
+            border-bottom-left-radius: 35px;
+        `
+        : css`
+            width: 120px;
+            height: 120px;
+        `}
+        
+        ${props => !props.hide && css`
+            opacity: 0;
+        `}
+    }
+
+    & > img {
+
+        object-fit: contain;
+        border: 1px solid #d2d2d2;
+
+        ${props => props.mobile 
+        ? css`
+            width: 285px;
+            height: 150px;
+            border-bottom-right-radius: 35px;
+            border-bottom-left-radius: 35px;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        `
+        : css`
+            width: 120px;
+            height: 120px;
+        `}
+
+        ${props => props.hide && css`
+            opacity: 0;
+        `}
+    }
+`
 
 export default ActionImage;

@@ -266,16 +266,18 @@ class ActionTag extends Component {
                             {this.renderTags()}
                         </div>
                         <p className="topic-form-area-input-title zero-opacity">タグ</p>
-                        <Autosuggest
-                            className="topic-form-area-search" 
-                            suggestions={this.state.suggestions}
-                            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                            getSuggestionValue={this.getSuggestionValue}
-                            renderSuggestion={this.renderSuggestion}
-                            onSuggestionSelected={this.onSuggestionSelected}
-                            inputProps={inputProps} 
-                        />
+                        <div style={{marginTop: "15px"}}>
+                            <Autosuggest
+                                className="topic-form-area-search" 
+                                suggestions={this.state.suggestions}
+                                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                                getSuggestionValue={this.getSuggestionValue}
+                                renderSuggestion={this.renderSuggestion}
+                                onSuggestionSelected={this.onSuggestionSelected}
+                                inputProps={inputProps} 
+                            />
+                        </div>
                     </form>
                     <div className="topic-form-button">
                         <button className="topic-form-button-left" onClick={this.handleBack}>戻る</button>
