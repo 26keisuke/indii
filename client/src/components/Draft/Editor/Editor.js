@@ -2,7 +2,8 @@ import React, { Component } from "react"
 import styled from "styled-components"
 
 import Screen from "../../Util/Screen"
-import TextArea from "./TextArea"
+import TextArea from "../TextArea/TextArea"
+import Reference from "../Reference/Reference"
 
 import "./Editor.css"
 
@@ -109,9 +110,8 @@ class Editor extends Component {
     renderRight() {
         return (
           <div>
-            <RightInsideTitle>
-              参照を追加
-            </RightInsideTitle>
+            <RightInsideTitle>参照を追加</RightInsideTitle>
+            <Reference/>
           </div>
             
         )

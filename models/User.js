@@ -13,7 +13,7 @@ const userSchema = new Schema({
         givenName: String,
     },
     photo: String,
-    active: {type: Boolean, default: false},
+    isVerified: {type: Boolean, default: false},
     intro: String,
 })
 

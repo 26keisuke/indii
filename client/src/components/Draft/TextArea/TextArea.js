@@ -74,7 +74,7 @@ class TextArea extends React.Component {
                 "link",
                 "media",
                 "hr",
-                "fullscreen",
+                // "fullscreen",
             ]}
             value={editorState}
             controlBarClassName="draft-area-tools"

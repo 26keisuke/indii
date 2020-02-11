@@ -29,6 +29,7 @@ class LogIn extends Component {
                         onChange={(e) => this.props.handleLogInChange(e,"email")} 
                         placeholder="Eメール" 
                         type="email"
+                        name="email"
                     />
                 </Input>
                 <Input>
@@ -38,6 +39,7 @@ class LogIn extends Component {
                         onChange={(e) => this.props.handleLogInChange(e,"password")} 
                         placeholder="パスワード" 
                         type="password"
+                        name="password"
                     />
                 </Input>
                 <Remember>
@@ -57,7 +59,7 @@ class LogIn extends Component {
                     :
                     <Button disabled={true} type="submit">ログイン</Button>
                     }
-                    <Link to={"/"}>パスワードを忘れた方はこちら</Link>
+                    <Link to={"/verification/password"}>パスワードを忘れた方はこちら</Link>
                 </BottomWrapper>
             </form>
         )
@@ -152,7 +154,7 @@ const Message = styled.div`
     display: flex;
     align-items: center;
     bottom: -20px;
-    left: 19px;
+    left: 22px;
     font-size: 10px;
     color: #333333;
 

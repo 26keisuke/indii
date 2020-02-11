@@ -5,6 +5,8 @@ import styled, { css, keyframes } from "styled-components"
 import axios from "axios"
 import { connect } from "react-redux"
 
+import validateEmail from "../Util/validateEmail"
+
 import * as actions from "../../actions"
 
 import SignUp from "./SignUp/SignUp"
@@ -79,7 +81,7 @@ class Auth extends Component {
 
         if (type === "email") {
             check = "validEmail"
-            if (this.validateEmail(value)) {
+            if (validateEmail(value)) {
 
                 res = true
 
@@ -342,9 +344,9 @@ const ThirdPartyButton = styled.div`
 
         & > button {
             width: 155px;
-            height: 35px;
-            border-radius: 1px;
-            padding-left: 35px;
+            height: 36px;
+            border-radius: 5px;
+            padding-left: 32px;
             font-family: ${props => props.theme.font};
             color: #252525;
             cursor: pointer;

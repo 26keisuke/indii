@@ -247,7 +247,7 @@ const Check = styled(IoMdCheckmark)`
     position: absolute;
     transform: scale(1.5);
     color: #4CD964;
-    right: 20px;
+    right: 21px;
     pointer-events: none;
 `
 
@@ -255,14 +255,14 @@ const Close = styled(IoMdClose)`
     position: absolute;
     transform: scale(1.5);
     color: #FF5F5F;
-    right: 20px;
+    right: 21px;
     pointer-events: none;
 `
 
 const DraftSelect = styled.div`
     border-radius: 100%;
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
     border: ${props => props.selected ? props.type === "delete" ? "1px solid #FF5F5F" : "1px solid #4CD964" : "1px solid #d2d2d2"};
     position: absolute;
     right: 15px;

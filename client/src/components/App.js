@@ -26,6 +26,7 @@ import Confirm from "./Confirm/Confirm"
 import Loading from "./Util/Loading"
 import Filter from "./Util/Filter"
 import Auth from "./Auth/Auth"
+import Verification from "./Verification/Verification"
 
 const ConfirmWrapper = React.forwardRef((props, ref) => (
      <Confirm innerRef={ref} {...props}/>
@@ -326,6 +327,7 @@ class App extends Component {
                             <Route path="/profile/:id" component={Profile} />
                             <Route exact path="/action" component={Action} />
                             <Route exact path="/workspace" component={WorkSpace} />
+                            <Route path="/verification/:type" component={Verification}/>
                         </div>
                     </div>
                 </BrowserRouter>

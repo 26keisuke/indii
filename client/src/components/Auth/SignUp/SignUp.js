@@ -74,7 +74,7 @@ class SignUp extends Component {
                         <p>このEmailは既に使用されています。</p>
                         }
                         {   this.props.valid.validEmail === false &&
-                        <p>Emailが正しくありません。</p>
+                        <p>Emailは「__@__」の形で入力してください。</p>
                         }
                     </Match>
                 </InputWrapperMiddle>

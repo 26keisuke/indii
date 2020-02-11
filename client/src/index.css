@@ -281,6 +281,7 @@ input:focus{
 }
 
 .search-box .react-autosuggest__input{
+    padding-top: 2px;
     width: 72%;
     height: 36px;
     border-radius: 30px;

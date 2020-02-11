@@ -10,12 +10,14 @@ import keys from "./config/keys";
 import bodyParser from "body-parser";
 import path from "path";
 import bcrypt from "bcrypt";
-// import uid from "uid2";
+import crypto from "crypto"
+import nodemailer from "nodemailer"
 
 import User from "./models/User"
 import Topic from "./models/Topic"
 import Post from "./models/Post"
 import Draft from "./models/Draft"
+import Token from "./models/Token";
 
 const dbName = "indii";
 
@@ -73,9 +75,14 @@ passport.use(new LocalStrategy({
                 bcrypt.compare(password, user.password)
                     .then(res => {
                         if(res === false) {
-                            console.log("NO")
+                            console.log("Password did not match.")
                             return done(null, false)
                         } else {
+                            if(!user.isVerified) {
+                                console.log("User is not verified yet")
+                                return done(null, false)
+                            }
+
                             console.log("YES")
                             return done(null, user)
                         }
@@ -85,7 +92,6 @@ passport.use(new LocalStrategy({
 
                 // signUpとloginをここで分けている。果たしてこれが適切かは疑問
                 if(!req.body.username || !req.body.familyName || !req.body.givenName) {
-                    console.log("HEY")
                     return done(null, false)
                 }
                 
@@ -105,10 +111,29 @@ passport.use(new LocalStrategy({
                                 password: hashedPassword,
                             }
 
-                            new User(value)
-                                .save()
+                            new User(value).save()
                                 .then(user => {
-                                    done(null, user)
+                                    var token = new Token({
+                                        _userId: user._id,
+                                         token: crypto.randomBytes(16).toString("hex")
+                                    })
+
+                                    token.save()
+                                    .then(() => {
+                                        var transporter = nodemailer.createTransport()
+                                        var mailOptions = {
+                                            from: 'no-reply@yourwebapplication.com',
+                                            to: user.email,
+                                            subject: 'Account Verification Token',
+                                            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' 
+                                        }
+
+                                        transporter.sendMail(mailOptions)
+                                        .then(() => {
+                                            console.log("Email has been sent")
+                                            done(null, user)
+                                        })                                        
+                                    })
                                 })            
                         })
                     })
@@ -251,6 +276,53 @@ app.get("/api/email/:id", (req, res) => {
         .catch(err => {
             console.error(err)
         })
+})
+
+app.post("/api/confirmation", (req, res) => {
+    Token.findOne({token: req.body.token})
+    .then(token => {
+        User.findOne({_id: token._userId, email: req.body.email})
+        .then(user => {
+            if(!user) { console.log("User not found"); return; }
+            if(user.isVerified) { console.log("User is already verified"); return; }
+            user.isVerified = true;
+            user.save()
+            .then(user => {
+                console.log("User is now verified")
+                res.send(user)
+            })
+        })
+    })
+})
+
+app.post("/api/resend", (req, res) => {
+    User.findOne({email: req.body.email})
+    .then(user => {
+        if(!user) { console.log("User not found"); return; }
+        if(user.isVerified) { console.log("User is already verified"); return; }
+
+        var token = new Token({
+            _userId: user._id,
+             token: crypto.randomBytes(16).toString("hex")
+        })
+
+        token.save()
+        .then(token => {
+            var transporter = nodemailer.createTransport()
+            var mailOptions = {
+                from: 'no-reply@yourwebapplication.com',
+                to: user.email,
+                subject: 'Account Verification Token',
+                text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' 
+            }
+
+            transporter.sendMail(mailOptions)
+
+            console.log("A verfication mail has been resent")
+
+            return;
+        })
+    })
 })
 
 app.post("/api/topic", (req, res) => {
