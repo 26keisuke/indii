@@ -4,11 +4,11 @@
     font-weight: 500;
 } */
 
-@font-face {
+/* @font-face {
     font-family: "Gennokaku Gothic";
     src: url(./fonts/SourceHanSansJP-Bold.otf) format("otf");
     font-weight: bold;
-}
+} */
 
 /* @font-face {
     font-family: "Gennokaku Gothic";
@@ -16,11 +16,11 @@
     font-weight: 300;
 } */
 
-@font-face {
+/* @font-face {
     font-family: "Gennokaku Gothic";
     src: url(./fonts/SourceHanSansJP-Normal.otf) format("otf");
     font-weight: normal;
-}
+} */
 
 /* @font-face {
     font-family: "Gennokaku Gothic";
@@ -30,12 +30,11 @@
 
 @import url('https://fonts.googleapis.com/css?family=Libre+Baskerville&display=swap');
 
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap'); */
 
 html {
     height:100%;
-    font-family: 'Roboto', sans-serif;
-    font-family: "Gennokaku Gothic";
+    font-family: serif;
     font-size: 11px;
     line-height: normal;
     color: #212121;
@@ -67,7 +66,12 @@ a {
 p {
     margin: 0px;
     font-feature-settings: "palt";
-    letter-spacing: 0.8px;
+    letter-spacing: 1.0px;
+}
+
+button,
+input {
+    font-family: serif !important;
 }
 
 input:focus{
@@ -86,6 +90,12 @@ input:focus{
     margin-left: 200px;
     height:100%;
     margin-top:56px;
+
+    overflow: scroll;
+}
+
+.fakebox::-webkit-scrollbar {
+    width: 0 !important;
 }
 
 /* .content{

@@ -10,11 +10,11 @@ class Form extends Component {
 
     renderForm = () => {
 
-        const {list, date, handleDateChange, setSelected, unsetSelected, getState} = this.props
+        const {toggle, list, handleDateChange, handleTextChange, getState} = this.props
 
         const res = list.map(elem => {
             return(
-                <RefElement key={elem.name} selected={getState(elem.name)}>
+                <RefElement key={elem.stateName}>
                     <p>{elem.name}</p>
                     {   elem.required &&
                     <p>* 必須</p>
@@ -22,16 +22,18 @@ class Form extends Component {
                     {   elem.date 
                     ?
                     <DatePicker
-                        selected={date}
-                        onChange={handleDateChange}
+                        dateFormat="yyyy/MM/dd"
+                        placeholderText="日付を選択"
+                        selected={getState(toggle)[elem.stateName]}
+                        onChange={(date) => handleDateChange(toggle, elem.stateName, date)}
                         locale="ja"
                     />
                     :
                     <input 
                         placeholder={elem.placeholder} 
-                        name={elem.name}
-                        onSelect={() => setSelected(elem.name)}
-                        onBlur={() => unsetSelected(elem.name)}
+                        name={elem.stateName}
+                        value={getState(toggle)[elem.stateName]}
+                        onChange={(e) => handleTextChange(toggle, elem.stateName, e.target.value)}
                     />
                     }
                 </RefElement>
@@ -58,10 +60,6 @@ const RefElement = styled.div`
     position: relative;
     margin-bottom: 20px;
 
-    & div {
-        font-family: "Gennokaku Gothic";
-    }
-
     & > p:nth-child(1) {
         color: #585858;
         font-size: 10px;
@@ -81,10 +79,12 @@ const RefElement = styled.div`
         width: 97%;
         font-size: 12px;
         border: none;
-        border-bottom: ${props => props.selected ? "1px solid #9EAEE5" : "1px solid #d2d2d2"};
+        border-bottom: 1px solid #d2d2d2;
         padding: 3px 5px;
-        font-family: "Gennokaku Gothic" !important;
 
+        &::placeholder{
+            opacity: 0.5;
+        }
     }
 `
 

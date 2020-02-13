@@ -12,6 +12,7 @@ import SearchResult from "./SearchResult/SearchResult"
 import Notification from "./Notif/Notif"
 import EditConfirm from "./Notif/Confirm/Confirm"
 import Topic from "./Topic/Topic"
+import Post from "./Post/Post"
 import Draft from "./Draft/Draft"
 import DraftEditor from "./Draft/Editor/Editor"
 import CreateTopic from "./Action/Topic/Create/Controller"
@@ -324,6 +325,7 @@ class App extends Component {
                             <Route path="/action/post/edit" component={EditPost} />
                             <Route path="/action/topic/edit" component={EditTopic} />
                             <Route path="/topic/:id" component={Topic} />
+                            <Route path="/post/:id" component={Post} />
                             <Route path="/profile/:id" component={Profile} />
                             <Route exact path="/action" component={Action} />
                             <Route exact path="/workspace" component={WorkSpace} />

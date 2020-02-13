@@ -49,8 +49,8 @@ class CreateTopic extends Component {
                             subTitle="トピック名"
                             type="Unique"
                             content="Topic"
-                            data={topics}
-                            searchByVariable="name"
+                            // data={topics}
+                            searchByVariable="topicName"
                             storage="createTopicName"
                             back={this.state.back} 
                             setBackward={this.setBackward} 

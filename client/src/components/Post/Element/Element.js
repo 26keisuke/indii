@@ -45,6 +45,7 @@ const PostElement = styled(Link)`
         & > div {
             display: flex;
             flex-direction: row;
+            align-items: center;
 
             & > img {
                 width: 13px;
@@ -54,7 +55,6 @@ const PostElement = styled(Link)`
 
             & > p:nth-child(2) {
                 margin-right:20px;
-                padding-top: 1px;
             }
 
             & > p:nth-child(3) {

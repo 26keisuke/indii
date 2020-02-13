@@ -6,20 +6,20 @@ const postSchema = new Schema({
     topic: {
         type: mongoose.Schema.Types.ObjectId, ref: "Topic"
     },
-    version: [{
+    index: [Number], // 2.1の場合は[2,1]
+    content: String,
+    contribution: [{
         timeStamp: Date,
-        index: [Number],
-        content: String,
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        state: {
-            delete: Boolean,
-            warn: Boolean,
-        }
     }],
+    state: {
+        delete: Boolean,
+        warn: Boolean,
+    },
     feedback: [{
         timeStamp: Date,
         feedback: {
-
+            // ここを付け加える
         },
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     }],
@@ -29,7 +29,7 @@ const postSchema = new Schema({
         rate: Number,
     }],
     star: {
-        counter: Number,
+        counter: {type: Number, default: 0},
         action: [{
             timeStamp: Date,
             user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

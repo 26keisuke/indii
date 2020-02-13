@@ -21,7 +21,7 @@ class CreatePost extends Component {
             back: false,
             selectedTopic: {}, 
             config: {
-                editWo: true,
+                allowEdit: true,
             },
             postName: ""
         }
@@ -44,8 +44,8 @@ class CreatePost extends Component {
                         subTitle="トピック名"
                         type="Match"
                         content="Topic"
-                        data={topics}
-                        searchByVariable="name"
+                        // data={topics}
+                        searchByVariable="topicName"
                         storage="editPostTopic"
                         back={this.state.back} 
                         setBackward={this.setBackward} 
@@ -67,7 +67,7 @@ class CreatePost extends Component {
                         subTitle="ポスト名"
                         type="Unique"
                         content="Post"
-                        data={posts}
+                        // data={posts}
                         transition={true}
                         searchByVariable="title"
                         storage="editPostPost"
@@ -89,7 +89,7 @@ class CreatePost extends Component {
                         setBackward={this.setBackward} 
                         postName={this.state.postName}
                         selectedTopic={this.state.selectedTopic}
-                        config={this.state.config.editWo}
+                        config={this.state.config}
                         setStep={this.setStep}
                         max={6}
                         />
@@ -119,7 +119,7 @@ class CreatePost extends Component {
     setConfig = (config) => {
         this.setState({
             config: {
-                editWo: config.editWo.on
+                allowEdit: config.allowEdit.on
             }
         })
     }

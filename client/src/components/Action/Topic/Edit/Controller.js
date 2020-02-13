@@ -57,8 +57,8 @@ class CreatePost extends Component {
                             subTitle="トピック名"
                             type="Match"
                             content="Topic"
-                            data={topics}
-                            searchByVariable="name"
+                            // data={topics}
+                            searchByVariable="topicName"
                             storage="editTopicName"
                             back={this.state.back} 
                             setBackward={this.setBackward} 
@@ -114,13 +114,13 @@ class CreatePost extends Component {
     }
 
     setImage = (img) => {
-        console.log(img)
         this.setState({
             edited: {
                 img
             }
         })
     }
+
     setTags = (tags) => {
         this.setState({
             edited:{
@@ -128,6 +128,7 @@ class CreatePost extends Component {
             }
         })
     }
+    
     setIndex = (index) => {
         this.setState({
             edited: {

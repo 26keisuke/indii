@@ -10,7 +10,7 @@ import indii from "../../images/indii.png";
 
 import Profile from "./Profile/Profile";
 import Navigation from "./Navigation/Navigation"
-import Search from "./Search/Search";
+import Search from "../Search/Search";
 
 const NavBar = styled.nav`
     display: flex;

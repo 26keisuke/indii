@@ -30,7 +30,7 @@ class CreatePreviewTopic extends Component {
         this.props.enableGray();
 
         axios.post("/api/topic", {
-            img: this.props.img.preview,
+            img: this.props.img,
             tags: this.props.tags,
             topicName: this.props.topicName,
         })

@@ -10,11 +10,15 @@ import {
         chapterList,
         paperList,
         mediaList,
-        generalList,} from "./List"
-
+        generalList,
+        stateName} from "./Data/data"
+        
 import Button from "../../Util/Button"
-import Form from "./Form"
-import Carousel from "./Carousel"
+import Form from "./Form/Form"
+import List from "./List/List"
+import Carousel from "./Carousel/Carousel"
+
+import { Space } from "../../Theme"
 
 class Reference extends Component {
 
@@ -22,28 +26,22 @@ class Reference extends Component {
         super(props)
         this.state = {
 
-            toggle: {
-                website: true,
-                news: false,
-                book: false,
-                journal: false,
-                paper: false,
-                media: false,
-                general: false,
-            },
+            toggle: "website",
+
+            reference: [],
 
             website: {
                 title: "",
                 url: "",
                 author: "",
-                date: "", // publish date
+                postDate: null, // publish date
                 website: "",
             },
 
             news: {
                 title: "",
                 source: "",
-                date: "",
+                date: null,
                 author: "",
                 url: "",
             },
@@ -52,7 +50,7 @@ class Reference extends Component {
                 author: "",
                 title: "",
                 source: "",
-                date: "", // volumeのdate
+                date: null, // volumeのdate
                 page: "",
                 doi: "",
                 URL: "",
@@ -61,9 +59,8 @@ class Reference extends Component {
             book: {
                 author: "",
                 title: "",
-                date: "",
+                publishDate: null,
                 publisher: "",
-                location: "", // publisher location
                 isbnurl: "",
             },
 
@@ -71,91 +68,160 @@ class Reference extends Component {
                 author: "",
                 bookTitle: "",
                 chapterTitle: "",
-                date: "",
+                date: null,
                 page: "",
                 editor: "",
                 publisher: "",
-                location: "", // publisher location
                 url: "",
             },
 
             paper: {
                 author: "",
                 title: "",
-                date: "",
-                name: "", // conference name
-                location: "", // conference location
+                heldDate: null,
+                conferenceName: "", // conference name
                 doi: "",
                 url: "",
             },
 
             media: {
-                name: "", // license name
-                url: "", // license url
                 creator: "",
                 creatorUrl: "", 
                 sourceUrl: "",
-                holder: "", // copyright holder
-                date: "", // copyright date
+                licenseName: "", // license name
+                licenseUrl: "", // license url
+                licenseHolder: "", // copyright holder
+                licenseDate: null, // copyright date
             },
 
             general: {
                 title: "",
                 author: "",
-                date: "",
+                date: null,
                 url: "",
             },
         }
+    }
+
+    componentWillUnmount() {
+        // save data
     }
 
     getState = (name) => {
         return this.state[name]
     }
 
-    setSelected = (name) => {
+    setToggle = (name) => {
         this.setState({
-            [name]: true
+            toggle: name,
         })
     }
 
-    unsetSelected = (name) => {
+    handleTextChange = (name, area, value) => {
         this.setState({
-            [name]: false
+            ...this.state,
+            [name]: {
+                ...this.state[name],
+                [area]: value
+            }
         })
     }
 
-    handleDateChange = (date) => {
+    handleDateChange = (name, stateName, date) => {
         this.setState({
-            date: date
+            ...this.state,
+            [name]: {
+                ...this.state[name],
+                [stateName]: date
+            }
+            
         })
     }
 
-    render () {
+    renderList = () => {
+
+        const { toggle } = this.state
+
+        if (toggle === "website") {
+            return websiteList
+        } else if (toggle === "news") {
+            return newsList
+        } else if (toggle === "book") {
+            return bookList
+        } else if (toggle === "journal") {
+            return journalList
+        } else if (toggle === "chapter") {
+            return chapterList
+        } else if (toggle === "paper") {
+            return paperList
+        } else if (toggle === "media") {
+            return mediaList
+        } else if (toggle === "general") {
+            return generalList
+        }
+    }
+
+    handleSubmit = () => {
+
+        const data = {
+            type: this.state.toggle,
+        }
+        const merged = Object.assign(data, this.state[this.state.toggle])
+        const subject = this.state.reference
+
+        subject.push(merged)
+
+        const initialized = Object.assign({}, merged)
+
+        Object.keys(initialized).forEach(key => {
+            if(key.toLowerCase().includes("date")){
+                initialized[key] = null
+            } else {
+                initialized[key] = ""
+            }
+        })
+
+        this.setState({
+            ...this.state,
+            reference: subject,
+            [this.state.toggle]: initialized,
+        })
+    }
+
+    render () { 
+
         return (
+            <div>
+            <RightInsideTitle>参照を追加</RightInsideTitle>
             <RefBox>
                 <Carousel
                     list={nameList}
+                    state={stateName}
+                    setToggle={this.setToggle}
+                    getState={this.getState}
                 />
                 <Form
-                    list={journalList}
-                    date={this.state.date}
+                    toggle={this.state.toggle}
+                    list={this.renderList() || generalList} // just in case
                     getState={this.getState}
-                    setSelected={this.setSelected}
-                    unsetSelected={this.unsetSelected}
                     handleDateChange={this.handleDateChange}
+                    handleTextChange={this.handleTextChange}
                 />
                 <RefButtonWrapper>
-                    <Button>参照を追加する</Button>
+                    <Button onClick={() => this.handleSubmit()}>参照を追加する</Button>
                 </RefButtonWrapper>
             </RefBox>
+            <Space height="20px"/>
+            <List
+                reference={this.state.reference}
+            />
+            </div>
         )
     }
 }
 
 const RefBox = styled.div`
-    border-right: 1px solid #d2d2d2;
-    border-bottom: 1px solid #d2d2d2;
-    border-left: 1px solid #d2d2d2;
+
 `
 
 const RefButtonWrapper = styled.div`
@@ -165,6 +231,14 @@ const RefButtonWrapper = styled.div`
     margin-bottom: 15px;
     display: flex;
     justify-content: flex-end;
+`
+
+const RightInsideTitle = styled.div`
+    height:35px;
+    padding-left:20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
 `
 
 export default Reference

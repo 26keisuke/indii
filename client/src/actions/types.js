@@ -32,3 +32,11 @@ export const ADD_COLUMN = "ADD_COLUMN"
 
 export const SHOW_LOGIN = "SHOW_LOGIN"
 export const HIDE_LOGIN = "HIDE_LOGIN"
+
+// Draft
+export const FETCH_DRAFT = "FETCH_DRAFT"
+
+
+// TOPIC
+export const SEARCH_TOPIC = "SEARCH_TOPIC"
+export const SEARCH_POST = "SEARCH_POST"

@@ -437,7 +437,7 @@ export const PreviewConfig = styled.div`
             border-radius: 100%;
             box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
 
-            ${props => props.config 
+            ${props => props.config
             ? css`
                 right: 3px; 
                 background-color: #9EAEE6;

@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 import sample from "../../images/sample1.png"
 
-import SearchResultTalk from "./Talk/Talk"
+import SearchResultTalk from "../Talk/Element/Element"
 import SearchFilter from "./Filter/Filter"
 import People from "../People"
 import Post from "../Post/Element/Element"

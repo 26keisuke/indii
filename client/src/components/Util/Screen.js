@@ -7,27 +7,27 @@ import Back from "./Back"
 
 import { Space } from "../Theme"
 
-const FeedBox = styled.div`
-    height: 100%;
+export const FeedBox = styled.div`
+    /* height: 100%; */
     display: flex;
     flex-direction: row;
     overflow-x: hidden;
 `
 
-const FeedLeft = styled.div`
+export const FeedLeft = styled.div`
     width: 675px;
     flex-shrink: 0;
     height:100%;
     position: relative;
     border-right: 1px solid #d2d2d2;
-    overflow: scroll;
+    /* overflow: scroll; */
 
-    &::-webkit-scrollbar {
+    /* &::-webkit-scrollbar {
         width: 0 !important;
-    }
+    } */
 `
 
-const FeedRight = styled.div`
+export const FeedRight = styled.div`
     width:100%;
     margin: 0px 15px;
     margin-top: 20px;
@@ -39,7 +39,7 @@ const FeedRight = styled.div`
     }
 `
 
-const FeedSpace = styled.div`
+export const FeedSpace = styled.div`
     height:10px;
     background-color: #F9F9F9;
 `
@@ -100,22 +100,32 @@ class Screen extends Component {
 
     render() {
 
-        const renderHeader = this.props.back ? this.renderBackHeader : this.renderHeader
+        const renderHeader = !this.props.noHeader ? this.props.withBack ? this.renderBackHeader : this.renderHeader : () => {return null}
 
         return (
             <FeedBox>
                 <FeedLeft>
                     {renderHeader()}
                     <FeedSpace/>
-                    {this.props.children[1]}
+                    { this.props.noHeader
+                    ?
+                    this.props.children[0]
+                    :
+                    this.props.children[1]
+                    }
                     {!this.props.space 
                     ? ""
-                    : <Space height="70vh" backgroundColor="#f9f9f9"/>
+                    : <Space height="90vh" backgroundColor="#f9f9f9"/>
                     }
                 </FeedLeft>
                 <FeedRight>
                     <div>
-                        {this.props.children[2]}
+                        { this.props.noHeader
+                        ?
+                        this.props.children[1]
+                        :
+                        this.props.children[2]
+                        }
                     </div>
                 </FeedRight>
             </FeedBox>
@@ -128,7 +138,8 @@ Screen.defaultProps = {
 }
 
 Screen.propTypes = {
-    back: PropTypes.bool,
+    noHeader: PropTypes.bool,
+    withBack: PropTypes.bool,
     space: PropTypes.bool,
     children: PropTypes.node
 }

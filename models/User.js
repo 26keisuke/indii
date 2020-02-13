@@ -15,6 +15,8 @@ const userSchema = new Schema({
     photo: String,
     isVerified: {type: Boolean, default: false},
     intro: String,
+    draft: [{type: mongoose.Schema.Types.ObjectId, ref: "Draft"}],
+    post: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
 })
 
 const User = mongoose.model("User", userSchema)

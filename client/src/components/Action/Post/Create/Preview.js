@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import axios from "axios"
 
 import * as actions from "../../../../actions"
 
@@ -23,6 +24,21 @@ class CreatePreviewTopic extends Component {
         this.props.setBackward(false);
         this.props.isFetching();
         this.props.enableGray();
+
+        const url = "/api/topic/" + this.props.selectedTopic._id + "/post"
+
+        axios.post(url, {
+            topic: this.props.selectedTopic._id,
+            topicName: this.props.selectedTopic.topicName,
+            topicImg: this.props.selectedTopic.img,
+            postName: this.props.postName,
+            config: {
+                allowEdit: this.props.config.allowEdit,
+            }
+        })
+        .then(res => {
+            this.onExit()
+        })
     };
 
     onExit = () => {
@@ -50,7 +66,7 @@ class CreatePreviewTopic extends Component {
                             <div/>
                             <p>トピック名</p>
                         </PreviewSection>
-                        <PreviewTitle>{this.props.selectedTopic.name}</PreviewTitle>
+                        <PreviewTitle>{this.props.selectedTopic.topicName}</PreviewTitle>
                         <PreviewUnderline/>
 
                         <PreviewSection>
@@ -65,8 +81,8 @@ class CreatePreviewTopic extends Component {
                                 <div/>
                                 <p>承認無しに変更を許可する</p>
                             </PreviewSection>
-                            <PreviewConfig config={this.props.config}>
-                                <PreviewTitle>{this.props.config ? "許可" : "許可しない"}</PreviewTitle>
+                            <PreviewConfig config={this.props.config.allowEdit}>
+                                <PreviewTitle>{this.props.config.allowEdit ? "許可" : "許可しない"}</PreviewTitle>
                                 <div>
                                     <input type="button"/>
                                     <div/>

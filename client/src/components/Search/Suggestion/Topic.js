@@ -16,7 +16,6 @@ const TopicElement = styled.div`
     & > img {
         width: 35px;
         height: 35px;
-        border: 1px solid black;
         margin-right: 20px;
     }
 `
@@ -41,7 +40,7 @@ const TopicInfo = styled.div`
         & > p {
             font-size:10px;
             color: #656565;
-            margin-left:10px;
+            padding-left: 5px;
             margin-left: auto;
         }
     }
@@ -68,18 +67,18 @@ class Topic extends Component {
         )
 
         return (
-            <Link key={suggestion.id} to={url} onClick={() => handleClick(suggestion[target])}>
+            <Link key={suggestion._id} to={url} onClick={() => handleClick(suggestion[target])}>
                 <TopicElement>
-                    <img src={suggestion.imgUrl} alt="検索結果のトピック一覧のメイン画像"/>
+                    <img src={suggestion.img} alt="検索結果のトピック一覧のメイン画像"/>
                     <TopicName>
-                        {suggestion.name}
+                        {suggestion.topicName}
                     </TopicName>
                     <TopicInfo>
                         <div>
                             {tags}
                         </div>
                         <div>
-                            <p>{suggestion.posts.toLocaleString()} Posts</p>
+                            <p>{suggestion.postCount.toLocaleString()} Posts</p>
                             <p>{suggestion.likes.toLocaleString()} Favorites</p>
                         </div>
                     </TopicInfo>

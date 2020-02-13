@@ -9,7 +9,7 @@ class CreateConfigurationPost extends Component {
     constructor(props){
         super(props)
         this.state = {
-            editWo: {   // edit without
+            allowEdit: {   // edit without
                 on: true, 
             },
         }
@@ -46,12 +46,12 @@ class CreateConfigurationPost extends Component {
                         <ConfigInput>承認無しに変更を許可する</ConfigInput>
                         <ConfigBox>
                             <div>
-                                <p>{this.state.editWo.on ? "許可" : "許可しない"}</p>
-                                <span>{this.state.editWo.on && "(推奨)"}</span>
+                                <p>{this.state.allowEdit.on ? "許可" : "許可しない"}</p>
+                                <span>{this.state.allowEdit.on && "(推奨)"}</span>
                             </div>
                             <ToggleBtn
-                                on={this.state.editWo.on}
-                                handleClick={() => this.toggleButton("editWo")}
+                                on={this.state.allowEdit.on}
+                                handleClick={() => this.toggleButton("allowEdit")}
                             />
                         </ConfigBox>
                         <ConfigUnderline/>

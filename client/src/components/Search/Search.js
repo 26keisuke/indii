@@ -11,11 +11,11 @@ import Autosuggest from "react-autosuggest";
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 
-import * as actions from "../../../actions"
+import * as actions from "../../actions"
 
 import { IoIosSearch } from "react-icons/io";
-import search from "../../../images/search.png";
-import searchClick from "../../../images/search-click.png";
+import search from "../../images/search.png";
+import searchClick from "../../images/search-click.png";
 
 import Topic from "./Suggestion/Topic";
 import New from "./Suggestion/New"

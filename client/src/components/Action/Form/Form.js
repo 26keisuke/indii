@@ -32,5 +32,6 @@ export const FormMount = styled.div`
 `
 
 export const BackWrapper = styled.div`
-    margin-top:-30px;
+    margin-top:-18px; 
+    /* margin-top:-30px; */
 `

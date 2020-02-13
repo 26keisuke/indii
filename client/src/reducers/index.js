@@ -10,9 +10,11 @@ import { USER_IS_LOGGEDIN,
          IS_FETCHING, END_FETCHING,
          ENABLE_GRAY, DISABLE_GRAY, 
          UPDATE_MESSAGE, RESET_MESSAGE,
-         SHOW_CONFIRMATION, HIDE_CONFIRMATION, CONFIRM_NEXT,
+         SHOW_CONFIRMATION, HIDE_CONFIRMATION,
          ADD_COLUMN, 
-         SHOW_LOGIN, HIDE_LOGIN, } from "../actions/types"
+         SHOW_LOGIN, HIDE_LOGIN,
+         SEARCH_TOPIC, SEARCH_POST,
+         FETCH_DRAFT } from "../actions/types"
 
 const initialState = {
     category: {
@@ -81,6 +83,61 @@ const initialState = {
             next: "",
         },
     },
+    topic: {
+        // search: [{
+        //     topicName: "",
+        //     img: "",
+        //     tags: [],
+        //     posts: 0,
+        //     favorites: 0,
+        // }],
+        search: [],
+    },
+    draft: {
+        // onEdit: [{
+        //     _id: null,
+        //     topic: null, //topicId
+        //     topicName: "",
+        //     postName: "",
+        //     date: null,
+        //     type: "",
+        //     isValid: false,
+        //     content: "",
+        //     config: {
+        //         allowEdit: false
+        //     },
+        // }]
+        onEdit: []
+    }
+}
+
+function draftReducer(state=initialState.draft, action) {
+
+    if(action.payload && action.payload.length === 0) {
+        return state
+    }
+
+    switch(action.type) {
+        case FETCH_DRAFT:
+            return {
+                ...state,
+                onEdit: action.payload,
+            }
+        default:
+            return state
+    }
+}
+
+function topicReducer(state=initialState.topic, action) {
+    switch(action.type) {
+        case SEARCH_TOPIC:
+            return {
+                ...state,
+                search: action.payload.suggestions
+            }
+        default:
+            return state
+    }
 }
 
 function indexReducer(state=initialState.index, action) {
@@ -301,4 +358,6 @@ export default combineReducers({
     nudge: nudgeReducer,
     update: updateReducer,
     index: indexReducer,
+    topic: topicReducer,
+    draft: draftReducer,
 });

@@ -185,7 +185,7 @@ class Post extends Component {
 
     render() {
         return (
-                <PostBox to={"/topic/" + this.props.id}>
+                <PostBox to={"/post/" + this.props.id}>
                     <PostTop>
                         <div>
                             <img src={sample} alt={"このポストの作成者の写真"}/>
@@ -204,9 +204,7 @@ class Post extends Component {
                     </PostTop>
                     
                     <PostMiddle>
-                        <Link to={"/topic/" + this.props.id}>
-                            <p>{this.props.topic}</p>
-                        </Link>
+                        <p>{this.props.topic}</p>
                         <p>{this.props.title}</p>
                         <Collapse isOpened={this.state.isOpened}>
                         <p>{this.props.content}</p>
@@ -249,7 +247,8 @@ const PostBox = styled(Link)`
     flex-direction: column;
     justify-content: start;
     background-color: #ffffff;
-    padding: 20px;
+    padding: 15px 20px;
+    border-top: 1px solid #d2d2d2;
     border-bottom: 1px solid #d2d2d2;
 
     &:hover {
@@ -371,16 +370,15 @@ const Arrow = styled(IoIosArrowDown)`
 `
 
 const PostMiddle = styled.div`
-    & > a {
-        & > p {
-            font-size: 14px;
-            font-weight: bold;
-            color: #767676;
-            cursor: pointer;
 
-            &:hover {
-                color: #565656;
-            }
+    & > p {
+        font-size: 14px;
+        font-weight: bold;
+        color: #767676;
+        cursor: pointer;
+
+        &:hover {
+            color: #565656;
         }
     }
 
@@ -390,13 +388,6 @@ const PostMiddle = styled.div`
         color: #1C1C1C;
         margin-bottom: 5px;
         font-weight: bold;
-    }
-
-    /* content */
-    & > p:nth-child(4) {
-        color: #2B2B2b;
-        margin-bottom: 10px;
-        cursor: pointer;
     }
 `
 
@@ -464,6 +455,7 @@ const PostBottom = styled.div`
     display: flex;
     justify-content: flex-end;
     z-index:2;
+    padding-top:10px;
 
     & img {
         width:18px;

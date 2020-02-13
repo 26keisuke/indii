@@ -48,7 +48,7 @@ const Content = styled.div`
 
         & > p {
             color: #5a5a5a;
-            font-size: 13px;
+            font-size: 11px;
             margin-right: 20px;;
         }
 

@@ -1,6 +1,7 @@
-// バグ
+// ====バグ====
 // EditPostでPreviewまで行って最初まで戻ると、最初のスライドのアニメーションが効かない
 // 同じように、CreatePostでスライド1から2に移る時に2の最初のrenderMarkやrenderWarningが効かない
+// ============
 
 // 将来的には、getSuggestionの中のreturn [{added: true}]の部分を変える。ここのせいでより複雑になっている
 
@@ -8,13 +9,16 @@ import React, { Component } from "react";
 import PropTypes from "prop-types"
 import Autosuggest from "react-autosuggest";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux"
 
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-import Topic from "../../Header/Search/Suggestion/Topic";
-import Post from "../../Header/Search/Suggestion/Post";
-import New from "../../Header/Search/Suggestion/New"
-import Warning from "../../Header/Search/Warning/Warning"
+import Topic from "../../Search/Suggestion/Topic";
+import Post from "../../Search/Suggestion/Post";
+import New from "../../Search/Suggestion/New"
+import Warning from "../../Search/Warning/Warning"
+
+import * as actions from "../../../actions"
 
 import { Box, BoxTransition, GreenMark, RedMark, Owner, OwnerIcon, ButtonWrapper, ButtonLeft } from "../Element/Box"
 
@@ -35,11 +39,15 @@ class Select extends Component {
         };
     };
 
-    // stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
+    // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
     componentDidUpdate = (prevProps) => {
         if (prevProps.storage !== this.props.storage){
             this.setState({
                 value: localStorage.getItem(this.props.storage) || ""
+            })
+        } else if(prevProps.topic.search !== this.props.topic.search) {
+            this.setState({
+                suggestions: this.props.topic.search,
             })
         }
     }
@@ -52,14 +60,18 @@ class Select extends Component {
     };
 
     onSuggestionsFetchRequested = ({ value }) => {
-        this.setState({
-          suggestions: getSuggestions(value, this.props.type, this.props.data, this.props.searchByVariable)
-        });
+        if(!this.props.data) {
+            this.props.searchTopic(this.props.type, value)  
+        } else {
+            this.setState({
+                suggestions: getSuggestions(value, this.props.type, this.props.data, this.props.searchByVariable)
+            });
+        }
     };
 
     onSuggestionsClearRequested = () => {
         this.setState({
-          suggestions: []
+            suggestions: []
         });
     };
 
@@ -131,6 +143,7 @@ class Select extends Component {
         return ""
     };
 
+    // suggestionを上下キーでホバーしている時
     getSuggestionUniqueValue = suggestion => {
         if (suggestion.added) {
           return this.state.value;
@@ -142,6 +155,7 @@ class Select extends Component {
         return suggestion[this.props.searchByVariable];
     };
 
+    // Suggestionをrenderする時の動作
     renderUniqueSuggestion = suggestion => {
         var words = ""
         if(this.props.content === "Topic") {
@@ -195,6 +209,7 @@ class Select extends Component {
         }
     };
 
+    // Warningを出す動作
     renderUniqueWarning = () => {
         if(!this.state.value || this.state.blur) {
             return null;
@@ -265,6 +280,7 @@ class Select extends Component {
         } 
     };
 
+    // Enter keyを押した時の動作
     formUniqueSubmit = (e) => {
         e.preventDefault();
         const success = () => this.handleClick(this.state.value);
@@ -384,4 +400,10 @@ Select.propTypes = {
 }
 
 
-export default Select;
+function mapStateToProps(state) {
+    return {
+        topic: state.topic
+    }
+}
+
+export default connect(mapStateToProps, actions)(Select);

@@ -9,7 +9,7 @@ import * as actions from "../../actions"
 import upload from "../../images/upload.png"
 import { MdDelete } from "react-icons/md"
 
-import Draft from "./Element/DraftElement"
+import Draft from "./Element/Element"
 import { Border } from "../Theme"
 
 const DraftTop = styled.div`
@@ -69,6 +69,10 @@ const DraftUpload = styled.div`
 
 class DraftNavigation extends Component {
 
+    componentDidMount() {
+        this.props.fetchDraft()
+    }
+
     deleteDraft = () => {
         const id = "1";
         const action = "DELETE_DRAFT";
@@ -112,15 +116,21 @@ class DraftNavigation extends Component {
     renderLeftContent = () => {
         return (
             <div>
-                <Border bottom={true}/>
-                <Draft
-                    id={"111"}
-                    topic={"Recurrent Neural Network"}
-                    title={"Transformer Network"}
-                    content={"本紙は RNN や CNN を使わず Attention のみ使用したニューラル機械翻訳 Transformer を提案している．わずかな訓練で圧倒的な State-of-the-Art を達成し，華麗にタイトル回収した．また注意を非常にシンプルな数式に一般化したうえで，加法注意・内積注意・ソースターゲット注意・自己注意に分類した．このうち自己注意はかなり汎用的かつ強力な手法であり他のあらゆるニューラルネットに転用できる．"}
-                    date={"August 21, 2013 5:36 AM"}
-                    type={"edit"}
-                />
+                { this.props.draft.onEdit.length > 0 ? <Border bottom={true}/> : "" }
+                {
+                    this.props.draft.onEdit.map(elem =>
+                        <Draft
+                            id={elem._id}
+                            topic={elem.topicName}
+                            title={elem.postName}
+                            content={elem.content}
+                            date={elem.date}
+                            type={elem.type}
+                            img={elem.topicImg}
+                        />
+                    )
+                }
+                
             </div>
         )
     }
@@ -142,4 +152,10 @@ class DraftNavigation extends Component {
     }
 }
 
-export default connect(null, actions)(DraftNavigation)
+function mapStateToProps(state) {
+    return {
+        draft: state.draft
+    }
+}
+
+export default connect(mapStateToProps, actions)(DraftNavigation)

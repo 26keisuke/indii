@@ -34,7 +34,7 @@ const TalkTop = styled.div`
 
     & > div {
         position: absolute;
-        width:66px;
+        padding: 0px 8px;
         height:22px;
         border-radius: 3px;
         background-color: #636480;

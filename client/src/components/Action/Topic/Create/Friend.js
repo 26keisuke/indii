@@ -6,7 +6,7 @@ import Autosuggest from "react-autosuggest";
 import { IoMdClose } from "react-icons/io"
 import { MdCheck } from "react-icons/md"
 
-import Warning from "../../../Header/Search/Warning/Warning"
+import Warning from "../../../Search/Warning/Warning"
 
 import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../../Element/Box"
 

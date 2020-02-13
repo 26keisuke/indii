@@ -41,8 +41,8 @@ class EditPost extends Component {
                         subTitle="トピック名"
                         type="Match"
                         content="Topic"
-                        data={topics}
-                        searchByVariable="name"
+                        // data={topics}
+                        searchByVariable="topicName"
                         storage="editPostTopic"
                         back={this.state.back} 
                         setBackward={this.setBackward} 

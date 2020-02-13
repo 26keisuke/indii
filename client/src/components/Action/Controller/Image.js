@@ -126,10 +126,10 @@ function ActionImage(props) {
         }
         props.setBackward(false)
         props.setStep(2);
-        if(file.preview) {
-            props.setImage(file)
-        } else if(props.initialVal) {
+        if((file.preview === "null") || (file.preview === "")) {
             props.setImage(props.initialVal)
+        } else if(props.initialVal) {
+            props.setImage(file.preview)
         }
     };
 

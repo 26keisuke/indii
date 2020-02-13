@@ -12,7 +12,9 @@ const topicSchema = new Schema({
     topicName: String,
     img: String,
     tags: [String],
-    order: [Number]
+    order: [Number],
+    likes: {type: Number, default: 0},
+    postCount: {type: Number, default: 0},
 })
 
 const Topic = mongoose.model("Topic", topicSchema)

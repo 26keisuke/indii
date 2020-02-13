@@ -17,7 +17,9 @@ import { USER_IS_LOGGEDIN,
          SHOW_CONFIRMATION,
          HIDE_CONFIRMATION,
          ADD_COLUMN,
-         SHOW_LOGIN, HIDE_LOGIN,} from "./types";
+         SHOW_LOGIN, HIDE_LOGIN,
+         SEARCH_POST, SEARCH_TOPIC,
+         FETCH_DRAFT} from "./types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
@@ -113,4 +115,42 @@ export const showLogin = () => (dispatch) => {
 
 export const hideLogin = () => (dispatch) => {
     dispatch({type: HIDE_LOGIN})
+}
+
+let token;
+
+export const searchTopic = (type, value) => async (dispatch) => {
+    const url = "/api/topic/search/" + String(type) + "/" + String(value)
+    const res = await cancelOnMultipleSearch(url)
+    dispatch({type: SEARCH_TOPIC, payload: {suggestions: res}})
+} 
+
+export const fetchDraft = () => async (dispatch) => {
+    const url = "/api/draft"
+    const res = await axios.get(url)
+    dispatch({type: FETCH_DRAFT, payload: res.data})
+}
+
+
+// UTIL
+
+const cancelOnMultipleSearch = async (url) => {
+    if(token) {
+        token.cancel()
+    }
+    token = axios.CancelToken.source()
+    try {
+        const res = await axios.get(url, {cancelToken: token.token})
+        const result = res.data
+        return result
+    } catch(error) {
+        //　ここの二つは本来はキャンセルしたいところ。（今の状態では、reducerに送られている）
+        if(axios.isCancel(error)) {
+            console.log("Search request has been cancelled.")
+            return []
+        } else {
+            console.log("Something went wrong with searching.")
+            return []
+        }
+    }
 }

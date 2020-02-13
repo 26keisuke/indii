@@ -325,7 +325,7 @@ app.post("/api/resend", (req, res) => {
     })
 })
 
-app.post("/api/topic", (req, res) => {
+app.post("/api/topic", isLoggedIn, (req, res) => {
     new Topic(req.body)
         .save()
         .then(topic => {
@@ -334,6 +334,58 @@ app.post("/api/topic", (req, res) => {
         .catch(err => {
             console.log(err)
             res.send("Fail: POST /api/topic")
+        })
+})
+
+app.post("/api/topic/:topicId/post/:postId")
+
+app.post("/api/topic/:topicId/post", isLoggedIn, (req, res) => {
+    const data = Object.assign({user: req.user.id, type: "New", date: Date.now()}, req.body)
+    new Draft(data)
+        .save()
+        .then(draft => {
+            User.findById(req.user.id)
+                .then(user => {
+                    user.draft.push(draft)
+                    user.save()
+                    .then(res.send("Success: POST /api/topic/:topicId/post"))
+                })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send("Fail: POST /api/topic/:topicId/post")
+        })
+})
+
+app.get("/api/topic/search/:type/:term", (req, res) => {
+    const type = req.params.type
+    const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
+    Topic.find({"topicName": {$regex: value, $options: 'i'}}) 
+        .exec()
+        .then(topic => {
+            if(topic.length === 0){
+                const result = type === "Match" ? [] : [{added: true}]
+                res.send(result)
+            } else {
+                res.send(topic)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.send([])
+        })
+})
+
+app.get("/api/draft", (req, res) => {
+    User.findById(req.user.id)
+        .then(user => {
+            Draft.find({_id: {$in: user.draft}}).limit(10)
+            .then(draft => {
+                res.send(draft)
+            })
+        })
+        .catch(err => {
+            console.log(err)
         })
 })
 
@@ -366,6 +418,7 @@ function isLoggedIn(req,res,next) {
     if (req.isAuthenticated()) {
         return next();
     }
+    console.log("NOT AUTHENTICATED")
     return res.redirect("/")
 }
 

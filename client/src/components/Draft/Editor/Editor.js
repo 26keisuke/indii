@@ -52,15 +52,6 @@ const EditorTop = styled.div`
     }
 `
 
-const RightInsideTitle = styled.div`
-    height:35px;
-    padding-left:30px;
-    border: 1px solid #d2d2d2;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-`
-
 class Editor extends Component {
 
     constructor(props) {
@@ -109,18 +100,16 @@ class Editor extends Component {
 
     renderRight() {
         return (
-          <div>
-            <RightInsideTitle>参照を追加</RightInsideTitle>
-            <Reference/>
-          </div>
-            
+            <div>
+                <Reference/>
+            </div>
         )
     }
 
 
     render() {
         return(
-            <Screen back={true} space={false}>
+            <Screen withBack={true} space={false}>
                 {this.renderTitle()}
                 {this.renderLeft()}
                 {this.renderRight()}
@@ -128,7 +117,5 @@ class Editor extends Component {
         )
     }
 }
-
-
 
 export default Editor
