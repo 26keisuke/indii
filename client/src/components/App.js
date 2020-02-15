@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -55,6 +55,8 @@ class App extends Component {
                 problem3: false,
                 problem4: false,
             },
+
+            // Action/Topic/Editのindexのやつ
             addColumn: "",
 
             logInError: false,
@@ -67,7 +69,7 @@ class App extends Component {
         this.props.fetchUser();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
         if (this.props.update.confirmation.on || this.props.auth.showForm) {
             document.addEventListener("mousedown", this.outsideClick)
         } else {
@@ -101,6 +103,26 @@ class App extends Component {
         this.props.disableGray();        
     }
 
+    sendMessage = (type, message, duration) => {
+        this.props.updateMessage(type, message);
+        setTimeout(() => this.props.resetMessage(), duration)
+    }
+
+    startAction = (type) => {
+        switch(type) {
+            case "confirm":
+                this.setState({confirmationCancel: true})
+                setTimeout(() => this.cancelAction("confirm"), 300)
+                return
+            case "logIn":
+                this.setState({logInFormShow: false})
+                setTimeout(() => this.cancelAction("logIn"), 300)
+                return
+            default:
+                return
+        }
+    }
+
     cancelAction = (type) => {
         switch(type) {
             case "confirm":
@@ -119,8 +141,7 @@ class App extends Component {
     postAction = (action, id, value) => {
         switch(action){
             case "POST_DELETE":
-                this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction("confirm"), 300)
+                this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
                     axios.post("/api/post/delete", {id})
@@ -129,8 +150,7 @@ class App extends Component {
                         setTimeout(() => {
                         this.props.endFetching(); 
                         this.props.disableGray();
-                        this.props.updateMessage("success", "ポストを削除しました。");
-                        setTimeout(() => this.props.resetMessage(), 3000)
+                        this.sendMessage("success", "ポストを削除しました。", 3000)
                         }, 500)
                     })
                     .catch((err)=> console.error(err))
@@ -140,8 +160,7 @@ class App extends Component {
                 return null;
 
             case "GIVE_FEEDBACK":
-                this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction("confirm"), 300)
+                this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
                     axios.post("/api/feeback", {id: id, problems: this.state.problems})
@@ -150,43 +169,71 @@ class App extends Component {
                         setTimeout(() => {
                         this.props.endFetching(); 
                         this.props.disableGray();
-                        this.props.updateMessage("success", "フィードバックを受け取りました。");
-                        setTimeout(() => this.props.resetMessage(), 3000)
+                        this.sendMessage("success", "フィードバックを受け取りました。", 3000)
                         }, 500);
                     })
-                    .catch((err)=> console.error(err))
-                    
+                    .catch((err) => console.error(err))
                 } else {
                     this.props.disableGray();
                 }
                 return null;
 
             case "ADD_COLUMN":
-                this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction("confirm"), 300)
+                this.startAction("confirm")
                 if (id){
                     this.props.addColumn(id, this.state.addColumn);
                 }
                 this.props.disableGray();
                 return null;
             
-            case "DELETE_DRAFT":
-                this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction("confirm"), 300)
+            case "DRAFT_DELETE_CHECK":
+                this.startAction("confirm")
                 if (id){
-                    //ここにロジックが入る
-                } 
-                this.props.disableGray();
+                    this.props.isFetching()
+                    axios.post("/api/draft/delete", {subject: id})
+                    .then(res => {
+                        this.props.endFetching();
+                        this.props.disableGray();
+                        this.props.fetchDraft() // this certainly isnt the optimal because req is sent to server again
+                        this.sendMessage("success", "下書きを削除しました。", 3000)
+                        return null
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        this.props.endFetching()
+                        this.props.disableGray();
+                        return null
+                    })
+                } else {
+                    this.props.disableGray();
+                    return null;
+                }
+
+            case "DRAFT_UPLOAD_CHECK":
+                this.startAction("confirm")
+                if (value){
+
+                    const promises = []
+
+                    for(var key in value) {
+                        promises.push(
+                            axios.post("/api/draft/upload", {value: value[key]})
+                        )
+                    }
+
+                    Promise.all(promises).then(() => {
+                        this.props.disableGray();
+                        this.props.endFetching()
+                        this.sendMessage("success", "ポストをアップロードしました。", 4000)
+                    })
+
+                } else {
+                    this.props.disableGray();
+                    this.props.endFetching()
+                }
+
                 return null;
 
-            case "UPLOAD_DRAFT":
-                this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction("confirm"), 300)
-                if (id){
-                    //ここにロジックが入る
-                } 
-                this.props.disableGray();
-                return null;
             case "SIGN_UP":
                 this.props.isFetching()
             
@@ -195,10 +242,8 @@ class App extends Component {
                     setTimeout(() => {
                         this.props.disableGray()
                         this.props.endFetching()
-                        this.setState({logInFormShow: false})
-                        setTimeout(() => this.cancelAction("logIn"), 300)
-                        this.props.updateMessage("success", `"${user.data.email}"に確認メールを送信しました。`);
-                        setTimeout(() => this.props.resetMessage(), 7000)
+                        this.startAction("logIn")
+                        this.sendMessage("success", `"${user.data.email}"に確認メールを送信しました。`, 7000)
                         this.props.fetchUser();
                     }, 2500)
                 })
@@ -220,10 +265,8 @@ class App extends Component {
                     }
                     this.props.disableGray()
                     this.props.endFetching()
-                    this.setState({logInFormShow: false})
-                    setTimeout(() => this.cancelAction("logIn"), 300)
-                    this.props.updateMessage("success", `${user.data.userName}さん、お帰りなさい。`);
-                    setTimeout(() => this.props.resetMessage(), 3000)
+                    this.startAction("logIn")
+                    this.sendMessage("success", `${user.data.userName}さん、お帰りなさい。`, 3000)
                     this.props.fetchUser();
                 })
                 .catch(err => {
@@ -232,12 +275,29 @@ class App extends Component {
 
                 return null;
 
+            case "DELETE_REF":
+                this.startAction("confirm")
+
+                if(id) {
+                    axios.delete(`/api/draft/${id.draftId}/ref/${id.refId}`)
+                    .then(res => {
+                        this.props.disableGray()
+                        this.sendMessage("success", "参照を削除しました。", 3000)
+                        return null
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        return null
+                    })
+                } else {
+                    this.props.disableGray()
+                    return null;
+                }
+
             default:
-                this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction("confirm"), 300)
+                this.startAction("confirm")
                 this.props.disableGray();
                 return null;
-
         }
     }
 
@@ -315,15 +375,15 @@ class App extends Component {
                         <div className="fakebox">
                             <Route exact path="/" component={Feed} />
                             <Route path="/profile" component={Profile} />
-                            <Route exact path="/draft" component={Draft} />
+                            <Route exact path="/draft" render={() => (auth.loggedIn ? <Draft/> : <Redirect to="/"/>)} />
                             <Route path="/draft/edit/:id" component={DraftEditor} />
                             <Route path="/search" component={SearchResult} />
-                            <Route exact path="/notification" component={Notification} />
+                            <Route exact path="/notification" render={() => (auth.loggedIn ? <Notification/> : <Redirect to="/"/>)} />
                             <Route path="/notification/check/:id" component={EditConfirm} />
-                            <Route path="/action/post/create" component={CreatePost} />
-                            <Route path="/action/topic/create" component={CreateTopic} />
-                            <Route path="/action/post/edit" component={EditPost} />
-                            <Route path="/action/topic/edit" component={EditTopic} />
+                            <Route path="/action/post/create" render={() => (auth.loggedIn ? <CreatePost/> : <Redirect to="/"/>)} />
+                            <Route path="/action/topic/create" render={() => (auth.loggedIn ? <CreateTopic/> : <Redirect to="/"/>)} />
+                            <Route path="/action/post/edit" render={() => (auth.loggedIn ? <EditPost/> : <Redirect to="/"/>)} />
+                            <Route path="/action/topic/edit" render={() => (auth.loggedIn ? <EditTopic/> : <Redirect to="/"/>)} />
                             <Route path="/topic/:id" component={Topic} />
                             <Route path="/post/:id" component={Post} />
                             <Route path="/profile/:id" component={Profile} />

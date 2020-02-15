@@ -96,7 +96,8 @@ class Post extends Component {
 
     render () {
 
-        const { suggestion } = this.props
+        const { index, postName, star, config, contribution  } = this.props.suggestion
+        const lastEdited = contribution[contribution.length-1]
 
         return (
             <div>
@@ -104,27 +105,23 @@ class Post extends Component {
                     <div>
                         <PostLeft>
                             <p>
-                            { 
-                            suggestion.index.map(idx => {
-                                return idx + "."
-                            })
-                            }
+                            {index.join(".")}
                             </p>
                         </PostLeft>
                         <PostMiddle>
-                            <p>{suggestion.title}</p>
+                            <p>{postName}</p>
                             <div>
                                 <StarImg/>
-                                <p>{suggestion.likes}</p>
+                                <p>{star.count}</p>
                                 <p>最後の編集日:</p>
-                                <p>{suggestion.lastEdited}</p>
+                                <p>{lastEdited ? lastEdited.timeStamp : "-------"}</p>
                             </div>
                         </PostMiddle>
                         {/* <div>
                             {this.renderLevel()}
                         </div> */}
-                        { suggestion.permission ? <PermissionImg/>: "" }
-                        <PostRight src={suggestion.imgUrl} alt="ポストの検索結果のメイン画像"/>
+                        { !config.allowEdit ? <PermissionImg/>: "" }
+                        <PostRight src={"/"} alt="ポストの検索結果のメイン画像"/>
                     </div>
                 </PostElement>
             </div>

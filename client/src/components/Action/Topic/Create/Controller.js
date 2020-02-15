@@ -1,11 +1,10 @@
 import React, { Component } from "react"
 
-
 import CreateFriendsTopic from "./Friend"
 import CreatePreviewTopic from "./Preview"
 
 import Select from "../../Controller/Select"
-import topics from "../../../__Mock__/data/topic"
+// import topics from "../../../__Mock__/data/topic"
 
 import ActionProgress from "../../Progress/Progress"
 import Image from "../../Controller/Image"
@@ -162,4 +161,4 @@ class CreateTopic extends Component {
     }
 }
 
-export default CreateTopic;
+export default CreateTopic

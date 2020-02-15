@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
+import { connect } from "react-redux"
 
-import index from "../../__Mock__/data/index"
+import * as actions from "../../../actions"
+
 import indent from "../../../images/indent.png"
 
 class Index extends Component {
@@ -10,64 +12,154 @@ class Index extends Component {
         super(props)
         this.state = {
             selectedId: "",
-            selectedContent: "",
+            selectedTitle: "",
             selectedIndex: "",
+            showBtn: false,
+            forcedOn: false,
+            addColumn: false,
+
+            draft: {},
+            topic: {},
         }
     }
 
+    // idが一致する下書きをとってくる
     componentDidMount() {
+
+        this.props.isFetching()
         this.props.unVisible()
+        const draftList = this.props.draft.onEdit
+
+        for (var key in  draftList) {
+            if( draftList[key]._id === this.props.id) {
+                this.props.fetchTopic(draftList[key].topic)
+                this.setState({
+                    draft: draftList[key]
+                })
+            }
+        }
+    }
+    
+    // draftの対象となるトピックをとってくる
+    componentDidUpdate(prevProps) {
+        if (prevProps.topic.fetched !== this.props.topic.fetched) {
+            this.props.endFetching()
+            this.setState({
+                topic: this.props.topic.fetched
+            })
+            this.props.setMessage(`「${this.state.draft.postName}」をトピック「${this.props.topic.fetched.topicName}」のどこに挿入しますか？`)
+        }
     }
 
-    handleClick = (id, idx, content) => {
+    handleClick = (id, idx, title, isLastIdx, forcedOn) => {
         this.setState({
             ...this.state,
-            selectedId: id,
-            selectedContent: content,
-            selectedIndex: idx
+            selectedId: id, // to ensure everything is unique
+            selectedTitle: title,
+            selectedIndex: idx,
+            showBtn: forcedOn ? false : isLastIdx,
+            forcedOn: forcedOn,
+            addColumn: forcedOn ? true : !isLastIdx && false
         }, () => {
-            this.props.visible();
+            if(forcedOn) {
+                this.props.setIndex(this.props.topic.fetched._id, this.props.id, idx, title, true)
+            } else {
+                this.props.setIndex(this.props.topic.fetched._id, this.props.id, idx, title)
+            }
+        })
+        this.props.visible();
+    }
+
+    handleToggle = () => {
+        this.setState({
+            addColumn: !this.state.addColumn,
+        }, () => {
+            this.props.setColumn(this.props.id, this.state.addColumn)
         })
     }
+    
+    renderIndex = () => {
+        var result = []
+        const { topic } = this.state
+
+        if(topic.posts) {
+            for (var k in topic.order) {
+                const column = topic.column.find(elem => elem._id === topic.order[k])
+                const id = column._id
+                const title = column.title
+                const isFirst = k === "0"
+                result.push(
+                    <IndexElement 
+                        k={id}
+                        indent={false} 
+                        selected={this.state.selectedId === id} 
+                        onClick={() => this.handleClick(id, [parseInt(k)], title, isFirst, isFirst)}
+                    >
+                        <p>{k}</p>
+                        <p>{title}</p>
+                        <img src={indent}/>
+                    </IndexElement>
+                )
+
+                if(k === "0"){ continue }
+
+                for (var l in column.posts) {
+                    const post = column.posts[l]
+                    const id = post._id
+                    const idx = post.index.join(".")
+                    const postName = post.postName
+                    const isLastIdx = l === (String(column.posts.length - 1))
+                    result.push(
+                        <IndexElement 
+                            key={id}
+                            indent={true}
+                            selected={this.state.selectedId === id} 
+                            onClick={() => this.handleClick(id, post.index, postName, isLastIdx)}
+                        >
+                            <p>{idx}</p>
+                            <p>{postName}</p>
+                            <img src={indent}/>
+                        </IndexElement>
+                    )
+                }
+            }
+        }
+        return result
+    }
+
 
     render () {
 
         return (
             <IndexBox>
-                {!!this.state.selectedIndex &&
-                <IndexPreview top="38px" right="-10px">
+                {!!this.state.selectedId &&
+                <IndexPreview top="2px" right="20px">
                     <div/>
-                    <p>{this.state.selectedIndex}</p>
-                    <p>{this.state.selectedContent}</p>
+                    <p>{this.state.selectedIndex.join(".")}</p>
+                    <p>{this.state.selectedTitle}</p>
                     <p>の後</p>
                 </IndexPreview>
                 }
                 <IndexElementWrapper>
-                    { Object.keys(index.tasks).map(task => {
-                        const id = index.tasks[task].id
-                        const idx = index.tasks[task].index.join(".")
-                        const content = index.tasks[task].content
-                        const indented = index.tasks[task].index.length > 1
-            
-                        return (
-                            <IndexElement 
-                                key={task}
-                                indent={indented} 
-                                selected={this.state.selectedId === id} 
-                                onClick={() => this.handleClick(id, idx, content)}
-                            >
-                                <p>{idx}</p>
-                                <p>{content}</p>
-                                <img src={indent}/>
-                            </IndexElement>
-                        )
-                    })}
+                    {this.renderIndex()}
                 </IndexElementWrapper>
+                <AddColumn show={this.state.showBtn}>
+                    { this.state.forcedOn
+                    ?
+                        <input checked={true} type="checkbox" id="0" name="addColumn"/>
+                    :
+                        this.state.showBtn
+                        ?
+                        <input onChange={this.handleToggle} checked={this.state.addColumn} type="checkbox" id="0" name="addColumn"/>
+                        :
+                        <input checked={false} type="checkbox" id="0" name="addColumn"/>
+                    }
+                    <label htmlFor="0">新しいコラムを追加する</label>
+                </AddColumn>
             </IndexBox>
         )
     }
 }
-
 
 const IndexBox = styled.div`
     display: flex;
@@ -144,15 +236,38 @@ export const IndexPreview = styled.div`
     }
 
     & p:nth-child(3) {
-        margin-top: -2px;
+        margin-top: 0px;
         margin-right: 5px;
         color: #444444;
     }
 
     & p:nth-child(4) {
+        margin-top: 2px;
         font-size: 10px;
         color: #777777;
     }
 `
 
-export default Index
+const AddColumn = styled.div`
+    position: absolute;
+    bottom: 9px;
+    left: 0px;
+    opacity: ${props => props.show ? 1 : 0.3};
+
+    & > input {
+        margin-right: 10px;
+    }
+
+    & > label {
+        cursor: ${props => !props.show && "default !important"};
+    }
+`
+
+function mapStateToProps(state) {
+    return {
+        draft: state.draft,
+        topic: state.topic,
+    }
+}
+
+export default connect(mapStateToProps, actions)(Index)

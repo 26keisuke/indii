@@ -49,6 +49,10 @@ class Select extends Component {
             this.setState({
                 suggestions: this.props.topic.search,
             })
+        } else if(prevProps.post.search !== this.props.post.search) {
+            this.setState({
+                suggestions: this.props.post.search,
+            })
         }
     }
 
@@ -61,7 +65,11 @@ class Select extends Component {
 
     onSuggestionsFetchRequested = ({ value }) => {
         if(!this.props.data) {
-            this.props.searchTopic(this.props.type, value)  
+            if(this.props.content === "Topic") {
+                this.props.searchTopic(this.props.type, value)  
+            } else if (this.props.content === "Post") {
+                this.props.searchPost(this.props.type, value)  
+            }
         } else {
             this.setState({
                 suggestions: getSuggestions(value, this.props.type, this.props.data, this.props.searchByVariable)
@@ -225,7 +233,7 @@ class Select extends Component {
                 return (
                     <Warning>
                         <p>
-                            既に{text}<Link to={"/topic/1123"}>"{this.state.value}"</Link>は存在しています。代わりに<Link to={"/action/post/create"}>新しいポスト</Link>を追加しますか？
+                            既に{text}<Link to={"/"}>"{this.state.value}"</Link>は存在しています。代わりに<Link to={"/action/post/create"}>新しいポスト</Link>を追加しますか？
                         </p>
                     </Warning>
                 )
@@ -402,7 +410,8 @@ Select.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        topic: state.topic
+        topic: state.topic,
+        post: state.post,
     }
 }
 

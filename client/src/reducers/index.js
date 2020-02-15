@@ -14,7 +14,9 @@ import { USER_IS_LOGGEDIN,
          ADD_COLUMN, 
          SHOW_LOGIN, HIDE_LOGIN,
          SEARCH_TOPIC, SEARCH_POST,
-         FETCH_DRAFT } from "../actions/types"
+         FETCH_TOPIC,
+         FETCH_DRAFT, 
+         DRAFT_UPDATED, DRAFT_READ} from "../actions/types"
 
 const initialState = {
     category: {
@@ -50,6 +52,7 @@ const initialState = {
         showForm: false,
         loggedIn: false,
         info: {
+            id: "",
             userName: "",
             email: "",
             name: {
@@ -83,31 +86,16 @@ const initialState = {
             next: "",
         },
     },
-    topic: {
-        // search: [{
-        //     topicName: "",
-        //     img: "",
-        //     tags: [],
-        //     posts: 0,
-        //     favorites: 0,
-        // }],
+    post: {
         search: [],
     },
+    topic: {
+        search: [],
+        fetched: {},
+    },
     draft: {
-        // onEdit: [{
-        //     _id: null,
-        //     topic: null, //topicId
-        //     topicName: "",
-        //     postName: "",
-        //     date: null,
-        //     type: "",
-        //     isValid: false,
-        //     content: "",
-        //     config: {
-        //         allowEdit: false
-        //     },
-        // }]
-        onEdit: []
+        onEdit: [],
+        isUpdated: false,
     }
 }
 
@@ -123,6 +111,28 @@ function draftReducer(state=initialState.draft, action) {
                 ...state,
                 onEdit: action.payload,
             }
+        case DRAFT_UPDATED:
+            return {
+                ...state,
+                isUpdated: true,
+            }
+        case DRAFT_READ:
+            return {
+                ...state,
+                isUpdated: false,
+            }
+        default:
+            return state
+    }
+}
+
+function postReducer(state=initialState.post, action) {
+    switch(action.type) {
+        case SEARCH_POST:
+            return {
+                ...state,
+                search: action.payload.suggestions
+            }
         default:
             return state
     }
@@ -134,6 +144,11 @@ function topicReducer(state=initialState.topic, action) {
             return {
                 ...state,
                 search: action.payload.suggestions
+            }
+        case FETCH_TOPIC:
+            return {
+                ...state,
+                fetched: action.payload
             }
         default:
             return state
@@ -317,12 +332,13 @@ function authReducer(state=initialState.auth, action) {
         case USER_IS_LOGGEDIN:
             if(action.payload) {
 
-                const { name, photo, email, userName } = action.payload
+                const { _id, name, photo, email, userName } = action.payload
 
                 return {
                     ...state,
                     loggedIn: true,
                     info: {
+                        id: _id,
                         email: email,
                         name: {
                             familyName: name ? name.familyName : "",
@@ -360,4 +376,5 @@ export default combineReducers({
     index: indexReducer,
     topic: topicReducer,
     draft: draftReducer,
+    post: postReducer,
 });

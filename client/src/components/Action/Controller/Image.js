@@ -126,14 +126,14 @@ function ActionImage(props) {
         }
         props.setBackward(false)
         props.setStep(2);
-        if((file.preview === "null") || (file.preview === "")) {
+        if((file.preview === "null") || (file.preview === "") || (file.preview === null)) {
             props.setImage(props.initialVal)
         } else if(props.initialVal) {
             props.setImage(file.preview)
         }
     };
 
-    const display = ((file.preview === "null") || (file.preview === "")) ? props.initialVal : file.preview
+    const display = ((file.preview === "null") || (file.preview === "") || (file.preview === null)) ? props.initialVal : file.preview
 
     return (
         <Box>

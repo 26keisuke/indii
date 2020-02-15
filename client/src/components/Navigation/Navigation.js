@@ -3,14 +3,26 @@ import { connect } from "react-redux"
 
 import * as actions from "../../actions"
 
+import { checkAuth } from "../Util/util"
 import List from "./List/List"
 
 class Navigation extends Component {
 
-    handleClick = (id) => {
+    toggleIcon = (id) => {
         this.props.resetCategory()
         this.props.setCategory(id)
         this.props.nudgeCheck(id)
+    }
+
+    handleClick = (e, id) => {
+        if((id === "draft") || (id === "notification")) {
+            const isAuthenticated = checkAuth(e, this.props)
+            if(isAuthenticated) {
+                this.toggleIcon(id)
+            }
+            return
+        }
+        this.toggleIcon(id)
     }
 
     render() {
@@ -27,7 +39,8 @@ class Navigation extends Component {
 function mapStateToProps(state) {
     return{
         category: state.category,
-        nudge: state.nudge
+        nudge: state.nudge,
+        auth: state.auth,
     }
 }
 

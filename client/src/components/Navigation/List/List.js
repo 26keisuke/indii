@@ -33,6 +33,62 @@ const images = {
 const variableName = ["home", "draft", "action", "notification", "setting"]
 const screenName = ["ホーム", "下書き", "編集・作成", "通知", "設定"]
 
+class List extends Component {
+
+    // tertinary expressionで書くと見にくくなる
+    renderText = (index, selected) => {
+        if(this.props.display === "header"){
+            return null
+        } else {
+            return <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
+        }
+    }
+
+    renderList = () => {
+
+        const cate = this.props.category;
+        const nudgeProps = this.props.nudge
+
+        const nudge = {
+            home: nudgeProps.home === true,
+            draft: nudgeProps.draft === true,
+            action: nudgeProps.action === true,
+            notification: nudgeProps.notification === true,
+            setting: nudgeProps.setting === true,
+        };
+
+        const subject = variableName.map((name, index) => {
+            var url = ""
+
+            if (name !== "home") {
+                url = "/" + name;
+            } else {
+                url = "/"
+            }
+            
+            return (
+                <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name)}>
+                    <NudgeMark key={name} nudge={nudge[name]}/>
+                    <ListImg 
+                        src={cate[name] ? images.pressed[name] : images.unpressed[name]} 
+                    />
+                    {this.renderText(index, cate[name])}
+                </ListElement>
+            )
+        })
+
+        return subject;
+    }
+
+    render() {
+        return (
+            <ListWrapper display={this.props.display}>
+                {this.renderList()}
+            </ListWrapper>
+        )
+    }
+}
+
 
 const ListWrapper = styled.div`
 
@@ -131,61 +187,5 @@ const TextSelected = styled.p`
         `
     }
 `
-
-class List extends Component {
-
-    // tertinary expressionで書くと見にくくなる
-    renderText = (index, selected) => {
-        if(this.props.display === "header"){
-            return null
-        } else {
-            return <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
-        }
-    }
-
-    renderList = () => {
-
-        const cate = this.props.category;
-        const nudgeProps = this.props.nudge
-
-        const nudge = {
-            home: nudgeProps.home === true,
-            draft: nudgeProps.draft === true,
-            action: nudgeProps.action === true,
-            notification: nudgeProps.notification === true,
-            setting: nudgeProps.setting === true,
-        };
-
-        const subject = variableName.map((name, index) => {
-            var url = ""
-
-            if (name !== "home") {
-                url = "/" + name;
-            } else {
-                url = "/"
-            }
-            
-            return (
-                <ListElement key={name} to={url} onClick={() => this.props.handleClick(name)}>
-                    <NudgeMark key={name} nudge={nudge[name]}/>
-                    <ListImg 
-                        src={cate[name] ? images.pressed[name] : images.unpressed[name]} 
-                    />
-                    {this.renderText(index, cate[name])}
-                </ListElement>
-            )
-        })
-
-        return subject;
-    }
-
-    render() {
-        return (
-            <ListWrapper display={this.props.display}>
-                {this.renderList()}
-            </ListWrapper>
-        )
-    }
-}
 
 export default List

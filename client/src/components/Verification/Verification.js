@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import indii from "../../images/indii.png"
 
-import validateEmail from "../Util/validateEmail"
+import { validateEmail } from "../Util/util"
 
 import Reset from "./Reset/Reset"
 import Change from "./Change/Change"

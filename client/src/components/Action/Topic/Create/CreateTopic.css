@@ -100,8 +100,8 @@
 .topic-form-progress-circle p{
     position: absolute;
     color: #ffffff;
-    top:12px;
-    left:18px;
+    top:10px;
+    left:17px;
     font-size: 17px;
 }
 
@@ -117,8 +117,8 @@
 .topic-form-progress-circle-fake p{
     position: absolute;
     color: #ffffff;
-    top:12px;
-    left:18px;
+    top:10px;
+    left:17px;
     font-size: 17px;
 }
 

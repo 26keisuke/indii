@@ -1,10 +1,11 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { connect } from "react-redux"
 
 import { Separator, DraftElement } from "./Action"
 import { IndexPreview } from "./Index"
 
-import sample from "../../../images/sample1.png"
+import { IoMdCheckmark } from "react-icons/io"
 
 const DraftElementWrapper = styled.div`
     margin-bottom: 20px;
@@ -16,65 +17,78 @@ const DraftElementWrapper = styled.div`
     }
 `
 
+const AddColumn = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 10px;
+    right: 5px;
+    font-size: 10px;
+`
+
+const ColumnCheck = styled(IoMdCheckmark)`
+    margin-right: 8px;
+    color: #4CD964;
+`
+
 class Preview extends Component {
 
-    renderUpload = () => {
-        return (
-            <DraftElement indexPreview={true}>
-                <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                <div>
-                    <p>ポスト名</p>
-                    <p>前回の編集日： </p>
-                </div>
-                <IndexPreview top="10px" left="7px">
-                    <div/>
-                    <p>1.0</p>
-                    <p>ハンバーガー将軍</p>
-                    <p>の後</p>
-                </IndexPreview>
-            </DraftElement>
-        )
-    }
-
-    renderDelete = () => {
-        return (
-            <DraftElement preview={true}>
-                <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                <div>
-                    <p>ポスト名</p>
-                    <p>前回の編集日： </p>
-                </div>
-            </DraftElement>
-        )
+    findDraftById = (isUpload) => {
+        const res = this.props.draft.onEdit.map(elem => {
+            if(this.props.ids.includes(elem._id)){
+                return (
+                    <DraftElement key={elem._id} indexPreview={isUpload ? true : false} preview={isUpload ? false : true}>
+                        <img src={elem.topicImg} alt={"ドラフトが傘下となっているトピックの写真"}/>
+                        <div>
+                            <p>{elem.postName}</p>
+                            <div>前回の編集日： {elem.editDate[elem.editDate.length-1] === undefined ? <span/> : elem.editDate[elem.editDate.length-1]}</div>
+                        </div>
+                        { isUpload &&
+                        <IndexPreview top="10px" left="7px">
+                            <div/>
+                            <p>{this.props.index[elem._id].index.join(".")}</p>
+                            <p>{this.props.index[elem._id].title}</p>
+                            <p>の後</p>
+                        </IndexPreview>
+                        }
+                        { this.props.index[elem._id].addColumn &&
+                        <AddColumn>
+                            <ColumnCheck/>
+                            <p>新しいコラムを追加</p>
+                        </AddColumn>
+                        }
+                    </DraftElement>
+                )
+            }
+        })
+        return res;
     }
 
     render () {
-
         return (
             <div>
-
                 <Separator/>
-
                 <DraftElementWrapper>
                     
-
                     { this.props.action === "DRAFT_DELETE_CHECK"
 
-                    ? this.renderDelete()
+                    ? this.findDraftById(false)
 
-                    : this.renderUpload()
+                    : this.findDraftById(true)
 
                     }
 
-
-
                 </DraftElementWrapper>
-
                 <Separator bottom="49px"/>
-
             </div>
         )
     }
 }
 
-export default Preview
+function mapStateToProps(state) {
+    return {
+        draft: state.draft
+    }
+}
+
+export default connect(mapStateToProps,null)(Preview)

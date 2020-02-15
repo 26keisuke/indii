@@ -17,6 +17,8 @@ import good from "../../../images/good.png";
 import nerd from "../../../images/nerd.png";
 import hmm from "../../../images/hmm.png";
 
+import ShowMore from "../../Util/ShowMore"
+
 import "./Post.css";
 
 import * as actions from "../../../actions";
@@ -157,8 +159,7 @@ class Post extends Component {
         }
     }
 
-    deletePost = (e) => {
-        e.preventDefault();
+    deletePost = () => {
         this.setState({showMore: false})
         const id = this.props.id;
         const action = "POST_DELETE"
@@ -170,8 +171,7 @@ class Post extends Component {
         this.props.enableGray()
     }
 
-    reportPost = (e) => {
-        e.preventDefault();
+    reportPost = () => {
         this.setState({showMore: false});
         const id = this.props.id;
         const action = "GIVE_FEEDBACK";
@@ -227,14 +227,17 @@ class Post extends Component {
                             </Emoji>
                             {this.renderIcon()}
                         </div>
-                        <div ref={this.actionRef}>
-                            <p onClick={this.handleMoreClick}></p>
-                            <Action show={this.state.showMore}>
-                                <p onClick={this.reportPost}>フィードバックをする</p>
-                                <p onClick={this.deletePost}>この投稿を削除する</p>
-                            </Action>
-                            <img className="post-feed-more"　src={more} alt={"その他のアクション"}/>
-                        </div>
+                        <ShowMoreWrapper>
+                            <ShowMore
+                                ref={this.actionRef}
+                                handleClick={this.handleMoreClick}
+                                show={this.state.showMore}
+                                left="-110px"
+                                bottom="23px"
+                                actionName={["フィードバックをする", "この投稿を削除する"]}
+                                action={[this.reportPost, this.deletePost]}
+                            />
+                        </ShowMoreWrapper>
                     </PostBottom>
                     </Collapse>
                 </PostBox>
@@ -421,34 +424,8 @@ const Emoji = styled.div`
     }
 `
 
-const Action = styled.div`
-    display: ${props => props.show ? "flex" : "none"};
-    position: absolute;
-    width:180px;
-    background-color: white;
-    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
-    flex-direction: column;
-    left: -110px;    
-    bottom: 23px;
-    border-radius: 5px;
-
-    & p {
-        padding: 12px 20px;
-        border-bottom: 0.5px solid #d2d2d2;
-        cursor: pointer;
-
-        &:hover {
-            background-color: rgba(28,28,28,0.1);
-        }
-
-        &:last-child {
-            border-bottom: none;
-        }
-    }
-
-    & div {
-        height: 30px;
-    }
+const ShowMoreWrapper = styled.div`
+    margin-right:65px;
 `
 
 const PostBottom = styled.div`
@@ -500,12 +477,6 @@ const PostBottom = styled.div`
     }
 
     & p:hover ~ .post-feed-response{
-        animation-name: bounce;
-        animation-duration: 300ms;
-        animation-fill-mode: forwards;
-    }
-
-    & p:hover ~ .post-feed-more{
         animation-name: bounce;
         animation-duration: 300ms;
         animation-fill-mode: forwards;

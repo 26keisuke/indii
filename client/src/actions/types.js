@@ -35,8 +35,12 @@ export const HIDE_LOGIN = "HIDE_LOGIN"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"
-
+export const DRAFT_UPDATED = "DRAFT_UPDATED"
+export const DRAFT_READ = "DRAFT_READ"
 
 // TOPIC
 export const SEARCH_TOPIC = "SEARCH_TOPIC"
+export const FETCH_TOPIC = "FETCH_TOPIC"
+
+// POST
 export const SEARCH_POST = "SEARCH_POST"

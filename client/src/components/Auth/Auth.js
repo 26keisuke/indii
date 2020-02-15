@@ -5,7 +5,7 @@ import styled, { css, keyframes } from "styled-components"
 import axios from "axios"
 import { connect } from "react-redux"
 
-import validateEmail from "../Util/validateEmail"
+import { validateEmail } from "../Util/util"
 
 import * as actions from "../../actions"
 

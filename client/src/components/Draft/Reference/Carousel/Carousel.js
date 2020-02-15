@@ -9,7 +9,7 @@ class Carousel extends Component {
 
         const res = list.map((name,index) => {
             return (
-                <RefToggle selected={getState("toggle") === state[index]} onClick={() => setToggle(state[index])}>
+                <RefToggle key={name} selected={getState("toggle") === state[index]} onClick={() => setToggle(state[index])}>
                     <div>
                         <p>{name}</p>
                         <div/>

@@ -128,14 +128,6 @@ class CreatePost extends Component {
         this.setState({
             selectedTopic: topic
         })
-        const url = "/api/topic/" + topic.id
-        axios.get(url)
-        .then(res => {
-            console.log(res)
-        })
-        .catch(err => {
-            console.log(err)
-        })
     }
 
     render () {

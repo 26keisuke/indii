@@ -1,5 +1,6 @@
 export const nameList = [
-    "ウェブサイト",
+    "ウェブ",
+    "ニュース",
     "本",
     "本の章",
     "雑誌",
@@ -12,6 +13,7 @@ export const stateName = [
     "website",
     "news",
     "book",
+    "chapter",
     "journal",
     "paper",
     "media",

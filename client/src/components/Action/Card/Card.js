@@ -2,6 +2,10 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import { connect } from "react-redux"
+
+import * as actions from "../../../actions"
+import { checkAuth } from "../../Util/util"
 
 const CardWrapper = styled.div`
     display: flex;
@@ -128,7 +132,7 @@ class Card extends Component {
             const url = "/action/" + this.props.category + "/" + action
 
             return (
-                <CardElement key={index} to={url}>
+                <CardElement key={index} to={url} onClick={(e) => checkAuth(e, this.props)}>
                     <div>
                         <Hexagon>
                             <div/>
@@ -169,4 +173,10 @@ Card.propTypes = {
     color: PropTypes.arrayOf(PropTypes.string),
 }
 
-export default Card;
+function mapStateToProps(state) {
+    return {
+        auth: state.auth
+    }
+}
+
+export default connect(mapStateToProps, actions)(Card);

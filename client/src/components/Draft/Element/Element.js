@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import BraftEditor from 'braft-editor'
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 
@@ -6,7 +7,7 @@ const DraftBox = styled(Link)`
     border-bottom: 1px solid #d2d2d2;   
     display: flex;
     flex-direction: row;
-    padding: 20px;
+    padding: 15px 20px;
     align-items: center;
     margin-left:-1px;
     cursor: pointer;
@@ -16,8 +17,8 @@ const DraftBox = styled(Link)`
     }
 
     & > img {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         object-fit: contain;
         flex-shrink: 0;
     }
@@ -39,7 +40,7 @@ const DraftLeft = styled.div`
 `
 
 const Title = styled.p`
-    font-size: 19px;
+    font-size: 15px;
     color: #1C1C1C;
     margin-bottom: 5px;
     font-weight: bold;
@@ -50,11 +51,18 @@ const Content = styled.p`
     margin-bottom: 10px;
     margin-right:25px;
     width: 510px; 
+    height: 15px;
+    overflow: hidden;
 `
 
-const Date = styled.p`
+const Date = styled.div`
     font-size: 10px;
     color: #8F8B8B;
+    & > span {
+        width: 30px;
+        border-bottom: 1px solid #d2d2d2;
+        margin-left: 10px;
+    }
 `
 
 class Draft extends Component {
@@ -69,19 +77,24 @@ class Draft extends Component {
     }
 
     render(){
+
+        const { _id, type, postName, topicName, content, editDate, topicImg } = this.props.draft
+
         return(
-            <DraftBox to={"/draft/edit/" + this.props.id} id={this.props.id}>
+            <DraftBox to={"/draft/edit/" + _id} id={_id}>
                 <DraftLeft>
                     <div>
                         <p>ポスト ></p>
-                        <p>{this.renderType(this.props.type) + " >"}</p>
-                        <p>{this.props.topic}</p>
+                        <p>{this.renderType(type) + " >"}</p>
+                        <p>{topicName}</p>
                     </div>
-                    <Title>{this.props.title}</Title>
-                    <Content>{this.props.content}</Content>
-                    <Date>前回の編集日: {this.props.date}</Date>
+                    <Title>{postName}</Title>
+                    <Content>
+                        {BraftEditor.createEditorState(content).toText().replace(/[a\s]+/, "").substring(0, 50)}
+                    </Content>
+                    <Date>前回の編集日: {editDate[editDate.length-1] === undefined ? <span/> : editDate[editDate.length-1]}</Date>
                 </DraftLeft>
-                <img src={this.props.img}/>
+                <img src={topicImg}/>
             </DraftBox>
         )
     }

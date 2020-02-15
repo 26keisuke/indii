@@ -1,5 +1,10 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+import axios from "axios"
+
+import * as actions from "../../../actions"
 
 import {
         nameList,
@@ -29,6 +34,7 @@ class Reference extends Component {
             toggle: "website",
 
             reference: [],
+            tempReference: {},
 
             website: {
                 title: "",
@@ -103,8 +109,26 @@ class Reference extends Component {
         }
     }
 
-    componentWillUnmount() {
-        // save data
+    componentDidUpdate(prevProps, prevState) {
+        // tempReferenceの部分は、最初にinitializeした時に呼ばれる（空白のobjがaxiosで送られる）から必要
+        if((prevState.reference !== this.state.reference) && (this.state.tempReference.refType)) {
+            const url = this.props.location.pathname
+            const draftId = url.substring(url.lastIndexOf('/') + 1)
+            axios.post(`/api/draft/${draftId}/ref`, {ref: this.state.tempReference})
+            .then(
+                this.setState({
+                    ...this.state,
+                    tempReference: {},
+                })
+            )
+            .catch(err => {
+                console.log(err)
+            })
+        } else if (prevProps.draft !== this.props.draft) {
+            this.setState({
+                reference: this.props.draft.ref || []
+            })
+        }
     }
 
     getState = (name) => {
@@ -163,28 +187,29 @@ class Reference extends Component {
 
     handleSubmit = () => {
 
-        const data = {
-            type: this.state.toggle,
+        const type = {
+            refType: this.state.toggle,
         }
-        const merged = Object.assign(data, this.state[this.state.toggle])
-        const subject = this.state.reference
+
+        const data = Object.assign({}, this.state[this.state.toggle])
+        const merged = Object.assign({}, type, data)
+        const subject = this.state.reference.slice()
 
         subject.push(merged)
 
-        const initialized = Object.assign({}, merged)
-
-        Object.keys(initialized).forEach(key => {
+        Object.keys(data).forEach(key => {
             if(key.toLowerCase().includes("date")){
-                initialized[key] = null
+                data[key] = new Date()
             } else {
-                initialized[key] = ""
+                data[key] = ""
             }
         })
 
         this.setState({
             ...this.state,
             reference: subject,
-            [this.state.toggle]: initialized,
+            tempReference: merged,
+            [this.state.toggle]: data,
         })
     }
 
@@ -192,29 +217,29 @@ class Reference extends Component {
 
         return (
             <div>
-            <RightInsideTitle>参照を追加</RightInsideTitle>
-            <RefBox>
-                <Carousel
-                    list={nameList}
-                    state={stateName}
-                    setToggle={this.setToggle}
-                    getState={this.getState}
+                <RightInsideTitle>参照を追加</RightInsideTitle>
+                <RefBox>
+                    <Carousel
+                        list={nameList}
+                        state={stateName}
+                        setToggle={this.setToggle}
+                        getState={this.getState}
+                    />
+                    <Form
+                        toggle={this.state.toggle}
+                        list={this.renderList() || generalList} // just in case
+                        getState={this.getState}
+                        handleDateChange={this.handleDateChange}
+                        handleTextChange={this.handleTextChange}
+                    />
+                    <RefButtonWrapper>
+                        <Button onClick={() => this.handleSubmit()}>参照を追加する</Button>
+                    </RefButtonWrapper>
+                </RefBox>
+                <Space height="20px"/>
+                <List
+                    reference={this.state.reference}
                 />
-                <Form
-                    toggle={this.state.toggle}
-                    list={this.renderList() || generalList} // just in case
-                    getState={this.getState}
-                    handleDateChange={this.handleDateChange}
-                    handleTextChange={this.handleTextChange}
-                />
-                <RefButtonWrapper>
-                    <Button onClick={() => this.handleSubmit()}>参照を追加する</Button>
-                </RefButtonWrapper>
-            </RefBox>
-            <Space height="20px"/>
-            <List
-                reference={this.state.reference}
-            />
             </div>
         )
     }
@@ -241,4 +266,4 @@ const RightInsideTitle = styled.div`
     align-items: center;
 `
 
-export default Reference
+export default connect(null, actions)(withRouter(Reference))

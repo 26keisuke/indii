@@ -1,16 +1,14 @@
 import React, { Component } from "react"
-import styled, { keyframes, css } from "styled-components"
-import axios from "axios"
+import styled, { css } from "styled-components"
+import { connect } from "react-redux"
 
 import { IoMdCheckmark, IoMdClose } from "react-icons/io"
-import sample from "../../../images/sample1.png"
 
 class DraftAction extends Component {
 
     constructor(props) {
         super(props) 
         this.state = {
-            drafts: {},
             selected: {},
             counter: 0,
         }
@@ -23,32 +21,30 @@ class DraftAction extends Component {
     }
 
     componentDidMount() {
-        // user idを元にdraft一覧を取得する
-        // const url = ""
-        // axios.get(url)
-        console.log(this.props)
         this.props.unVisible()
     }
 
     renderDraft = () => {
 
-        //将来的にはここのindexをpostのidにする
-
-        const mapped = this.state.drafts.map((draft, index) => 
-            <DraftElement key={index} onClick={() => this.selectDraft(index)}>
-                <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                <div>
-                    <p>ポスト名</p>
-                    <p>前回の編集日： </p>
-                </div>
-                <DraftSelect type={this.props.type} selected={this.state.selected[index]}/>
-                { 
-                this.state.selected[index] ? 
-                (this.props.type === "delete")
-                ? <Close/> : <Check/> : ""
-                }
-            </DraftElement>
-        )
+        const mapped = this.props.draft.onEdit.map((elem) => {
+            if ((!elem.isDeleted) && (!elem.isUploaded)) {
+                return (
+                    <DraftElement key={elem._id} onClick={() => this.selectDraft(elem._id)}>
+                        <img src={elem.topicImg} alt={"ドラフトが傘下となっているトピックの写真"}/>
+                        <div>
+                            <p>{elem.postName}</p>
+                            <div>前回の編集日： {elem.editDate[elem.editDate.length-1] === undefined ? <span/> : elem.editDate[elem.editDate.length-1]}</div>
+                        </div>
+                        <DraftSelect type={this.props.type} selected={this.state.selected[elem._id]}/>
+                        { 
+                        this.state.selected[elem._id] ? 
+                        (this.props.type === "delete")
+                        ? <Close/> : <Check/> : ""
+                        }
+                    </DraftElement>
+                )
+            }
+        })
 
         return mapped;
     }
@@ -80,95 +76,9 @@ class DraftAction extends Component {
         return (
 
             <DraftBox>
-
                 <Separator top="84px"/>
-
-
-
-                {/* {this.renderDraft();} */}
-
-
-                <DraftElement onClick={() => this.selectDraft(1)} >
-                    <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                    <div>
-                        <p>ポスト名</p>
-                        <p>前回の編集日： </p>
-                    </div>
-                    <DraftSelect type={this.props.type} selected={this.state.selected[1]}/>
-                    { 
-                    this.state.selected[1] ? 
-                    (this.props.type === "delete")
-                    ? <Close/> : <Check/> : ""
-                    }
-                </DraftElement>
-                <DraftElement onClick={() => this.selectDraft(2)}>
-                    <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                    <div>
-                        <p>ポスト名</p>
-                        <p>前回の編集日： </p>
-                    </div>
-                    <DraftSelect type={this.props.type} selected={this.state.selected[2]}/>
-                    { 
-                    this.state.selected[2] ?
-                    (this.props.type === "delete")
-                    ? <Close/> : <Check/> : ""
-                    }
-                </DraftElement>
-                <DraftElement onClick={() => this.selectDraft(3)}>
-                    <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                    <div>
-                        <p>ポスト名</p>
-                        <p>前回の編集日： </p>
-                    </div>
-                    <DraftSelect type={this.props.type} selected={this.state.selected[3]}/>
-                    { 
-                    this.state.selected[3] ? 
-                    (this.props.type === "delete")
-                    ? <Close/> : <Check/> : ""
-                    }
-                </DraftElement>
-                <DraftElement onClick={() => this.selectDraft(4)}>
-                    <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                    <div>
-                        <p>ポスト名</p>
-                        <p>前回の編集日： </p>
-                    </div>
-                    <DraftSelect type={this.props.type} selected={this.state.selected[4]}/>
-                    { 
-                    this.state.selected[4] ?
-                    (this.props.type === "delete")
-                    ? <Close/> : <Check/> : ""
-                    }
-                </DraftElement>
-                <DraftElement onClick={() => this.selectDraft(5)}>
-                    <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                    <div>
-                        <p>ポスト名</p>
-                        <p>前回の編集日： </p>
-                    </div>
-                    <DraftSelect type={this.props.type} selected={this.state.selected[5]}/>
-                    { 
-                    this.state.selected[5] ? 
-                    (this.props.type === "delete")
-                    ? <Close/> : <Check/> : ""
-                    }
-                </DraftElement>
-                <DraftElement onClick={() => this.selectDraft(6)}>
-                    <img src={sample} alt={"ドラフトが傘下となっているトピックの写真"}/>
-                    <div>
-                        <p>ポスト名</p>
-                        <p>前回の編集日： </p>
-                    </div>
-                    <DraftSelect type={this.props.type} selected={this.state.selected[6]}/>
-                    { 
-                    this.state.selected[6] ?
-                    (this.props.type === "delete")
-                    ? <Close/> : <Check/> : ""
-                    }
-                </DraftElement>
-
+                {this.renderDraft()}
                 <Separator bottom="48px"/>
-
             </DraftBox>
         )
     }
@@ -176,7 +86,7 @@ class DraftAction extends Component {
 
 
 export const Separator = styled.div`
-    width: 460px;
+    width: 560px;
     left: -30px;
     border-bottom: 1px solid #d2d2d2;
     position: absolute;
@@ -205,7 +115,7 @@ export const DraftElement = styled.div`
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid #d2d2d2;
-    padding: 3px 0px;
+    padding: 8px 0px;
     padding-left: 5px;
     cursor: pointer;
 
@@ -220,8 +130,8 @@ export const DraftElement = styled.div`
     
 
     & > img {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         object-fit: contain;
         margin-right: 10px;
     }
@@ -230,15 +140,24 @@ export const DraftElement = styled.div`
         display: flex;
         flex-direction: column;
 
-        & > p:nth-child(1) {
+        & > p {
             font-size: 11px;
             color: #2B2B2b;
             margin-bottom: 3px;
         }
 
-        & > p:nth-child(2) {
+        & > div {
             font-size: 10px;
             color: #8B8B8B;
+            position: relative;
+
+            & > span {
+                width: 30px;
+                border-bottom: 1px solid #d2d2d2;
+                position: absolute;
+                top: 7px;
+                right: -35px;
+            }
         }
     }
 `
@@ -268,4 +187,10 @@ const DraftSelect = styled.div`
     right: 15px;
 `
 
-export default DraftAction
+function mapStateToProps(state) {
+    return {
+        draft: state.draft
+    }
+}
+
+export default connect(mapStateToProps, null)(DraftAction)

@@ -1,5 +1,7 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { connect } from "react-redux"
+import { withRouter } from "react-router-dom"
 
 import Screen from "../../Util/Screen"
 import TextArea from "../TextArea/TextArea"
@@ -23,7 +25,8 @@ const EditorTop = styled.div`
     & > div:nth-child(1) {
         position: absolute;
         height:30px;
-        top:40px;
+        top:33px;
+        padding-bottom: 5px;
         width: 100%;
         left: -1px;
         background-color: #ffffff;
@@ -46,7 +49,7 @@ const EditorTop = styled.div`
                 font-size: 10px;
                 color: #767676;
                 right: -200px;
-                bottom: 9px;
+                bottom: 5px;
             }
         }
     }
@@ -59,15 +62,34 @@ class Editor extends Component {
         const url = this.props.location.pathname
         const id = url.substring(url.lastIndexOf('/') + 1)
         this.state = {
-            id
+            draft: {},
+            draftId: id,
         }
+    }
+
+    // retrieve draft and check for ownership
+    componentDidMount() {
+        const { draft, auth, history } = this.props
+
+        for (var key in draft.onEdit) {
+            if(draft.onEdit[key]._id === this.state.draftId) {
+                if(String(draft.onEdit[key].user) === String(auth.info.id)) {
+                    this.setState({
+                        draft: draft.onEdit[key]
+                    })
+                    return;
+                }
+            }
+        }
+
+        history.push('/')
     }
 
     renderType(type){
         switch(type){
-            case "edit":
+            case "Edit":
                 return "編集"
-            case "new":
+            case "New":
                 return "新規作成"
         }
     }
@@ -77,8 +99,8 @@ class Editor extends Component {
             <div>
                 <EditorNavi>
                     <p>ポスト ></p>
-                    <p>新規作成 ></p>
-                    <p>Recurrent Neural Network</p>
+                    <p>{this.renderType(this.state.draft.type)} ></p>
+                    <p>{this.state.draft.topicName}</p>
                 </EditorNavi>
             </div>
         )
@@ -89,11 +111,11 @@ class Editor extends Component {
             <EditorTop>
                 <div>
                     <div>
-                        <p>Transformer Netowork</p>
+                        <p>{this.state.draft.postName}</p>
                         <p>* 編集は自動的に保存されます。</p>
                     </div>
                 </div>
-                <TextArea id={this.state.id}/>
+                <TextArea draft={this.state.draft}/>
             </EditorTop>
         )
     }
@@ -101,7 +123,9 @@ class Editor extends Component {
     renderRight() {
         return (
             <div>
-                <Reference/>
+                <Reference
+                    draft={this.state.draft}
+                />
             </div>
         )
     }
@@ -118,4 +142,11 @@ class Editor extends Component {
     }
 }
 
-export default Editor
+function mapStateToProps(state) {
+    return {
+        draft: state.draft,
+        auth: state.auth,
+    }
+}
+
+export default connect(mapStateToProps, null)(withRouter(Editor))

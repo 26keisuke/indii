@@ -1,3 +1,5 @@
+// 現時点では戻るボタンが使えない状況
+
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
@@ -11,7 +13,6 @@ import Preview from "../Draft/Action/Preview"
 import Index from "../Draft/Action/Index"
 
 import { IoMdClose } from "react-icons/io"
-import axios from "axios"
 
 class Confirm extends Component {
 
@@ -20,7 +21,7 @@ class Confirm extends Component {
         this.state = {
             transparent: false,
 
-            id: "",
+            id: null,
             action: "",
             title: "",
             message: "",
@@ -28,18 +29,18 @@ class Confirm extends Component {
             buttonMessage: "",
             next: "",
 
-            draftId: [],
-            cleanedIds: [],
+            // postAction用にdispatchするvalue(this.state.index)
+            value: {},
 
-            topicInfo: [{
-                
-            }],
-            
-            index: [],
+            // Selectされたdraftを保存: [{_: true}, {_: false}]の形
+            draftId: [],
+
+            //Index用のstate
+            index: {},
                                 
-            currentStep: 0,     // 全体のステップ数を把握する。これらは、仮にdynamicにformをつなげる必要がある場合に役立つ。
-            counter: 0,         // しかし、現時点での役割は Draft upload & delete のみ。将来的にはもっと良い方法があると思う
-                                // しかも、現時点では戻るボタンが使えない状況
+            currentStep: 0, // 全体のステップ数を把握する。これらは、仮にdynamicにformをつなげる必要がある場合に役立つ。 
+            counter: 0,
+                                
         }
     }
 
@@ -58,24 +59,32 @@ class Confirm extends Component {
         })
     }
 
-    parseNext = () => {
-
+    // draftIdsの中からtrueのものだけを抜き取る
+    extractTrueValues = () => {
         var cleanedIds = []
 
-        if(this.state.cleanedIds.length === 0) {
+        if((this.state.id === null) || (this.state.id.length === 0)) {
             for (const [key, value] of Object.entries(this.state.draftId)) {
                 if (value === true) {
                     cleanedIds.push(key)
                 }
             }
+            this.setState({ id: cleanedIds })
         } else {
-            cleanedIds = this.state.cleanedIds
+            cleanedIds = this.state.id
         }
+
+        return cleanedIds
+    }
+
+    parseNext = () => {
+
+        const cleanedIds = this.extractTrueValues()
 
         switch(this.state.next) {
             case "DELETE_DRAFT":
                 return this.setState({
-                    id: "",
+                    id: cleanedIds,
                     action: "DRAFT_DELETE_CHECK",
                     title: "確認",
                     message: "これらの下書きを削除してもよろしいですか？",
@@ -84,19 +93,6 @@ class Confirm extends Component {
                     next: "",
                 })
             case "UPLOAD_DRAFT":
-
-                const url = "/draft/" + cleanedIds[this.state.currentStep]
-
-                this.props.isFetching();
-                axios.get(url)
-                .then(res => {
-                    console.log("DONE")
-                })
-                .catch(err => {
-                    console.error(err)
-                })
-                this.props.endFetching();
-
                 var next = ""
 
                 if (this.state.counter === (this.state.currentStep + 1)) {
@@ -104,39 +100,38 @@ class Confirm extends Component {
                 } else {
                     next = "UPLOAD_DRAFT"
                 }
-                
+
                 return this.setState({
-                    id: "",
+                    id: cleanedIds,
                     action: "DRAFT_UPLOAD_SELECT",
                     title: "挿入位置の決定",
-                    message: "どの位置にポストを挿入しますか？",
+                    message: "　",
                     caution: "",
                     buttonMessage: "次の画面へ",
                     next: next,
                     currentStep: this.state.currentStep + 1,
-                    cleanedIds: cleanedIds,
                 })
 
             case "UPLOAD_DRAFT_1":
                 return this.setState({
-                    id: "",
                     action: "DRAFT_UPLOAD_CHECK",
                     title: "下書きをアップロード",
                     message: "これらの下書きをアップロードしてもよろしいですか？",
                     caution: "",
                     buttonMessage: "完了する",
                     next: "",
+                    value: this.state.index
                 })
             default:
                 return;
         }
     }
 
-    btnTransparent = () => {
+    setTransparent = () => {
         this.setState({ transparent: true })
     }
 
-    btnVisible = () => {
+    setVisible = () => {
         this.setState({ transparent: false })
     }
 
@@ -148,8 +143,60 @@ class Confirm extends Component {
         this.setState({ draftId: ids })
     }
 
-    setIndex = () => {
-        this.setState({})
+    setMessage = (name) => {
+        this.setState({ message: name })
+    }
+
+    setIndex = (topicId, draftId, idx, title, forcedOn) => {
+        if(this.state.index[draftId] !== undefined) { // toggle
+            this.setState({
+                ...this.state,
+                index :{
+                    [draftId]: {
+                        ...this.state.index[draftId],
+                        draftId: draftId,
+                        index: idx,
+                        title: title,
+                        topicId: topicId,
+                        addColumn: forcedOn ? true : this.state.index[draftId].addColumn
+                    }
+                }
+            })
+        } else { // adding new draft 
+            const newIdxObj =
+                Object.assign({}, 
+                    {   [draftId]: {
+                            index: idx,
+                            title: title, 
+                            topicId: topicId, 
+                            draftId: draftId,
+                            addColumn: forcedOn,
+                        }
+                    }, this.state.index)
+            this.setState({
+                index: newIdxObj
+            })
+        }
+    }
+
+    setColumn = (draftId, addColumn) => {
+        if(this.state.index[draftId] !== undefined) {
+            this.setState({
+                ...this.state,
+                index: {
+                    ...this.state.index,
+                    [draftId]: {
+                        ...this.state.index[draftId],
+                        addColumn: addColumn
+                    }
+                }
+            })
+        } else {
+            const newIdxObj = Object.assign({}, {[draftId]: { addColumn: addColumn }}, this.state.index)
+            this.setState({
+                index: newIdxObj
+            })
+        }
     }
 
     renderContent = (id, action) => {
@@ -173,8 +220,8 @@ class Confirm extends Component {
                 return (
                     <Action
                         type="delete"
-                        unVisible={this.btnTransparent}
-                        visible={this.btnVisible}
+                        unVisible={this.setTransparent}
+                        visible={this.setVisible}
                         setCounter={this.setCounter}
                         setId={this.setId}
                     />
@@ -183,8 +230,8 @@ class Confirm extends Component {
                 return (
                     <Action
                         type="upload"
-                        unVisible={this.btnTransparent}
-                        visible={this.btnVisible}
+                        unVisible={this.setTransparent}
+                        visible={this.setVisible}
                         setCounter={this.setCounter}
                         setId={this.setId}
                     />
@@ -192,24 +239,31 @@ class Confirm extends Component {
             case "DRAFT_DELETE_CHECK":
                 return (
                     <Preview
+                        ids={this.state.id}
                         action={action}
-                        unVisible={this.btnTransparent}
-                        visible={this.btnVisible}
+                        unVisible={this.setTransparent}
+                        visible={this.setVisible}
                     />
                     )
             case "DRAFT_UPLOAD_CHECK":
                 return (
                     <Preview
+                        ids={this.state.id}
                         action={action}
-                        unVisible={this.btnTransparent}
-                        visible={this.btnVisible}
+                        unVisible={this.setTransparent}
+                        visible={this.setVisible}
+                        index={this.state.index}
                     />
                 )
             case "DRAFT_UPLOAD_SELECT":
                 return (
                     <Index
-                        unVisible={this.btnTransparent}
-                        visible={this.btnVisible}
+                        id={this.state.id[this.state.currentStep-1]}
+                        unVisible={this.setTransparent}
+                        visible={this.setVisible}
+                        setMessage={this.setMessage}
+                        setIndex={this.setIndex}
+                        setColumn={this.setColumn}
                     />
                 )
             default:
@@ -219,8 +273,8 @@ class Confirm extends Component {
 
     render () {
 
-        const {id, action, title, caution, message, buttonMessage, next, transparent } = this.state
-        const {innerRef, postAction, cancel } = this.props
+        const { id, action, title, caution, message, buttonMessage, next, transparent, value } = this.state
+        const { innerRef, postAction, cancel } = this.props
 
         return (
             <ConfirmBox ref={innerRef} cancel={cancel}>
@@ -236,7 +290,7 @@ class Confirm extends Component {
                             ?
                                 <button onClick={() => this.parseNext()}>{buttonMessage}</button>
                             :
-                                <button onClick={() => postAction(action, id)}>{buttonMessage}</button>
+                                <button onClick={() => postAction(action, id, value)}>{buttonMessage}</button>
                         :
                         <button>{buttonMessage}</button>
                         }
@@ -289,7 +343,7 @@ const ConfirmButton = styled.div`
 
 const ConfirmBox = styled.div`
     position: absolute;
-    width: 400px;
+    width: 500px;
     padding: 20px 30px;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     background-color: #ffffff;

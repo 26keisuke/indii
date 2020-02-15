@@ -73,8 +73,15 @@ class DraftNavigation extends Component {
         this.props.fetchDraft()
     }
 
+    componentDidUpdate() {
+        if(this.props.draft.isUpdated) {
+            this.props.fetchDraft()
+            this.props.draftRead()
+        }
+    }
+
     deleteDraft = () => {
-        const id = "1";
+        const id = "";
         const action = "DELETE_DRAFT";
         const title = "下書きを削除";
         const message = "削除する下書きを選択してください";
@@ -86,7 +93,7 @@ class DraftNavigation extends Component {
     }
 
     uploadDraft = () => {
-        const id = "1";
+        const id = "";
         const action = "UPLOAD_DRAFT";
         const title = "下書きをアップロードする";
         const message = "アップロードする下書きを選択してください";
@@ -114,23 +121,24 @@ class DraftNavigation extends Component {
     }
 
     renderLeftContent = () => {
+
+        const counter = this.props.draft.onEdit.filter(elem => (!elem.isDeleted && !elem.isUploaded)).length
+ 
         return (
             <div>
-                { this.props.draft.onEdit.length > 0 ? <Border bottom={true}/> : "" }
+                { counter > 0 ? <Border bottom={true}/> : "" }
                 {
-                    this.props.draft.onEdit.map(elem =>
-                        <Draft
-                            id={elem._id}
-                            topic={elem.topicName}
-                            title={elem.postName}
-                            content={elem.content}
-                            date={elem.date}
-                            type={elem.type}
-                            img={elem.topicImg}
-                        />
-                    )
+                    this.props.draft.onEdit.map(elem => {
+                        if((!elem.isDeleted) && (!elem.isUploaded)) {
+                            return (
+                                <Draft
+                                    key={elem._id}
+                                    draft={elem}
+                                />
+                            )
+                        }
+                    })
                 }
-                
             </div>
         )
     }

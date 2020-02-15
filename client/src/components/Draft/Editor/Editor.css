@@ -62,9 +62,12 @@
     border-top: none;
     background-color: rgba(233, 233, 238, 0.15);
     padding: 20px;
-    font-size: 12px;
     height: 1000px;
     overflow: scroll;
+}
+
+.draft-area-textarea div{
+    font-size: 12px;
 }
 
 .draft-area-textarea span a{

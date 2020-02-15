@@ -19,7 +19,9 @@ import { USER_IS_LOGGEDIN,
          ADD_COLUMN,
          SHOW_LOGIN, HIDE_LOGIN,
          SEARCH_POST, SEARCH_TOPIC,
-         FETCH_DRAFT} from "./types";
+         FETCH_DRAFT,
+         DRAFT_UPDATED, DRAFT_READ, 
+         FETCH_TOPIC} from "./types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
@@ -125,14 +127,33 @@ export const searchTopic = (type, value) => async (dispatch) => {
     dispatch({type: SEARCH_TOPIC, payload: {suggestions: res}})
 } 
 
+export const searchPost = (type, value) => async (dispatch) => {
+    const url = "/api/post/search/" + String(type) + "/" + String(value)
+    const res = await cancelOnMultipleSearch(url)
+    dispatch({type: SEARCH_POST, payload: {suggestions: res}})
+}
+
 export const fetchDraft = () => async (dispatch) => {
     const url = "/api/draft"
     const res = await axios.get(url)
     dispatch({type: FETCH_DRAFT, payload: res.data})
 }
 
+export const draftUpdated = () => (dispatch) => {
+    dispatch({type: DRAFT_UPDATED})
+}
 
-// UTIL
+export const draftRead = () => (dispatch) => {
+    dispatch({type: DRAFT_READ})
+}
+
+export const fetchTopic = (id) => async (dispatch) => {
+    const url = "/api/topic/" + String(id)
+    const res = await axios.get(url)
+    dispatch({type: FETCH_TOPIC, payload: res.data})
+}
+
+// ===== UTIL =====
 
 const cancelOnMultipleSearch = async (url) => {
     if(token) {

@@ -4,17 +4,17 @@ const { Schema } = mongoose
 
 const topicSchema = new Schema({
     column: [{
-        _id: Number,
-        index: Number, // Column別にrenderする時に役に立つ
+        index: Number, // Column Index: Column別にrenderする時に役に立つ
         title: String,
         posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
     }],
     topicName: String,
     img: String,
     tags: [String],
-    order: [Number],
+    order: [mongoose.ObjectId], // Column Order (by Id in "column")
     likes: {type: Number, default: 0},
     postCount: {type: Number, default: 0},
+    posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}]
 })
 
 const Topic = mongoose.model("Topic", topicSchema)
