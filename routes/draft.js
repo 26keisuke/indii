@@ -1,4 +1,5 @@
 import express from "express"
+import mongoose from "mongoose";
 
 import User from "../models/User"
 import Topic from "../models/Topic"
@@ -27,7 +28,7 @@ router.post("/draft/upload", (req, res) => {
     Draft.findById(draftId)
         .then(draft => {
             
-            const { topic, topicName, postName, content, config } = draft
+            const { topic, topicName, postName, postImg, content, config } = draft
 
             var newIndex = index.slice()
             if(addColumn === true) {
@@ -41,6 +42,7 @@ router.post("/draft/upload", (req, res) => {
                 topic: topic,
                 topicName: topicName,
                 postName: postName,
+                postImg: postImg,
                 index: newIndex,
                 content: content,
                 creator: req.user.id,
@@ -124,7 +126,7 @@ router.post("/draft/upload", (req, res) => {
 
                         for (var m in topicElem.column) {
                             if(topicElem.column[m].index === insertColumn) {
-                                topicElem.column[m].splice(insertIndex, 0, newPost)
+                                topicElem.column[m].posts.splice(insertIndex, 0, newPost)
                             }
                         }
 
@@ -175,11 +177,21 @@ router.post("/draft/:id", (req, res) => {
     })
 })
 
+router.post("/draft/:id/image", (req, res) => {
+    Draft.findById(req.params.id)
+    .then(draft => {
+        draft.postImg = req.body.img
+        draft.save()
+        .then(res.send("Success: /api/draft/:id/image"))
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
 router.post("/draft/:id/ref", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
-        console.log(req.body.ref.postDate)
-        console.log(typeof req.body.ref.postDate)
         draft.ref.push(req.body.ref)
         draft.save()
         .then(res.send("Success: /api/draft/:id/ref"))

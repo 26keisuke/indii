@@ -8,13 +8,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types"
 import Autosuggest from "react-autosuggest";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux"
 
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { IoIosSearch } from "react-icons/io";
-import search from "../../../images/search.png";
-import searchClick from "../../../images/search-click.png";
 
 import Topic from "../../Search/Suggestion/Topic";
 import Post from "../../Search/Suggestion/Post";
@@ -42,9 +39,9 @@ class Select extends Component {
         };
     };
 
-    
+    // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
     componentDidUpdate = (prevProps) => {
-        if (prevProps.storage !== this.props.storage){ // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
+        if (prevProps.storage !== this.props.storage){
             this.setState({
                 value: localStorage.getItem(this.props.storage) || ""
             })
@@ -86,25 +83,15 @@ class Select extends Component {
         });
     };
 
-    handleFocus = () => {
-        if(this.props.searchBox) {
-            this.props.onSearch()
-            return
-        }
-
+    handleBlur = () => {
         this.setState({
-            blur: false
+            blur: true
         });
     };
 
-    handleBlur = () => {
-        if(this.props.searchBox) {
-            this.props.offSearch()
-            return
-        }
-
+    handleFocus = () => {
         this.setState({
-            blur: true
+            blur: false
         });
     };
 
@@ -122,12 +109,6 @@ class Select extends Component {
     }
 
     handleClick = (suggestion) => {
-
-        if(this.props.searchBox) {
-            return this.props.searchTerm(suggestion)
-        }
-
-
         if(this.props.type === "Unique"){
             if(this.state.suggestions.length === 0 || !this.state.suggestions[0].added){ 
                 return null;
@@ -236,29 +217,6 @@ class Select extends Component {
         }
     };
 
-    renderBoxSuggestion = suggestion => {
-        if (suggestion.added) {
-            return (
-                <New
-                    url="/search/from_direct"
-                    text={["", "を検索する"]}
-                    value={this.state.value}
-                    handleClick={this.handleClick}
-                >
-                    <IoIosSearch/>
-                </New>
-            );
-        }
-        return (
-            <Topic
-                url="/search/from_suggestion"
-                handleClick={this.handleClick}
-                suggestion={suggestion}
-                target={this.props.searchByVariable}
-            />
-        )
-    }
-
     // Warningを出す動作
     renderUniqueWarning = () => {
         if(!this.state.value || this.state.blur) {
@@ -349,12 +307,6 @@ class Select extends Component {
         e.preventDefault();
     }
 
-    formBoxSubmit = (e) => {
-        e.preventDefault();
-        this.handleClick(this.state.value); 
-        this.props.history.push("/search/from_form")
-    }
-
     renderHelper = () => {
         switch (this.props.helper){
             case "owner":
@@ -396,80 +348,59 @@ class Select extends Component {
         const renderWarning = flag ? this.renderUniqueWarning : this.renderMatchWarning
         const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
 
-        if (this.props.searchBox) {
-            return (
-                <form onSubmit={(e) => this.formBoxSubmit(e)} className="search-box">
-                    <img 
-                        src={this.props.search.onSearch ? searchClick : search}  
-                        className="search-icon"
-                        alt={"検索バーにある検索アイコン"}
-                    />
-                    <Autosuggest
-                        className="search-input" 
-                        suggestions={suggestions}
-                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                        getSuggestionValue={this.getSuggestionUniqueValue}
-                        renderSuggestion={this.renderBoxSuggestion}
-                        inputProps={inputProps} 
-                    />
-                </form>
-            )
-        } else {
-            return ( 
-                <Box>
-                    <BoxTransition back={this.props.back} transition={this.props.transition}>
-                        <div> 
-                            {renderWarning()}
-                            <p>{this.props.index}. {this.props.title}</p>
-                            {this.renderHelper()}
-                        </div> 
-                        <form onSubmit={(e) => formSubmit(e)}>
-                            <p>{ this.props.subTitle }</p>
-                            { flag
-                            ?
-                            <Autosuggest
-                                suggestions={suggestions}
-                                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                                getSuggestionValue={this.getSuggestionUniqueValue}
-                                renderSuggestion={this.renderUniqueSuggestion}
-                                onSuggestionSelected={this.onSuggestionUniqueSelected}
-                                inputProps={inputProps} 
-                            />
-                            :
-                            <Autosuggest
-                                suggestions={suggestions}
-                                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                                getSuggestionValue={this.getSuggestionMatchValue}
-                                renderSuggestion={this.renderMatchSuggestion}
-                                onSuggestionSelected={this.onSuggestionMatchSelected}
-                                inputProps={inputProps} 
-                            />
-                            }
-                            {renderMark()}
-                        </form>
-                        {this.renderButton()}
-                    </BoxTransition>
-                </Box>
-            )
-        }
+        return ( 
+            <Box>
+                <BoxTransition back={this.props.back} transition={this.props.transition}>
+                    <div> 
+                        {renderWarning()}
+                        <p>{this.props.index}. {this.props.title}</p>
+                        {this.renderHelper()}
+                    </div> 
+                    <form onSubmit={(e) => formSubmit(e)}>
+                        <p>{ this.props.subTitle }</p>
+                        { flag
+                        ?
+                        <Autosuggest
+                            suggestions={suggestions}
+                            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                            getSuggestionValue={this.getSuggestionUniqueValue}
+                            renderSuggestion={this.renderUniqueSuggestion}
+                            onSuggestionSelected={this.onSuggestionUniqueSelected}
+                            inputProps={inputProps} 
+                        />
+                        :
+                        <Autosuggest
+                            suggestions={suggestions}
+                            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                            getSuggestionValue={this.getSuggestionMatchValue}
+                            renderSuggestion={this.renderMatchSuggestion}
+                            onSuggestionSelected={this.onSuggestionMatchSelected}
+                            inputProps={inputProps} 
+                        />
+                        }
+                        {renderMark()}
+                    </form>
+                    {this.renderButton()}
+                </BoxTransition>
+            </Box>
+        )
     }
 }
 
 Select.propTypes = {
     searchBox: PropTypes.bool,
-    placeholder: PropTypes.string,
-    index: PropTypes.string,
-    title: PropTypes.string,
-    subTitle: PropTypes.string,
-    type: PropTypes.string, // Match || Unique
-    content: PropTypes.string, // Topic || Post
+    placeholder: PropTypes.string.isRequired,
+    index: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    subTitle: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired, // Match || Unique
+    content: PropTypes.string.isRequired, // Topic || Post
     helper: PropTypes.string,
     transition: PropTypes.bool,
-    data: PropTypes.object, // Mock DataでもOK
-    searchByVariable: PropTypes.string,
+    data: PropTypes.object.isRequired, // Mock DataでもOK
+    searchByVariable: PropTypes.string.isRequired,
     storage: PropTypes.string,
     back: PropTypes.bool,
     setBackward: PropTypes.func,
@@ -482,8 +413,7 @@ function mapStateToProps(state) {
     return {
         topic: state.topic,
         post: state.post,
-        search: state.search,
     }
 }
 
-export default connect(mapStateToProps, actions)(withRouter(Select));
+export default connect(mapStateToProps, actions)(Select);

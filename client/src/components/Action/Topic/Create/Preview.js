@@ -63,8 +63,8 @@ class CreatePreviewTopic extends Component {
 
     renderFriends = () => {
         if(this.props.friends.length > 0){
-            var res = this.props.friends.map(friend => 
-                <FriendWrapper>
+            var res = this.props.friends.map((friend,index) => 
+                <FriendWrapper key={index}>
                     <img src={friend.imgUrl}/>
                 </FriendWrapper>    
             )

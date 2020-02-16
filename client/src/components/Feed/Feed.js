@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import styled from "styled-components"
 
 import sample from "../../images/sample0.jpg"
-import sample1 from "../../images/sample1.png";
+// import sample1 from "../../images/sample1.png";
 
 import PostFeed from "./Post/Post";
 import People from "./People/People";
-import Post from "../Post/Element/Element"
+// import Post from "../Post/Element/Element"
+import Trend from "./Trend/Trend"
 
 
 import Screen, { FeedSpace } from "../Util/Screen"
@@ -105,7 +106,8 @@ class Feed extends Component {
     renderRight = () => {
         return (
             <div>
-                <FeedRightHeader>
+                <Trend/>
+                {/* <FeedRightHeader>
                     <p>トレンド</p>
                 </FeedRightHeader>
                 <PostWrapper>
@@ -118,7 +120,7 @@ class Feed extends Component {
                         date={"August 21 2013"} 
                         img={sample1}
                     />
-                </PostWrapper>
+                </PostWrapper> */}
             </div>
         )
     }

@@ -265,8 +265,8 @@ input:focus{
 }
 
 .search-icon{
-    height: 18px;
-    width: 18px;
+    height: 17px;
+    width: 17px;
     left: 263px;
     position: absolute;
     pointer-events: none;
@@ -291,14 +291,14 @@ input:focus{
 }
 
 .search-box .react-autosuggest__input{
-    padding-top: 2px;
+    padding-top: 4px;
     width: 72%;
-    height: 36px;
+    height: 34px;
     border-radius: 30px;
     background-color: #E9E9EE;
     border: none;
     padding-left: 50px;
-    font-size: 15px;
+    font-size: 13px;
     font-family: "Gennokaku Gothic";
 }
 

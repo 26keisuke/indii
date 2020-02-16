@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { IoMdStar } from "react-icons/io"
 import { FaUserCheck } from "react-icons/fa"
 
+import indii from "../../../images/indii.png"
+
 const PostElement = styled.div`
     width: 100%;
     padding: 10px;
@@ -24,8 +26,10 @@ const PostLeft = styled.div`
 `
 
 const PostRight = styled.img`
-    width: 40px;
-    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
     position: absolute;
     right: 22px;
 `
@@ -96,7 +100,7 @@ class Post extends Component {
 
     render () {
 
-        const { index, postName, star, config, contribution  } = this.props.suggestion
+        const { index, postName, star, config, contribution, postImg  } = this.props.suggestion
         const lastEdited = contribution[contribution.length-1]
 
         return (
@@ -121,7 +125,7 @@ class Post extends Component {
                             {this.renderLevel()}
                         </div> */}
                         { !config.allowEdit ? <PermissionImg/>: "" }
-                        <PostRight src={"/"} alt="ポストの検索結果のメイン画像"/>
+                        <PostRight src={postImg || indii} alt="ポストの検索結果のメイン画像"/>
                     </div>
                 </PostElement>
             </div>

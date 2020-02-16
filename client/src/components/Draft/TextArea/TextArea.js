@@ -18,7 +18,7 @@ class TextArea extends React.Component {
 
     componentDidMount() {
         this.autoSave = setInterval(() => {
-            this.sendUpdate()
+            this.sendUpdate(false)
         }, 60000)
     }
 
@@ -33,12 +33,12 @@ class TextArea extends React.Component {
     // このリクエストが受理されてアップデートされる前に次のページのcomponentDidMountがcallされているから、draftUpdatedを呼ばなきゃいけない
     componentWillUnmount() {
         clearInterval(this.autoSave)
-        this.sendUpdate()
+        this.sendUpdate(true)
     }
 
-    sendUpdate = () => {
+    sendUpdate = (timeUpdate) => {
         const url = "/api/draft/" + this.props.draft._id
-        axios.post(url, {timeUpdate: false, content: JSON.stringify(this.state.editorState.toHTML())})
+        axios.post(url, {timeUpdate: timeUpdate, content: JSON.stringify(this.state.editorState.toHTML())})
             .then(this.props.draftUpdated())
             .catch(err => console.error(err))
     }

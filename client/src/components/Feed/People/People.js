@@ -32,7 +32,8 @@ const PeopleElement = styled(Link)`
 
         & > p:nth-child(2) {
             color: #747474;
-            font-size: 11px;
+            font-size: 10px;
+            margin-top: 4px;
             margin-bottom: 5px;
         }
 

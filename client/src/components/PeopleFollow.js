@@ -50,16 +50,18 @@ class PeopleFollow extends Component {
 }
 
 const Follow = styled.div`
-    height: 19px;
+    height: 22px;
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-right:15px;
     border-radius: 20px;
+    justify-content: center;
     align-self: center;
     margin-left:40px;
     cursor: pointer;
     min-width: 72px;
+    position: relative;
 
     ${props => props.follow 
     ? css`
@@ -78,8 +80,8 @@ const Follow = styled.div`
 
         &:hover > svg{
             color: #9aaee6;
-            animation-name: tiny-bounce;
-            animation-duration: 300ms;
+            /* animation-name: tiny-bounce;
+            animation-duration: 300ms; */
         }
 
         &:hover > p{
@@ -89,23 +91,29 @@ const Follow = styled.div`
     `}
 `
 
-const FollowedIcon = styled(FiCheck)`
-    width: 13px;
-    height: 13px;
-    margin-right:2px;
-    color:#ffffff;
-`
-
 const FollowIcon = styled(TiUserAddOutline)`
     width: 14px;
     height: 14px;
-    margin-right:4px;
     color:#636480;
+    position: absolute;
+    top: 4px;
+    left: 11px;
+`
+
+const FollowedIcon = styled(FiCheck)`
+    width: 13px;
+    height: 13px;
+    color:#ffffff;
+    position: absolute;
+    top: 6px;
+    left: 7px;
+    
 `
 
 const FollowText = styled.p`
-    font-size: ${props => props.follow ? "10px" : "11px"};
+    font-size: ${props => props.follow ? "10px" : "10px"};
     color: ${props => props.follow ? "#ffffff" : "#636480"};
+    margin-left: 7px;
 `
 
 export default PeopleFollow

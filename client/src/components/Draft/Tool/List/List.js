@@ -10,11 +10,11 @@ import ShowMore from "../../../Util/ShowMore"
 const ListBox = styled.div`
     display: flex;
     flex-direction: column;
+    margin-top: 10px;
 
     & > div:nth-child(1) {
 
         padding-bottom: 5px;
-        border-bottom: 1px solid #d2d2d2;
         margin-bottom: 10px;
 
         & > p:nth-child(1) {
@@ -55,7 +55,7 @@ const RefSection = styled.div`
 
 const ShowMoreWrapper = styled.div`
     position: absolute;
-    right: 10px;
+    right: 15px;
     top: 2px;
 `
 
@@ -81,13 +81,13 @@ class List extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isOpen: false,
+            isOpened: "",
         }
         this.moreRef = React.createRef()
     }
 
     componentDidUpdate() {
-        if (this.state.isOpen) {
+        if (this.state.isOpened) {
             document.addEventListener("mousedown", this.outsideClick)
         } else {
             document.removeEventListener("mousedown", this.outsideClick)
@@ -104,13 +104,13 @@ class List extends Component {
         }
 
         this.setState({
-            isOpen: false,
+            isOpened: "",
         })
     }
 
-    handleClick = () => {
+    handleClick = (id) => {
         this.setState({
-            isOpen: true,
+            isOpened: id,
         })
     }
 
@@ -119,7 +119,7 @@ class List extends Component {
         const url = this.props.location.pathname
         const draftId = url.substring(url.lastIndexOf('/') + 1)
         const id = {draftId, refId}
-        this.setState({isOpen: false})
+        this.setState({isOpened: ""})
         const action = "DELETE_REF"
         const title = "この参照を削除";
         const caution = ""
@@ -159,6 +159,7 @@ class List extends Component {
     renderRef = () => {
         var counter = 0
         const res = this.props.reference.map(ref => {
+            console.log(ref)
             if (!ref.isDeleted) {
                 counter++
                 return(
@@ -170,8 +171,9 @@ class List extends Component {
                         <ShowMoreWrapper>
                             <ShowMore
                                 ref={this.actionRef}
-                                handleClick={this.handleClick}
-                                show={this.state.isOpen}
+                                handleClick={() => this.handleClick(ref._id)}
+                                show={this.state.isOpened === ref._id}
+                                shadow={false}
                                 left="-159px"
                                 bottom="-39px"
                                 actionName={["この参照を削除する"]}
@@ -190,9 +192,6 @@ class List extends Component {
 
         return (
             <ListBox>
-                <div>
-                    <p>参照一覧</p>
-                </div>
                 <div>
                     {this.renderRef()}
                 </div>

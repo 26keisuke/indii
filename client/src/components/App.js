@@ -1,9 +1,13 @@
+// confirmation renderの引数いらない。reduxで既に送られている
+
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 
 import * as actions from "../actions";
+
+import { sendMessage } from "./Util/util"
 
 import Header from "./Header/Header";
 import Navigation from "./Navigation/Navigation";
@@ -87,36 +91,28 @@ class App extends Component {
             if(this.authRef.current.contains(e.target)) {
                 return null;
             }
-            this.setState({logInFormShow: false})
-            setTimeout(() => this.cancelAction("logIn"), 300)
+            this.startAction("logIn")
         }
 
         if(this.props.update.confirmation.on) {
             if(this.confirmRef.current.contains(e.target)) {
                 return null;
-            }
-            
-            this.setState({confirmationCancel: true});
-            setTimeout(() => this.cancelAction("confirm"), 300);
+            } 
+            this.startAction("confirm")
         }
-        
-        this.props.disableGray();        
-    }
 
-    sendMessage = (type, message, duration) => {
-        this.props.updateMessage(type, message);
-        setTimeout(() => this.props.resetMessage(), duration)
+        this.props.disableGray();        
     }
 
     startAction = (type) => {
         switch(type) {
             case "confirm":
-                this.setState({confirmationCancel: true})
-                setTimeout(() => this.cancelAction("confirm"), 300)
+                this.setState({confirmationCancel: true}) // Animation starts (200ms)
+                setTimeout(() => this.cancelAction("confirm"), 200)
                 return
             case "logIn":
                 this.setState({logInFormShow: false})
-                setTimeout(() => this.cancelAction("logIn"), 300)
+                setTimeout(() => this.cancelAction("logIn"), 200)
                 return
             default:
                 return
@@ -150,7 +146,7 @@ class App extends Component {
                         setTimeout(() => {
                         this.props.endFetching(); 
                         this.props.disableGray();
-                        this.sendMessage("success", "ポストを削除しました。", 3000)
+                        sendMessage("success", "ポストを削除しました。", 3000, this.props)
                         }, 500)
                     })
                     .catch((err)=> console.error(err))
@@ -169,7 +165,7 @@ class App extends Component {
                         setTimeout(() => {
                         this.props.endFetching(); 
                         this.props.disableGray();
-                        this.sendMessage("success", "フィードバックを受け取りました。", 3000)
+                        sendMessage("success", "フィードバックを受け取りました。", 3000, this.props)
                         }, 500);
                     })
                     .catch((err) => console.error(err))
@@ -195,7 +191,7 @@ class App extends Component {
                         this.props.endFetching();
                         this.props.disableGray();
                         this.props.fetchDraft() // this certainly isnt the optimal because req is sent to server again
-                        this.sendMessage("success", "下書きを削除しました。", 3000)
+                        sendMessage("success", "下書きを削除しました。", 3000, this.props)
                         return null
                     })
                     .catch(err => {
@@ -223,8 +219,9 @@ class App extends Component {
 
                     Promise.all(promises).then(() => {
                         this.props.disableGray();
-                        this.props.endFetching()
-                        this.sendMessage("success", "ポストをアップロードしました。", 4000)
+                        this.props.endFetching();
+                        this.props.fetchDraft();
+                        sendMessage("success", "ポストをアップロードしました。", 4000, this.props)
                     })
 
                 } else {
@@ -243,7 +240,7 @@ class App extends Component {
                         this.props.disableGray()
                         this.props.endFetching()
                         this.startAction("logIn")
-                        this.sendMessage("success", `"${user.data.email}"に確認メールを送信しました。`, 7000)
+                        sendMessage("success", `"${user.data.email}"に確認メールを送信しました。`, 7000, this.props)
                         this.props.fetchUser();
                     }, 2500)
                 })
@@ -266,7 +263,7 @@ class App extends Component {
                     this.props.disableGray()
                     this.props.endFetching()
                     this.startAction("logIn")
-                    this.sendMessage("success", `${user.data.userName}さん、お帰りなさい。`, 3000)
+                    sendMessage("success", `${user.data.userName}さん、お帰りなさい。`, 3000, this.props)
                     this.props.fetchUser();
                 })
                 .catch(err => {
@@ -282,7 +279,7 @@ class App extends Component {
                     axios.delete(`/api/draft/${id.draftId}/ref/${id.refId}`)
                     .then(res => {
                         this.props.disableGray()
-                        this.sendMessage("success", "参照を削除しました。", 3000)
+                        sendMessage("success", "参照を削除しました。", 3000, this.props)
                         return null
                     })
                     .catch(err => {
@@ -388,7 +385,7 @@ class App extends Component {
                             <Route path="/post/:id" component={Post} />
                             <Route path="/profile/:id" component={Profile} />
                             <Route exact path="/action" component={Action} />
-                            <Route exact path="/workspace" component={WorkSpace} />
+                            {/* <Route exact path="/workspace" component={WorkSpace} /> */}
                             <Route path="/verification/:type" component={Verification}/>
                         </div>
                     </div>

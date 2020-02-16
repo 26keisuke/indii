@@ -134,9 +134,11 @@ export const searchPost = (type, value) => async (dispatch) => {
 }
 
 export const fetchDraft = () => async (dispatch) => {
+    dispatch({type: IS_FETCHING})
     const url = "/api/draft"
     const res = await axios.get(url)
     dispatch({type: FETCH_DRAFT, payload: res.data})
+    dispatch({type: END_FETCHING})
 }
 
 export const draftUpdated = () => (dispatch) => {

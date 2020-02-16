@@ -72,7 +72,7 @@ const RefElement = styled.div`
         top: 0px;
         color: #585858;
         font-size: 10px;
-        left: 60px;
+        left: 100px;
     }
 
     & input {

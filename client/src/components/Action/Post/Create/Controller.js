@@ -69,7 +69,7 @@ class CreatePost extends Component {
                         content="Post"
                         // data={posts}
                         transition={true}
-                        searchByVariable="title"
+                        searchByVariable="postName"
                         storage="editPostPost"
                         back={this.state.back} 
                         setBackward={this.setBackward} 

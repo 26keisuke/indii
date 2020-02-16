@@ -35,13 +35,14 @@ const screenName = ["ホーム", "下書き", "編集・作成", "通知", "設�
 
 class List extends Component {
 
-    // tertinary expressionで書くと見にくくなる
     renderText = (index, selected) => {
-        if(this.props.display === "header"){
-            return null
-        } else {
-            return <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
-        }
+        const { display } = this.props
+        return display === "header" ? null : <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
+        // if(this.props.display === "header"){
+        //     return null
+        // } else {
+        //     return <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
+        // }
     }
 
     renderList = () => {
@@ -60,16 +61,20 @@ class List extends Component {
         const subject = variableName.map((name, index) => {
             var url = ""
 
-            if (name !== "home") {
-                url = "/" + name;
-            } else {
-                url = "/"
-            }
+            name !== "home" ? (url = "/" + name) : (url = "/")
+
+            // if (name !== "home") {
+            //     url = "/" + name;
+            // } else {
+            //     url = "/"
+            // }
             
             return (
                 <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name)}>
+                    <SelectBar selected={cate[name]}/>
                     <NudgeMark key={name} nudge={nudge[name]}/>
                     <ListImg 
+                        selected={cate[name]}
                         src={cate[name] ? images.pressed[name] : images.unpressed[name]} 
                     />
                     {this.renderText(index, cate[name])}
@@ -89,6 +94,16 @@ class List extends Component {
     }
 }
 
+const SelectBar = styled.div`
+    ${props => props.selected && css`
+        position: absolute;
+        height: 22px;
+        left: -30px;
+        top: 12px;
+        width: 3px;
+        background-color: #636480;
+    `}
+`
 
 const ListWrapper = styled.div`
 
@@ -130,7 +145,7 @@ const ListElement = styled(Link)`
         padding-top: 13px;
         padding-bottom: 15px;
         padding-right:50px;
-        font-size: 12px;
+        font-size: 11px;
     }
 
     &:img {
@@ -161,6 +176,7 @@ const ListElement = styled(Link)`
 `
 
 const ListImg = styled.img`
+    opacity: ${props => props.selected ? 1 : 0.3 };
     width:20px;
     height:20px;
     padding-top: 12px;

@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { IoIosMore } from "react-icons/io"
-import styled from "styled-components"
+import styled, {css} from "styled-components"
 
 const MoreBtn = styled(IoIosMore)`
     transform: scale(1.7);
@@ -48,16 +48,19 @@ const ShowBox = styled.div`
             display: block;
         }
 
-        &::before {
-            content: "";
-            position: absolute;
-            display: none;
-            width:40px;
-            height:40px;
-            background-color: #9EAEE5;
-            opacity: 0.1;
-            border-radius: 100%;
-        }
+        ${props => props.shadow ? css`
+            &::before {
+                content: "";
+                position: absolute;
+                display: none;
+                width:40px;
+                height:40px;
+                background-color: #9EAEE5;
+                opacity: 0.1;
+                border-radius: 100%;
+            }
+        `
+        : css``}
     }
 
     & p:hover ~ ${MoreBtn}{
@@ -74,14 +77,14 @@ const ShowMore = React.forwardRef((props, ref) => (
 class ShowMoreWrapped extends Component {
     render () {
 
-        const { innerRef, handleClick, show, left, bottom, action, actionName } = this.props
+        const { innerRef, handleClick, show, left, bottom, action, actionName, shadow } = this.props
 
         return (
-            <ShowBox ref={innerRef}>
+            <ShowBox ref={innerRef} shadow={shadow}>
                 <p onClick={handleClick}></p>
                 <Action show={show} left={left} bottom={bottom}>
                     { action.map((elem, index) => 
-                        <p onClick={(e) => {e.preventDefault(); action[index]();}}>{actionName[index]}</p>
+                        <p key={elem} onClick={(e) => {e.preventDefault(); action[index]();}}>{actionName[index]}</p>
                     )
                     }
                 </Action>
@@ -89,6 +92,10 @@ class ShowMoreWrapped extends Component {
             </ShowBox>
         )
     }
+}
+
+ShowMore.defaultProps = {
+    shadow: true,
 }
 
 export default ShowMore

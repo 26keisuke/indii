@@ -15,7 +15,7 @@ import Back from "../../../Util/Back";
 
 import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
-import indii from "../../../../images/indii.png"
+// import indii from "../../../../images/indii.png"
 
 class CreateTopic extends Component {
 
@@ -60,7 +60,7 @@ class CreateTopic extends Component {
                 return <Image
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        initialVal={indii}
+                        // initialVal={indii}
                         storage="createTopicImage"
                         setImage={this.setImage} 
                         setStep={this.setStep}

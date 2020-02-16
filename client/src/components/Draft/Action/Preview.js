@@ -65,6 +65,7 @@ class Preview extends Component {
     }
 
     render () {
+        console.log(this.props.index)
         return (
             <div>
                 <Separator/>

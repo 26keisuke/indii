@@ -9,6 +9,7 @@ const draftSchema = new Schema({
     topicName: String, // for fast lookup
     topicImg: String, // for fast lookup
     postName: String,
+    postImg: String,
     creationDate: Date,
     editDate: [Date],
     date: Date, // delete this after

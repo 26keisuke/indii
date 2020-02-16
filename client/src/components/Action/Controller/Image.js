@@ -1,17 +1,10 @@
-//全てに大してdefault valueを適用したらfakeの点線のやつはいらなくなる
-
-import React, {useState, useMemo, useEffect} from "react"
-import axios from "axios"
-import Dropzone, { useDropzone } from "react-dropzone"
+import React, { useState } from "react"
 import styled, { css } from "styled-components"
 
+import Upload from "../../Util/Upload"
 import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../Element/Box"
+import { Space } from "../../Theme"
 
-// For uploading on Cloudinary
-// const CLOUDINARY_UPLOAD_PRESET = 'glgcswc0';
-// const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/dgc4swpmv/upload';
-
-// Styling
 const baseStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -40,73 +33,12 @@ const rejectStyle = {
 
 function ActionImage(props) {
 
-    const [file, setFile] = useState({preview: localStorage.getItem(props.storage)} || {});
+    // fileは{preview: __}の形
+    const [file, setFile] = useState({preview: localStorage.getItem(props.storage)} || {preview: null});
 
-    const {
-        acceptedFiles,
-        getRootProps,
-        getInputProps,
-        isDragAccept, 
-        isDragActive, 
-        isDragReject
-    } = useDropzone({
-        accept: "image/jpeg, image/png",
-        maxSize: 5242880,
-        multiple: false,
-        onDropAccepted: (acceptedFiles) => {
-
-            const promise = new Promise((resolve, reject) => {
-                const reader = new FileReader()
-                reader.readAsDataURL(acceptedFiles[0])
-                reader.onload = () => {
-                    if(!!reader.result) {
-                        resolve(reader.result)
-                    } else {
-                        reject(Error("Failed converting to base64"))
-                    }
-                }
-            })
-            promise.then(result => {
-                setFile({preview: result})
-            }, err => {
-                console.log(err)
-            })
-
-            // setFiles(acceptedFiles.map(file => Object.assign(file, {
-            //     preview: URL.createObjectURL(file)
-            // })));
-
-            // const uploader = acceptedFiles.map(file => {
-            //     const formData = new FormData();
-            //     formData.append("file", file);
-            //     formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-            //     formData.append("timestamp", (Date.now()));
-            //     return axios.post(CLOUDINARY_UPLOAD_URL, formData, {
-            //         headers: { "X-Requested-With": "XMLHttpRequest" },
-            //     }).then(response => {
-            //         const data = response.data;
-            //         const fileURL = data.secure_url // Have to store this URL for future references
-            //         console.log(data);
-            //     })
-            // })
-        }
-    });
-
-    useEffect (() => {
-        if(file !== "undefined" || file === undefined){
-            localStorage.setItem(props.storage, file.preview)
-        }
-    },[props.storage, file])
-
-    const style = useMemo(() => ({
-        ...baseStyle,
-        ...(isDragAccept ? acceptStyle : {}),
-        ...(isDragReject ? rejectStyle : {}),
-        ...(isDragActive ? activeStyle : {})
-    }), [
-        isDragActive,
-        isDragReject
-    ]);
+    // const flag = ((file.preview === "null") || (file.preview === null) || (file.preview === "undefined"))
+    const flag = ((file.preview === null) || (file.preview === undefined))
+    const display = flag ? props.initialVal : file.preview
 
     const handleBack = () => {
         props.setBackward(true);
@@ -116,24 +48,23 @@ function ActionImage(props) {
     const handleRevert = () => {
         setFile({
             ...file,
-            preview: "null"
+            preview: null
         })
     }
 
     const handleForward = () => {
-        if(!file.preview && !props.initialVal){
+        if(!display){
             console.log("Illegal attempt to bypass sending a file");
         }
         props.setBackward(false)
         props.setStep(2);
-        if((file.preview === "null") || (file.preview === "") || (file.preview === null)) {
-            props.setImage(props.initialVal)
-        } else if(props.initialVal) {
+
+        if(flag) {
+            props.setImage(props.initialVal) 
+        } else  {
             props.setImage(file.preview)
         }
     };
-
-    const display = ((file.preview === "null") || (file.preview === "") || (file.preview === null)) ? props.initialVal : file.preview
 
     return (
         <Box>
@@ -145,38 +76,39 @@ function ActionImage(props) {
                         : ""
                     }
                 </div> 
-                <div>
-                    <div {...getRootProps({style})}>
-                        <input {...getInputProps()} />
-                        <p>このボックスに画像をドラッグするか、ボックスをクリックしてください</p>
-                        <em>(*.jpegと*.pngのみ)</em>
-                    </div>
-                    <div>
-                    <PreviewBox>
-                        <PreviewElement mobile={true} hide={!file.preview && !props.initialVal}>
-                            <p>モバイルでの表示</p>
-                            <div/>
-                            <img 
-                                src={display} 
-                                alt={"モバイル用のトピックの画像プレビュー"}/>
-                        </PreviewElement>
-                        <PreviewElement hide={ !file.preview && !props.initialVal}>
-                            <p>PCでの表示</p>
-                            <div/>
-                            <img 
-                                src={display} 
-                                alt={"ウェブ用のトピックの画像プレビュー"}
-                            />
-                        </PreviewElement>
-                    </PreviewBox>
-                    </div>
-                </div>
+                <Upload
+                    message="このボックスに画像をドラッグするか、ボックスをクリックしてください"
+                    caution="(*.jpegと*.pngのみ)"
+                    file={file}
+                    storage={props.storage}
+                    setFile={setFile}
+                    baseStyle={baseStyle}
+                    activeStyle={activeStyle}
+                    acceptStyle={acceptStyle}
+                    rejectStyle={rejectStyle}
+                />
+                <PreviewBox>
+                    <PreviewElement mobile={true} hide={!display}>
+                        <p>モバイルでの表示</p>
+                        <div/>
+                        <img 
+                            src={display} 
+                            alt={"モバイル用のトピックの画像プレビュー"}/>
+                    </PreviewElement>
+                    <PreviewElement hide={!display}>
+                        <p>PCでの表示</p>
+                        <div/>
+                        <img 
+                            src={display} 
+                            alt={"ウェブ用のトピックの画像プレビュー"}
+                        />
+                    </PreviewElement>
+                </PreviewBox>
                 <ButtonWrapper>
                     <ButtonLeft onClick={handleBack}>戻る</ButtonLeft>
-                    <ButtonRight disabled={!file.preview && !props.initialVal} onClick={handleForward}>次へ進む</ButtonRight>
-                    {/* <ButtonRight disabled={!file.preview && !props.initialVal ? "topic-form-button-right disable" : "topic-form-button-right"} onClick={handleForward}>次へ進む</ButtonRight> */}
+                    <ButtonRight disabled={!display} onClick={handleForward}>次へ進む</ButtonRight>
                 </ButtonWrapper>
-                <div className="space"/>
+                <Space height="220px"/>
             </BoxTransition>
         </Box>
     );
@@ -198,7 +130,7 @@ const PreviewBox = styled.div`
     width: 444px;
 `
 
-const PreviewElement = styled.div`
+export const PreviewElement = styled.div`
     position: relative;
     margin: 0px 15px;
     margin-top: 25px;
@@ -240,15 +172,19 @@ const PreviewElement = styled.div`
 
         ${props => props.mobile 
         ? css`
-            width: 285px;
-            height: 150px;
+            min-width: 285px;
+            min-height: 150px;
+            max-width: 285px;
+            max-height: 150px;
             border-bottom-right-radius: 35px;
             border-bottom-left-radius: 35px;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         `
         : css`
-            width: 120px;
-            height: 120px;
+            min-width: 120px;
+            min-height: 120px;
+            max-width: 120px;
+            max-height: 120px;
         `}
 
         ${props => props.hide && css`

@@ -16,6 +16,7 @@ export function checkAuth(e, context) {
     return true
 }
 
-export function checkOwnership(context) {
-    
+export function sendMessage(type, message, duration, context) {
+    context.updateMessage(type, message);
+    setTimeout(() => context.resetMessage(), duration)
 }

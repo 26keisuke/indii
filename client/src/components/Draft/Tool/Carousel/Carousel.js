@@ -34,13 +34,14 @@ class Carousel extends Component {
 
 const RefCarousel = styled.div`
     width: 100%;
+    position: relative;
 
-    & > div {
+    & > div:nth-child(1) {
         display: flex;
         flex-direction: row;
         overflow-x: scroll;
         padding: 6px 15px;
-        border: 1px solid #d2d2d2;
+        border-bottom: 1px solid #d2d2d2;
 
         &::-webkit-scrollbar{
             width: 0px !important;

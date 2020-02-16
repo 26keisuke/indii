@@ -2,14 +2,11 @@ import React, { Component } from "react";
 import { connect } from "react-redux"
 import { Link } from "react-router-dom";
 import { Collapse } from 'react-collapse';
-import styled, { css, keyframes } from "styled-components"
-
-import { IoIosArrowDown } from "react-icons/io"
+import styled from "styled-components"
 
 import response from "../../../images/response.png";
 import star_pressed from "../../../images/star-pressed.png";
 import star from "../../../images/star.png";
-import more from "../../../images/more.png";
 import sample from "../../../images/sample0.jpg";
 import dissapointed from "../../../images/dissapointed.png";
 import love from "../../../images/love.png";
@@ -18,6 +15,7 @@ import nerd from "../../../images/nerd.png";
 import hmm from "../../../images/hmm.png";
 
 import ShowMore from "../../Util/ShowMore"
+import ArrowSpin from "../../Util/ArrowSpin"
 
 import "./Post.css";
 
@@ -197,10 +195,14 @@ class Post extends Component {
                                 <p>{this.props.date}</p>
                             </div>
                         </div>
-                        <div>
-                            <p onClick={this.handleCollapseClick}></p>
-                            <Arrow isOpened={this.state.isOpened} changed={this.state.changed}/>
-                        </div>
+                        <ArrowWrapper>
+                            <ArrowSpin
+                                handleClick={this.handleCollapseClick}
+                                isOpened={this.state.isOpened}
+                                changed={this.state.changed}
+                                size={38}
+                            />
+                        </ArrowWrapper>
                     </PostTop>
                     
                     <PostMiddle>
@@ -258,7 +260,7 @@ const PostBox = styled(Link)`
         background-color: rgba(233, 233, 238, 0.25);    
     }
 `
-// 詰め込みすぎ
+
 const PostTop = styled.div`
     display: flex;
     flex-direction: row;
@@ -299,83 +301,20 @@ const PostTop = styled.div`
 
             & > p {
                 color: #747474;
-            }
-        }
-    }
-
-    & > div:nth-child(2) {
-
-        position: relative;
-
-        & > p {
-
-            position: absolute;
-            right:-7px;
-            top: -13px;
-            width: 40px;
-            height: 40px;
-            display: block;
-            cursor: pointer;
-
-            &::before {
-                content: "";
-                display: none;
-                background-color: #1C1C1C;
-                opacity: 0.1;
-                border-radius: 100%;
-                width: 40px;
-                height: 40px;
-            }
-
-            &:hover::before {
-                display: block;
+                font-size: 10px;
             }
         }
     }
 `
 
-const spin = keyframes`
-    from {
-        transform: rotate(0deg)
-    }
-    to {
-        transform: rotate(180deg)
-    }
-`
-
-const spin_1 = keyframes`
-    from {
-        transform: rotate(180deg)
-    }
-    to {
-        transform: rotate(360deg)
-    }
-`
-
-const Arrow = styled(IoIosArrowDown)`
+const ArrowWrapper = styled.div`
     margin-right: 8px;
-    pointer-events: none;
-
-    ${props => props.changed
-    ? props => !props.isOpened 
-        ? css `
-            animation-name: ${spin};
-            animation-duration: 400ms;
-            animation-fill-mode: forwards;
-        `
-        : css `
-            animation-name: ${spin_1};
-            animation-duration: 400ms;
-            animation-fill-mode: forwards;
-        `
-    : css `
-    `}
 `
 
 const PostMiddle = styled.div`
 
     & > p {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: bold;
         color: #767676;
         cursor: pointer;
@@ -387,7 +326,7 @@ const PostMiddle = styled.div`
 
     /* title */
     & > p:nth-child(2) {
-        font-size: 18px;
+        font-size: 17px;
         color: #1C1C1C;
         margin-bottom: 5px;
         font-weight: bold;
@@ -435,8 +374,8 @@ const PostBottom = styled.div`
     padding-top:10px;
 
     & img {
-        width:18px;
-        height:18px;
+        width:17px;
+        height:17px;
         margin-right:65px;
     }
 

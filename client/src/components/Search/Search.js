@@ -13,78 +13,15 @@ import { connect } from "react-redux"
 
 import * as actions from "../../actions"
 
+import topics from "../__Mock__/data/topic"
+import getSuggestions from "../__Mock__/method/getSuggestions"
+
 import { IoIosSearch } from "react-icons/io";
 import search from "../../images/search.png";
 import searchClick from "../../images/search-click.png";
 
 import Topic from "./Suggestion/Topic";
 import New from "./Suggestion/New"
-
-const topics = [
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C0",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C00",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C000",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    },
-    {
-        id: "123",
-        imgUrl: "",
-        name: "C0000",
-        likes: 123132,
-        posts: 123,
-        tags: ["Computer Science"],
-    }
-];
-
-// '\\$&'は文字列全体を意味する
-const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const getSuggestions = value => {
-  const escapedValue = escapeRegexCharacters(value.trim());
-  
-  if (escapedValue === '') {
-    return [];
-  }
-
-  // 先頭の文字から比べて、testでtrueかfalseを出す
-  const regex = new RegExp('^' + escapedValue, 'i');
-  const suggestions = topics.filter(topic => regex.test(topic.name));
-  
-  if (suggestions.length === 0) {
-    return [
-      { added: true } 
-    ];
-  }
-  
-  return suggestions;
-}
 
 class Search extends Component {
 

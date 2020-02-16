@@ -89,7 +89,7 @@ const TitleWrapper = styled.div`
     & > p {
         width: 188px;
         text-align: center;
-        font-size: 15px;
+        font-size: 14px;
         margin-bottom: 7px;
         white-space: nowrap;
     }

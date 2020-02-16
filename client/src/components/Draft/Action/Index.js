@@ -90,7 +90,7 @@ class Index extends Component {
                 const isFirst = k === "0"
                 result.push(
                     <IndexElement 
-                        k={id}
+                        key={id}
                         indent={false} 
                         selected={this.state.selectedId === id} 
                         onClick={() => this.handleClick(id, [parseInt(k)], title, isFirst, isFirst)}
@@ -242,7 +242,7 @@ export const IndexPreview = styled.div`
     }
 
     & p:nth-child(4) {
-        margin-top: 2px;
+        margin-top: 3px;
         font-size: 10px;
         color: #777777;
     }

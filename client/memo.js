@@ -47,3 +47,5 @@ dark blue   #111350
 gray        #aeadae
 light gray  #e1e0e2
 white       #ffffff
+
+black       #3d4245

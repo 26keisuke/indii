@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom"
 
 import Screen from "../../Util/Screen"
 import TextArea from "../TextArea/TextArea"
-import Reference from "../Reference/Reference"
+import Tool from "../Tool/Tool"
 
 import "./Editor.css"
 
@@ -48,7 +48,7 @@ const EditorTop = styled.div`
                 position: absolute;
                 font-size: 10px;
                 color: #767676;
-                right: -200px;
+                right: -295px;
                 bottom: 5px;
             }
         }
@@ -123,7 +123,7 @@ class Editor extends Component {
     renderRight() {
         return (
             <div>
-                <Reference
+                <Tool
                     draft={this.state.draft}
                 />
             </div>

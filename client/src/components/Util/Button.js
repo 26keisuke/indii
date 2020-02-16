@@ -5,10 +5,9 @@ const Button = styled.button`
     padding: 0px 22px;
     height: 34px;
     cursor: pointer;
-    border: none;
-    background-color: #636480;
-    color: #ffffff;
-    font-family: "Gennokaku Gothic";
+    border: ${props => props.inverse ? "1px solid #636480" : "none"};
+    background-color: ${props => props.inverse ? "#ffffff" : "#636480"};
+    color: ${props => props.inverse ? "#636480" : "#ffffff"};
     outline: 0;
     opacity: ${props => props.disabled && 0.2};
 `

@@ -9,6 +9,7 @@ const postSchema = new Schema({
     topicName: String, // for fast lookup
     index: [Number], // 2.1の場合は[2,1]
     postName: String,
+    postImg: String,
     content: String,
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     creationDate: Date,
@@ -20,14 +21,14 @@ const postSchema = new Schema({
         delete: Boolean,
         warn: Boolean,
     },
-    feedback: [{
+    feedback: [{ // report 
         timeStamp: Date,
         feedback: {
             // ここを付け加える
         },
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     }],
-    rating: [{
+    rating: [{ // emoji
         timeStamp: Date,
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         rate: Number,

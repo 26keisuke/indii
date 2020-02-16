@@ -7,7 +7,7 @@ const DraftBox = styled(Link)`
     border-bottom: 1px solid #d2d2d2;   
     display: flex;
     flex-direction: row;
-    padding: 15px 20px;
+    padding: 10px 20px;
     align-items: center;
     margin-left:-1px;
     cursor: pointer;
@@ -17,8 +17,8 @@ const DraftBox = styled(Link)`
     }
 
     & > img {
-        width: 80px;
-        height: 80px;
+        width: 60px;
+        height: 60px;
         object-fit: contain;
         flex-shrink: 0;
     }
@@ -49,9 +49,9 @@ const Title = styled.p`
 const Content = styled.p`
     color: #2B2B2b;
     margin-bottom: 10px;
-    margin-right:25px;
+    margin-right:50px;
     width: 510px; 
-    height: 15px;
+    height: 32px;
     overflow: hidden;
 `
 
@@ -78,7 +78,7 @@ class Draft extends Component {
 
     render(){
 
-        const { _id, type, postName, topicName, content, editDate, topicImg } = this.props.draft
+        const { _id, type, postName, topicName, content, editDate, topicImg, postImg } = this.props.draft
 
         return(
             <DraftBox to={"/draft/edit/" + _id} id={_id}>
@@ -90,11 +90,11 @@ class Draft extends Component {
                     </div>
                     <Title>{postName}</Title>
                     <Content>
-                        {BraftEditor.createEditorState(content).toText().replace(/[a\s]+/, "").substring(0, 50)}
+                        {BraftEditor.createEditorState(content).toText().replace(/[a\s]+/, "").substring(0, 100)}
                     </Content>
                     <Date>前回の編集日: {editDate[editDate.length-1] === undefined ? <span/> : editDate[editDate.length-1]}</Date>
                 </DraftLeft>
-                <img src={topicImg}/>
+                <img src={postImg || topicImg}/>
             </DraftBox>
         )
     }
