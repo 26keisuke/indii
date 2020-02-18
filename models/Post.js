@@ -64,7 +64,6 @@ const postSchema = new Schema({
         doi: String,
         bookTitle: String,
         chapterTitle: String,
-        publisher: String,
         editor: String,
         heldDate: Date,
         conferenceName: String,

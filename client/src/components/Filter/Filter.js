@@ -22,14 +22,14 @@ const FilterSection = styled.div`
     }
 `
 
-const Radio = styled.input`
+export const Radio = styled.input`
     cursor: pointer;
 
     &:checked + label,
     &:not(:checked) + label
     {
         position: relative;
-        padding-left: 30px;
+        padding-left: ${props => props.paddingLeft};
         cursor: pointer;
         display: inline-block;
         color: #666;
@@ -38,8 +38,10 @@ const Radio = styled.input`
     &:not(:checked) + label:before {
         content: '';
         position: absolute;
-        left: 0;
-        top: -10px;
+        /* left: 0;
+        top: -10px; */
+        left: ${props => props.boxLeft};
+        top: ${props => props.boxTop};
         width: 16px;
         height: 16px;
         border: 1px solid #ddd;
@@ -52,8 +54,10 @@ const Radio = styled.input`
         height: 10px;
         background: #4CD964;
         position: absolute;
-        top: -6px;
-        left: 4px;
+        /* top: -6px;
+        left: 4px; */
+        left: ${props => props.btnLeft};
+        top: ${props => props.btnTop};
         border-radius: 100%;
         -webkit-transition: all 0.2s ease;
         transition: all 0.2s ease;
@@ -107,6 +111,11 @@ class Filter extends Component {
             <FilterSection key={String(title)+String(idx)}>
                 <p>{section}</p>
                 <Radio type="radio" 
+                    paddingLeft={"30px"}
+                    boxTop={"10px"}
+                    boxLeft={"0px"}
+                    btnTop={"6px"}
+                    btnLeft={"4px"}
                     name={this.props.name[index]} 
                     id={String(title)+String(idx)} 
                     defaultChecked={idx === 0 ? true : false}

@@ -1,9 +1,14 @@
-import React, { useState } from "react"
+//　将来的にはcrop使う時と使わない時で分岐させる（もしuncrop opが必要になるのだったらの場合）
+// Radio buttonのpropsが汚い
+
+import React, { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 
 import Upload from "../../Util/Upload"
 import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../Element/Box"
 import { Space } from "../../Theme"
+import Crop from "../../Util/Crop"
+import { Radio } from "../../Filter/Filter"
 
 const baseStyle = {
     display: 'flex',
@@ -34,11 +39,46 @@ const rejectStyle = {
 function ActionImage(props) {
 
     // fileは{preview: __}の形
-    const [file, setFile] = useState({preview: localStorage.getItem(props.storage)} || {preview: null});
+    // const [file, setFile] = useState({preview: localStorage.getItem(props.storage)} || {preview: null});
 
-    // const flag = ((file.preview === "null") || (file.preview === null) || (file.preview === "undefined"))
-    const flag = ((file.preview === null) || (file.preview === undefined))
-    const display = flag ? props.initialVal : file.preview
+    const [file1, setFile1] = useState({preview: null})
+    const [file2, setFile2] = useState({preview: null})
+    const [file3, setFile3] = useState({preview: null})
+    const [url1, setUrl1] = useState(localStorage.getItem(props.storage1) || null)
+    const [url2, setUrl2] = useState(localStorage.getItem(props.storage2) || null)
+    const [url3, setUrl3] = useState(localStorage.getItem(props.storage3) || null)
+    const [toggle, setToggle] = useState("mobile")
+
+    // For uncrop op
+    // const flag = ((file.preview === null) || (file.preview === undefined))
+    // const display = flag ? props.initialVal : file.preview
+
+    const flag1 = ((url1 === null) || (url1 === undefined))
+    const display1 = flag1 ? props.initialVal1 : url1
+
+    const flag2 = ((url2 === null) || (url2 === undefined))
+    const display2 = flag2 ? props.initialVal2 : url2
+
+    const flag3 = ((url3 === null) || (url3 === undefined))
+    const display3 = flag3 ? props.initialVal3 : url3
+
+    useEffect (() => {
+        if(!flag1){
+            localStorage.setItem(props.storage1, url1)
+        }
+    }, [url1])
+
+    useEffect (() => {
+        if(!flag2){
+            localStorage.setItem(props.storage2, url2)
+        }
+    }, [url2])
+
+    useEffect (() => {
+        if(!flag3){
+            localStorage.setItem(props.storage3, url3)
+        }
+    }, [url3])
 
     const handleBack = () => {
         props.setBackward(true);
@@ -46,32 +86,96 @@ function ActionImage(props) {
     };
 
     const handleRevert = () => {
-        setFile({
-            ...file,
-            preview: null
-        })
+        // For uncrop op
+        // setFile({
+        //     ...file,
+        //     preview: null
+        // })
+
+        switch(toggle) {
+            case "mobile":
+                return setUrl1(null)
+            case "topic":
+                return setUrl2(null)
+            case "post":
+                return setUrl3(null)
+            default:
+                return null
+        }
     }
 
     const handleForward = () => {
-        if(!display){
+        // if(!display) {
+        //     console.log("Illegal attempt to bypass sending a file");
+        // }
+
+        if(!display1 || !display2 || !display3){
             console.log("Illegal attempt to bypass sending a file");
         }
+
         props.setBackward(false)
         props.setStep(2);
 
-        if(flag) {
-            props.setImage(props.initialVal) 
+        // For uncrop op
+        // if(flag) {
+        //     props.setImage(props.initialVal) 
+        // } else  {
+        //     props.setImage(file.preview)
+        // }
+
+        if(flag1) {
+            props.setImage(props.initialVal1) 
         } else  {
-            props.setImage(file.preview)
+            props.setImage(url1)
+        }
+
+        if(flag2) {
+            props.setImage(props.initialVal2) 
+        } else  {
+            props.setImage(url2)
+        }
+
+        if(flag3) {
+            props.setImage(props.initialVal3) 
+        } else  {
+            props.setImage(url3)
         }
     };
+
+    const getConfig = (name) => {
+        switch(name) {
+            case "mobile":
+                return {
+                    aspect: 57/30,
+                    height: 285,
+                    x: 0,
+                    y: 0,
+                }
+            case "topic":
+                return {
+                    aspect: 1,
+                    height: 250,
+                    x: 0,
+                    y: 0,
+                }
+            case "post":
+                return {
+                    aspect: 16/9,
+                    height: 200,
+                    x: 0,
+                    y: 0,
+                }
+            default:
+                return null
+        }
+    }
 
     return (
         <Box>
             <BoxTransition back={props.back} transition={true}>
                 <div> 
                     <p>2. アイコンと背景用の写真を選択</p>
-                    {   props.initialVal
+                    {   (props.initialVal1 || props.initialVal2 || props.initialVal3)
                         ? <RevertBtn　onClick={handleRevert}>元に戻す</RevertBtn>
                         : ""
                     }
@@ -79,40 +183,118 @@ function ActionImage(props) {
                 <Upload
                     message="このボックスに画像をドラッグするか、ボックスをクリックしてください"
                     caution="(*.jpegと*.pngのみ)"
-                    file={file}
-                    storage={props.storage}
-                    setFile={setFile}
+                    file={toggle === "mobile" ? file1 : toggle === "topic" ? file2 : file3}
+                    // <upload/>でlocalstorageに保存しない
+                    // storage={toggle === "mobile" ? props.storage1 : toggle === "topic" ? props.storage2 : props.storage3}
+                    setFile={toggle === "mobile" ? setFile1 : toggle === "topic" ? setFile2 : setFile3}
                     baseStyle={baseStyle}
                     activeStyle={activeStyle}
                     acceptStyle={acceptStyle}
                     rejectStyle={rejectStyle}
                 />
+                <RadioWrapper>
+                    <div>
+                        <Radio 
+                            paddingLeft={"25px"}
+                            boxTop={"0px"}
+                            boxLeft={"0px"}
+                            btnTop={"4px"}
+                            btnLeft={"4px"}
+                            type="radio" 
+                            id="mobile" 
+                            name="preview" 
+                            onClick={() => setToggle("mobile")} 
+                            checked={toggle === "mobile"}
+                        />
+                        <label htmlFor="mobile">モバイルでの表示</label>
+                    </div>
+                    <div>
+                        <Radio 
+                            paddingLeft={"25px"}
+                            boxTop={"0px"}
+                            boxLeft={"0px"}
+                            btnTop={"4px"}
+                            btnLeft={"4px"}
+                            type="radio" 
+                            id="topic" 
+                            name="preview" 
+                            onClick={() => setToggle("topic")} 
+                            checked={toggle === "topic"}
+                        />
+                        <label htmlFor="topic">トピック画面での表示</label>
+                    </div>
+                    <div>
+                        <Radio 
+                            paddingLeft={"25px"}
+                            boxTop={"0px"}
+                            boxLeft={"0px"}
+                            btnTop={"4px"}
+                            btnLeft={"4px"}
+                            type="radio" 
+                            id="post" 
+                            name="preview" 
+                            onClick={() => setToggle("post")} 
+                            checked={toggle === "post"}
+                        />
+                        <label htmlFor="post">ポスト画面での表示</label>
+                    </div>
+                </RadioWrapper>
                 <PreviewBox>
-                    <PreviewElement mobile={true} hide={!display}>
+                    { toggle === "mobile" &&
+                    <PreviewImg mobile={true} hide={!display1}>
                         <p>モバイルでの表示</p>
                         <div/>
                         <img 
-                            src={display} 
+                            src={display1} 
                             alt={"モバイル用のトピックの画像プレビュー"}/>
-                    </PreviewElement>
-                    <PreviewElement hide={!display}>
-                        <p>PCでの表示</p>
+                    </PreviewImg>
+                    }
+                    { toggle === "topic" &&
+                    <PreviewImg topic={true} hide={!display2}>
+                        <p>トピック画面での表示</p>
                         <div/>
                         <img 
-                            src={display} 
+                            src={display2} 
                             alt={"ウェブ用のトピックの画像プレビュー"}
                         />
-                    </PreviewElement>
+                    </PreviewImg>
+                    }
+                    { toggle === "post" &&
+                    <PreviewImg hide={!display3}>
+                        <p>ポスト画面での表示</p>
+                        <div/>
+                        <img 
+                            src={display3} 
+                            alt={"ウェブ用のトピックの画像プレビュー"}
+                        />
+                    </PreviewImg>
+                    }
                 </PreviewBox>
+                <Crop
+                    file={toggle === "mobile" ? file1 : toggle === "topic" ? file2 : file3}
+                    setUrl={toggle === "mobile" ? setUrl1 : toggle === "topic" ? setUrl2 : setUrl3}
+                    crop={getConfig(toggle)}
+                    config={toggle}
+                />
                 <ButtonWrapper>
                     <ButtonLeft onClick={handleBack}>戻る</ButtonLeft>
-                    <ButtonRight disabled={!display} onClick={handleForward}>次へ進む</ButtonRight>
+                    <ButtonRight disabled={ !display1 || !display2 || !display3 } onClick={handleForward}>次へ進む</ButtonRight>
                 </ButtonWrapper>
                 <Space height="220px"/>
             </BoxTransition>
         </Box>
     );
 };
+
+const RadioWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 15px 0px;
+    & > div {
+        margin-right: 15px;
+    }
+`
 
 const RevertBtn = styled.p`
     margin-left: 185px;
@@ -128,7 +310,91 @@ const PreviewBox = styled.div`
     flex-direction: row;
     justify-content: center;
     width: 444px;
+    margin-bottom: 50px;
 `
+
+const PreviewImg = styled.div`
+    position: relative;
+    margin: 0px 15px;
+    margin-top: 25px;
+
+    & > p {
+        margin-bottom:10px;
+        color: #585858;
+        font-size: 10px;
+        margin-left: 5px;
+    }
+
+    & > div {
+        position: absolute;
+        border: 1px solid black;
+        border-style: dashed;
+        border-width: 1px;
+
+        ${props => props.mobile 
+        ? css`
+            width: 380px;
+            height: 200px;
+            border-bottom-right-radius: 35px;
+            border-bottom-left-radius: 35px;
+        `
+        : props => props.topic 
+        ? css`
+            width: 250px;
+            height: 250px;
+        `
+        : css`
+            width: 350px;
+            height: 200px;
+        `}
+        
+        ${props => !props.hide && css`
+            opacity: 0;
+        `}
+    }
+
+    & > img {
+
+        object-fit: contain;
+        border: 1px solid #d2d2d2;
+
+        ${props => props.mobile 
+        ? css`
+            min-width: 380px;
+            min-height: 200px;
+            max-width: 380px;
+            max-height: 200px;
+            border-bottom-right-radius: 45px;
+            border-bottom-left-radius: 45px;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        `
+        : props => props.topic 
+        ? css`
+            min-width: 250px;
+            min-height: 250px;
+            max-width: 250px;
+            max-height: 250px;
+        ` 
+        : css`
+            min-width: 350px;
+            min-height: 200px;
+            max-width: 350px;
+            max-height: 200px;
+        `}
+
+        ${props => props.hide && css`
+            opacity: 0;
+        `}
+    }
+`
+
+
+
+
+
+
+
+
 
 export const PreviewElement = styled.div`
     position: relative;

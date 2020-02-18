@@ -6,7 +6,6 @@ import axios from "axios";
 
 import * as actions from "../../../actions"
 
-
 class TextArea extends React.Component {
 
     constructor(props) {

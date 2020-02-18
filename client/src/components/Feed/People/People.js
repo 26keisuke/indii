@@ -38,7 +38,7 @@ const PeopleElement = styled(Link)`
         }
 
         & > p:nth-child(3) {
-            font-size: 11px;
+            line-height: 20px;
         }
     }
 `

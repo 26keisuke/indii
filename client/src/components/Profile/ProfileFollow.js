@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 
-import People from "../People"
+import People from "../People/People"
 
 class ProfileFollow extends Component {
 

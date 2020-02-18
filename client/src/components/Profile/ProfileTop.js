@@ -40,12 +40,12 @@ class ProfileTop extends Component {
                 </div>
                 <div className="profile-bottom">
                     <div className="profile-bottom-left">
-                        <div className="profile-sns">
+                        {/* <div className="profile-sns">
                             <FaTwitter className="profile-icon"/>
                             <FaGithub className="profile-icon"/>
                             <FaBlog className="profile-icon"/>
                             <FaFacebookSquare className="profile-icon"/>
-                        </div>
+                        </div> */}
                         <div className="profile-record">
                             <div className="profile-stats">
                                 <p className="profile-number">{this.props.posts}</p>

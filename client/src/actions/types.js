@@ -44,3 +44,4 @@ export const FETCH_TOPIC = "FETCH_TOPIC"
 
 // POST
 export const SEARCH_POST = "SEARCH_POST"
+export const FETCH_POST = "FETCH_POST"

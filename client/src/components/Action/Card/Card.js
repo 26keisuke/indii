@@ -10,7 +10,7 @@ import { checkAuth } from "../../Util/util"
 const CardWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-bottom: 35px;
 `
 

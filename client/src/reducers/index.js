@@ -16,6 +16,7 @@ import { USER_IS_LOGGEDIN,
          SEARCH_TOPIC, SEARCH_POST,
          FETCH_TOPIC,
          FETCH_DRAFT, 
+         FETCH_POST,
          DRAFT_UPDATED, DRAFT_READ} from "../actions/types"
 
 const initialState = {
@@ -88,6 +89,7 @@ const initialState = {
     },
     post: {
         search: [],
+        fetched: {},
     },
     topic: {
         search: [],
@@ -132,6 +134,11 @@ function postReducer(state=initialState.post, action) {
             return {
                 ...state,
                 search: action.payload.suggestions
+            }
+        case FETCH_POST:
+            return {
+                ...state,
+                fetched: action.payload
             }
         default:
             return state

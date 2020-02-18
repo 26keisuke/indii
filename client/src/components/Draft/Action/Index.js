@@ -23,9 +23,7 @@ class Index extends Component {
         }
     }
 
-    // idが一致する下書きをとってくる
-    componentDidMount() {
-
+    fetchDraft = () => {
         this.props.isFetching()
         this.props.unVisible()
         const draftList = this.props.draft.onEdit
@@ -39,15 +37,35 @@ class Index extends Component {
             }
         }
     }
+
+    // idが一致する下書きをとってくる
+    componentDidMount() {
+        this.fetchDraft();
+    }
+
+    // ↑の後に↓が呼ばれる
     
-    // draftの対象となるトピックをとってくる
+    
     componentDidUpdate(prevProps) {
+        // draftの対象となるトピックをとってくる
         if (prevProps.topic.fetched !== this.props.topic.fetched) {
             this.props.endFetching()
             this.setState({
                 topic: this.props.topic.fetched
             })
             this.props.setMessage(`「${this.state.draft.postName}」をトピック「${this.props.topic.fetched.topicName}」のどこに挿入しますか？`)
+        } else if (prevProps.id !== this.props.id) {
+            // ２回以上連続でrenderされた場合はcomponentDidMountが呼ばれない
+            this.setState({
+                selectedId: "",
+                selectedTitle: "",
+                selectedIndex: "",
+                showBtn: false,
+                forcedOn: false,
+                addColumn: false,
+            }, () => {
+                this.fetchDraft();
+            })
         }
     }
 

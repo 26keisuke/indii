@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 
 import * as actions from "../../../../actions"
+import { jpMapping } from "../Data/data"
 
 import ShowMore from "../../../Util/ShowMore"
 
@@ -59,31 +60,19 @@ const ShowMoreWrapper = styled.div`
     top: 2px;
 `
 
-function jpMapping(enName) {
-    switch(enName){
-        case "title":
-            return 
-        case "url":
-            return 
-        case "author":
-            return 
-        case "date":
-            return 
-        case "url":
-            return 
-        case "author":
-            return 
-    }
-}
-
 class List extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
             isOpened: "",
+            counter: 0,
+            refs: [],
         }
-        this.moreRef = React.createRef()
+    }
+
+    setRef = (ref) => {
+        this.state.refs.push(ref)
     }
 
     componentDidUpdate() {
@@ -99,8 +88,10 @@ class List extends Component {
     }
 
     outsideClick = (e) => {
-        if(this.moreRef.current.contains(e.target)) {
-            return null;
+        for(var k in this.state.refs) {
+            if (this.state.refs[k].contains(e.target)) {
+                return null
+            }
         }
 
         this.setState({
@@ -115,7 +106,6 @@ class List extends Component {
     }
 
     deleteRef = (refId) => {
-
         const url = this.props.location.pathname
         const draftId = url.substring(url.lastIndexOf('/') + 1)
         const id = {draftId, refId}
@@ -138,12 +128,12 @@ class List extends Component {
                         ?   section[0].toLowerCase().includes("date")
                             ?
                             <div>
-                                <p>{section[0]}:</p>
+                                <p>{jpMapping(section[0])}:</p>　
                                 <p>{new Date(section[1]).toLocaleDateString()}</p>
                             </div>
                             :
                             <div>
-                                <p>{section[0]}:</p>
+                                <p>{jpMapping(section[0])}:</p>
                                 <p>{section[1]}</p>   
                             </div>               
                         :
@@ -159,18 +149,18 @@ class List extends Component {
     renderRef = () => {
         var counter = 0
         const res = this.props.reference.map(ref => {
-            console.log(ref)
             if (!ref.isDeleted) {
                 counter++
                 return(
-                    <RefElement key={ref._id} ref={this.moreRef}>
+                    <RefElement key={ref._id}>
                         <div>[{counter}]</div>
                         <div>
                             {this.renderSection(ref)}
                         </div>
                         <ShowMoreWrapper>
                             <ShowMore
-                                ref={this.actionRef}
+                                // ref={this.moreRef}
+                                ref={this.setRef}
                                 handleClick={() => this.handleClick(ref._id)}
                                 show={this.state.isOpened === ref._id}
                                 shadow={false}
@@ -189,7 +179,6 @@ class List extends Component {
     }
 
     render() {
-
         return (
             <ListBox>
                 <div>

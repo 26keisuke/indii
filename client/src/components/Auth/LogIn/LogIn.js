@@ -55,9 +55,9 @@ class LogIn extends Component {
                 <BottomWrapper>
                     {   ((this.props.logInStates.email) && (this.props.logInStates.password)) 
                     ?
-                    <Button type="submit" onClick={(e) => this.props.handleSubmit(e, "logIn")}>ログイン</Button>
+                    <Button width={"360px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "logIn")}>ログイン</Button>
                     :
-                    <Button disabled={true} type="submit">ログイン</Button>
+                    <Button width={"360px"} disabled={true} type="submit">ログイン</Button>
                     }
                     <Link to={"/verification/password"}>パスワードを忘れた方はこちら</Link>
                 </BottomWrapper>
@@ -71,7 +71,7 @@ const Division = styled.div`
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     position: relative;
     & > p {
         color: #B3B3C8;
@@ -82,7 +82,7 @@ const Division = styled.div`
     & > div:nth-child(3){
         width: 44%;
         border: none;
-        border-bottom: 1px solid #B3B3C8;
+        border-bottom: 1px solid #d2d2d2;
     }
 `
 
@@ -134,10 +134,10 @@ export const BottomWrapper = styled.div`
     }
 
     & > p {
-        font-size: 9px;
+        font-size: 10px;
         width: 300px;
         text-align: center;
-        margin-top: 13px;
+        margin-top: 18px;
         color: #444444;
     }
 `
@@ -147,6 +147,7 @@ const Remember = styled.div`
     flex-direction: row;
     align-items: center;
     margin: 0px 34px;
+    margin-bottom: 18px;
 `
 
 const Message = styled.div`

@@ -34,7 +34,7 @@ class Create extends Component {
         return (
             <GridWrapper>
                 <Grid config={config}/>
-                <Space height="150px"/>
+                <Space height="10px"/>
             </GridWrapper>
             
         )

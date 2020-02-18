@@ -261,7 +261,7 @@ class Reference extends Component {
             tempReference: merged,
             [this.state.toggle]: data,
         }, () => {
-            sendMessage("success", "参照を追加しました。", 2500, this.props)
+            sendMessage("success", "参照を追加しました。", 3000, this.props)
         })
     }
 

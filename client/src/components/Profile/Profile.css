@@ -28,7 +28,7 @@
 
 .profile-bottom{
     background-color: #ffffff;
-    height: 110px;
+    height: 90px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -124,7 +124,7 @@
 
 .profile-follow-button-wrapper{
     position: absolute;
-    top: 58px;
+    top: 14px;
     left: 0px;
 }
 

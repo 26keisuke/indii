@@ -312,3 +312,60 @@ export const generalList = [
         isValid: null,
     },
 ]
+
+export function jpMapping(enName) {
+    switch(enName){
+        case "refType":
+            return "種類"
+        case "title":
+            return "タイトル"
+        case "url":
+            return　"URL"
+        case "author":
+            return "著者"
+        case "postDate":
+            return "掲載日"
+        case "website":
+            return "ウェブサイト名"
+        case "source":
+            return "ソース"
+        case "date":
+            return "作成日"
+        case "publishDate":
+            return "出版日"
+        case "isbnurl":
+            return "ISBNURL"
+        case "page":
+            return "ページ"
+        case "doi":
+            return "DOI"
+        case "bookTitle":
+            return "本のタイトル"
+        case "chapterTitle":
+            return "章のタイトル"
+        case "publisher":
+            return "出版社"
+        case "editor":
+            return "編集者"
+        case "heldDate":
+            return "開催日"
+        case "conferenceName":
+            return "カンファレンス名"
+        case "creator":
+            return "クリエイター"
+        case "creatorUrl":
+            return "クレエイターへのURL"
+        case "sourceUrl":
+            return "ソースのURL"
+        case "licenseName":
+            return "ライセンス名"
+        case "licenseUrl":
+            return "ライセンスへのURL"
+        case "licenseHolder":
+            return "ライセンス保持者"
+        case "licenseDate":
+            return "ライセンス期限"
+        default:
+            return ""
+    }
+}

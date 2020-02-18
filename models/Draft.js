@@ -38,7 +38,6 @@ const draftSchema = new Schema({
         doi: String,
         bookTitle: String,
         chapterTitle: String,
-        publisher: String,
         editor: String,
         heldDate: String,
         conferenceName: String,

@@ -1,12 +1,12 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-import sample from "../images/sample0.jpg"
+import sample from "../../images/sample0.jpg"
 import { Link } from "react-router-dom"
 
-import PeopleFollow from "./PeopleFollow"
+import PeopleFollow from "../PeopleFollow"
 
 const PeopleElement = styled.div`
-    padding: 10px 10px;
+    /* padding: 10px 10px; */
     cursor: pointer;
 
     &:hover {

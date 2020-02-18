@@ -100,7 +100,7 @@ class Post extends Component {
 
     render () {
 
-        const { index, postName, star, config, contribution, postImg  } = this.props.suggestion
+        const { index, postName, star, config, contribution, postImg, topicImg  } = this.props.suggestion
         const lastEdited = contribution[contribution.length-1]
 
         return (
@@ -125,7 +125,7 @@ class Post extends Component {
                             {this.renderLevel()}
                         </div> */}
                         { !config.allowEdit ? <PermissionImg/>: "" }
-                        <PostRight src={postImg || indii} alt="ポストの検索結果のメイン画像"/>
+                        <PostRight src={postImg || topicImg} alt="ポストの検索結果のメイン画像"/>
                     </div>
                 </PostElement>
             </div>

@@ -61,7 +61,9 @@ class CreateTopic extends Component {
                         back={this.state.back} 
                         setBackward={this.setBackward} 
                         // initialVal={indii}
-                        storage="createTopicImage"
+                        storage1="createTopicImage1"
+                        storage2="createTopicImage2"
+                        storage3="createTopicImage3"
                         setImage={this.setImage} 
                         setStep={this.setStep}
                         />

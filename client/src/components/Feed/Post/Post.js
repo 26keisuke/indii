@@ -331,6 +331,10 @@ const PostMiddle = styled.div`
         margin-bottom: 5px;
         font-weight: bold;
     }
+
+    & > div p{
+        line-height: 20px;
+    }
 `
 
 const Emoji = styled.div`

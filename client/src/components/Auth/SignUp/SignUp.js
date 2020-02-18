@@ -21,7 +21,7 @@ class SignUp extends Component {
                         type="text" 
                         id="userName"
                     />
-                    <label htmlFor="userName">表示名</label>
+                    {/* <label htmlFor="userName">表示名</label> */}
                     <input 
                         value={this.props.signUpStates.familyName}
                         placeholder="苗字" 
@@ -29,7 +29,7 @@ class SignUp extends Component {
                         type="text" 
                         id="familyName"
                     />
-                    <label htmlFor="familyName">苗字</label>
+                    {/* <label htmlFor="familyName">苗字</label> */}
                     <input 
                         value={this.props.signUpStates.givenName}
                         placeholder="名前" 
@@ -37,7 +37,7 @@ class SignUp extends Component {
                         type="text" 
                         id="givenName"
                     />
-                    <label htmlFor="givenName">名前</label>
+                    {/* <label htmlFor="givenName">名前</label> */}
                     { this.props.signUpStates.userName &&
                     <Match left="62px">
                         <Check/>
@@ -61,8 +61,7 @@ class SignUp extends Component {
                         onChange={(e) => this.props.handleSignUpChange(e,"email")} 
                         type="email"
                     />
-                    <label htmlFor="email">Eメール</label>
-                    
+                    {/* <label htmlFor="email">Eメール</label> */}
                     <Match left="66px">
                         {   this.props.valid.validEmail && this.props.valid.uniqueEmail &&
                         <Check/>
@@ -86,7 +85,7 @@ class SignUp extends Component {
                         type="password" 
                         id="password"
                     />
-                    <label htmlFor="password">パスワード</label>
+                    {/* <label htmlFor="password">パスワード</label> */}
                     <input 
                         value={this.props.signUpStates.confirm}
                         placeholder="パスワードの確認" 
@@ -111,8 +110,8 @@ class SignUp extends Component {
                 </InputWrapperBottom>
                 <BottomWrapper signUp={true}>
                     {this.props.valid.valid
-                    ? <Button type="submit" onClick={(e) => this.props.handleSubmit(e, "signUp")}>アカウントを作成</Button>
-                    : <Button disabled={true} type="submit">アカウントを作成</Button>
+                    ? <Button width={"360px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "signUp")}>アカウントを作成</Button>
+                    : <Button width={"360px"} disabled={true} type="submit">アカウントを作成</Button>
                     }
                     <p>アカウントを作成すると、利用規約、及びCookieの使用を含むプライバシーポリシーに同意したことになります。</p>
                 </BottomWrapper>

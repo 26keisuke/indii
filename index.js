@@ -361,8 +361,6 @@ app.get("/api/topic/:topicId", (req, res) => {
         })
 })
 
-// app.post("/api/topic/:topicId/post/:postId")
-
 app.post("/api/topic/:topicId/post", isLoggedIn, (req, res) => {
     const data = Object.assign({user: req.user.id, type: "New", creationDate: Date.now()}, req.body)
     new Draft(data)
@@ -378,6 +376,16 @@ app.post("/api/topic/:topicId/post", isLoggedIn, (req, res) => {
     .catch(err => {
         console.log(err)
         res.send("Fail: POST /api/topic/:topicId/post")
+    })
+})
+
+app.get("/api/post/:postId", (req, res) => {
+    Post.findById(req.params.postId)
+    .then(post => {
+        res.send(post)
+    })
+    .catch(err => {
+        console.log(err)
     })
 })
 
@@ -419,24 +427,24 @@ app.get("/api/post/search/:type/:term", (req, res) => {
         })
 })
 
-function searchByCategoryAndType(req, model, variableName) {
-    const type = req.params.type
-    const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
-    model.find({[variableName]: {$regex: value, $options: 'i'}}) 
-        .exec()
-        .then(elem => {
-            if(elem.length === 0){
-                const result = type === "Match" ? [] : [{added: true}]
-                res.send(result)
-            } else {
-                res.send(elem)
-            }
-        })
-        .catch(err => {
-            console.log(err)
-            res.send([])
-        })
-}
+// function searchByCategoryAndType(req, res, model, variableName) {
+//     const type = req.params.type
+//     const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
+//     model.find({[variableName]: {$regex: value, $options: 'i'}}) 
+//         .exec()
+//         .then(elem => {
+//             if(elem.length === 0){
+//                 const result = type === "Match" ? [] : [{added: true}]
+//                 res.send(result)
+//             } else {
+//                 res.send(elem)
+//             }
+//         })
+//         .catch(err => {
+//             console.log(err)
+//             res.send([])
+//         })
+// }
 
 app.get("/api/search/:term", (req, res) => {
     console.log(`A TERM "${req.params.term}" HAS BEEN SEARCHED`)

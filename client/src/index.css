@@ -770,3 +770,21 @@ input:focus{
     position: absolute;
     left: -9999px;
 }
+
+/*=======*/
+
+.post-braft {
+    height: 100vh !important;
+    border-top: 1px solid #d2d2d2;
+    overflow: inherit;
+    font-size: 12px !important;
+    color: #222222;
+}
+
+.post-braft span {
+    font-size: 12px;
+}
+
+.post-braft a {
+    text-decoration: underline !important;
+}

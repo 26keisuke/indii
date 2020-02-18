@@ -97,7 +97,7 @@ class DraftNavigation extends Component {
         const action = "UPLOAD_DRAFT";
         const title = "下書きをアップロードする";
         const message = "アップロードする下書きを選択してください";
-        const caution = "* 複数選択できます";
+        const caution = "* 同じトピックに属する下書きは同時にアップロードできません";
         const buttonMessage = "次の画面へ";
         const next = "UPLOAD_DRAFT"
         this.props.showConfirmation(id, action, title, caution, message, buttonMessage, next);

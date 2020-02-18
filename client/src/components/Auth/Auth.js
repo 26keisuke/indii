@@ -269,7 +269,7 @@ class Auth extends Component {
 
 const LogInCard = styled.div`
     width: 400px;
-    height: 385px;
+    height: 400px;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     background-color: #ffffff;

@@ -9,6 +9,8 @@ const Button = styled.button`
     background-color: ${props => props.inverse ? "#ffffff" : "#636480"};
     color: ${props => props.inverse ? "#636480" : "#ffffff"};
     outline: 0;
+    width: ${props => props.width ? props.width : "auto"}; 
+
     opacity: ${props => props.disabled && 0.2};
 `
 

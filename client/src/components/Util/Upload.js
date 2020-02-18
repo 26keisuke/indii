@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone"
 
 const Upload = ( props ) => {
 
-    const {file, setFile, storage, children, baseStyle, activeStyle, acceptStyle, rejectStyle, message, caution, onDropped} = props
+    const {file, setFile, storage, baseStyle, activeStyle, acceptStyle, rejectStyle, message, caution, onDropped} = props
 
     const {
         acceptedFiles,
@@ -39,9 +39,9 @@ const Upload = ( props ) => {
     });
 
     useEffect (() => {
-        if(storage && ((file.preview !== null) && (file.preview !== undefined))){
-            localStorage.setItem(storage, file.preview)
-        }
+        // if(storage && ((file.preview !== null) && (file.preview !== undefined))){
+        //     localStorage.setItem(storage, file.preview)
+        // }
         if(onDropped && ((file.preview !== null) && (file.preview !== undefined))) {
             onDropped(file.preview)
         }

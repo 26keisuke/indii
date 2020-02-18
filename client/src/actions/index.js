@@ -21,7 +21,7 @@ import { USER_IS_LOGGEDIN,
          SEARCH_POST, SEARCH_TOPIC,
          FETCH_DRAFT,
          DRAFT_UPDATED, DRAFT_READ, 
-         FETCH_TOPIC} from "./types";
+         FETCH_TOPIC, FETCH_POST} from "./types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
@@ -153,6 +153,11 @@ export const fetchTopic = (id) => async (dispatch) => {
     const url = "/api/topic/" + String(id)
     const res = await axios.get(url)
     dispatch({type: FETCH_TOPIC, payload: res.data})
+}
+
+export const fetchPost = (id) => async (dispatch) => {
+    const res = await axios.get(`/api/post/${String(id)}`)
+    dispatch({type: FETCH_POST, payload: res.data})
 }
 
 // ===== UTIL =====
