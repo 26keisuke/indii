@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import { IoIosMore } from "react-icons/io"
-import styled, {css} from "styled-components"
+import styled from "styled-components"
+
+import HoverIcon from "./HoverIcon"
 
 const MoreBtn = styled(IoIosMore)`
     transform: scale(1.7);
@@ -33,41 +35,18 @@ const Action = styled.div`
     }
 `
 
-const ShowBox = styled.div`
-    position: relative;
-
+const ShowBox = styled(HoverIcon)`
     & > p {
-        width:40px;
-        height:40px;
-        position: absolute;
         top: -12px;
         left: -14px;
-        cursor: pointer;
 
-        &:hover::before {
-            display: block;
+        &:hover ~ ${MoreBtn}{
+            animation-name: inflate;
+            animation-duration: 300ms;
+            animation-fill-mode: forwards;
         }
-
-        ${props => props.shadow ? css`
-            &::before {
-                content: "";
-                position: absolute;
-                display: none;
-                width:40px;
-                height:40px;
-                background-color: #9EAEE5;
-                opacity: 0.1;
-                border-radius: 100%;
-            }
-        `
-        : css``}
     }
 
-    & p:hover ~ ${MoreBtn}{
-        animation-name: inflate;
-        animation-duration: 300ms;
-        animation-fill-mode: forwards;
-    }
 `
 
 const ShowMore = React.forwardRef((props, ref) => (

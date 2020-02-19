@@ -160,7 +160,7 @@ function ActionImage(props) {
                 }
             case "post":
                 return {
-                    aspect: 16/9,
+                    aspect: 19/10,
                     height: 200,
                     x: 0,
                     y: 0,

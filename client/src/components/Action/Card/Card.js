@@ -100,16 +100,17 @@ const TitleWrapper = styled.div`
         bottom:-7px;
         transform: translate(-50%,0%);
         width: 30%;
-        height: 2px;
-        opacity: 0.4;
+        height: 1px;
+        opacity: 0.1;
         border-radius: 20%;
         background-color: #636480;
     }
 `
 
 const Content = styled.p`
-    font-size: 10px;
+    font-size: 11px;
     margin-top: -12px;
+    line-height: 17px;
     color: #555555;
 `
 

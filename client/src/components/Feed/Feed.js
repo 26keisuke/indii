@@ -47,6 +47,10 @@ const PostWrapper = styled.div`
     border-bottom: 1px solid #d2d2d2;
 `
 
+const TrendWrapper = styled.div`
+    margin-left: 5px;
+`
+
 class Feed extends Component {
 
     renderLeft = () => {
@@ -106,7 +110,9 @@ class Feed extends Component {
     renderRight = () => {
         return (
             <div>
-                <Trend/>
+                <TrendWrapper>
+                    <Trend/>
+                </TrendWrapper>
                 {/* <FeedRightHeader>
                     <p>トレンド</p>
                 </FeedRightHeader>

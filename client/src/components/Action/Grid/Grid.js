@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 
 import Card from "../Card/Card"
+import Icon from "./Icon/Icon"
 
 export const GridWrapper = styled.div`
     overflow: scroll;
@@ -12,7 +13,7 @@ export const GridWrapper = styled.div`
 `
 
 const GridBox = styled.div`
-    padding: 35px 50px;
+    padding: 35px 100px;
     padding-right: 10px;
     position: relative;
     display: flex;
@@ -54,6 +55,29 @@ const GridLabel = styled.div`
     }
 `
 
+const GridTop = styled.div`
+
+    margin-bottom: 50px;
+    margin-left: 30px;
+
+    & > div {
+        padding-left: 120px;
+    }
+
+    & h1 {
+        color: #333333;
+        font-size: 16px;
+        margin-bottom: 7px;
+        margin-top: 7px;
+    }
+
+    & h2 {
+        font-size: 12px;
+        color: #333333;
+        font-weight: normal;
+    }
+`
+
 class Grid extends Component {
     render () {
 
@@ -61,10 +85,19 @@ class Grid extends Component {
 
         return (
             <GridBox>
-                    <GridLabel>
+                    <GridTop>
+                        {/* <IconWrapper> */}
+                            <Icon/>
+                        {/* </IconWrapper> */}
+                        <div>
+                            <h1>{config.header}</h1>
+                            <h2>{config.headerContent}</h2>
+                        </div>
+                    </GridTop>
+                    {/* <GridLabel>
                         <div/>
                         <div/>
-                    </GridLabel>
+                    </GridLabel> */}
                     <GridTitle>{config.screenName[0]}</GridTitle>
                     <Card
                         category={config.category[0]}
@@ -74,10 +107,10 @@ class Grid extends Component {
                         img={config.img[0]}
                         color={config.color[0]}
                     />
-                    <GridLabel>
+                    {/* <GridLabel>
                         <div/>
                         <div/>
-                    </GridLabel>
+                    </GridLabel> */}
                     <GridTitle>{config.screenName[1]}</GridTitle>
                     <Card
                         category={config.category[1]}

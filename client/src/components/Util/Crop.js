@@ -26,7 +26,6 @@ class Crop extends Component {
 
     componentDidUpdate(prevProps) {
         if((prevProps.config !== this.props.config)) {
-            console.log(prevProps.crop)
             this.setState({ 
                 ...this.state,
                 crop: this.props.crop,

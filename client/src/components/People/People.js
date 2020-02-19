@@ -7,19 +7,19 @@ import PeopleFollow from "../PeopleFollow"
 
 const PeopleElement = styled.div`
     /* padding: 10px 10px; */
-    cursor: pointer;
 
-    &:hover {
+    /* &:hover {
         background-color: rgba(233, 233, 238, 0.25);
-    }
+    } */
 
-    &:hover > div {
+    /* &:hover > div {
         background-color: rgba(0, 0, 0, 0);
-    }
+    } */
 
     & > p {
         font-size: 11px;
         margin: 0px 1px;
+        cursor: default;
     }
 
     & > div {
@@ -37,9 +37,12 @@ const PeopleElement = styled.div`
             object-fit: cover;
             flex-shrink: 0;
             margin-right: 10px;
+            cursor: pointer;
         }
 
         & > div:nth-child(2) {
+
+            cursor: pointer;
 
             & > p:nth-child(1) {
                 font-size: 12px;

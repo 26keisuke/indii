@@ -71,7 +71,8 @@
 }
 
 .draft-area-textarea span a{
-    text-decoration: underline !important;
+    text-decoration-line: underline !important;
+    text-decoration-style: dotted !important;
 }
 
 /*== draft right ==*/

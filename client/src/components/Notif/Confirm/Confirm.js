@@ -5,11 +5,6 @@ import styled, { css, keyframes } from "styled-components"
 import { FaPencilAlt } from 'react-icons/fa';
 
 import sample from "../../../images/sample0.jpg"
-import love from "../../../images/love.png"
-import good from "../../../images/good.png"
-import nerd from "../../../images/nerd.png"
-import happy from "../../../images/happy.png"
-import dissapointed from "../../../images/dissapointed.png"
 import close_gray from "../../../images/close-gray.png"
 import tick_gray from "../../../images/tick-gray.png"
 import close from "../../../images/close-red.png"
@@ -18,6 +13,7 @@ import down from "../../../images/down.png";
 
 import PeopleFollow from "../../PeopleFollow"
 import Back from "../../Util/Back"
+import Feedback from "../Feedback/Feedback"
 
 import { Space } from "../../Theme"
 
@@ -30,21 +26,14 @@ class Confirm extends Component {
         this.state = {
             textareaValue: "",
             textareaFocus: false,
-            feedback: {
-                0: false,
-                1: false,
-                2: false,
-                3: false,
-                4: false
-            },
+            feedback: {},
             feedbackPressed: false,
-            feedbackChanged: false,
+            collapsed: false,
             btnChanged: false,
             isClosed: false,
         }
     }
     
-    // Warning: mutating states!!
     handleFeedback = (id) => {
         const prevState = this.state.feedback[id]
         this.setState({
@@ -81,13 +70,12 @@ class Confirm extends Component {
     handleCollapseClick = () => {
         this.setState({
             isClosed: !this.state.isClosed,
-            feedbackChanged: true,
+            collapsed: true,
             btnChanged: true,
         })
     }
 
     render() {
-        console.log(this.state.feedback[0])
         return (
             <ConfirmWrapper>
                 <ConfirmHeader>
@@ -116,7 +104,7 @@ class Confirm extends Component {
                     <ConfirmTitle>
                         <p><span>"Apache Kafkaの長所"</span>への編集リクエスト</p>
                     </ConfirmTitle>
-                    <ConfirmLeft hide={this.state.isClosed} changed={this.state.feedbackChanged}>
+                    <ConfirmLeft hide={this.state.isClosed} changed={this.state.collapsed}>
                         <p>基本情報</p>
                         <p>編集者</p>
                         <Editor followBtn={true}>
@@ -160,33 +148,10 @@ class Confirm extends Component {
                         </Section>
                         <Section>
                             <Title>フィードバック</Title>
-                            <Feedback>
-                                <FeedbackIcon 
-                                    src={love} 
-                                    pressed={this.state.feedback[0]} 
-                                    onClick={()=>this.handleFeedback(0)}
-                                />
-                                <FeedbackIcon 
-                                    src={good} 
-                                    pressed={this.state.feedback[1]} 
-                                    onClick={()=>this.handleFeedback(1)}
-                                />
-                                <FeedbackIcon 
-                                    src={nerd} 
-                                    pressed={this.state.feedback[2]} 
-                                    onClick={()=>this.handleFeedback(2)}
-                                />
-                                <FeedbackIcon 
-                                    src={happy} 
-                                    pressed={this.state.feedback[3]} 
-                                    onClick={()=>this.handleFeedback(3)}
-                                />
-                                <FeedbackIcon 
-                                    src={dissapointed} 
-                                    pressed={this.state.feedback[4]} 
-                                    onClick={()=>this.handleFeedback(4)}
-                                />
-                            </Feedback>
+                            <Feedback
+                                feedback={this.state.feedback}
+                                handleClick={this.handleFeedback}
+                            />
                         </Section>
                         <Section>
                             <PencilIcon focused={this.state.textareaFocus}/>
@@ -468,45 +433,6 @@ const Mark = styled.div`
     border-radius: 4px;
 `
 
-const Feedback = styled.div`
-    background-color: white;
-    display: flex;
-    padding: 2px;
-    width: 200px;
-    border-radius: 18px;
-    margin-left: 18px;
-    align-items: center;
-    animation-name: bounce;
-    animation-duration: 300ms;
-    animation-fill-mode: forwards;
-    z-index:1;
-`
-
-const FeedbackIcon = styled.img`
-    width: 20px;
-    height: 20px;
-    margin-right:20px;
-    cursor: pointer;
-    padding:5px;
-    margin: 0px 5px !important;
-
-    ${props => props.pressed
-    ? css`        
-        opacity: 1;
-        transform: scale(1.08);
-        background-color: rgba(154, 174, 230, 0.7);
-        border-radius: 100%;
-    `
-    : css`
-        &:hover {
-            animation-name: bounce;
-            animation-duration: 300ms;
-            animation-fill-mode: forwards;
-            background-color: rgba(158, 175, 229, 0.3);
-            border-radius: 100%;
-        }
-    `}
-`
 
 const ConfirmText = styled.div`
     width: 50%;
