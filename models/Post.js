@@ -7,6 +7,9 @@ const postSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId, ref: "Topic"
     },
     topicName: String, // for fast lookup
+    topicRectangleImg: String,
+    topicSquareImg: String,
+    topicMobileImg: String, // おそらくこいつはいらないと思うが一応
     index: [Number], // 2.1の場合は[2,1]
     postName: String,
     postImg: String,

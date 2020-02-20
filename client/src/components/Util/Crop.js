@@ -15,52 +15,53 @@ class Crop extends Component {
         super(props)
 
         this.state = {
-            crop: {
-                aspect: 57/30,
-                height: 285,
-                x: 0,
-                y: 0,
-            },
+            crop: null,
         }
     }
 
     componentDidUpdate(prevProps) {
-        if((prevProps.config !== this.props.config)) {
+        if ((!this.state.crop && this.props.config)) {
+            // 初期化
             this.setState({ 
                 ...this.state,
                 crop: this.props.crop,
-             }, () => { console.log(this.state.crop) })
+            })
+        } else if((prevProps.config !== this.props.config)) {
+            this.setState({ 
+                ...this.state,
+                crop: this.props.crop,
+            })
         }
     }
 
     onSelectFile = e => {
         if (e.target.files && e.target.files.length > 0) {
-          const reader = new FileReader();
-          reader.addEventListener('load', () =>
-            this.setState({ src: reader.result })
-          );
-          reader.readAsDataURL(e.target.files[0]);
+            const reader = new FileReader();
+            reader.addEventListener('load', () =>
+              this.setState({ src: reader.result })
+            );
+            reader.readAsDataURL(e.target.files[0]);
         }
-      };
+    };
     
-      onImageLoaded = image => {
+    onImageLoaded = image => {
         this.imageRef = image;
-      };
+    };
     
-      onCropChange = (crop, percentCrop) => {
+    onCropChange = (crop, percentCrop) => {
         this.setState({ crop });
-      };
+    };
     
-      onCropComplete = crop => {
+    onCropComplete = crop => {
         this.makeClientCrop(crop);
-      };
+    };
     
-      makeClientCrop = (crop) => {
+    makeClientCrop = (crop) => {
         if (this.imageRef && crop.width && crop.height) {
-          const croppedImageUrl = this.getCroppedImg(this.imageRef, crop);
-          this.props.setUrl(croppedImageUrl)
+            const croppedImageUrl = this.getCroppedImg(this.imageRef, crop);
+            this.props.setUrl(croppedImageUrl)
         }
-      }
+    }
     
     getCroppedImg(image, crop) {
         const canvas = document.createElement('canvas');
@@ -88,7 +89,7 @@ class Crop extends Component {
     render () {
 
         const { crop } = this.state;
-        const { file  } = this.props
+        const { file, style, imageStyle  } = this.props
 
         return (
             <div>
@@ -96,8 +97,8 @@ class Crop extends Component {
                 <div>
                     <Message>画像のサイズを変更する</Message>
                     <ReactCrop
-                        style={{ marginTop: "10px", width: "445px", border: "1px solid #d2d2d2" }}
-                        imageStyle={{ width: "445px" }}
+                        style={ style || { marginTop: "10px", width: "444px", border: "1px solid #d2d2d2", boxSizing: "border-box" }}
+                        imageStyle={ imageStyle || { width: "445px" }}
                         src={file.preview}
                         crop={crop}
                         ruleOfThirds

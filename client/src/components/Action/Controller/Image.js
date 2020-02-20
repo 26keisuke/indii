@@ -126,19 +126,19 @@ function ActionImage(props) {
         if(flag1) {
             props.setImage(props.initialVal1) 
         } else  {
-            props.setImage(url1)
+            props.setImage(url1, "mobile")
         }
 
         if(flag2) {
             props.setImage(props.initialVal2) 
         } else  {
-            props.setImage(url2)
+            props.setImage(url2, "square")
         }
 
         if(flag3) {
             props.setImage(props.initialVal3) 
         } else  {
-            props.setImage(url3)
+            props.setImage(url3, "rectangle")
         }
     };
 
@@ -309,11 +309,11 @@ const PreviewBox = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 444px;
+    width: 445px;
     margin-bottom: 50px;
 `
 
-const PreviewImg = styled.div`
+export const PreviewImg = styled.div`
     position: relative;
     margin: 0px 15px;
     margin-top: 25px;
@@ -344,7 +344,7 @@ const PreviewImg = styled.div`
             height: 250px;
         `
         : css`
-            width: 350px;
+            width: 380px;
             height: 200px;
         `}
         
@@ -376,9 +376,9 @@ const PreviewImg = styled.div`
             max-height: 250px;
         ` 
         : css`
-            min-width: 350px;
+            min-width: 380px;
             min-height: 200px;
-            max-width: 350px;
+            max-width: 380px;
             max-height: 200px;
         `}
 
@@ -387,14 +387,6 @@ const PreviewImg = styled.div`
         `}
     }
 `
-
-
-
-
-
-
-
-
 
 export const PreviewElement = styled.div`
     position: relative;

@@ -111,7 +111,15 @@ class CreatePreviewTopic extends Component {
                             <p>トピックの画像</p>
                         </PreviewSection>
                         
-                        <Image originalImg={sample} newImg={sample}/>
+                        <Image
+                            originalSquareImg={this.props.originalSquareImg}
+                            originalRectangleImg={this.props.originalRectangleImg}
+                            originalMobileImg={this.props.originalMobileImg}
+                            
+                            editedMobileImg={this.props.editedMobileImg}
+                            editedRectanlgeImg={this.props.editedRectanlgeImg}
+                            editedSquareImg={this.props.editedSquareImg}
+                        />
 
                         <PreviewSection>
                             <div/>

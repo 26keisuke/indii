@@ -61,7 +61,7 @@
     border-right: none;
     border-top: none;
     background-color: rgba(233, 233, 238, 0.15);
-    padding: 20px;
+    padding: 20px 75px;
     height: 1000px;
     overflow: scroll;
 }

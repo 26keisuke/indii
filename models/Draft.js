@@ -7,7 +7,9 @@ const draftSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId, ref:"Topic"
     },
     topicName: String, // for fast lookup
-    topicImg: String, // for fast lookup
+    topicRectangleImg: String,
+    topicSquareImg: String,
+    topicMobileImg: String, // for fast lookup
     postName: String,
     postImg: String,
     creationDate: Date,

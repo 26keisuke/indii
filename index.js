@@ -17,6 +17,7 @@ import Topic from "./models/Topic"
 import Post from "./models/Post"
 import Draft from "./models/Draft"
 import Token from "./models/Token";
+import Image from "./models/Image"
 
 import draft from "./routes/draft"
 
@@ -326,6 +327,9 @@ app.post("/api/topic", isLoggedIn, (req, res) => {
     var post = new Post({
         topic: topicId, 
         topicName: req.body.topicName, 
+        topicRectangleImg: req.body.rectangleImg,
+        topicSquareImg: req.body.squareImg,
+        topicMobileImg: req.body.mobileImg,
         index: [0], 
         postName: "概要",
     })
@@ -413,12 +417,12 @@ app.get("/api/post/search/:type/:term", (req, res) => {
     const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
     Post.find({"postName": {$regex: value, $options: 'i'}}) 
         .exec()
-        .then(topic => {
-            if(topic.length === 0){
+        .then(post => {
+            if(post.length === 0){
                 const result = type === "Match" ? [] : [{added: true}]
                 res.send(result)
             } else {
-                res.send(topic)
+                res.send(post)
             }
         })
         .catch(err => {

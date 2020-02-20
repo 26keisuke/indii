@@ -18,7 +18,8 @@ class TextArea extends React.Component {
     componentDidMount() {
         this.autoSave = setInterval(() => {
             this.sendUpdate(false)
-        }, 60000)
+            this.props.setUpdate()
+        }, 20000)
     }
 
     componentDidUpdate(prevProps) {

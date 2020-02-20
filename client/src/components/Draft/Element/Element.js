@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import BraftEditor from 'braft-editor'
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import Skeleton from "react-loading-skeleton"
 
 const DraftBox = styled(Link)`
     border-bottom: 1px solid #d2d2d2;   
@@ -17,24 +18,24 @@ const DraftBox = styled(Link)`
     }
 
     & > img {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
         object-fit: contain;
         flex-shrink: 0;
     }
 `
 
 const DraftLeft = styled.div`
+
+    margin-right: 40px;
+
     & > div {
         display: flex;
-        flex-direction: row;
-        align-items: center;
 
         & > p {
-            font-size: 10px;
+            font-size: 11px;
             color: #767676;
             margin-right:5px;
-            margin-bottom:5px;
         }
     }
 `
@@ -49,20 +50,21 @@ const Title = styled.p`
 const Content = styled.p`
     color: #2B2B2b;
     margin-bottom: 10px;
-    margin-right:50px;
     width: 510px; 
     height: 32px;
     overflow: hidden;
 `
 
 const Date = styled.div`
-    font-size: 10px;
+    font-size: 11px;
     color: #8F8B8B;
-    & > span {
-        width: 30px;
-        border-bottom: 1px solid #d2d2d2;
-        margin-left: 10px;
-    }
+    margin-left: auto;
+`
+
+const Nil = styled.span`
+    width: 30px;
+    border-bottom: 1px solid #d2d2d2;
+    margin-left: 10px;
 `
 
 class Draft extends Component {
@@ -78,23 +80,59 @@ class Draft extends Component {
 
     render(){
 
-        const { _id, type, postName, topicName, content, editDate, topicImg, postImg } = this.props.draft
+        const { _id, type, postName, topicName, content, editDate, topicSquareImg, postImg } = this.props.draft
+        const flag = this.props.draft._id
+        const lastEdited = flag ? editDate[editDate.length-1] : undefined
+        const date = lastEdited === undefined ? <Nil/> : lastEdited
 
         return(
             <DraftBox to={"/draft/edit/" + _id} id={_id}>
                 <DraftLeft>
-                    <div>
-                        <p>ポスト ></p>
-                        <p>{this.renderType(type) + " >"}</p>
-                        <p>{topicName}</p>
-                    </div>
-                    <Title>{postName}</Title>
+                    { flag 
+                    ? <Title>{postName}</Title>
+                    : (
+                        <div style={{marginBottom: "5px"}}>
+                            <Skeleton height={16} width={250}/>
+                        </div>
+                    )
+                    }
+                    { flag
+                    ? (
                     <Content>
                         {BraftEditor.createEditorState(content).toText().replace(/[a\s]+/, "").substring(0, 100)}
                     </Content>
-                    <Date>前回の編集日: {editDate[editDate.length-1] === undefined ? <span/> : editDate[editDate.length-1]}</Date>
+                    )
+                    : (
+                        <div style={{marginBottom: "10px", display: "flex", flexDirection: "column"}}>
+                            <Skeleton width={510} height={14}/>
+                            <Skeleton width={450} height={14}/>
+                        </div>
+                    )
+                    }
+                    <div>
+                        { flag
+                        ? <p>{topicName}</p>
+                        : (
+                            <div style={{marginRight: "5px"}}>
+                                <Skeleton width={80} height={12}/>
+                            </div>
+                        )
+                        }
+                        <p>・</p>
+                        { flag
+                        ? <p>{this.renderType(type)}</p>
+                        : (
+                            <div style={{marginRight: "5px"}}>
+                                <Skeleton width={55} height={12}/>
+                            </div>
+                        )
+                        }
+                        <Date>
+                            前回の編集日: { flag ? date : <Skeleton width={80} height={12}/>}
+                        </Date>
+                    </div>
                 </DraftLeft>
-                <img src={postImg || topicImg}/>
+                { flag ? <img src={postImg || topicSquareImg}/> : <Skeleton width={80} height={80}/>}
             </DraftBox>
         )
     }

@@ -1,6 +1,3 @@
-// 注意
-//　alt を追加すると、autosuggestが少し変になるが別に心配ない！
-
 import React, { Component } from "react";
 import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
@@ -69,7 +66,7 @@ class Topic extends Component {
         return (
             <Link key={suggestion._id} to={url} onClick={() => handleClick(suggestion[target])}>
                 <TopicElement>
-                    <img src={suggestion.img} alt="検索結果のトピック一覧のメイン画像"/>
+                    <img src={suggestion.squareImg} alt="検索結果のトピック一覧のメイン画像"/>
                     <TopicName>
                         {suggestion.topicName}
                     </TopicName>

@@ -30,7 +30,9 @@ class CreatePreviewTopic extends Component {
         axios.post(url, {
             topic: this.props.selectedTopic._id,
             topicName: this.props.selectedTopic.topicName,
-            topicImg: this.props.selectedTopic.img,
+            topicRectangleImg: this.props.selectedTopic.rectangleImg,
+            topicSquareImg: this.props.selectedTopic.squareImg,
+            topicMobileImg: this.props.selectedTopic.mobileImg,
             postName: this.props.postName,
             config: {
                 allowEdit: this.props.config.allowEdit,

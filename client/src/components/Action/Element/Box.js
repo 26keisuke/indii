@@ -267,7 +267,7 @@ export const PreviewList = styled.div`
     width: 440px;
 `
 
-export const PreviewImgWrapper = styled.div`
+/* export const PreviewImgWrapper = styled.div`
     margin-bottom:40px;
 `
 
@@ -276,8 +276,8 @@ export const PreviewImg = styled.div`
     flex-direction: row;
     justify-content: center;
     width: 444px;
-`
-
+` */
+/* 
 export const ImgBox = styled.div`
     position: relative;
     margin: 0px 15px;
@@ -308,7 +308,7 @@ export const ImgBox = styled.div`
             object-fit: contain;
         `}
     }
-`
+` */
 
 export const PreviewIndex = styled.div`
 

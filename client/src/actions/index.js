@@ -133,12 +133,10 @@ export const searchPost = (type, value) => async (dispatch) => {
     dispatch({type: SEARCH_POST, payload: {suggestions: res}})
 }
 
-export const fetchDraft = () => async (dispatch) => {
-    dispatch({type: IS_FETCHING})
+export const fetchDraft = (id) => async (dispatch) => {
     const url = "/api/draft"
     const res = await axios.get(url)
-    dispatch({type: FETCH_DRAFT, payload: res.data})
-    dispatch({type: END_FETCHING})
+    dispatch({type: FETCH_DRAFT, payload: {data: res.data, nounce: id }})
 }
 
 export const draftUpdated = () => (dispatch) => {

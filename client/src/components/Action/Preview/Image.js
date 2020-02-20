@@ -1,38 +1,120 @@
 import React, { Component } from "react"
+import styled from "styled-components"
 
-import { PreviewImgWrapper, PreviewImg, ImgBox } from "../Element/Box"
+import { PreviewImg } from "../Controller/Image"
 
 class Image extends Component {
     render () {
+
+        const { 
+        mobileImg, 
+        squareImg, 
+        rectangleImg, 
+        originalSquareImg,
+        originalRectangleImg,
+        originalMobileImg,
+        } = this.props
+
+        const flag = this.props.originalSquareImg
+
         return (
-            <PreviewImgWrapper>
-                <PreviewImg>
-                    <ImgBox type="mobile">
-                        <p>After: </p>
-                        <img src={this.props.newImg} alt={"変更が適用された後のモバイルのプレビュー"}/>
-                    </ImgBox>
-                    <ImgBox>
-                        <p>　</p>
-                        <img src={this.props.newImg} alt={"変更が適用された後のウェブのプレビュー"}/>
-                    </ImgBox>
+            <PreviewColumn>
+
+                {/* モバイル */}
+
+                { flag && <Text>After:</Text> }
+
+                <PreviewImg mobile={true}>
+                    <p>モバイルでの表示</p>
+                    <div/>
+                    <img 
+                        src={mobileImg} 
+                        alt={"変更が適用された後のモバイル用のトピックの画像プレビュー"}/>
                 </PreviewImg>
-                { this.props.originalImg 
-                ?
-                <PreviewImg>
-                    <ImgBox type="mobile">
-                        <p>Before: </p>
-                        <img src={this.props.originalImg}　alt={"変更が適用される前のモバイルのプレビュー"}/>
-                    </ImgBox>
-                    <ImgBox>
-                        <p>　</p>
-                        <img src={this.props.originalImg}　alt={"変更が適用される前のウェブのプレビュー"}/>
-                    </ImgBox>
+
+                { flag && <Text>Before:</Text> }
+                
+                { flag &&
+                <PreviewImg mobile={true}>
+                    <p>モバイルでの表示</p>
+                    <div/>
+                    <img 
+                        src={originalMobileImg} 
+                        alt={"変更が適用された後のモバイル用のトピックの画像プレビュー"}/>
                 </PreviewImg>
-                : ""
                 }
-            </PreviewImgWrapper>
+
+                {/* トピック */}
+
+                { flag && <Text>After:</Text> }
+
+                <PreviewImg topic={true}>
+                    <p>トピック画面での表示</p>
+                    <div/>
+                    <img 
+                        src={squareImg} 
+                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
+                    />
+                </PreviewImg>
+
+                { flag && <Text>Before:</Text> }
+                
+                { flag && 
+                <PreviewImg topic={true}>
+                    <p>トピック画面での表示</p>
+                    <div/>
+                    <img 
+                        src={originalSquareImg} 
+                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
+                    />
+                </PreviewImg>
+                }
+
+                {/* ポスト */}
+
+                { flag && <Text>After:</Text> }
+
+                <PreviewImg>
+                    <p>ポスト画面での表示</p>
+                    <div/>
+                    <img 
+                        src={rectangleImg} 
+                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
+                    />
+                </PreviewImg>
+
+                { flag && <Text>Before:</Text> }
+                
+                { flag &&
+                <PreviewImg>
+                    <p>ポスト画面での表示</p>
+                    <div/>
+                    <img 
+                        src={originalRectangleImg} 
+                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
+                    />
+                </PreviewImg>
+                }
+
+            </PreviewColumn>
         )
     }
 }
+
+const Text = styled.p`
+    margin-bottom:10px;
+    color: #585858;
+    font-size: 10px;
+    margin-left: 5px;
+`
+
+const PreviewColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 445px;
+    margin-bottom: 25px;
+`
+
 
 export default Image

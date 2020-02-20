@@ -30,15 +30,19 @@ const ImageBox = styled.div`
     margin-left: -10px;
     margin-top: -15px;
     margin-bottom: 15px;
+    min-width: 380px;
+    max-width: 380px;
+    min-height: 200px;
+    max-height: 200px;
     overflow: hidden;
     cursor: pointer;
 
     &:hover > div:nth-child(1) {
-        height: 198px;
+        height: 199px;
     }
 
     &:hover > div:nth-child(3) {
-        bottom: 114px;
+        bottom: 112px;
     }
 
     &:hover > h2 {
@@ -46,7 +50,7 @@ const ImageBox = styled.div`
     }
 
     &:hover > p:nth-child(5) {
-        bottom: 50px;
+        top:118px;
     }
 `
 
@@ -64,11 +68,11 @@ const Overlay = styled.div`
     content: "";
     background-color: #000000;
     opacity: 0.6;
-    width: 377px;
-    height: 70px;
+    width: 378px;
+    height: 65px;
     left: 1px;
     transition: 250ms;
-    bottom: 6px;
+    bottom: 0px;
     position: absolute;
 `
 
@@ -77,7 +81,7 @@ const Tag = styled.div`
     display: flex;
     flex-direction: row;
     color: #ffffff;
-    bottom: 44px;
+    bottom: 40px;
     left: 20px;
     font-weight: bold;
     transition: 300ms;
@@ -85,10 +89,14 @@ const Tag = styled.div`
     font-weight: normal;
 
     & > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-right: 10px;
         background-color: #626480;
         padding: 1px 10px;
         border-radius: 15px;
+        font-size: 10px;
     }
 `
 
@@ -96,7 +104,7 @@ const Title = styled.h2`
     position: absolute;
     color: #ffffff;
     font-size: 14px;
-    bottom: 17px;
+    bottom: 12px;
     left: 18px;
     font-weight: bold;
     transition: 300ms;
@@ -104,7 +112,7 @@ const Title = styled.h2`
 
 const Content = styled.p`
     position: absolute;
-    bottom: -50px;
+    top: 240px;
     left: 20px;
     color: white;
     padding-right: 20px;

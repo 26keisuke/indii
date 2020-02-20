@@ -305,7 +305,7 @@ const PostMiddle = styled.div`
 
     /* title */
     & > p:nth-child(2) {
-        font-size: 17px;
+        font-size: 18px;
         color: #1C1C1C;
         margin-bottom: 5px;
         font-weight: bold;

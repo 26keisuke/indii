@@ -27,8 +27,7 @@ import Form from "./Form/Form"
 import List from "./List/List"
 import Carousel from "./Carousel/Carousel"
 import ArrowSpin from "../../Util/ArrowSpin"
-import Upload from "../../Util/Upload"
-import { PreviewElement } from "../../Action/Controller/Image"
+import Image from "./Image/Image"
 import { Space } from "../../Theme"
 // import { id } from "date-fns/locale";
 
@@ -125,8 +124,8 @@ class Reference extends Component {
             },
 
             // image
-            file: {preview: null},
-            
+            file: {preview: null}, // Uploadされた時
+            url: "", // Cropがされている時
         }
     }
 
@@ -181,7 +180,13 @@ class Reference extends Component {
 
     setFile = (file) => {
         this.setState({
-            file: file,
+            file,
+        })
+    }
+
+    setUrl = (url) => {
+        this.setState({
+            url
         })
     }
 
@@ -209,6 +214,16 @@ class Reference extends Component {
                 [stateName]: date
             }
             
+        })
+    }
+
+    handleImgClick = () => {
+        axios.post(`/api/draft/${this.props.draft._id}/image`, {img: this.state.url})
+        .then(
+            sendMessage("success", "メイン画像を保存しました。", 3000, this.props)
+        )
+        .catch(err => {
+            console.log(err)
         })
     }
 
@@ -276,21 +291,15 @@ class Reference extends Component {
         })
     }
 
-    onDropped = (img) => {
-        axios.post(`/api/draft/${this.props.draft._id}/image`, {img: img})
-        .then()
-        .catch(err => {
-            console.log(err)
-        })
-    }
-
     render () { 
 
-        const { file } = this.state
+        const { file, url } = this.state
         const initialVal = this.props.draft.postImg
 
-        const flag = ((file.preview === null) || (file.preview === undefined))
-        const display = flag ? initialVal : file.preview
+        // const flag = ((file.preview === null) || (file.preview === undefined))
+        // const display = flag ? initialVal : file.preview
+
+        const display = !url ? initialVal : url
 
         return (
             <div>
@@ -376,29 +385,31 @@ class Reference extends Component {
                     </ArrowWrapper>
                 </RightInsideTitle>
                 <Collapse isOpened={this.state.refImg.isOpened}>
-                    <UploadWrapper>
-                        <PreviewWrapper>
-                            <PreviewElement hide={!display}>
-                                <p>プレビュー</p>
-                                <div/>
-                                <img 
-                                    src={display} 
-                                    alt={"ウェブ用のトピックの画像プレビュー"}
-                                />
-                            </PreviewElement>
-                        </PreviewWrapper>
-                        <Upload
-                            message="ここに画像をドラッグするか、ボックスをクリックしてください"
-                            caution="(*.jpegと*.pngのみ)"
-                            file={this.state.file}
-                            setFile={this.setFile}
-                            baseStyle={baseStyle}
-                            activeStyle={activeStyle}
-                            acceptStyle={acceptStyle}
-                            rejectStyle={rejectStyle}
-                            onDropped={this.onDropped}
-                        />
-                    </UploadWrapper>
+                    <Image
+                        // uploadのprops
+                        display={display}
+                        message="ここに画像をドラッグするか、ボックスをクリックしてください"
+                        caution="(*.jpegと*.pngのみ)"
+                        file={file}
+                        setFile={this.setFile}
+
+                        // cropのprops
+                        setUrl={this.setUrl}
+                        crop={{
+                            aspect: 1,
+                            height: 100,
+                            x: 0,
+                            y: 0,
+                        }}
+                        config={"postImg"}
+                    />
+                    { url &&
+                        <RefButtonWrapper>
+                            <Button inverse={true} onClick={this.handleImgClick}>
+                                決定
+                            </Button>
+                        </RefButtonWrapper>
+                    }
                     <Space height="20px"/>
                 </Collapse>
 
@@ -406,37 +417,6 @@ class Reference extends Component {
         )
     }
 }
-
-
-const baseStyle = {
-    display: 'flex',
-    marginTop: "27px",
-    flexDirection: 'column',
-    textAlign: "center",
-    alignItems: 'center',
-    padding: '45px 10px',
-    width: "160px",
-    borderWidth: 2,
-    borderRadius: 2,
-    borderColor: '#eeeeee',
-    borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
-    transition: 'border .24s ease-in-out'
-};
-const activeStyle = {
-    borderColor: '#2196f3'
-};
-
-const acceptStyle = {
-    borderColor: '#00e676'
-};
-
-const rejectStyle = {
-    borderColor: '#ff1744'
-};
-
-
 
 
 const RefBox = styled.div``
@@ -466,15 +446,6 @@ const ArrowWrapper = styled.div`
     position: absolute;
     right: 14px;
     top: 9px;
-`
-
-const UploadWrapper = styled.div`
-    display: flex;
-    justify-content: center;
-`
-
-const PreviewWrapper = styled.div`
-    margin-left: -15px;
 `
 
 const IconRefAdd = styled(FaGlobe)`

@@ -38,7 +38,7 @@ class Preview extends Component {
             if(this.props.ids.includes(elem._id)){
                 return (
                     <DraftElement key={elem._id} indexPreview={isUpload ? true : false} preview={isUpload ? false : true}>
-                        <img src={elem.postImg || elem.topicImg} alt={"ドラフトが傘下となっているトピックの写真"}/>
+                        <img src={elem.postImg || elem.topicSquareImg} alt={"ドラフトが傘下となっているトピックの写真"}/>
                         <div>
                             <p>{elem.postName}</p>
                             <div>前回の編集日： {elem.editDate[elem.editDate.length-1] === undefined ? <span/> : elem.editDate[elem.editDate.length-1]}</div>

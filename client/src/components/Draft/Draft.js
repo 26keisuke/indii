@@ -69,8 +69,16 @@ const DraftUpload = styled.div`
 
 class DraftNavigation extends Component {
 
+    constructor(props){
+        super(props)
+        this.state = {
+            id: Math.random().toString(36).substring(2, 15)
+        }
+    }
+
     componentDidMount() {
-        this.props.fetchDraft()
+        // Every fetch needs unique id. => reduxで{fetched: true}とかにするとfalseにしなくちゃいけないから面倒
+        this.props.fetchDraft(this.state.id)
     }
 
     componentDidUpdate() {
@@ -127,6 +135,7 @@ class DraftNavigation extends Component {
         return (
             <div>
                 { counter > 0 ? <Border bottom={true}/> : "" }
+                { ((this.props.draft.nounce === this.state.id) || (counter > 0)) ? "" : <Draft draft={""}/>}
                 {
                     this.props.draft.onEdit.map(elem => {
                         if((!elem.isDeleted) && (!elem.isUploaded)) {

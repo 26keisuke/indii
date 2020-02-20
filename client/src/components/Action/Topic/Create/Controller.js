@@ -25,7 +25,9 @@ class CreateTopic extends Component {
             step: 0,
             back: false,
             topicName: "",
-            img: {},
+            mobileImg: "",
+            squareImg: "",
+            rectangleImg: "",
             tags: [],
             friends: [],
         }
@@ -89,7 +91,9 @@ class CreateTopic extends Component {
                         back={this.state.back} 
                         setBackward={this.setBackward} 
                         topicName={this.state.topicName}
-                        img={this.state.img}
+                        mobileImg={this.state.mobileImg}
+                        squareImg={this.state.squareImg}
+                        rectangleImg={this.state.rectangleImg}
                         tags={this.state.tags}
                         friends={this.state.friends}
                         setStep={this.setStep}
@@ -124,9 +128,10 @@ class CreateTopic extends Component {
             topicName: name
         })
     }
-    setImage = (img) => {
+    setImage = (img, type) => {
+        const name = String(type) + "Img"
         this.setState({
-            img
+            [name]: img
         })
     }
 

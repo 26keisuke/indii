@@ -30,7 +30,9 @@ class CreatePreviewTopic extends Component {
         this.props.enableGray();
 
         axios.post("/api/topic", {
-            img: this.props.img,
+            rectangleImg: this.props.rectangleImg,
+            mobileImg: this.props.mobileImg,
+            squareImg: this.props.squareImg,
             tags: this.props.tags,
             topicName: this.props.topicName,
         })
@@ -75,9 +77,12 @@ class CreatePreviewTopic extends Component {
     }
 
     render(){
+
+        const { back, topicName, mobileImg, squareImg, rectangleImg, } = this.props
+
         return (
             <Box scroll={true}>
-                <BoxTransition back={this.props.back} transition={true}>
+                <BoxTransition back={back} transition={true}>
                     <div> 
                         <p>プレビュー</p>
                     </div> 
@@ -86,14 +91,18 @@ class CreatePreviewTopic extends Component {
                             <div/>
                             <p>トピック名</p>
                         </PreviewSection>
-                        <PreviewTitle>{this.props.topicName}</PreviewTitle>
+                        <PreviewTitle>{topicName}</PreviewTitle>
                         <PreviewUnderline/>
                         <PreviewSection>
                             <div/>
                             <p>トピックの画像</p>
                         </PreviewSection>
                         
-                        <Image newImg={this.props.img}/>
+                        <Image 
+                            mobileImg={mobileImg}
+                            squareImg={squareImg}
+                            rectangleImg={rectangleImg}
+                        />
 
                         <PreviewSection>
                             <div/>

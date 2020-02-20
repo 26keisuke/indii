@@ -28,12 +28,16 @@ class CreatePost extends Component {
             back: false,
             topic: {},
             original: {
-                img: [],
+                rectangleImg: "",
+                mobileImg: "",
+                squareImg: "",
                 tags: [],
                 index: [],
             },
             edited: {
-                img: [],
+                rectangleImg: "",
+                mobileImg: "",
+                squareImg: "",
                 tags: [],
                 index: [],
             },
@@ -69,8 +73,11 @@ class CreatePost extends Component {
                 return <Image
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        // initialVal={this.state.original.img} 本来はこっち
-                        initialVal={sample}
+                        
+                        initialVal1={sample}
+                        initialVal2={sample}
+                        initialVal3={sample}
+
                         storage="editTopicImage"
                         setImage={this.setImage} 
                         setStep={this.setStep}
@@ -100,10 +107,17 @@ class CreatePost extends Component {
                         back={this.state.back} 
                         setBackward={this.setBackward} 
                         topic={this.state.topic}
-                        originalImg={this.state.original.img}
-                        originalTags={this.state.original.tags}
+
+                        originalSquareImg={this.state.original.squareImg}
+                        originalRectangleImg={this.state.original.rectangleImg}
+                        originalMobileImg={this.state.original.mobileImg}
+                        
+                        mobileImg={this.state.edited.mobileImg}
+                        rectanlgeImg={this.state.edited.rectangleImg}
+                        squareImg={this.state.edited.squareImg}
+
                         originalIndex={this.state.original.index}
-                        editedImg={this.state.edited.img}
+                        originalTags={this.state.original.tags}
                         editedTags={this.state.edited.tags}
                         editedIndex={this.state.edited.index}
                         setStep={this.setStep}
@@ -113,12 +127,13 @@ class CreatePost extends Component {
         }
     }
 
-    setImage = (img) => {
+    setImage = (img, type) => {
+        const name = String(type) + "Img"
         this.setState({
             edited: {
-                img
+                [name]: img
             }
-        })
+        }, () => console.log(this.state))
     }
 
     setTags = (tags) => {

@@ -98,6 +98,7 @@ const initialState = {
     draft: {
         onEdit: [],
         isUpdated: false,
+        nounce: "",
     }
 }
 
@@ -111,7 +112,8 @@ function draftReducer(state=initialState.draft, action) {
         case FETCH_DRAFT:
             return {
                 ...state,
-                onEdit: action.payload,
+                onEdit: action.payload.data,
+                nounce: action.payload.nounce
             }
         case DRAFT_UPDATED:
             return {
