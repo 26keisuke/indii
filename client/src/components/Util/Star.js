@@ -10,12 +10,12 @@ class Star extends Component {
 
     render () {
 
-        const { handleClick, icon, shadow } = this.props
+        const { handleClick, shadow, show } = this.props
 
         return (
             <StarHover shadow={shadow}>
                 <p onClick={handleClick}></p>
-                <img className="post-feed-star"　src={!icon ? star : star_pressed} alt={"星マーク"}/>
+                <img className="post-feed-star"　src={show ? star_pressed : star} alt={"星マーク"}/>
             </StarHover>
         )   
     }
@@ -33,6 +33,5 @@ const StarHover = styled(HoverIcon)`
         height:17px;
     }
 `
-
 
 export default Star

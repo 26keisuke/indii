@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import styled, { keyframes } from "styled-components"
 
-import { MdCheck } from "react-icons/md"
+import { MdCheck, MdClose } from "react-icons/md"
 
 const dangle = keyframes`
     0% {opacity: 0; margin-top: -30px;}
@@ -11,7 +11,12 @@ const dangle = keyframes`
 `
 
 const MessageElement = styled.div`
-    background: linear-gradient(-90deg, #fff 0%, #fff 98%, #4CD964 98%, #4CD964 100%);
+    background: ${props => props.type === "SUCCESS" 
+                ? 
+                "linear-gradient(-90deg, #fff 0%, #fff 98%, #4CD964 98%, #4CD964 100%)" 
+                :
+                "linear-gradient(-90deg, #fff 0%, #fff 98%, #FF5F5F 98%, #FF5F5F 100%)"
+                };
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     height: 60px;
     width: 330px;
@@ -30,7 +35,7 @@ const MessageElement = styled.div`
     & > div {
         width:20px;
         height: 20px;
-        background-color: #4CD964;
+        background-color: ${props => props.type === "SUCCESS" ? "#4CD964" : "#FF5F5F"};
         left: 18px;
         border-radius: 100%;
         position: absolute;
@@ -51,7 +56,13 @@ const MessageElement = styled.div`
     }
 `
 
-const MessageIcon = styled(MdCheck)`
+const SuccessIcon = styled(MdCheck)`
+    color: white;
+    margin-left: 4px;
+    margin-top: 4px;
+`
+
+const FailIcon = styled(MdClose)`
     color: white;
     margin-left: 4px;
     margin-top: 4px;
@@ -60,11 +71,23 @@ const MessageIcon = styled(MdCheck)`
 class Message extends Component {
     render () {
         return (
-            <MessageElement>
+            <MessageElement type={this.props.type}>
                 <div>
-                    <MessageIcon/>
+                    {this.props.type === "SUCCESS"
+                    ?
+                    <SuccessIcon/>
+                    :
+                    <FailIcon/>
+                    }
                 </div>
-                <p>完了しました！</p>
+                <p>
+                    {this.props.type === "SUCCESS"
+                    ?
+                    "完了しました！"
+                    :
+                    "失敗しました。"
+                    }
+                </p>
                 <p>{this.props.message}</p>
             </MessageElement>
         )

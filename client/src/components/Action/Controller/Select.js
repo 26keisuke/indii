@@ -127,7 +127,6 @@ class Select extends Component {
             return this.props.searchTerm(suggestion)
         }
 
-
         if(this.props.type === "Unique"){
             if(this.state.suggestions.length === 0 || !this.state.suggestions[0].added){ 
                 return null;

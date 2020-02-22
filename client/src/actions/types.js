@@ -1,3 +1,5 @@
+// STAR_ONとSTAR_OFFのようにペアになっているやつはSTAR_TOGGLEで一つにまとめて、argumentでon offさせた方が楽だしわかりやすい
+
 export const USER_IS_LOGGEDIN = "USER_IS_LOGGEDIN"
 
 export const STAR_ON = "STAR_ON"
@@ -33,6 +35,9 @@ export const ADD_COLUMN = "ADD_COLUMN"
 export const SHOW_LOGIN = "SHOW_LOGIN"
 export const HIDE_LOGIN = "HIDE_LOGIN"
 
+// Feed
+export const FETCH_FEED = "FETCH_FEED"
+
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"
 export const DRAFT_UPDATED = "DRAFT_UPDATED"
@@ -45,3 +50,9 @@ export const FETCH_TOPIC = "FETCH_TOPIC"
 // POST
 export const SEARCH_POST = "SEARCH_POST"
 export const FETCH_POST = "FETCH_POST"
+
+// Emoji
+// export const EMOJI_TOGGLE = "EMOJI_TOGGLE"
+
+// STAR
+// export const STAR_TOGGLE = "STAR_TOGGLE"

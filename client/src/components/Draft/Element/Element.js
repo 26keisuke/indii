@@ -4,6 +4,8 @@ import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
 
+import { fmtDate } from "../../Util/util"
+
 const DraftBox = styled(Link)`
     border-bottom: 1px solid #d2d2d2;   
     display: flex;
@@ -58,10 +60,12 @@ const Content = styled.p`
 const Date = styled.div`
     font-size: 11px;
     color: #8F8B8B;
+    display: flex;
+    align-items: center;
     margin-left: auto;
 `
 
-const Nil = styled.span`
+const Nil = styled.div`
     width: 30px;
     border-bottom: 1px solid #d2d2d2;
     margin-left: 10px;
@@ -83,7 +87,7 @@ class Draft extends Component {
         const { _id, type, postName, topicName, content, editDate, topicSquareImg, postImg } = this.props.draft
         const flag = this.props.draft._id
         const lastEdited = flag ? editDate[editDate.length-1] : undefined
-        const date = lastEdited === undefined ? <Nil/> : lastEdited
+        const date = lastEdited === undefined ? <Nil/> : fmtDate(lastEdited)
 
         return(
             <DraftBox to={"/draft/edit/" + _id} id={_id}>
@@ -99,7 +103,7 @@ class Draft extends Component {
                     { flag
                     ? (
                     <Content>
-                        {BraftEditor.createEditorState(content).toText().replace(/[a\s]+/, "").substring(0, 100)}
+                        {BraftEditor.createEditorState(content).toText().replace(/a\s/g, "").substring(0, 100)}
                     </Content>
                     )
                     : (
@@ -132,7 +136,7 @@ class Draft extends Component {
                         </Date>
                     </div>
                 </DraftLeft>
-                { flag ? <img src={postImg || topicSquareImg}/> : <Skeleton width={80} height={80}/>}
+                { flag ? <img src={postImg ? postImg.image : topicSquareImg.image}/> : <Skeleton width={80} height={80}/>}
             </DraftBox>
         )
     }

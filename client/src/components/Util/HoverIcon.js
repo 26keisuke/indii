@@ -2,6 +2,7 @@ import styled, { css } from "styled-components"
 
 const HoverIcon = styled.div`
 
+    z-index: 1;
     position: relative;
 
     & > p {

@@ -221,11 +221,7 @@
 
 /*== icon animation ==*/
 
-.post-feed-more,
-.post-feed-response,
-.post-feed-star{
-    pointer-events: none;
-}
+
 
 /* .post-feed-bottom p:hover ~ .post-feed-star{
     animation-name: bounce;
@@ -248,9 +244,7 @@
 
 /*==Collapse==*/
 
-.ReactCollapse--collapse {
-    transition: height 200ms;
-}
+
 
 /* .rotate {
     animation-name: spin;

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom"
 import { IoMdMail, IoIosLock } from "react-icons/io"
 
 import Button from "../../Util/Button"
+import { Space } from "../../Theme"
 
 class LogIn extends Component {
 
@@ -59,7 +60,9 @@ class LogIn extends Component {
                     :
                     <Button width={"360px"} disabled={true} type="submit">ログイン</Button>
                     }
-                    <Link to={"/verification/password"}>パスワードを忘れた方はこちら</Link>
+                    <Space height={"7px"}/>
+                    <Link to={"/verification/change"}>パスワードを忘れた方はこちら</Link>
+                    <Link to={"/verification/token"}>確認メールを再送する場合はこちら</Link>
                 </BottomWrapper>
             </form>
         )
@@ -124,11 +127,11 @@ export const BottomWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    margin-top: ${props => props.signUp ? "-6px" : "10px"};
+    margin-top: ${props => props.signUp ? "-22px" : "10px"};
 
     & > a {
         color: #656565;
-        margin-top: 20px;
+        margin-top: 12px;
         cursor: pointer;
         border-bottom: 1px dotted #656565;
     }
@@ -137,8 +140,8 @@ export const BottomWrapper = styled.div`
         font-size: 10px;
         width: 300px;
         text-align: center;
-        margin-top: 18px;
-        color: #444444;
+        margin-top: 10px;
+        color: #656565;
     }
 `
 

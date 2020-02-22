@@ -1,19 +1,25 @@
 import React, { Component } from "react"
+import { connect } from "react-redux"
+import styled from "styled-components"
+import axios from "axios"
+
 import ProfileTop from "./ProfileTop"
 import ProfileTopic from "./ProfileTopic"
 import ProfilePost from "./ProfilePost"
 import ProfileFollow from "./ProfileFollow"
 
+
 import sample from "../../images/sample0.jpg"
 
 import "./Profile.css"
 
-// 本来はhookを使って一気に簡略化するべき
 class Profile extends Component {
 
     constructor(props){
         super(props)
         this.state = {
+            user: {},
+            isThisUser: false,
             toggle: {
                 owner: true,
                 favoriteTopic: false,
@@ -22,6 +28,7 @@ class Profile extends Component {
                 followers: false,
             }
         }
+        this.getProfile()
     }
 
     setElement = (target) => {
@@ -41,14 +48,28 @@ class Profile extends Component {
         })
     }
 
-    componentDidMount(){
-        // retrieve all data by id
+    getProfile = () => {
+        if(this.props.match.params.id && this.props.auth.info._id) {
+            axios.get(`/api/profile/${this.props.match.params.id}`)
+            .then(user => {
+                this.setState({user})
+                this.isThisUser()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    }
+
+    isThisUser = () => {
+        if(this.props.match.params.id === this.props.auth.info._id) { this.setState({ isThisUser: true }) }
     }
 
     render() {
         return (
             <div className="profile">
                 <ProfileTop
+                    isThisUser={this.state.isThisUser}
                     familyName={"飯塚"}
                     givenName={"啓介"}
                     job={"Chief株式会社 CEO"}
@@ -73,5 +94,10 @@ class Profile extends Component {
 }
 
 
+function mapStateToProps({auth}) {
+    return {
+        auth
+    }
+}
 
-export default Profile
+export default connect(mapStateToProps)(Profile)

@@ -38,7 +38,7 @@ class Preview extends Component {
             if(this.props.ids.includes(elem._id)){
                 return (
                     <DraftElement key={elem._id} indexPreview={isUpload ? true : false} preview={isUpload ? false : true}>
-                        <img src={elem.postImg || elem.topicSquareImg} alt={"ドラフトが傘下となっているトピックの写真"}/>
+                        <img src={elem.postImg ? elem.postImg.image : elem.topicSquareImg.image} alt={"ドラフトが傘下となっているトピックの写真"}/>
                         <div>
                             <p>{elem.postName}</p>
                             <div>前回の編集日： {elem.editDate[elem.editDate.length-1] === undefined ? <span/> : elem.editDate[elem.editDate.length-1]}</div>
@@ -46,12 +46,12 @@ class Preview extends Component {
                         { isUpload &&
                         <IndexPreview top="10px" left="7px">
                             <div/>
-                            <p>{this.props.index[elem._id].index.join(".")}</p>
-                            <p>{this.props.index[elem._id].title}</p>
+                            <p>{this.props.index && this.props.index[elem._id].index.join(".")}</p>
+                            <p>{this.props.index && this.props.index[elem._id].title}</p>
                             <p>の後</p>
                         </IndexPreview>
                         }
-                        { this.props.index[elem._id].addColumn &&
+                        { this.props.index && this.props.index[elem._id].addColumn &&
                         <AddColumn>
                             <ColumnCheck/>
                             <p>新しいコラムを追加</p>
@@ -65,7 +65,6 @@ class Preview extends Component {
     }
 
     render () {
-        console.log(this.props.index)
         return (
             <div>
                 <Separator/>

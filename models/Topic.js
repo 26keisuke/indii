@@ -9,9 +9,9 @@ const topicSchema = new Schema({
         posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
     }],
     topicName: String,
-    squareImg: String,
-    rectangleImg: String,
-    mobileImg: String,
+    squareImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
+    rectangleImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
+    mobileImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     tags: [String],
     order: [mongoose.ObjectId], // Column Order (by Id in "column")
     likes: {type: Number, default: 0},

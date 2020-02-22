@@ -3,15 +3,13 @@ import mongoose from "mongoose"
 const { Schema } = mongoose
 
 const draftSchema = new Schema({
-    topic: {
-        type: mongoose.Schema.Types.ObjectId, ref:"Topic"
-    },
+    topic: { type: mongoose.Schema.Types.ObjectId, ref:"Topic" },
     topicName: String, // for fast lookup
-    topicRectangleImg: String,
-    topicSquareImg: String,
-    topicMobileImg: String, // for fast lookup
+    topicRectangleImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, // for fast lookup
+    topicSquareImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"},
+    topicMobileImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     postName: String,
-    postImg: String,
+    postImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     creationDate: Date,
     editDate: [Date],
     date: Date, // delete this after

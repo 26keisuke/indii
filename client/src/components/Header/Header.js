@@ -10,7 +10,6 @@ import indii from "../../images/indii.png";
 
 import Profile from "./Profile/Profile";
 import Navigation from "./Navigation/Navigation"
-// import Search from "../Search/Search";
 import Select from "../Action/Controller/Select"
 
 const NavBar = styled.nav`
@@ -41,6 +40,7 @@ const Logo = styled(Link)`
         font-size:24px;
         color: #222222;
         margin-right:20px;
+        letter-spacing: 0px;
 
         @media only screen and (max-width: 670px) {
             font-size:21px !important;
@@ -79,11 +79,10 @@ class Header extends Component {
             <Select
                 placeholder="Indiiで検索"
                 searchBox={true}
-                type="Match"
+                type="Unique"
                 content="Topic"
                 // data={topics}
                 searchByVariable="topicName"
-                storage="searchTopicName"
             />
             <Profile click={this.logInClicked}/>
         </NavBar>

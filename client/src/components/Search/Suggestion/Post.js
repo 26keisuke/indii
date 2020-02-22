@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { IoMdStar } from "react-icons/io"
 import { FaUserCheck } from "react-icons/fa"
 
-import indii from "../../../images/indii.png"
+import { fmtDate } from "../../Util/util"
 
 const PostElement = styled.div`
     width: 100%;
@@ -118,14 +118,14 @@ class Post extends Component {
                                 <StarImg/>
                                 <p>{star.count}</p>
                                 <p>最後の編集日:</p>
-                                <p>{lastEdited ? lastEdited.timeStamp : "-------"}</p>
+                                <p>{lastEdited ? fmtDate(lastEdited.timeStamp) : "-------"}</p>
                             </div>
                         </PostMiddle>
                         {/* <div>
                             {this.renderLevel()}
                         </div> */}
                         { !config.allowEdit ? <PermissionImg/>: "" }
-                        <PostRight src={postImg || topicSquareImg} alt="ポストの検索結果のメイン画像"/>
+                        <PostRight src={ postImg ? postImg.image : topicSquareImg.image } alt="ポストの検索結果のメイン画像"/>
                     </div>
                 </PostElement>
             </div>

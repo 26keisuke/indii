@@ -7,15 +7,16 @@ const postSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId, ref: "Topic"
     },
     topicName: String, // for fast lookup
-    topicRectangleImg: String,
-    topicSquareImg: String,
-    topicMobileImg: String, // おそらくこいつはいらないと思うが一応
+    topicRectangleImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
+    topicSquareImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
+    topicMobileImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"},  // おそらくこいつはいらないと思うが一応
     index: [Number], // 2.1の場合は[2,1]
     postName: String,
-    postImg: String,
+    postImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     content: String,
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     creationDate: Date,
+    lastEdited: Date,
     contribution: [{ // 今のところはただ単にeditされたらここにappendする感じ
         timeStamp: Date,
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -38,9 +39,13 @@ const postSchema = new Schema({
     }],
     star: {
         counter: {type: Number, default: 0},
-        action: [{
+        // lookUp: [{
+        //     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        // }],
+        action: [{ // userは全てuniqueじゃなきゃいけない
             timeStamp: Date,
             user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+            // like: Boolean,
         }],
     },
     reader: [{

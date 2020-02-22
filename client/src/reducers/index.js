@@ -2,7 +2,6 @@ import { combineReducers } from "redux";
 // import { reducer as reduxForm } from "redux-form";
 
 import { USER_IS_LOGGEDIN,
-         STAR_OFF, STAR_ON, 
          ON_SEARCH, OFF_SEARCH, 
          RESET_CATEGORY, SET_CATEGORY,
          NUDGE_ADD, NUDGE_CHECK,
@@ -17,7 +16,9 @@ import { USER_IS_LOGGEDIN,
          FETCH_TOPIC,
          FETCH_DRAFT, 
          FETCH_POST,
-         DRAFT_UPDATED, DRAFT_READ} from "../actions/types"
+         DRAFT_UPDATED, DRAFT_READ,
+         FETCH_FEED
+         } from "../actions/types"
 
 const initialState = {
     category: {
@@ -36,9 +37,9 @@ const initialState = {
             people: []
         }
     },
-    response: {
-        starOn: false
-    },
+    // response: {
+    //     starOn: false
+    // },
     nudge: {
         home: true,
         draft: false,
@@ -52,16 +53,7 @@ const initialState = {
     auth: {
         showForm: false,
         loggedIn: false,
-        info: {
-            id: "",
-            userName: "",
-            email: "",
-            name: {
-                familyName: "",
-                givenName: "",
-            },
-            photo: "",
-        }
+        info: {}
     },
     notif: {
 
@@ -90,6 +82,7 @@ const initialState = {
     post: {
         search: [],
         fetched: {},
+        feed: {},
     },
     topic: {
         search: [],
@@ -142,6 +135,29 @@ function postReducer(state=initialState.post, action) {
                 ...state,
                 fetched: action.payload
             }
+        case FETCH_FEED:
+            return {
+                ...state,
+                feed: action.payload
+            }
+        // case STAR_TOGGLE:
+        //     return {
+        //         ...state,
+        //         star: {
+        //             ...state.star,
+        //             [action.payload.id]: action.payload.on
+        //         }
+        //     }
+        // case EMOJI_TOGGLE:
+        //     return {
+        //         ...state,
+        //         emoji: {
+        //             ...state.emoji,
+        //             [action.payload.id]: {
+        //                 emotion: action.payload.emotion,
+        //             }
+        //         }
+        //     }
         default:
             return state
     }
@@ -288,24 +304,24 @@ function categoryReducer(state=initialState.category, action) {
     }
 }
 
-function responseReducer(state=initialState.response, action) {
-    switch(action.type){
-        case STAR_ON:
-            console.log("STAR HAS BEEN CLICKED")
-            return {
-                ...state,
-                starOn: true
-            }
-        case STAR_OFF:
-            console.log(("STAR HAS BEEN UNCLICKED"))
-            return {
-                ...state,
-                starOn: false
-            }
-        default:
-            return state
-    }
-}
+// function responseReducer(state=initialState.response, action) {
+//     switch(action.type){
+//         case STAR_ON:
+//             console.log("STAR HAS BEEN CLICKED")
+//             return {
+//                 ...state,
+//                 starOn: true
+//             }
+//         case STAR_OFF:
+//             console.log(("STAR HAS BEEN UNCLICKED"))
+//             return {
+//                 ...state,
+//                 starOn: false
+//             }
+//         default:
+//             return state
+//     }
+// }
 
 function searchReducer(state=initialState.search, action) {
     switch(action.type) {
@@ -340,22 +356,10 @@ function authReducer(state=initialState.auth, action) {
     switch(action.type) {
         case USER_IS_LOGGEDIN:
             if(action.payload) {
-
-                const { _id, name, photo, email, userName } = action.payload
-
                 return {
                     ...state,
                     loggedIn: true,
-                    info: {
-                        id: _id,
-                        email: email,
-                        name: {
-                            familyName: name ? name.familyName : "",
-                            givenName: name ? name.givenName : "",
-                        },
-                        userName: userName,
-                        photo: photo,
-                    }
+                    info: action.payload,
                 }
             }
             return state;
@@ -377,7 +381,7 @@ function authReducer(state=initialState.auth, action) {
 export default combineReducers({
     auth: authReducer,
     // form: reduxForm,
-    response: responseReducer,
+    // response: responseReducer,
     search: searchReducer,
     category: categoryReducer,
     nudge: nudgeReducer,

@@ -1,17 +1,18 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux"
 import { Link } from "react-router-dom";
 import { Collapse } from 'react-collapse';
+import BraftEditor from 'braft-editor'
 import styled from "styled-components"
+import Skeleton from "react-loading-skeleton"
 
 import sample from "../../../images/sample0.jpg";
 
-import ShowMore from "../../Util/ShowMore"
-import ArrowSpin from "../../Util/ArrowSpin"
-import Emoji from "../../Util/Emoji"
-import Star from "../../Util/Star"
+import Response from "../../Util/Response"
 
-import "./Post.css";
+import ArrowSpin from "../../Util/ArrowSpin"
+
+import { fmtDate } from "../../Util/util"
 
 import * as actions from "../../../actions";
 
@@ -21,36 +22,52 @@ const message = [
     "さんが、ポストにスターを付けました。" ,
 ]
 
-class Post extends Component {
+class Post extends PureComponent {
 
     constructor(props) {
         super(props)
         this.state = {
             isOpened: true, 
             changed: false,
-            showStar: false,
-            showEmoji: false,
-            showMore: false,
-            chosenEmoji: null
-        }
-        this.emojiRef = React.createRef();
-        this.actionRef = React.createRef();
-    }
-
-    componentDidUpdate() {
-        if (this.state.showEmoji || this.state.showMore) {
-            document.addEventListener("mousedown", this.outsideClick)
-        } else {
-            document.removeEventListener("mousedown", this.outsideClick)
         }
     }
 
     componentDidMount() {
-        // checkForStars and checkForFeedbacks
-    }
 
-    componentWillUnmount() {
-        document.removeEventListener("mousedown", this.outsideClick)
+        if(this.props.content) {
+
+            // filter out images
+            var images = document.getElementsByClassName("bf-image")
+            if(Object.keys(images).length > 0) {
+                for(var k in images) {
+                    if (images[k].style){
+                        images[k].style.display = "none"
+                    }
+                }
+            }
+
+            // filter out leftovers from images
+            var alignLeft = document.getElementsByClassName("bfa-left")
+            if(Object.keys(alignLeft).length > 0) {
+                for(var k in alignLeft) {
+                    if (alignLeft[k].style){
+                        alignLeft[k].style.display = "none"
+                    }
+                }
+            }
+
+            var alignRight = document.getElementsByClassName("bfa-right")
+            if(Object.keys(alignRight).length > 0) {
+                for(var k in alignRight) {
+                    if (alignRight[k].style){
+                        alignRight[k].style.display = "none"
+                    }
+                }
+            }
+
+            // filter out empty span
+            // => reverse for loopをして、htmlが連続してemptyがだったら削除する
+        }
     }
 
     actionRender = (action) => {
@@ -66,113 +83,22 @@ class Post extends Component {
         }
     }
 
-    handleCollapseClick = (e) => {
-        e.preventDefault()
-        this.setState({
-            isOpened: !this.state.isOpened,
-            changed: true,
-            showMore: false,
-            showEmoji: false,
-        })
-    }
-
-    // 注意! こっから先はPost/Post.jsと内容が同じなので、変える際はあっちも変えること！
-    // TODO: このabstractionを作る
-
-    outsideClick = (e) => {
-        if(this.emojiRef.current.contains(e.target)) {
-            return null;
-        }
-
-        if(this.actionRef.current.contains(e.target)) {
-            return null;
-        }
-
-        this.setState({
-            showEmoji: false,
-            showMore: false,
-        })
-    }
-
-    handleStarClick = (e) => {
-        e.preventDefault()
-        if (!this.state.showStar) {
-            this.props.starOn(this.props.id)
-            this.setState({
-                showStar: true
-            })
-        } else {
-            this.props.starOff(this.props.id)
-            this.setState({
-                showStar: false
-            })
-        }
-    }
-
-    handleResponseClick = (e) => {
-        e.preventDefault()
-        this.setState({showMore: false})
-        this.setState({
-            showEmoji: !this.state.showEmoji
-        })
-    }
-
-    handleEmojiClick = (e, id) => {
-        e.preventDefault()
-        this.setState({
-            chosenEmoji: id
-        })
-        this.setState({
-            showEmoji: false
-        })
-    }
-
-    handleMoreClick = (e) => {
-        e.preventDefault()
-        this.setState({showEmoji: false})
-        this.setState({
-            showMore: !this.state.showMore
-        })
-    }
-
-    deletePost = () => {
-        this.setState({showMore: false})
-        const id = this.props.id;
-        const action = "POST_DELETE"
-        const title = "ポストを削除";
-        const caution = ""
-        const message = "このポストを削除してもよろしいですか？";
-        const buttonMessage = "削除する";
-        this.props.showConfirmation(id, action, title, caution, message, buttonMessage)
-        this.props.enableGray()
-    }
-
-    reportPost = () => {
-        this.setState({showMore: false});
-        const id = this.props.id;
-        const action = "GIVE_FEEDBACK";
-        const title = "このポストへのフィードバック";
-        const message = "このポストについてどう思いましたか？";
-        const caution = "（このフィードバックは匿名で保存されます。）";
-        const buttonMessage = "送信する";
-        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
-        this.props.enableGray();
-    };
-
-    // ↑ ここまで
-
     render() {
         return (
                 <PostBox to={"/post/" + this.props.id}>
+                    { this.props.skeleton 
+                    ?
                     <PostTop>
                         <div>
-                            <img src={sample} alt={"このポストの作成者の写真"}/>
+                            <div style={{marginRight: "10px"}}>
+                                <Skeleton width={37} height={37}/>
+                            </div>
+                            
                             <div>
                                 <div>
-                                    <p>{this.props.name}</p>
-                                    <p>{this.actionRender(this.props.action)}</p>
+                                    <Skeleton width={250} height={17}/>
                                 </div>
-                                <p>{this.props.date}</p>
+                                <Skeleton width={200} height={15}/>
                             </div>
                         </div>
                         <ArrowWrapper>
@@ -184,46 +110,88 @@ class Post extends Component {
                             />
                         </ArrowWrapper>
                     </PostTop>
+                    :
+                    <PostTop>
+                        <div>
+                            <img src={sample} alt={"このポストの作成者の写真"}/>
+                            <div>
+                                <div>
+                                    <p>{this.props.name}</p>
+                                    <p>{this.actionRender(this.props.action)}</p>
+                                </div>
+                                <p>{fmtDate(this.props.date)}</p>
+                            </div>
+                        </div>
+                        <ArrowWrapper>
+                            <ArrowSpin
+                                handleClick={this.handleCollapseClick}
+                                isOpened={this.state.isOpened}
+                                changed={this.state.changed}
+                                size={38}
+                            />
+                        </ArrowWrapper>
+                    </PostTop>
+                    }
                     
+                    { this.props.skeleton 
+                    ?
                     <PostMiddle>
-                        <p>{this.props.topic}</p>
-                        <p>{this.props.title}</p>
+                        <Link><Skeleton width={120} height={15}/></Link>
+                        <p style={{marginBottom: "10px"}}><Skeleton width={200} height={23}/></p>
                         <Collapse isOpened={this.state.isOpened}>
-                        <p>{this.props.content}</p>
+                        <SkeletonWrapper>
+                            <Skeleton count={5} width={630} height={20}/>
+                        </SkeletonWrapper>
+                        <Skeleton width={430} height={20}/>
                         </Collapse>
                     </PostMiddle>
-                    <Collapse isOpened={this.state.isOpened}>
-                    <PostBottom>
-                        <Star
-                            handleClick={this.handleStarClick}
-                            icon={this.state.showStar}
-                            shadow={true}
-                        />
-                        <Emoji
-                            ref={this.emojiRef}
-                            handleResponseClick={this.handleResponseClick}
-                            handleEmojiClick={this.handleEmojiClick}
-                            chosenEmoji={this.state.chosenEmoji}
-                            showEmoji={this.state.showEmoji}
-                            shadow={true}
-                        />
-                        <ShowMoreWrapper>
-                            <ShowMore
-                                ref={this.actionRef}
-                                handleClick={this.handleMoreClick}
-                                show={this.state.showMore}
-                                left="-110px"
-                                bottom="23px"
-                                actionName={["フィードバックをする", "この投稿を削除する"]}
-                                action={[this.reportPost, this.deletePost]}
-                                shadow={true}
+                    :
+                    <PostMiddle>
+                        <Link to={"/topic"}>{this.props.topic}</Link>
+                        <p>{this.props.title}</p>
+                        <Collapse isOpened={this.state.isOpened}>
+                        <EditorWrapper>
+                            {/* <p>{BraftEditor.createEditorState(this.props.content).toText().replace(/a\s|\s/g, "").substring(0, 500) + "..."}</p> */}
+                            <BraftEditor
+                                controls={[]}
+                                readOnly={true}
+                                value={BraftEditor.createEditorState(this.props.content)}
+                                contentClassName="post-braft"
                             />
-                        </ShowMoreWrapper>
-                    </PostBottom>
+                        </EditorWrapper>
+                        </Collapse>
+                    </PostMiddle>
+                    }
+
+                    { this.props.skeleton 
+                    ?
+                    <Collapse isOpened={this.state.isOpened}>
+                    <div style={{marginRight: "5px"}}>
+                        <div style={wrapperStyle}>
+                            <Skeleton width={250} height={20}/>
+                        </div>
+                    </div>
                     </Collapse>
+                    :
+                    <Collapse isOpened={this.state.isOpened}>
+                    <ResponseWrapper>
+                        <Response
+                            postId={this.props.id}
+                            wrapperStyle={wrapperStyle}
+                        />
+                    </ResponseWrapper>
+                    </Collapse>
+                    }
                 </PostBox>
         )
     }
+}
+
+const wrapperStyle = {
+    display: "flex",
+    justifyContent: "flex-end",
+    zIndex:2,
+    paddingTop:"15px",
 }
 
 const PostBox = styled(Link)`
@@ -232,7 +200,6 @@ const PostBox = styled(Link)`
     justify-content: start;
     background-color: #ffffff;
     padding: 15px 20px;
-    border-top: 1px solid #d2d2d2;
     border-bottom: 1px solid #d2d2d2;
 
     &:hover {
@@ -286,6 +253,16 @@ const PostTop = styled.div`
     }
 `
 
+const EditorWrapper = styled.div`
+    & div {
+        padding: 0px !important;
+    }
+
+    & > p {
+        line-height: 20px;
+    }
+`
+
 const ArrowWrapper = styled.div`
     margin-right: 8px;
 `
@@ -297,6 +274,14 @@ const PostMiddle = styled.div`
         font-weight: bold;
         color: #767676;
         cursor: pointer;
+    }
+
+    & > a {
+        margin-left: 1px;
+        font-size: 13px;
+        font-weight: bold;
+        color: #767676;
+        cursor: pointer;
 
         &:hover {
             color: #565656;
@@ -304,7 +289,7 @@ const PostMiddle = styled.div`
     }
 
     /* title */
-    & > p:nth-child(2) {
+    & > p {
         font-size: 18px;
         color: #1C1C1C;
         margin-bottom: 5px;
@@ -316,25 +301,28 @@ const PostMiddle = styled.div`
     }
 `
 
-const ShowMoreWrapper = styled.div`
-    margin-right:65px;
-`
-
-const PostBottom = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    z-index:2;
-    padding-top:10px;
-
+const ResponseWrapper = styled.div`
     & img {
         margin-right:65px;
     }
 
+    & > div {
+        & > div:last-child {
+            margin-right: 65px;
+        }
+    }
+`
+
+const SkeletonWrapper = styled.div`
+    & span {
+        margin-bottom: 8px;
+    }
 `
 
 function mapStateToProps(state) {
     return {
-        response: state.response
+        response: state.response,
+        auth: state.auth
     }
 }
 

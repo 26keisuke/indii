@@ -5,13 +5,14 @@ import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
 import Draft from "../models/Draft"
+import Image from "../models/Image"
 
 const router = express.Router()
 
 router.get("/draft", (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            Draft.find({_id: {$in: user.draft}}).limit(10)
+            Draft.find({_id: {$in: user.draft}}).limit(10).populate("topicSquareImg").populate("postImg").exec()
             .then(draft => {
                 res.send(draft)
             })
@@ -24,11 +25,15 @@ router.get("/draft", (req, res) => {
 router.post("/draft/upload", (req, res) => {
 
     const { draftId, index, addColumn } = req.body.value
-
+    
     Draft.findById(draftId)
         .then(draft => {
             
-            const { topic, topicName, postName, postImg, content, config } = draft
+            const imgId = mongoose.Types.ObjectId();
+
+            const { topic, topicName, postName, postImg, content, config, topicRectangleImg, topicSquareImg, topicMobileImg } = draft
+
+            new Image({_id: imgId, image: postImg}).save()
 
             var newIndex = index.slice()
             if(addColumn === true) {
@@ -41,12 +46,16 @@ router.post("/draft/upload", (req, res) => {
             const data = {
                 topic: topic,
                 topicName: topicName,
+                topicRectangleImg: topicRectangleImg.id,
+                topicSquareImg: topicSquareImg.id,
+                topicMobileImg: topicMobileImg.id,
                 postName: postName,
-                postImg: postImg,
+                postImg: imgId,
                 index: newIndex,
                 content: content,
                 creator: req.user.id,
                 creationDate: Date.now(),
+                lastEdited: Date.now(),
                 config: config,
             }
 
@@ -178,9 +187,14 @@ router.post("/draft/:id", (req, res) => {
 })
 
 router.post("/draft/:id/image", (req, res) => {
+
+    const imgId = mongoose.Types.ObjectId();
+
+    new Image({ _id: imgId, image: req.body.img }).save()
+
     Draft.findById(req.params.id)
     .then(draft => {
-        draft.postImg = req.body.img
+        draft.postImg = imgId
         draft.save()
         .then(res.send("Success: /api/draft/:id/image"))
     })

@@ -10,7 +10,7 @@ import bodyParser from "body-parser";
 import path from "path";
 import bcrypt from "bcrypt";
 import crypto from "crypto"
-import nodemailer from "nodemailer"
+import sgMail from "@sendgrid/mail"
 
 import User from "./models/User"
 import Topic from "./models/Topic"
@@ -45,6 +45,8 @@ app.use(passport.session())
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true})) //これは将来的に危険。もしユーザーがめっちゃ写真を載せたらおしまい
 app.use(bodyParser.json({limit: '50mb'}))
 
+sgMail.setApiKey(keys.SENDGRID_API_KEY)
+
 passport.serializeUser((user, done) => {
     done(null, user.id)
 })
@@ -54,6 +56,8 @@ passport.deserializeUser((id, done) => {
         done(null, user)
     })
 })
+
+// 参考: https://codemoto.io/coding/nodejs/email-verification-node-express-mongodb
 
 passport.use(new LocalStrategy({
     usernameField: "email",
@@ -74,8 +78,6 @@ passport.use(new LocalStrategy({
                                 console.log("User is not verified yet")
                                 return done(null, false)
                             }
-
-                            console.log("YES")
                             return done(null, user)
                         }
                     })
@@ -83,7 +85,7 @@ passport.use(new LocalStrategy({
             } else {
 
                 // signUpとloginをここで分けている。果たしてこれが適切かは疑問
-                if(!req.body.username || !req.body.familyName || !req.body.givenName) {
+                if(!req.body.username) {
                     return done(null, false)
                 }
                 
@@ -95,10 +97,6 @@ passport.use(new LocalStrategy({
 
                             const value = {
                                 userName: req.body.username,
-                                name: {
-                                    familyName: req.body.familyName,
-                                    givenName: req.body.givenName
-                                },
                                 email: email,
                                 password: hashedPassword,
                             }
@@ -112,15 +110,15 @@ passport.use(new LocalStrategy({
 
                                     token.save()
                                     .then(() => {
-                                        var transporter = nodemailer.createTransport()
-                                        var mailOptions = {
-                                            from: 'no-reply@yourwebapplication.com',
+
+                                        var msg = {
+                                            from: 'info@indii.jp',
                                             to: user.email,
-                                            subject: 'Account Verification Token',
-                                            text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' 
+                                            subject: '【Indii】Indiiにようこそ！',
+                                            text: `${req.body.username}さん、Indiiへようこそ！\n\n` + "以下のリンクをクリックして、ご登録いただいたメールアドレスを認証してください。\n\n" + `http://indii.jp/api/confirmation/${token.token}` + "\n" 
                                         }
 
-                                        transporter.sendMail(mailOptions)
+                                        sgMail.send(msg)
                                         .then(() => {
                                             console.log("Email has been sent")
                                             done(null, user)
@@ -161,6 +159,7 @@ passport.use(new FacebookStrategy({
                     },
                     email: emails[0].value,
                     photo: photos[0].value,
+                    isVerified: true,
                 }
 
                 new User(value)
@@ -200,6 +199,7 @@ passport.use(new GoogleStrategy({
                     },
                     email: emails[0].value,
                     photo: photos[0].value || "",
+                    isVerified: true,
                 }
                 new User(value)
                     .save()
@@ -250,18 +250,6 @@ app.get("/api/current_user", (req, res) => {
     res.send(req.user)
 })
 
-app.post("/api/star_on", (req, res) => {
-    res.send("")
-})
-
-app.post("/api/star_off", (req, res) => {
-    res.send("")
-})
-
-app.get("/api/friend/:name", (req, res) => {
-    console.log(req.params)
-})
-
 app.get("/api/email/:id", (req, res) => {
     User.findOne({email: req.params.id})
         .then(result => {
@@ -272,10 +260,11 @@ app.get("/api/email/:id", (req, res) => {
         })
 })
 
-app.post("/api/confirmation", (req, res) => {
-    Token.findOne({token: req.body.token})
+// 本来はここでもう一段階emailを入力してもらうステップを置いて、POSTで確認するのが理想（tokenIdを取得すれば誰でもできちゃうから）
+app.get("/api/confirmation/:tokenId", (req, res) => {
+    Token.findOne({token: req.params.tokenId})
     .then(token => {
-        User.findOne({_id: token._userId, email: req.body.email})
+        User.findById({_id: token._userId}) 
         .then(user => {
             if(!user) { console.log("User not found"); return; }
             if(user.isVerified) { console.log("User is already verified"); return; }
@@ -283,17 +272,118 @@ app.post("/api/confirmation", (req, res) => {
             user.save()
             .then(user => {
                 console.log("User is now verified")
-                res.send(user)
+                res.redirect("/")
             })
         })
     })
+    .catch(err => {
+        console.log(err)
+        res.redirect("/")
+    })
 })
+
+app.post("/api/password/reset/:tokenId", (req, res) => {
+    const { newPassword, confirmPassword } = req.body
+
+    if (newPassword !== confirmPassword) { console.log("Password did not match"); return }
+
+    Token.findOne({token: req.params.tokenId})
+    .then(token => {
+        User.findById({_id: token._userId}) 
+        .then(user => {
+            if(!user) { console.log("User not found"); return; }
+
+            bcrypt.genSalt(10)
+            .then(salt => {
+                bcrypt.hash(newPassword, salt)
+                .then(hash => {
+                    user.password = hash
+                    user.save()
+                    .then(user => {
+                        console.log("A password has been set")
+                        res.send("SUCCESS")
+                    })
+                })
+            })
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.send("FAIL")
+    })
+})
+
+app.post("/api/password/reset/email", (req, res) => {
+    User.findOne({email: req.body.email})
+    .then(user => {
+        if(!user) { 
+            console.log("User not found");
+            res.send("FAIL")
+            return; 
+        }
+
+        var token = new Token({
+            _userId: user._id,
+            token: crypto.randomBytes(16).toString("hex")
+        })
+
+        token.save()
+        .then(token => {
+            
+            var msg = {
+                from: 'info@indii.jp',
+                to: user.email,
+                subject: '【Indii】 パスワードの再設定',
+                text: `${user.userName}さん\n\n` + "以下のリンクをクリックすると、パスワードの再設定を行うことができます。\n\n" + `http://indii.jp/api/password/reset/${token.token}` + "\n" 
+            }
+
+            sgMail.send(msg)
+            .then(() => {
+                console.log("A password reset mail has been sent")
+                res.send("SUCCESS")
+            })  
+
+            return;
+        })
+
+
+    })
+})
+
+// ログインしなくてもパスワードが再設定できるが大丈夫なのか？
+app.get("/api/password/reset/:tokenId", (req, res) => {
+    Token.findOne({token: req.params.tokenId})
+    .then(token => {
+        User.findById({_id: token._userId}) 
+        .then(user => {
+            if(!user) { 
+                console.log("User not found"); 
+                return; 
+            }
+            res.redirect(`/verification/password/${req.params.tokenId}`)
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.redirect("/")
+    })
+})
+
+
 
 app.post("/api/resend", (req, res) => {
     User.findOne({email: req.body.email})
     .then(user => {
-        if(!user) { console.log("User not found"); return; }
-        if(user.isVerified) { console.log("User is already verified"); return; }
+        if(!user) { 
+            console.log("User not found");
+            res.send("FAIL")
+            return; 
+        }
+        if(user.isVerified) { 
+            console.log("User is already verified");
+            res.send("ALREADY")
+            return; 
+        }
 
         var token = new Token({
             _userId: user._id,
@@ -302,34 +392,85 @@ app.post("/api/resend", (req, res) => {
 
         token.save()
         .then(token => {
-            var transporter = nodemailer.createTransport()
-            var mailOptions = {
-                from: 'no-reply@yourwebapplication.com',
+            
+            var msg = {
+                from: 'info@indii.jp',
                 to: user.email,
-                subject: 'Account Verification Token',
-                text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' 
+                subject: '【Indii】 確認メールの再送',
+                text: `${req.body.username}さん\n\n` + "以下のリンクをクリックして、ご登録いただいたメールアドレスを認証してください。\n\n" + `http://indii.jp/api/confirmation/${token.token}` + "\n" 
             }
 
-            transporter.sendMail(mailOptions)
-
-            console.log("A verfication mail has been resent")
+            sgMail.send(msg)
+            .then(() => {
+                console.log("A verfication mail has been resent")
+                res.send("SUCCESS")
+            })  
 
             return;
         })
     })
 })
 
+app.get("/api/feed", (req, res) => {
+    // Post.find({contribution: { $exists: true, $ne: [] }}).sort({contribution: 1}).limit(10)
+    Post.find({lastEdited: { $exists: true }}).sort({lastEdited: -1}).limit(10)
+    .then(posts => {
+        res.send(posts)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+app.get("/api/profile/:userId", (req, res) => {
+    User.findById(req.params.userId)
+    .populate("post")
+    .populate("followers.user")
+    .populate("follows.user")
+    .populate({path: "likedPost.post", populate: {path: "postImg"}})
+    .populate({path: "likedTopic.topic", populate: {path: "squareImg"}})
+    .exec()
+    .then(user => {
+        res.send(user)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+
+
+
 app.post("/api/topic", isLoggedIn, (req, res) => {
 
     const columnId = mongoose.Types.ObjectId();
     const topicId = mongoose.Types.ObjectId();
+    const topicRectangleImgId = mongoose.Types.ObjectId();
+    const topicSquareImgId = mongoose.Types.ObjectId();
+    const topicMobileImgId = mongoose.Types.ObjectId();
+
+    const ls = [
+        {_id: topicRectangleImgId, image: req.body.rectangleImg},
+        {_id: topicSquareImgId, image: req.body.squareImg},
+        {_id: topicMobileImgId, image: req.body.MobileImg},
+    ]
+
+    Image.insertMany(ls)
+
+    const newBody = Object.assign(
+        {},
+        req.body,
+        {squareImg: topicSquareImgId,
+        rectangleImg: topicRectangleImgId,
+        mobileImg: topicMobileImgId}
+    )
 
     var post = new Post({
         topic: topicId, 
         topicName: req.body.topicName, 
-        topicRectangleImg: req.body.rectangleImg,
-        topicSquareImg: req.body.squareImg,
-        topicMobileImg: req.body.mobileImg,
+        topicRectangleImg: topicRectangleImgId,
+        topicSquareImg: topicSquareImgId,
+        topicMobileImg: topicMobileImgId,
         index: [0], 
         postName: "概要",
     })
@@ -342,7 +483,7 @@ app.post("/api/topic", isLoggedIn, (req, res) => {
                 title: "概要",
                 posts: [post.id]
             }
-            var topic = new Topic(Object.assign({_id: topicId}, req.body))
+            var topic = new Topic(Object.assign({_id: topicId}, newBody))
             topic.column.push(desc)
             topic.order.push(columnId)
             topic.posts.push(post.id)
@@ -384,9 +525,115 @@ app.post("/api/topic/:topicId/post", isLoggedIn, (req, res) => {
 })
 
 app.get("/api/post/:postId", (req, res) => {
-    Post.findById(req.params.postId)
+    Post.findById(req.params.postId).populate({path: "topic", populate:{ path: "rectangleImg"}}).exec()
     .then(post => {
         res.send(post)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+app.post("/api/post/:postId/star", isLoggedIn, (req, res) => {
+    Post.findById(req.params.postId)
+    .then(post => {
+
+        if(!req.body.like){
+            post.star.action.map((elem, index) => {
+                if(String(elem.user) === String(req.user.id)) {
+                    post.star.action.splice(index, 1)
+                    post.star.counter--
+                }
+            })
+        } else {
+            const res = post.star.action.map(elem => {
+                if(String(elem.user) === String(req.user.id)) {
+                    return true
+                }
+            })
+            if(!res[0]){
+                post.star.counter++
+                post.star.action.push({timeStamp: Date.now(), user: req.user.id})
+            }
+        }
+
+        User.findById(req.user.id)
+        .then(user => {
+            if(!req.body.like){
+                user.likedPost.map((elem,index) => {
+                    if(String(elem.post) === String(post.id)) {
+                        user.likedPost.splice(index, 1)
+                    }
+                })
+            } else {
+                const res = user.likedPost.map(elem => {
+                    if(String(elem.post) === String(post.id)) {
+                        return true
+                    }
+                })
+                if(!res[0]){
+                    user.likedPost.push({timeStamp: Date.now(), post: post.id})
+                }
+            }
+            post.save()
+            user.save()
+
+            res.send("DONE")
+        })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+app.post("/api/post/:postId/emoji", isLoggedIn, (req, res) => {
+    Post.findById(req.params.postId)
+    .then(post => {
+
+        if(!req.body.emoji){
+            post.rating.map((elem, index) => {
+                if(String(elem.user) === String(req.user.id)) {
+                    post.rating.splice(index, 1)
+                }
+            })
+        } else {
+            const res = post.rating.map(elem => {
+                if(String(elem.user) === String(req.user.id)) {
+                    elem.rate = req.body.emoji
+                    elem.timeStamp = Date.now()
+                    return true
+                }
+            })
+            if(!res[0]){ 
+                post.rating.push({timeStamp: Date.now(), user: req.user.id, rate: req.body.emoji})
+            }
+        }
+
+        User.findById(req.user.id)
+        .then(user => {
+            if(!req.body.emoji){
+                user.postRating.map((elem,index) => {
+                    if(String(elem.post) === String(post.id)) {
+                        user.postRating.splice(index, 1)
+                    }
+                })
+            } else {
+                const res = user.postRating.map(elem => {
+                    if(String(elem.post) === String(post.id)) {
+                        elem.rate = req.body.emoji
+                        elem.timeStamp = Date.now()
+                        return true
+                    }
+                })
+                if(!res[0]){
+                    user.postRating.push({timeStamp: Date.now(), post: post.id, rate: req.body.emoji})
+                }
+            }
+            post.save()
+            user.save()
+
+            res.send("DONE")
+        })
     })
     .catch(err => {
         console.log(err)
@@ -396,7 +643,7 @@ app.get("/api/post/:postId", (req, res) => {
 app.get("/api/topic/search/:type/:term", (req, res) => {
     const type = req.params.type
     const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
-    Topic.find({"topicName": {$regex: value, $options: 'i'}}) 
+    Topic.find({"topicName": {$regex: value, $options: 'i'}}).populate("squareImg")
         .exec()
         .then(topic => {
             if(topic.length === 0){
@@ -415,7 +662,7 @@ app.get("/api/topic/search/:type/:term", (req, res) => {
 app.get("/api/post/search/:type/:term", (req, res) => {
     const type = req.params.type
     const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
-    Post.find({"postName": {$regex: value, $options: 'i'}}) 
+    Post.find({"postName": {$regex: value, $options: 'i'}}).populate("postImg").populate("topicSquareImg")
         .exec()
         .then(post => {
             if(post.length === 0){
@@ -471,10 +718,6 @@ function isLoggedIn(req,res,next) {
     }
     console.log("NOT AUTHENTICATED")
     return res.send("NO_AUTH")
-}
-
-function isOwner(req,res,next) {
-
 }
 
 if (process.env.NODE_ENV === "production") {

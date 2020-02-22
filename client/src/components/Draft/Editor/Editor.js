@@ -8,8 +8,6 @@ import Screen from "../../Util/Screen"
 import TextArea from "../TextArea/TextArea"
 import Tool from "../Tool/Tool"
 
-import "./Editor.css"
-
 const EditorNavi = styled.div`
     display: flex;
     flex-direction: row;
@@ -92,11 +90,8 @@ class Editor extends Component {
 
     constructor(props) {
         super(props)
-        const url = this.props.location.pathname
-        const id = url.substring(url.lastIndexOf('/') + 1)
         this.state = {
             draft: {},
-            draftId: id,
             updated: false,
         }
     }
@@ -106,8 +101,8 @@ class Editor extends Component {
         const { draft, auth, history } = this.props
 
         for (var key in draft.onEdit) {
-            if(draft.onEdit[key]._id === this.state.draftId) {
-                if(String(draft.onEdit[key].user) === String(auth.info.id)) {
+            if(draft.onEdit[key]._id === this.props.match.params.id) {
+                if(draft.onEdit[key].user === auth.info._id) {
                     this.setState({
                         draft: draft.onEdit[key]
                     })
@@ -115,7 +110,6 @@ class Editor extends Component {
                 }
             }
         }
-
         history.push('/')
     }
 

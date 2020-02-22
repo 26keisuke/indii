@@ -1,21 +1,29 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
-import styled from "styled-components"
+import styled, {css} from "styled-components"
 
 import "./Element.css"
 
 import star_pressed from "../../../images/star-pressed.png"
 
 const PostElement = styled(Link)`
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
     background-color: #ffffff;
 
-    &:hover{
-        background-color: ${props => props.theme.hover};
-    }
+    ${props => !props.search && css`
+        &:hover{
+            background-color: ${props => props.theme.hover};
+        }
+    `}
+
+    ${props => props.search && css`
+        pointer-events: none;
+        cursor: default;
+    `}
+   
 
     & > div:nth-child(1){
         display: flex;
@@ -30,16 +38,23 @@ const PostElement = styled(Link)`
         }
 
         & > p:nth-child(2) {
-            font-size: 16px;
-            color: #1C1C1C;
+            font-size: 15px;
+            color: ${props => props.search ? "royalblue" : "#1C1C1C"};
             margin-bottom: 2px;
             font-weight: bold;
+
+            ${props => props.search && css`
+                cursor: pointer;
+                pointer-events: auto;
+            `}
         }
 
         & > p:nth-child(3) {
             font-size: 11px;
             margin-bottom: 6px;
             color: #1c1c1c;
+            height: 50px;
+            overflow: hidden;
         }
 
         & > div {
@@ -66,8 +81,8 @@ const PostElement = styled(Link)`
 
     & > div:nth-child(2){
         & > img {
-            width: 87px;
-            height: 87px;
+            width: 110px;
+            height: 110px;
             object-fit: contain;
         }
     }
@@ -75,14 +90,9 @@ const PostElement = styled(Link)`
 `
 
 class Post extends Component {
-
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         return (
-            <PostElement to={"/topic/" + this.props.id}>
+            <PostElement search={this.props.search} to={"/topic/" + this.props.id}>
                 <div>
                     <p>{this.props.topic}</p>
                     <p>{this.props.title}</p>
@@ -99,6 +109,10 @@ class Post extends Component {
             </PostElement>
         )
     }
+}
+
+Post.defaultProps = {
+    search: false,
 }
 
 export default Post

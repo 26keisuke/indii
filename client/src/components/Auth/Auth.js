@@ -1,6 +1,5 @@
-// ここはめちゃくちゃわかりにくいし長いから後できれいにする
-
-import React, { Component } from "react";
+// ここをPureComponentにしてるのは、メッセージがrenderされるとinputのカーソルが崩れるのを防ぐため
+import React, { PureComponent } from "react";
 import styled, { css, keyframes } from "styled-components"
 import axios from "axios"
 import { connect } from "react-redux"
@@ -15,7 +14,10 @@ import LogIn from "./LogIn/LogIn"
 import google from "../../images/google-logo.png"
 import facebook from "../../images/facebook-logo.png"
 
-class Auth extends Component {
+
+let token;
+
+class Auth extends PureComponent {
 
     constructor(props) {
         super(props)
@@ -34,8 +36,6 @@ class Auth extends Component {
             // signUpに関するもの
             signUp: {
                 userName: "",
-                familyName: "",
-                givenName: "",
                 email: "",
                 password: "",
                 confirm: "",
@@ -71,7 +71,7 @@ class Auth extends Component {
         })
     }
 
-    handleSignUpChange = (e, type) => {
+    handleSignUpChange = async (e, type) => {
 
         var res = false;
         var check = ""
@@ -82,7 +82,6 @@ class Auth extends Component {
         if (type === "email") {
             check = "validEmail"
             if (validateEmail(value)) {
-
                 res = true
 
                 axios.get(`/api/email/${value}`)
@@ -101,6 +100,7 @@ class Auth extends Component {
                 .catch(err => {
                     console.error(err)
                 }) 
+
             } else {
                 res = false
             }
@@ -143,10 +143,10 @@ class Auth extends Component {
                 [type]: value
             }
         }, () => {
-            const {userName, familyName, givenName} = this.state.signUp
+            const {userName} = this.state.signUp
             const {uniqueEmail, matchPassword} = this.state
             // longPasswordとvalidEmailはいらない。なぜなら、longPasswordでないとmatchPasswordにならないから
-            if(uniqueEmail && matchPassword && userName && familyName && givenName) {
+            if(uniqueEmail && matchPassword && userName) {
                 this.setState({
                     valid: true,
                 })
@@ -158,13 +158,6 @@ class Auth extends Component {
         })   
     }
 
-    validateEmail(value){
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)){
-            return true;
-        }
-            return false;
-    }
-
     handleSubmit = (e, type) => {
         e.preventDefault()
         if(type === "signUp") {
@@ -172,8 +165,6 @@ class Auth extends Component {
             const value = {
                 username: this.state.signUp.userName,
                 email: this.state.signUp.email,
-                familyName: this.state.signUp.familyName,
-                givenName: this.state.signUp.givenName,
                 password: this.state.signUp.password,
             }
 
@@ -269,7 +260,7 @@ class Auth extends Component {
 
 const LogInCard = styled.div`
     width: 400px;
-    height: 400px;
+    height: 430px;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     background-color: #ffffff;

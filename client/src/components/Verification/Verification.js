@@ -1,9 +1,18 @@
+// token => トークンを再送信
+// change => パスワードを変更するためのEmailを送る
+// password => changeで送られたEmailのリンクをクリックしたページ
+
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import styled from "styled-components"
+import axios from "axios"
+import { withRouter } from "react-router-dom" 
+
+import * as actions from "../../actions"
 
 import indii from "../../images/indii.png"
 
-import { validateEmail } from "../Util/util"
+import { validateEmail, sendMessage } from "../Util/util"
 
 import Reset from "./Reset/Reset"
 import Change from "./Change/Change"
@@ -43,14 +52,76 @@ class Verification extends Component {
         })
     }
 
-    handleClick = () => {
+    handleResetClick = (e) => {
+        e.preventDefault()
 
+        const { type } = this.props.match.params
+
+        if (type === "token") {
+            axios.post("/api/resend", {email: this.state.sendEmail})
+            .then(res => {
+                switch(res.data) {
+                    case "SUCCESS":
+                        sendMessage("success", `"${this.state.sendEmail}"に確認メールを送信しました。`, 7000, this.props)
+                        return
+                    case "FAIL":
+                        sendMessage("fail", `"${this.state.sendEmail}"はまだ登録されていません。`, 7000, this.props)
+                        return
+                    case "ALREADY":
+                        sendMessage("fail", `"${this.state.sendEmail}"は既に認証済みです。`, 7000, this.props)
+                        return
+                    default:
+                        return
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        } else if(type === "change") {
+            axios.post("/api/password/reset/email", {email: this.state.sendEmail})
+            .then(res => {
+                switch(res.data) {
+                    case "SUCCESS":
+                        sendMessage("success", `"${this.state.sendEmail}"にメールを送信しました。`, 7000, this.props)
+                        return
+                    case "FAIL":
+                        sendMessage("fail", `"${this.state.sendEmail}"はまだ登録されていません。`, 7000, this.props)
+                        return
+                    default:
+                        return
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    }
+
+    handleChangeClick = (e) => {
+        e.preventDefault()
+        axios.post(`/api/password/reset/${this.props.match.params.tokenId}`, {newPassword: this.state.newPassword, confirmPassword: this.state.confirmPassword})
+            .then(res => {
+                switch(res.data) {
+                    case "SUCCESS":
+                        this.props.history.push("/")
+                        sendMessage("success", "パスワードを変更しました。", 7000, this.props)
+                        return
+                    case "FAIL":
+                        sendMessage("fail", "変更に失敗しました。", 7000, this.props)
+                        return
+                    default:
+                        return
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     renderChange = () => {
         return(
             <Change
-                handleClick={this.handleClick}
+                handleClick={this.handleChangeClick}
                 handleChange={this.handleChange}
                 newPassword={this.state.newPassword}
                 confirmPassword={this.state.confirmPassword}
@@ -62,7 +133,7 @@ class Verification extends Component {
         return(
             <Reset
                 type={type}
-                handleClick={this.handleClick}
+                handleClick={this.handleResetClick}
                 handleChange={this.handleChange}
                 value={this.state.sendEmail}
                 valid={this.state.validEmail}
@@ -78,7 +149,22 @@ class Verification extends Component {
             <VerifyPage>
                 <div>
                     <img src={indii} alt={"ロゴの写真"}/>
-                    <p>パスワードをリセットする</p>
+                    <p>
+                    { type === "token"
+                    ?
+                    "認証メールを再送信する"
+                    :
+                    type === "password"
+                    ?
+                    "パスワードをリセットする"
+                    :
+                    type === "change"
+                    ?
+                    "パスワードをリセットする"
+                    :
+                    "" 
+                    }
+                    </p>
                 </div>
                 <VerifyContainer>
                     { type === "token"
@@ -143,6 +229,12 @@ export const VerifyBox = styled.form`
     & > p:nth-child(1) {
         font-size: 16px;
         margin-bottom: 15px;
+
+        & > span {
+            margin-left: 10px;
+            font-size: 10px;
+            color: #555555;
+        }
     }
 
     & > p:nth-child(2),
@@ -153,7 +245,7 @@ export const VerifyBox = styled.form`
     }
 
     & > input {
-        width: 300px;
+        min-width: 300px;
         background-color:#E9E9EE;
         height: 36px;
         border: none;
@@ -195,4 +287,4 @@ export const Warning = styled.div`
     
 `
 
-export default Verification
+export default connect(null, actions)(withRouter(Verification))

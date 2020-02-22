@@ -1,9 +1,8 @@
 import React, { Component } from "react"
+import { GiPencil } from "react-icons/gi"
+// import { FaTwitter, FaBlog, FaGithub, FaFacebookSquare } from "react-icons/fa"
 
 import PeopleFollow from "../PeopleFollow"
-import * as actions from "../../actions"
-
-import { FaTwitter, FaBlog, FaGithub, FaFacebookSquare } from "react-icons/fa"
 
 class ProfileTop extends Component {
 

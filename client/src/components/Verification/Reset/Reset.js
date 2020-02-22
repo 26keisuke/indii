@@ -11,9 +11,9 @@ class Reset extends Component {
             <VerifyBox>
                 { this.props.type === "password"
                 ?
-                <p>パスワードをリセット</p>
+                <p>パスワードをリセット<span>*送信後は迷惑メールフォルダも確認してください</span></p>
                 :
-                <p>認証メールを再送信</p>
+                <p>認証メールを再送信<span>*送信後は迷惑メールフォルダも確認してください</span></p>
                 }
                 <p>登録しているEmailを入力してください。</p>
                 <input 
@@ -28,7 +28,7 @@ class Reset extends Component {
                     ?
                     <Warning>
                         <div/>
-                        <p>Emailは「__@__」の形で入力してください。</p>
+                        <p>Emailの形式が正しくありません。</p>
                     </Warning>
                     :
                     <Space height="17px"/>
@@ -38,7 +38,7 @@ class Reset extends Component {
                 <div>
                     { (this.props.value && this.props.valid) 
                     ?
-                    <Button type="submit" onClick={this.props.handleClick}>送信</Button>
+                    <Button type="submit" onClick={(e) => this.props.handleClick(e)}>送信</Button>
                     :
                     <Button disabled={true} type="submit">送信</Button>
                     }

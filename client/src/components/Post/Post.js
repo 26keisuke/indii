@@ -18,116 +18,13 @@ import SkeletonBox from "./Skeleton/SkeletonBox"
 import Image from "./Image/Image"
 import Slider from "./Slider/Slider"
 import Navigation from "./Navigation/Navigation"
-import Star from "../Util/Star"
-import Emoji from "../Util/Emoji"
-import ShowMore from "../Util/ShowMore"
+import Response from "../Util/Response"
 
 class Post extends Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            feedback: {},
-            showStar: false,
-            showEmoji: false,
-            showMore: false,
-            chosenEmoji: null
-        }
-        this.emojiRef = React.createRef();
-        this.actionRef = React.createRef();
-    }
-
+    
     componentDidMount() {
-        const url = this.props.location.pathname
-        const id = url.substring(url.lastIndexOf('/') + 1)
-        this.props.fetchPost(id)
+        this.props.fetchPost(this.props.match.params.id)
     }
-
-    // 注意! こっから先はFeed/Post/Post.jsと内容が同じなので、変える際はあっちも変えること！
-    // TODO: このabstractionを作る
-
-    outsideClick = (e) => {
-        if(this.emojiRef.current.contains(e.target)) {
-            return null;
-        }
-
-        if(this.actionRef.current.contains(e.target)) {
-            return null;
-        }
-
-        this.setState({
-            showEmoji: false,
-            showMore: false,
-        })
-    }
-
-    handleStarClick = (e) => {
-        e.preventDefault()
-        if (!this.state.showStar) {
-            this.props.starOn(this.props.id)
-            this.setState({
-                showStar: true
-            })
-        } else {
-            this.props.starOff(this.props.id)
-            this.setState({
-                showStar: false
-            })
-        }
-    }
-
-    handleResponseClick = (e) => {
-        e.preventDefault()
-        this.setState({showMore: false})
-        this.setState({
-            showEmoji: !this.state.showEmoji
-        })
-    }
-
-    handleEmojiClick = (e, id) => {
-        e.preventDefault()
-        this.setState({
-            chosenEmoji: id
-        })
-        this.setState({
-            showEmoji: false
-        })
-    }
-
-    handleMoreClick = (e) => {
-        e.preventDefault()
-        this.setState({showEmoji: false})
-        this.setState({
-            showMore: !this.state.showMore
-        })
-    }
-
-    deletePost = () => {
-        this.setState({showMore: false})
-        const id = this.props.id;
-        const action = "POST_DELETE"
-        const title = "ポストを削除";
-        const caution = ""
-        const message = "このポストを削除してもよろしいですか？";
-        const buttonMessage = "削除する";
-        this.props.showConfirmation(id, action, title, caution, message, buttonMessage)
-        this.props.enableGray()
-    }
-
-    reportPost = () => {
-        this.setState({showMore: false});
-        const id = this.props.id;
-        const action = "GIVE_FEEDBACK";
-        const title = "このポストへのフィードバック";
-        const message = "このポストについてどう思いましたか？";
-        const caution = "（このフィードバックは匿名で保存されます。）";
-        const buttonMessage = "送信する";
-        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
-        this.props.enableGray();
-    };
-
-    // ↑ ここまで
-
 
     renderLeft = () => {
         return(
@@ -145,31 +42,10 @@ class Post extends Component {
                         value={BraftEditor.createEditorState(this.props.post.fetched.content)}
                         contentClassName="post-braft"
                     />
-                    <div>
-                        <Star
-                            handleClick={this.handleStarClick}
-                            icon={this.state.star}
-                            shadow={true}
-                        />
-                        <Emoji
-                            ref={this.emojiRef}
-                            handleResponseClick={this.handleResponseClick}
-                            handleEmojiClick={this.handleEmojiClick}
-                            chosenEmoji={this.state.chosenEmoji}
-                            showEmoji={this.state.showEmoji}
-                            shadow={true}
-                        />
-                        <ShowMore
-                            ref={this.actionRef}
-                            handleClick={this.handleMoreClick}
-                            show={this.state.showMore}
-                            left="-110px"
-                            bottom="23px"
-                            actionName={["フィードバックをする", "この投稿を削除する"]}
-                            action={[this.reportPost, this.deletePost]}
-                            shadow={true}
-                        />
-                    </div>
+                    <Response
+                        postId={this.props.post.fetched._id}
+                        wrapperStyle={wrapperStyle}
+                    />
                 </div>
                 :      
                 <SkeletonBox/>
@@ -183,7 +59,7 @@ class Post extends Component {
         return(
             <div>
                 <Image/>
-                <Navigation/>
+                {/* <Navigation/> */}
                 <Slider/>
                 <TitleWrapper>
                     <SlashTitle>
@@ -250,6 +126,11 @@ class Post extends Component {
     }
 }
 
+const wrapperStyle= {
+    display: "flex",
+    justifyContent: "space-around",
+}
+
 const LeftWrapper = styled.div`
     padding: 28px 75px;
     background-color: #ffffff;
@@ -275,7 +156,8 @@ const HeaderUnderline = styled.div`
 
 function mapStateToProps(state) {
     return {
-        post: state.post
+        post: state.post,
+        auth: state.auth
     }
 }
 

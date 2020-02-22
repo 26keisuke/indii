@@ -83,7 +83,7 @@ class DraftNavigation extends Component {
 
     componentDidUpdate() {
         if(this.props.draft.isUpdated) {
-            this.props.fetchDraft()
+            this.props.fetchDraft(this.state.id)
             this.props.draftRead()
         }
     }

@@ -59,8 +59,8 @@ const LogInButton = styled.div`
 class Profile extends Component {
     render() {
 
-        const flag = this.props.auth.loggedIn
-        const { photo, userName } = this.props.auth.info
+        const flag = this.props.auth.loggedIn && this.props.auth.info.isVerified
+        const { photo, userName, _id } = this.props.auth.info
 
         return (
             <ProfileArea>
@@ -69,15 +69,15 @@ class Profile extends Component {
                         ?
                         photo
                         ?
-                        <Link to="/profile"><img src={photo}/></Link>
+                        <Link to={`/profile/${_id}`}><img src={photo}/></Link>
                         :
-                        <Link to="/profile"><img src={account}/></Link>
+                        <Link to={`/profile/${_id}`}><img src={account}/></Link>
                         :
                         ""
                     }
                     {   flag
                         ? 
-                        <Name to="/profile">
+                        <Name  to={`/profile/${_id}`}>
                             <p>{userName}</p>
                         </Name>
                         :

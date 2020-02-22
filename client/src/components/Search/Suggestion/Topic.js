@@ -66,7 +66,7 @@ class Topic extends Component {
         return (
             <Link key={suggestion._id} to={url} onClick={() => handleClick(suggestion[target])}>
                 <TopicElement>
-                    <img src={suggestion.squareImg} alt="検索結果のトピック一覧のメイン画像"/>
+                    <img src={suggestion.squareImg.image} alt="検索結果のトピック一覧のメイン画像"/>
                     <TopicName>
                         {suggestion.topicName}
                     </TopicName>

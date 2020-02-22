@@ -1,8 +1,38 @@
 export function validateEmail(value){
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)){
+    // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)){ <- これだと、長いinputだと死ぬ
+    if(/(.+)@(.+){2,}\.(.+){2,}/.test(value)){
         return true;
     }
         return false;
+}
+
+export function fmtDate(time) {
+    const date = new Date(time)
+    const now = new Date()
+
+    const y = now.getFullYear() - date.getFullYear()
+    const m = now.getMonth() - date.getMonth()
+    const d = now.getDate() - date.getDate()
+    const h = now.getHours() - date.getHours()
+    const mi = now.getMinutes() - date.getMinutes()
+
+    const yearDiff = y === 0
+    const monthDiff = m === 0
+    const dateDiff = d === 0
+    const hourDiff = h === 0
+
+    if(yearDiff && monthDiff && dateDiff && hourDiff) {
+        return String(mi) + "分前"
+    } else if (yearDiff && monthDiff && dateDiff) {
+        return String(h) + "時間前"
+    } else if (yearDiff && monthDiff) {
+        return String(d) + "日前"
+    } else if (yearDiff) {
+        return String(m) + "ヶ月前"
+    } else {
+        const fmtDate = String(date.getFullYear()) + "年" + String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
+        return fmtDate
+    }
 }
 
 // onClick event

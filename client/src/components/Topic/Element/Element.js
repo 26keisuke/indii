@@ -9,6 +9,7 @@ const Box = styled.div`
     background-color: #ffffff;
     align-items: center;
     height:135px;
+    padding: 5px;
     cursor: pointer;
 
     &:hover {
@@ -27,18 +28,19 @@ const Box = styled.div`
 const Content = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 10px 0px;
-    padding-right:15px;
+    padding-left:15px;
 
     & > p:nth-child(1) {
         color: #333333;
-        font-size:17px;
+        font-size:16px;
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 2px;
     }
 
     & > p:nth-child(2) {
         margin-bottom: 7px;
+        height: 50px;
+        overflow: hidden;
     }
 
     & > div {
@@ -69,7 +71,6 @@ class Element extends Component {
     render() {
         return (
             <Box>
-                <img src={sample} alt={"トピックを代表する写真"}/>
                 <Content>
                     <p>{this.props.title}</p>
                     <p>{this.props.content}</p>
@@ -82,6 +83,7 @@ class Element extends Component {
                         </div>
                     </div>
                 </Content>
+                <img src={sample} alt={"トピックを代表する写真"}/>
             </Box>
         )
     }

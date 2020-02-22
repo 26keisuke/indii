@@ -6,15 +6,6 @@ import { Link } from "react-router-dom"
 import PeopleFollow from "../PeopleFollow"
 
 const PeopleElement = styled.div`
-    /* padding: 10px 10px; */
-
-    /* &:hover {
-        background-color: rgba(233, 233, 238, 0.25);
-    } */
-
-    /* &:hover > div {
-        background-color: rgba(0, 0, 0, 0);
-    } */
 
     & > p {
         font-size: 11px;
@@ -26,7 +17,6 @@ const PeopleElement = styled.div`
         display: flex;
         flex-direction: row;
         margin-bottom: 10px;
-        background-color: #ffffff;
         height:37px;
         position: relative;
 

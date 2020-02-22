@@ -12,27 +12,24 @@ const UserIcon = styled(FaUserCircle)`
     position: absolute;
     color: #636480;
     z-index: 1;
-    left: 30px;
-    top: 10px;
-    transform: scale(1.2);
+    left: 33px;
+    top: 8px;
 `
 
 const MailIcon = styled(IoMdMail)`
     position: absolute;
     color: #636480;
     z-index: 1;
-    left: 30px;
-    top: 10px;
-    transform: scale(1.2);
+    left: 33px;
+    top: 8px;
 `
 
 const PasswordIcon = styled(IoIosLock)`
     position: absolute;
     color: #636480;
     z-index: 1;
-    left: 30px;
-    top: 10px;
-    transform: scale(1.2);
+    left: 33px;
+    top: 8px;
 `
 
 class SignUp extends Component {
@@ -40,7 +37,8 @@ class SignUp extends Component {
     render () {
         return (
             <form>
-                <InputWrapper>
+                <Space height="10px"/>
+                <InputWrapperTop>
                     <UserIcon/>
                     <input 
                         value={this.props.signUpStates.userName}
@@ -48,15 +46,41 @@ class SignUp extends Component {
                         onChange={(e) => this.props.handleSignUpChange(e,"userName")} 
                         type="text" 
                         id="userName"
-                        maxlength="25"
                     />
+                    {/* <label htmlFor="userName">表示名</label> */}
+                    {/* <input 
+                        value={this.props.signUpStates.familyName}
+                        placeholder="苗字" 
+                        onChange={(e) => this.props.handleSignUpChange(e,"familyName")} 
+                        type="text" 
+                        id="familyName"
+                    /> */}
+                    {/* <label htmlFor="familyName">苗字</label> */}
+                    {/* <input 
+                        value={this.props.signUpStates.givenName}
+                        placeholder="名前" 
+                        onChange={(e) => this.props.handleSignUpChange(e,"givenName")} 
+                        type="text" 
+                        id="givenName"
+                    /> */}
+                    {/* <label htmlFor="givenName">名前</label> */}
                     { this.props.signUpStates.userName &&
-                    <Match top={9} right={37}>
+                    <Match left="23px">
                         <Check/>
                     </Match>
                     }
-                </InputWrapper>
-                <InputWrapper>
+                    {/* { this.props.signUpStates.familyName &&
+                    <Match left="192px">
+                        <Check/>
+                    </Match>
+                    }
+                    { this.props.signUpStates.givenName &&
+                    <Match left="306px">
+                        <Check/>
+                    </Match>
+                    } */}
+                </InputWrapperTop>
+                <InputWrapperMiddle>
                     <MailIcon/> 
                     <input 
                         value={this.props.signUpStates.email}
@@ -64,13 +88,11 @@ class SignUp extends Component {
                         onChange={(e) => this.props.handleSignUpChange(e,"email")} 
                         type="email"
                     />
-                    {   (this.props.valid.validEmail && this.props.valid.uniqueEmail) 
-                    ?
-                    <Match top={9} right={37}>
+                    {/* <label htmlFor="email">Eメール</label> */}
+                    <Match left="23px">
+                        {   this.props.valid.validEmail && this.props.valid.uniqueEmail &&
                         <Check/>
-                    </Match>
-                    :
-                    <Match top={-18} left={25}>
+                        }
                         {   ((this.props.valid.validEmail　=== false) || (this.props.valid.uniqueEmail === false)) &&
                         <div/>
                         }
@@ -78,12 +100,11 @@ class SignUp extends Component {
                         <p>このEmailは既に使用されています。</p>
                         }
                         {   this.props.valid.validEmail === false &&
-                        <p>Emailの形式が正しくありません。</p>
+                        <p>Emailは「__@__」の形で入力してください。</p>
                         }
                     </Match>
-                    }
-                </InputWrapper>
-                <InputWrapper>
+                </InputWrapperMiddle>
+                <InputWrapperBottom>
                     <PasswordIcon/>
                     <input 
                         value={this.props.signUpStates.password}
@@ -92,13 +113,18 @@ class SignUp extends Component {
                         type="password" 
                         id="password"
                     />
-                    {   (this.props.valid.matchPassword && this.props.valid.longPassword)
-                    ?
-                    <Match top={9} right={37}>
+                    {/* <label htmlFor="password">パスワード</label> */}
+                    <input 
+                        value={this.props.signUpStates.confirm}
+                        placeholder="パスワードの確認" 
+                        onChange={(e) => this.props.handleSignUpChange(e,"confirm")} 
+                        type="password" 
+                        id="confirmPassowrd"
+                    />
+                    <Match left="23px">
+                        { this.props.valid.matchPassword && this.props.valid.longPassword &&
                         <Check/>
-                    </Match>
-                    :
-                    <Match top={-18} left={25}>
+                        }
                         { ((this.props.valid.matchPassword === false) || (this.props.valid.longPassword === false)) &&
                         <div/>
                         }
@@ -109,24 +135,7 @@ class SignUp extends Component {
                         <p>パスワードが一致しません。</p>
                         }
                     </Match>
-                    }
-                </InputWrapper>
-                <InputWrapper>
-                    <PasswordIcon/>
-                    <input 
-                        value={this.props.signUpStates.confirm}
-                        placeholder="パスワードの確認" 
-                        onChange={(e) => this.props.handleSignUpChange(e,"confirm")} 
-                        type="password" 
-                        id="confirmPassowrd"
-                    />
-                    {   (this.props.valid.matchPassword && this.props.valid.longPassword) &&
-                    <Match top={9} right={37}>
-                        <Check/>
-                    </Match>
-                    }
-                </InputWrapper>
-                <Space height="20px"/>
+                </InputWrapperBottom>
                 <BottomWrapper signUp={true}>
                     {this.props.valid.valid
                     ? <Button width={"360px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "signUp")}>アカウントを作成</Button>
@@ -140,18 +149,18 @@ class SignUp extends Component {
 }
 
 /* 今はわざと三つに分けてる後々変える可能性が高いから */
-const InputWrapper = styled.div`
+const InputWrapperTop = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 29px;
     position: relative;
 
     & > input {
-        width:  316px;
-        padding-right: 12px;
-        padding-left: 32px;
-        height: 29px;
+        width:  334px;
+        margin: 0px 6px;
+        padding: 0px 12px;
+        height: 28px;
         font-size: 12px;
         font-family: ${props => props.theme.font};
         position: relative;
@@ -162,15 +171,96 @@ const InputWrapper = styled.div`
     & > input:nth-child(1) {
         width: 116px !important;
     }
+
+    & > label:nth-child(2) {
+        position:absolute;
+        left: 25px;
+        top: -18px;
+        color: #888888;
+        font-size: 10px;
+    }
+
+    & > label:nth-child(4) {
+        position:absolute;
+        left: 167px;
+        top: -18px;
+        color: #888888;
+        font-size: 10px;
+    }
+
+    & > label:nth-child(6) {
+        position:absolute;
+        left: 282px;
+        top: -18px;
+        color: #888888;
+        font-size: 10px;
+    }
+`
+
+const InputWrapperMiddle = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 29px;
+    position: relative;
+
+    & > input {
+        width:  329px;
+        margin: 0px 6px;
+        padding: 0px 12px;
+        height: 28px;
+        font-size: 12px;
+        font-family: ${props => props.theme.font};
+        position: relative;
+        border: none;
+        background-color: #f6f6f6;
+    }
+
+    & > label:nth-child(2) {
+        position:absolute;
+        left: 25px;
+        top: -18px;
+        color: #888888;
+        font-size: 10px;
+
+    }
+`
+
+const InputWrapperBottom = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 29px;
+    position: relative;
+
+    & > input {
+        width: 151px;
+        margin: 0px 6px;
+        padding: 0px 10px;
+        height: 29px;
+        font-size: 12px;
+        font-family: ${props => props.theme.font};
+        position: relative;
+        border: none;
+        background-color: #f6f6f6;
+    }
+
+    & > label:nth-child(2) {
+        position:absolute;
+        left: 25px;
+        top: -18px;
+        color: #888888;
+        font-size: 10px;
+
+    }
 `
 
 const Match = styled.div`
     position: absolute;
+    top: -18px;
     display: flex;
     align-items: center;
-    top: ${props => String(props.top) + "px"};
-    left: ${props => String(props.left) + "px"};
-    right: ${props => String(props.right) + "px"};
+    left: ${props => props.left};
 
     & > div {
         background-color: #FF5F5F;
@@ -188,7 +278,7 @@ const Match = styled.div`
 `
 
 const Check = styled(IoIosCheckmark)`
-    transform: scale(2.2);
+    transform: scale(1.6);
     margin-top: 1px;
     color: #4CD964;
 `

@@ -220,7 +220,7 @@ class App extends Component {
                     Promise.all(promises).then(() => {
                         this.props.disableGray();
                         this.props.endFetching();
-                        this.props.fetchDraft();
+                        this.props.draftUpdated();
                         sendMessage("success", "ポストをアップロードしました。", 4000, this.props)
                     })
 
@@ -334,7 +334,11 @@ class App extends Component {
         switch(this.props.update.updateMessage.type){
             case "success":
                 return (
-                    <Message message={this.props.update.updateMessage.message}/>
+                    <Message type={"SUCCESS"} message={this.props.update.updateMessage.message}/>
+                )
+            case "fail":
+                return (
+                    <Message type={"FAIL"} message={this.props.update.updateMessage.message}/>
                 )
             default:
                 return;
@@ -386,7 +390,9 @@ class App extends Component {
                             <Route path="/profile/:id" component={Profile} />
                             <Route exact path="/action" component={Action} />
                             {/* <Route exact path="/workspace" component={WorkSpace} /> */}
+                            {/* ここのダブり後で変える */}
                             <Route path="/verification/:type" component={Verification}/>
+                            <Route path="/verification/:type/:tokenId" component={Verification}/> 
                         </div>
                     </div>
                 </BrowserRouter>

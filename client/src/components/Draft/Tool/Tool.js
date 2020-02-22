@@ -294,7 +294,7 @@ class Reference extends Component {
     render () { 
 
         const { file, url } = this.state
-        const initialVal = this.props.draft.postImg
+        const initialVal = this.props.draft.postImg && this.props.draft.postImg.image
 
         // const flag = ((file.preview === null) || (file.preview === undefined))
         // const display = flag ? initialVal : file.preview

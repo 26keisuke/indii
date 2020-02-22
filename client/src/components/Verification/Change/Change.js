@@ -46,7 +46,7 @@ class Change extends Component {
                 <div>
                     {((this.props.newPassword) && (!this.props.newPassword.length < 8) && (this.props.newPassword === this.props.confirmPassword))
                     ?
-                    <Button type="submit" onClick={this.handleClick}>送信</Button>
+                    <Button type="submit" onClick={(e) => this.props.handleClick(e)}>送信</Button>
                     :
                     <Button type="submit" disabled={true}>送信</Button>
                     }

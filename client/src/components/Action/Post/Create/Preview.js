@@ -27,17 +27,19 @@ class CreatePreviewTopic extends Component {
 
         const url = "/api/topic/" + this.props.selectedTopic._id + "/post"
 
-        axios.post(url, {
+        const data = {
             topic: this.props.selectedTopic._id,
             topicName: this.props.selectedTopic.topicName,
             topicRectangleImg: this.props.selectedTopic.rectangleImg,
-            topicSquareImg: this.props.selectedTopic.squareImg,
+            topicSquareImg: this.props.selectedTopic.squareImg._id, // populateしているから
             topicMobileImg: this.props.selectedTopic.mobileImg,
             postName: this.props.postName,
             config: {
                 allowEdit: this.props.config.allowEdit,
             }
-        })
+        }
+
+        axios.post(url, data)
         .then(res => {
             this.onExit()
         })

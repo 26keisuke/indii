@@ -1,26 +1,39 @@
 import React, { Component } from "react"
-import styled, { keyframes } from "styled-components"
+import styled, { css } from "styled-components"
+import { connect } from "react-redux"
+import Skeleton from "react-loading-skeleton"
 
 class Image extends Component {
+
     render () {
+
+        if(this.props.post.fetched.topic) {
+
+            const { topicName, tags, rectangleImg } = this.props.post.fetched.topic
+
+            return (
+                    <ImageBox>
+                        <Overlay/>
+                        <Container src={rectangleImg.image}/>
+                        <Tag>
+                            {
+                                tags.map(tag => 
+                                    <div>
+                                        <p># {tag}</p>
+                                    </div>
+                                )
+                            }
+                        </Tag>
+                        <Title>{topicName}</Title>
+                        <Content>桶狭間の戦い（おけはざまのたたかい）は、日本の戦国時代の永禄3年5月19日（1560年6月12日）に尾張国桶狭間で行われた。</Content>
+                    </ImageBox>
+            )
+        } 
+
         return (
-                <ImageBox>
-                    <Overlay/>
-                    <Container/>
-                    <Tag>
-                        <div>
-                            <p># タグ1</p>
-                        </div>
-                        <div>
-                            <p># タグ2</p>
-                        </div>
-                        <div>
-                            <p># タグ3</p>
-                        </div>
-                    </Tag>
-                    <Title>タイトルが入ります</Title>
-                    <Content>桶狭間の戦い（おけはざまのたたかい）は、日本の戦国時代の永禄3年5月19日（1560年6月12日）に尾張国桶狭間で行われた。</Content>
-                </ImageBox>
+            <ImageBox skeleton={true}>
+                <Skeleton width={380} height={196}/>
+            </ImageBox>
         )
     }
 }
@@ -30,6 +43,9 @@ const ImageBox = styled.div`
     margin-left: -10px;
     margin-top: -15px;
     margin-bottom: 15px;
+    ${props => !props.skeleton && css`
+        box-shadow: 1px 1px 10px #d2d2d2;
+    `}
     min-width: 380px;
     max-width: 380px;
     min-height: 200px;
@@ -38,7 +54,7 @@ const ImageBox = styled.div`
     cursor: pointer;
 
     &:hover > div:nth-child(1) {
-        height: 199px;
+        height: 200px;
     }
 
     &:hover > div:nth-child(3) {
@@ -55,13 +71,8 @@ const ImageBox = styled.div`
 `
 
 const Container = styled.img`
-    box-shadow: 1px 1px 10px #d2d2d2;
     height: 200px;
     width: 380px;
-
-    /* temp */
-    background-color: red;
-    opacity: 0.3;
 `
 
 const Overlay = styled.div`
@@ -70,7 +81,7 @@ const Overlay = styled.div`
     opacity: 0.6;
     width: 378px;
     height: 65px;
-    left: 1px;
+    left: 0px;
     transition: 250ms;
     bottom: 0px;
     position: absolute;
@@ -85,7 +96,7 @@ const Tag = styled.div`
     left: 20px;
     font-weight: bold;
     transition: 300ms;
-    margin-left: -3px;
+    margin-left: -6px;
     font-weight: normal;
 
     & > div {
@@ -114,9 +125,16 @@ const Content = styled.p`
     position: absolute;
     top: 240px;
     left: 20px;
+    margin-left: -2px;
     color: white;
     padding-right: 20px;
     transition: 300ms;
 `
 
-export default Image
+function mapStateToProps(state) {
+    return {
+        post: state.post
+    }
+}
+
+export default connect(mapStateToProps, null)(Image)

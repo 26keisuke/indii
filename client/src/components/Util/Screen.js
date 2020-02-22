@@ -19,7 +19,7 @@ export const FeedLeft = styled.div`
     flex-shrink: 0;
     height:100%;
     position: relative;
-    border-right: 1px solid #d2d2d2;
+    border-right: ${props => props.noBorder ? "none" : "1px solid #d2d2d2"};
     /* overflow: scroll; */
 
     /* &::-webkit-scrollbar {
@@ -104,9 +104,11 @@ class Screen extends Component {
 
         return (
             <FeedBox>
-                <FeedLeft>
+                <FeedLeft noBorder={this.props.noBorder}>
                     {renderHeader()}
+                    { !this.props.noHeaderSpace &&
                     <FeedSpace/>
+                    }
                     { this.props.noHeader
                     ?
                     this.props.children[0]
@@ -135,10 +137,13 @@ class Screen extends Component {
 
 Screen.defaultProps = {
     space: true,
+    noBorder: false,
 }
 
 Screen.propTypes = {
+    noHeaderSpace: PropTypes.bool,
     noHeader: PropTypes.bool,
+    noBorder: PropTypes.bool,
     withBack: PropTypes.bool,
     space: PropTypes.bool,
     children: PropTypes.node

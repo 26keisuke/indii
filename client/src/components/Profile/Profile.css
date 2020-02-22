@@ -39,6 +39,9 @@
 .profile-top-left{
     width: 425px;
     margin-right: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profile-img{
@@ -166,7 +169,7 @@
 
 .profile-wrapper{
     height: 100%;
-    background-color: #fefefe;
+    background-color: #fafafa;
     padding: 30px 60px;
     display: flex;
     flex-direction: column;
@@ -175,7 +178,7 @@
 
 .profile-wrapper-extra{
     height: 100%;
-    background-color: #fefefe;
+    background-color: #fafafa;
     padding: 30px 40px;
     display: flex;
     flex-direction: column;
@@ -185,7 +188,7 @@
 /*== profile home ==*/
 
 .profile-post-wrapper{  
-    border: 1px solid #d2d2d2;
+    box-shadow: 1px 1px 10px #d2d2d2;
     width: 600px;
     margin-bottom: 12px;
 }
@@ -198,14 +201,14 @@
 /*== profile topic ==*/
 
 .profile-topic-wrapper{  
-    border: 1px solid #d2d2d2;
+    box-shadow: 1px 1px 10px #d2d2d2;
     width: 600px;
     margin-bottom: 12px;
 }
 
 /*== profile follow==*/
 
-.profile-follow-box{
+/* .profile-follow-box{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -216,4 +219,4 @@
     border: 1px solid #d2d2d2;
     width: 300px;
     margin: 10px;
-}
+} */

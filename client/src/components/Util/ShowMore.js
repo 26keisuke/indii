@@ -6,6 +6,8 @@ import HoverIcon from "./HoverIcon"
 
 const MoreBtn = styled(IoIosMore)`
     transform: scale(1.7);
+    color: #636480;
+
     pointer-events: none;
 `
 

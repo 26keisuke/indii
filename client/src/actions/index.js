@@ -1,6 +1,6 @@
 import axios from "axios";
 import { USER_IS_LOGGEDIN,
-         STAR_ON, STAR_OFF,
+        //  STAR_ON, STAR_OFF,
          ON_SEARCH,
          OFF_SEARCH, 
          SET_CATEGORY, 
@@ -21,22 +21,14 @@ import { USER_IS_LOGGEDIN,
          SEARCH_POST, SEARCH_TOPIC,
          FETCH_DRAFT,
          DRAFT_UPDATED, DRAFT_READ, 
-         FETCH_TOPIC, FETCH_POST} from "./types";
+         FETCH_TOPIC, FETCH_POST,
+        //  EMOJI_TOGGLE, STAR_TOGGLE, 
+         FETCH_FEED } from "./types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
     dispatch({type: USER_IS_LOGGEDIN, payload: res.data});
 };
-
-export const starOn = (id) => async (dispatch) => {
-    const res = await axios.post("/api/star_on", id)
-    dispatch({type: STAR_ON, payload: res.data})
-}
-
-export const starOff = (id) => async (dispatch) => {
-    const res = await axios.post("/api/star_off", id)
-    dispatch({type: STAR_OFF, payload: res.data})
-}
 
 export const onSearch = () => (dispatch) => {
     dispatch({type: ON_SEARCH})
@@ -158,21 +150,45 @@ export const fetchPost = (id) => async (dispatch) => {
     dispatch({type: FETCH_POST, payload: res.data})
 }
 
+// export const starToggle = (id, on) => async (dispatch) => {
+//     await cancelOnMultipleSearch(`/api/post/${String(id)}/star`, "POST", {on})
+//     dispatch({type: STAR_TOGGLE, payload: {id, on}}) // ここなぜかdispatchしないとcancelが適用されない後で詳しく掘り下げる
+// }
+
+// export const emojiToggle = (id, emotion) => async (dispatch) => {
+//     await cancelOnMultipleSearch(`/api/post/${String(id)}/emoji`, "POST", {emotion})
+//     dispatch({type: EMOJI_TOGGLE, payload: {}})
+// }
+
+export const fetchFeed = () =>  async (dispatch) => {
+    const res = await axios.get("api/feed")
+    dispatch({type: FETCH_FEED, payload: res.data})
+}
+
 // ===== UTIL =====
 
-const cancelOnMultipleSearch = async (url) => {
+export const cancelOnMultipleSearch = async (url, type, body) => {
     if(token) {
         token.cancel()
     }
     token = axios.CancelToken.source()
     try {
-        const res = await axios.get(url, {cancelToken: token.token})
+        var res = {}
+
+        if(type === "POST") {
+            res = await axios.post(url, body, {cancelToken: token.token})
+            const result = res.data
+            return result
+        }
+
+        res = await axios.get(url, {cancelToken: token.token})
         const result = res.data
         return result
+
     } catch(error) {
-        //　ここの二つは本来はキャンセルしたいところ。（今の状態では、reducerに送られている）
+        //　ここの二つは本来はキャンセルしたいところ。（今の状態では、reducerに送られているからその分無駄）
         if(axios.isCancel(error)) {
-            console.log("Search request has been cancelled.")
+            console.log("Request has been cancelled.")
             return []
         } else {
             console.log("Something went wrong with searching.")
