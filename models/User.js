@@ -16,6 +16,7 @@ const userSchema = new Schema({
         givenName: String,
     },
     photo: String,
+    comment: String,
     intro: String,
 
     followers: [{
@@ -29,6 +30,10 @@ const userSchema = new Schema({
 
     draft: [{type: mongoose.Schema.Types.ObjectId, ref: "Draft"}],
     post: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
+    edit: [{
+        timeStamp: Date,
+        post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+    }],
 
     likedPost: [{
         timeStamp: Date,

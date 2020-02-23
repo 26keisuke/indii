@@ -31,14 +31,13 @@ class Response extends Component {
         }
     }
 
-    handleCollapseClick = (e) => {
-        e.preventDefault()
-        this.setState({
-            isOpened: !this.state.isOpened,
-            changed: true,
-            showMore: false,
-            showEmoji: false,
-        })
+    componentDidUpdate() {
+        if(!this.props.isOpened) {
+            this.setState({
+                showMore: false,
+                showEmoji: false,
+            })
+        }
     }
 
     handleWindowClose = () => {

@@ -51,6 +51,10 @@ export const FETCH_TOPIC = "FETCH_TOPIC"
 export const SEARCH_POST = "SEARCH_POST"
 export const FETCH_POST = "FETCH_POST"
 
+// PROFILE
+export const FETCH_PROFILE = "FETCH_PROFILE"
+
+
 // Emoji
 // export const EMOJI_TOGGLE = "EMOJI_TOGGLE"
 

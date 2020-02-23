@@ -23,7 +23,8 @@ import { USER_IS_LOGGEDIN,
          DRAFT_UPDATED, DRAFT_READ, 
          FETCH_TOPIC, FETCH_POST,
         //  EMOJI_TOGGLE, STAR_TOGGLE, 
-         FETCH_FEED } from "./types";
+         FETCH_FEED,
+         FETCH_PROFILE } from "./types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
@@ -84,7 +85,7 @@ export const resetMessage = () => (dispatch) => {
     dispatch({type: RESET_MESSAGE})
 }
 
-export const showConfirmation = (id, action, title, caution, message, buttonMessage, next) => (dispatch) => {
+export const showConfirmation = (id, action, title, caution, message, buttonMessage, next, value) => (dispatch) => {
     dispatch({type: SHOW_CONFIRMATION, payload: {
                                                 id: id,
                                                 action: action,
@@ -92,7 +93,8 @@ export const showConfirmation = (id, action, title, caution, message, buttonMess
                                                 caution: caution,
                                                 message: message, 
                                                 buttonMessage: buttonMessage,
-                                                next: next}})
+                                                next: next,
+                                                value: value }})
 }
 
 export const hideConfirmation = () => (dispatch) => {
@@ -148,6 +150,11 @@ export const fetchTopic = (id) => async (dispatch) => {
 export const fetchPost = (id) => async (dispatch) => {
     const res = await axios.get(`/api/post/${String(id)}`)
     dispatch({type: FETCH_POST, payload: res.data})
+}
+
+export const fetchProfile = (id) => async (dispatch) => {
+    const res = await axios.get(`/api/profile/${id}`)
+    dispatch({type: FETCH_PROFILE, payload: res.data})
 }
 
 // export const starToggle = (id, on) => async (dispatch) => {

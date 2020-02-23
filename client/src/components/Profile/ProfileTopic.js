@@ -1,9 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
-import styled from "styled-components"
 
 import TopicElement from "../Topic/Element/Element"
-
 
 class ProfileTopic extends Component {
 

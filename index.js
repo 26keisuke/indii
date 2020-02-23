@@ -438,8 +438,53 @@ app.get("/api/profile/:userId", (req, res) => {
     })
 })
 
+app.post("/api/profile/:userId/photo", (req, res) => {
+    User.findById(req.params.userId)
+    .then(user => {
+        user.photo = req.body.photo
+        user.save()
+        res.send("Success")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
 
+app.post("/api/profile/:userId/name", (req, res) => {
+    User.findById(req.params.userId)
+    .then(user => {
+        user.userName= req.body.userName
+        user.save()
+        res.send("Success")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
 
+app.post("/api/profile/:userId/comment", (req, res) => {
+    User.findById(req.params.userId)
+    .then(user => {
+        user.comment = req.body.comment
+        user.save()
+        res.send("Success")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+app.post("/api/profile/:userId/intro", (req, res) => {
+    User.findById(req.params.userId)
+    .then(user => {
+        user.intro= req.body.intro
+        user.save()
+        res.send("Success")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
 
 app.post("/api/topic", isLoggedIn, (req, res) => {
 

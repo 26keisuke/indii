@@ -25,13 +25,24 @@ import CreatePost from "./Action/Post/Create/Controller"
 import Action from "./Action/Action"
 import EditTopic from "./Action/Topic/Edit/Controller"
 import EditPost from "./Action/Post/Edit/Controller"
-import WorkSpace from "./WorkSpace"
 import Message from "./Util/Message"
 import Confirm from "./Confirm/Confirm"
 import Loading from "./Util/Loading"
 import Filter from "./Util/Filter"
 import Auth from "./Auth/Auth"
 import Verification from "./Verification/Verification"
+
+import {
+    deletePost,
+    sendFeedBack,
+    deleteDraft,
+    uploadDraft,
+    deleteRef,
+    logIn,
+    signUp,
+    updateIntro,
+    updateImage,
+} from "./Action"
 
 const ConfirmWrapper = React.forwardRef((props, ref) => (
      <Confirm innerRef={ref} {...props}/>
@@ -136,43 +147,30 @@ class App extends Component {
 
     postAction = (action, id, value) => {
         switch(action){
+
+            // ======== PopUp関係 ==========
+
             case "POST_DELETE":
                 this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
-                    axios.post("/api/post/delete", {id})
-                    .then(()=> {
-                        // 本来はsettimeoutはいらん
-                        setTimeout(() => {
-                        this.props.endFetching(); 
-                        this.props.disableGray();
-                        sendMessage("success", "ポストを削除しました。", 3000, this.props)
-                        }, 500)
-                    })
-                    .catch((err)=> console.error(err))
+                    deletePost(id, this.props)
+                    return
                 } else {
                     this.props.disableGray();
+                    return
                 }
-                return null;
 
             case "GIVE_FEEDBACK":
                 this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
-                    axios.post("/api/feeback", {id: id, problems: this.state.problems})
-                    .then(()=> {
-                        // 本来はsettimeoutはいらん
-                        setTimeout(() => {
-                        this.props.endFetching(); 
-                        this.props.disableGray();
-                        sendMessage("success", "フィードバックを受け取りました。", 3000, this.props)
-                        }, 500);
-                    })
-                    .catch((err) => console.error(err))
+                    sendFeedBack(id, this.state.problems, this.props)
+                    return
                 } else {
                     this.props.disableGray();
+                    return
                 }
-                return null;
 
             case "ADD_COLUMN":
                 this.startAction("confirm")
@@ -180,117 +178,70 @@ class App extends Component {
                     this.props.addColumn(id, this.state.addColumn);
                 }
                 this.props.disableGray();
-                return null;
+                return
             
             case "DRAFT_DELETE_CHECK":
                 this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
-                    axios.post("/api/draft/delete", {subject: id})
-                    .then(res => {
-                        this.props.endFetching();
-                        this.props.disableGray();
-                        this.props.fetchDraft() // this certainly isnt the optimal because req is sent to server again
-                        sendMessage("success", "下書きを削除しました。", 3000, this.props)
-                        return null
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        this.props.endFetching()
-                        this.props.disableGray();
-                        return null
-                    })
+                    deleteDraft(id, this.props)
+                    return
                 } else {
                     this.props.disableGray();
-                    return null;
+                    return
                 }
 
             case "DRAFT_UPLOAD_CHECK":
                 this.startAction("confirm")
                 if (value){
-
-                    const promises = []
-
-                    for(var key in value) {
-                        promises.push(
-                            axios.post("/api/draft/upload", {value: value[key]})
-                        )
-                    }
-
-                    Promise.all(promises).then(() => {
-                        this.props.disableGray();
-                        this.props.endFetching();
-                        this.props.draftUpdated();
-                        sendMessage("success", "ポストをアップロードしました。", 4000, this.props)
-                    })
-
+                    uploadDraft(value, this.props)
+                    return
                 } else {
                     this.props.disableGray();
                     this.props.endFetching()
+                    return
+                }
+            case "DELETE_REF":
+                this.startAction("confirm")
+                if(id) {
+                    deleteRef(id, this.props)
+                    return
+                } else {
+                    this.props.disableGray()
+                    return
+                }
+            case "SELF_INTRO":
+                this.startAction("confirm")
+                if(id) {
+                    updateIntro(value, this.props)
+                    return
+                } else {
+                    this.props.disableGray()
+                    return
                 }
 
-                return null;
+            case "SELF_IMAGE":
+                this.startAction("confirm")
+                if(id) {
+                    updateImage(value, this.props)
+                    return
+                } else {
+                    this.props.disableGray()
+                    return
+                }
+
+            // ======== logIn系 ==========
 
             case "SIGN_UP":
                 this.props.isFetching()
-            
-                axios.post("/api/login", value)
-                .then(user => {
-                    setTimeout(() => {
-                        this.props.disableGray()
-                        this.props.endFetching()
-                        this.startAction("logIn")
-                        sendMessage("success", `"${user.data.email}"に確認メールを送信しました。`, 7000, this.props)
-                        this.props.fetchUser();
-                    }, 2500)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-
-                return null;
-                
+                this.startAction("logIn")
+                signUp(value, this.props)
+                return
             case "LOG_IN":
                 this.props.isFetching()
-            
-                axios.post("/api/login", value)
-                .then(user => {
-                    if(!user.data.userName) { // if user is not found, return error message
-                        this.props.endFetching()
-                        this.setState({ logInError: true })
-                        return false;
-                    }
-                    this.props.disableGray()
-                    this.props.endFetching()
-                    this.startAction("logIn")
-                    sendMessage("success", `${user.data.userName}さん、お帰りなさい。`, 3000, this.props)
-                    this.props.fetchUser();
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-
-                return null;
-
-            case "DELETE_REF":
-                this.startAction("confirm")
-
-                if(id) {
-                    axios.delete(`/api/draft/${id.draftId}/ref/${id.refId}`)
-                    .then(res => {
-                        this.props.disableGray()
-                        sendMessage("success", "参照を削除しました。", 3000, this.props)
-                        return null
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        return null
-                    })
-                } else {
-                    this.props.disableGray()
-                    return null;
-                }
-
+                this.startAction("logIn")
+                logIn(value, this.props)
+                return
             default:
                 this.startAction("confirm")
                 this.props.disableGray();
@@ -310,24 +261,6 @@ class App extends Component {
             ...this.state,
             addColumn: e.target.value
         })
-    }
-
-    renderConfirmBox = (id, action, title, caution, message, buttonMessage) => {
-        return (
-            <ConfirmWrapper
-                ref={this.confirmRef}
-                id={id}
-                action={action}
-                title={title}
-                caution={caution}
-                message={message}
-                buttonMessage={buttonMessage}
-                cancel={this.state.confirmationCancel}
-                postAction={this.postAction}
-                reportChange={this.handleReportChange}
-                addColumnChange={this.handleAddColumnChange}
-            />
-        )
     }
 
     renderMessage = () => {
@@ -353,24 +286,26 @@ class App extends Component {
             <div className="browser">
                 <BrowserRouter>
                     <div className="router">
-                        <Header />                        
-                        <Navigation />
-                        { auth.showForm && <AuthWrapper 
-                                                ref={this.authRef} 
-                                                show={this.state.logInFormShow}
-                                                postAction={this.postAction}
-                                                error={this.state.logInError}
-                                            /> 
+                        <Header/>
+                        <Navigation/>
+                        { auth.showForm && 
+                        <AuthWrapper 
+                            ref={this.authRef} 
+                            show={this.state.logInFormShow}
+                            postAction={this.postAction}
+                            error={this.state.logInError}
+                        /> 
                         }
                         { update.fetching && <Loading/>}
                         { update.grayBackground && <Filter/>}
                         { update.confirmation.on && 
-                        this.renderConfirmBox(update.confirmation.id,
-                                            update.confirmation.action,
-                                            update.confirmation.title,
-                                            update.confirmation.caution,
-                                            update.confirmation.message,
-                                            update.confirmation.buttonMessage)
+                        <ConfirmWrapper
+                            ref={this.confirmRef}
+                            cancel={this.state.confirmationCancel}
+                            postAction={this.postAction}
+                            reportChange={this.handleReportChange}
+                            addColumnChange={this.handleAddColumnChange}
+                        />
                         }
                         { update.updateMessage.on && this.renderMessage()} 
                         <div className="fakebox">
@@ -389,8 +324,6 @@ class App extends Component {
                             <Route path="/post/:id" component={Post} />
                             <Route path="/profile/:id" component={Profile} />
                             <Route exact path="/action" component={Action} />
-                            {/* <Route exact path="/workspace" component={WorkSpace} /> */}
-                            {/* ここのダブり後で変える */}
                             <Route path="/verification/:type" component={Verification}/>
                             <Route path="/verification/:type/:tokenId" component={Verification}/> 
                         </div>

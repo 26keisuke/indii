@@ -17,7 +17,8 @@ import { USER_IS_LOGGEDIN,
          FETCH_DRAFT, 
          FETCH_POST,
          DRAFT_UPDATED, DRAFT_READ,
-         FETCH_FEED
+         FETCH_FEED,
+         FETCH_PROFILE
          } from "../actions/types"
 
 const initialState = {
@@ -37,9 +38,6 @@ const initialState = {
             people: []
         }
     },
-    // response: {
-    //     starOn: false
-    // },
     nudge: {
         home: true,
         draft: false,
@@ -92,6 +90,20 @@ const initialState = {
         onEdit: [],
         isUpdated: false,
         nounce: "",
+    },
+    profile: {
+        user: {},
+    }
+}
+
+function profileReducer(state=initialState.profile, action) {
+    switch(action.type) {
+        case FETCH_PROFILE:
+            return {
+                user: action.payload
+            }
+        default:
+            return state
     }
 }
 
@@ -140,24 +152,6 @@ function postReducer(state=initialState.post, action) {
                 ...state,
                 feed: action.payload
             }
-        // case STAR_TOGGLE:
-        //     return {
-        //         ...state,
-        //         star: {
-        //             ...state.star,
-        //             [action.payload.id]: action.payload.on
-        //         }
-        //     }
-        // case EMOJI_TOGGLE:
-        //     return {
-        //         ...state,
-        //         emoji: {
-        //             ...state.emoji,
-        //             [action.payload.id]: {
-        //                 emotion: action.payload.emotion,
-        //             }
-        //         }
-        //     }
         default:
             return state
     }
@@ -244,6 +238,7 @@ function updateReducer(state=initialState.update, action){
                     message: action.payload.message,
                     buttonMessage: action.payload.buttonMessage,
                     next: action.payload.next,
+                    value: action.payload.value,
                 }
             }
         case HIDE_CONFIRMATION:
@@ -251,13 +246,14 @@ function updateReducer(state=initialState.update, action){
                 ...state,
                 confirmation: {
                     on: false,
-                    id: 0,
+                    id: "", // 0から""に変えたバグ起きる可能性あり
                     action: "",
                     title: "",
                     caution: "",
                     message: "",
                     buttonMessage: "",
                     next: "",
+                    value: "",
                 }
             }
         default:
@@ -303,25 +299,6 @@ function categoryReducer(state=initialState.category, action) {
             return state
     }
 }
-
-// function responseReducer(state=initialState.response, action) {
-//     switch(action.type){
-//         case STAR_ON:
-//             console.log("STAR HAS BEEN CLICKED")
-//             return {
-//                 ...state,
-//                 starOn: true
-//             }
-//         case STAR_OFF:
-//             console.log(("STAR HAS BEEN UNCLICKED"))
-//             return {
-//                 ...state,
-//                 starOn: false
-//             }
-//         default:
-//             return state
-//     }
-// }
 
 function searchReducer(state=initialState.search, action) {
     switch(action.type) {
@@ -381,7 +358,7 @@ function authReducer(state=initialState.auth, action) {
 export default combineReducers({
     auth: authReducer,
     // form: reduxForm,
-    // response: responseReducer,
+    profile: profileReducer,
     search: searchReducer,
     category: categoryReducer,
     nudge: nudgeReducer,

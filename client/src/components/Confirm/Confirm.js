@@ -11,6 +11,8 @@ import AddColumn from "../Util/AddColumn"
 import Action from "../Draft/Action/Action"
 import Preview from "../Draft/Action/Preview"
 import Index from "../Draft/Action/Index"
+import TextArea from "../Profile/Info/TextArea/TextArea"
+import Thumb from "../Profile/Info/Thumb/Thumb"
 
 import { IoMdClose } from "react-icons/io"
 
@@ -29,7 +31,7 @@ class Confirm extends Component {
             buttonMessage: "",
             next: "",
 
-            // postAction用にdispatchするvalue(this.state.index)
+            // postAction用にdispatchするvalue(this.state.index && profile textarea)
             value: {},
 
             // Selectされたdraftを保存: [{_: true}, {_: false}]の形
@@ -46,7 +48,7 @@ class Confirm extends Component {
 
     componentDidMount() {
 
-        const {id, action, title, caution, message, buttonMessage, next } = this.props.update.confirmation
+        const { id, action, title, caution, message, buttonMessage, next, value } = this.props.update.confirmation
 
         this.setState({
             id: id,
@@ -56,6 +58,7 @@ class Confirm extends Component {
             caution: caution,
             buttonMessage: buttonMessage,
             next: next,
+            value: value,
         })
     }
 
@@ -105,7 +108,7 @@ class Confirm extends Component {
                     id: cleanedIds,
                     action: "DRAFT_UPLOAD_SELECT",
                     title: "挿入位置の決定",
-                    message: "　",
+                    message: "", // "　"から変えたのでバグ起きるかもしれない
                     caution: "",
                     buttonMessage: "次の画面へ",
                     next: next,
@@ -201,6 +204,20 @@ class Confirm extends Component {
 
     renderContent = (id, action) => {
         switch(action){
+            case "SELF_INTRO":
+                return (
+                    <TextArea
+                        value={this.state.value}
+                        handleChange={(e) => this.setState({ value: e.target.value })}
+                    />
+                )
+            case "SELF_IMAGE":
+                return (
+                    <Thumb
+                        value={this.state.value}
+                        handleChange={(img) => this.setState({ value: img })}
+                    />
+                )
             case "GIVE_FEEDBACK":
                 return (
                     <Report
@@ -393,9 +410,10 @@ const ConfirmIcon = styled(IoMdClose)`
     cursor: pointer;
 `
 
-function mapStateToProps(state) {
+function mapStateToProps({update, auth}) {
     return {
-        update: state.update
+        update,
+        auth
     }
 }
 

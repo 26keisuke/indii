@@ -70,6 +70,14 @@ class Post extends PureComponent {
         }
     }
 
+    handleCollapseClick = (e) => {
+        e.preventDefault()
+        this.setState({
+            isOpened: !this.state.isOpened,
+            changed: true,
+        })
+    }
+
     actionRender = (action) => {
         switch(action){
             case "CREATE_POST":
@@ -178,6 +186,7 @@ class Post extends PureComponent {
                         <Response
                             postId={this.props.id}
                             wrapperStyle={wrapperStyle}
+                            isOpened={this.state.isOpened}
                         />
                     </ResponseWrapper>
                     </Collapse>

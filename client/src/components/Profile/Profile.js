@@ -1,24 +1,28 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
-import axios from "axios"
 
-import ProfileTop from "./ProfileTop"
+import * as actions from "../../actions"
+
+import ProfileTop from "./Info/Info"
 import ProfileTopic from "./ProfileTopic"
 import ProfilePost from "./ProfilePost"
 import ProfileFollow from "./ProfileFollow"
 
-
-import sample from "../../images/sample0.jpg"
-
 import "./Profile.css"
+
+const Wrapper = styled.div`
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+`
 
 class Profile extends Component {
 
     constructor(props){
         super(props)
         this.state = {
-            user: {},
             isThisUser: false,
             toggle: {
                 owner: true,
@@ -31,8 +35,19 @@ class Profile extends Component {
         this.getProfile()
     }
 
+    componentDidUpdate(prevProps) {
+        if(prevProps.profile.user !== this.props.profile.user) {
+            if(this.props.profile.user._id === this.props.auth.info._id) {
+                this.setState({
+                    isThisUser: true,
+                })
+            }
+        }
+    }
+
     setElement = (target) => {
         this.setState({
+            ...this.state,
             toggle: {
                 owner: false,
                 favoriteTopic: false,
@@ -40,64 +55,60 @@ class Profile extends Component {
                 follows: false,
                 followers: false,
             }
-        })
-        this.setState({
-            toggle: {
-                [target]: true,
-            }
+        }, () => {
+            this.setState({
+                ...this.state,
+                toggle: {
+                    ...this.state.toggle,
+                    [target]: true,
+                }
+            })
         })
     }
 
     getProfile = () => {
-        if(this.props.match.params.id && this.props.auth.info._id) {
-            axios.get(`/api/profile/${this.props.match.params.id}`)
-            .then(user => {
-                this.setState({user})
-                this.isThisUser()
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        if(this.props.match.params.id) {
+            this.props.fetchProfile(this.props.match.params.id)
         }
     }
 
-    isThisUser = () => {
-        if(this.props.match.params.id === this.props.auth.info._id) { this.setState({ isThisUser: true }) }
-    }
-
     render() {
+
+        const { isThisUser, toggle } = this.state
+
         return (
-            <div className="profile">
+            <Wrapper>
+                { !!this.props.profile.user._id 
+                ?
                 <ProfileTop
-                    isThisUser={this.state.isThisUser}
-                    familyName={"飯塚"}
-                    givenName={"啓介"}
-                    job={"Chief株式会社 CEO"}
-                    intro={"Chief株式会社のCEOです。よろしくお願いします。大手製薬会社のMerck & Co.は2017年にランサムウェア（身代金要求型マルウェア）「NotPetya」による攻撃を受け、10億ドルもの損失を被った。同社はこの経験を受け、将来的な攻撃に対する耐性を高めるため、広範にわたってネットワークの俊敏性を高める対策に着手した。"}
-                    photo={sample}
-                    sns={["twitter", "github", "personal"]}
-                    posts={123}
-                    edits={1623}
-                    follows={82}
-                    followers={423}
+                    skeleton={false}
+                    isThisUser={isThisUser}
                     setElement={this.setElement}
-                    toggle={this.state.toggle}
+                    toggle={toggle}
                 />
-                { this.state.toggle.owner ? <ProfilePost/> : "" }
-                { this.state.toggle.favoriteTopic ? <ProfileTopic/> : "" }
-                { this.state.toggle.favoritePost ? <ProfilePost/> : "" }
-                { this.state.toggle.follows ? <ProfileFollow/> : "" }
-                { this.state.toggle.followers ? <ProfileFollow/> : "" }
-            </div>
+                :
+                <ProfileTop 
+                    skeleton={true}
+                    setElement={this.setElement}
+                    toggle={toggle}
+                />
+                }
+                { toggle.owner ? <ProfilePost/> : "" }
+                { toggle.favoriteTopic ? <ProfileTopic/> : "" }
+                { toggle.favoritePost ? <ProfilePost/> : "" }
+                { toggle.follows ? <ProfileFollow/> : "" }
+                { toggle.followers ? <ProfileFollow/> : "" }
+            </Wrapper>
         )
     }
 }
 
 
-function mapStateToProps({auth}) {
+function mapStateToProps({auth, profile}) {
     return {
-        auth
+        auth,
+        profile
     }
 }
 
-export default connect(mapStateToProps)(Profile)
+export default connect(mapStateToProps, actions)(Profile)
