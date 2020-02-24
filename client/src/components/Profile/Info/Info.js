@@ -3,11 +3,15 @@ import { FaPen, FaImage } from "react-icons/fa"
 import styled, { css, keyframes } from "styled-components"
 import Skeleton from "react-loading-skeleton"
 import { connect } from "react-redux"
+import axios from "axios"
 
 import * as actions from "../../../actions"
 
+import account from "../../../images/account.png"
+
 import InputText from "../../Util/InputText"
 import PeopleFollow from "../../PeopleFollow"
+import { sendMessage } from "../../Util/util"
 
 
 class ProfileTop extends Component {
@@ -87,6 +91,46 @@ class ProfileTop extends Component {
         this.props.enableGray();
     }
 
+    handleUserName = (e) => {
+        e.preventDefault()
+
+        if(this.state.userName.length > 25) {
+            sendMessage("fail", "入力可能な文字数を超えています", 3000, this.props)
+            return
+        }
+
+        const url = `/api/profile/${this.props.auth.info._id}/name`
+        axios.post(url, {userName: this.state.userName})
+            .then(() => {
+                this.props.fetchUser();
+                this.props.fetchProfile(this.props.auth.info._id);
+                sendMessage("success", "ユーザー名を変更しました。", 3000, this.props)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    handleComment = (e) => {
+        e.preventDefault()
+
+        if(this.state.comment.length > 30) {
+            sendMessage("fail", "入力可能な文字数を超えています", 3000, this.props)
+            return
+        }
+
+        const url = `/api/profile/${this.props.auth.info._id}/comment`
+        axios.post(url, {comment: this.state.comment})
+            .then(() => {
+                this.props.fetchUser();
+                this.props.fetchProfile(this.props.auth.info._id);
+                sendMessage("success", "一言コメントを変更しました。", 3000, this.props)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
     render() {
 
         const { skeleton, profile, setElement, isThisUser } = this.props
@@ -104,7 +148,7 @@ class ProfileTop extends Component {
                                 }
                                 { isThisUser && 
                                 <Pen 
-                                    right={150} 
+                                    marginLeft={20} 
                                     top={3} 
                                     onClick={() => this.setState({ 
                                         editName: true, editComment: false,
@@ -122,6 +166,7 @@ class ProfileTop extends Component {
                                 cancelAction={() => this.setState({ editName: false })}
                                 animationCoordinates={[-53, 13]}
                                 animationDuration={500}
+                                onSubmit={(e) => this.handleUserName(e)}
                             />
                             }
                         </AnimationWrapper>
@@ -133,7 +178,7 @@ class ProfileTop extends Component {
                                 }
                                 { isThisUser && 
                                 <Pen 
-                                    right={135} 
+                                    marginLeft={20} 
                                     top={2} 
                                     onClick={() => this.setState({
                                          editName: false, editComment: true,
@@ -145,12 +190,13 @@ class ProfileTop extends Component {
                             <InputText 
                                 maxLength={30}
                                 width={250}
-                                placeholder={"職業・経歴"}
+                                placeholder={"職業・経歴・一言"}
                                 value={this.state.comment}
                                 handleChange={(e) => this.handleChange(e, "comment")}
                                 cancelAction={() => this.setState({ editComment: false })}
                                 animationCoordinates={[-53, 13]}
                                 animationDuration={500}
+                                onSubmit={(e) => this.handleComment(e)}
                             />
                             }
                         </AnimationWrapper>
@@ -165,7 +211,7 @@ class ProfileTop extends Component {
                                 { isThisUser && 
                                 <Pen 
                                     right={0} 
-                                    bottom={0} 
+                                    bottom={-14} 
                                     onClick={this.handleTextArea}
                                 />
                                 }
@@ -175,7 +221,7 @@ class ProfileTop extends Component {
                     <TopRightWrapper>
                         {skeleton 
                         ? <Skeleton width={110} height={110}/> 
-                        : <TopRight src={profile.user.photo}/>
+                        : <TopRight src={profile.user.photo || account}/>
                         }
                         { isThisUser && 
                         <Image onClick={this.handleImageClick}>
@@ -208,7 +254,7 @@ class ProfileTop extends Component {
                     </BottomLeft>
                     <BottomRight>
                         <BtnWrapper>
-                            { (!skeleton && !isThisUser) && <PeopleFollow/> }
+                            <PeopleFollow show={!skeleton && !isThisUser}/>
                         </BtnWrapper>
                     </BottomRight>
                     <ToggleBox>
@@ -246,6 +292,8 @@ const AnimationWrapper = styled.div`
 
 const Pen = styled(FaPen)`
     position: absolute;
+    z-index: 1;
+    margin-left: ${props => String(props.marginLeft) + "px"};;
     right: ${props => String(props.right) + "px"};
     top: ${props => String(props.top) + "px"};
     bottom: ${props => String(props.bottom) + "px"};

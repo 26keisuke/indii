@@ -11,13 +11,13 @@ class Recommend extends Component {
                     <p>{this.props.content}</p>
                     <TrendInfo>
                         <TrendAuthor>
-                            <img src={this.props.authorImg}/>
+                            <img src={this.props.authorImg} alt={"ポストの作成者の写真"}/>
                             <p>{this.props.author}</p>
                         </TrendAuthor>
                         <p>{this.props.editDate}</p>
                     </TrendInfo>
                 </div>
-                <img src={this.props.postImg}/>
+                <img src={this.props.postImg} alt={"ポストの写真"}/>
             </TrendElement>
         )
     }

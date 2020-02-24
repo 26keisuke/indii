@@ -1,9 +1,6 @@
 // STAR_ONとSTAR_OFFのようにペアになっているやつはSTAR_TOGGLEで一つにまとめて、argumentでon offさせた方が楽だしわかりやすい
 
-export const USER_IS_LOGGEDIN = "USER_IS_LOGGEDIN"
-
-export const STAR_ON = "STAR_ON"
-export const STAR_OFF = "STAR_OFF"
+export const FETCH_USER = "FETCH_USER"
 
 export const FEEDBACK_SENT = "FEEDBACK_SENT"
 
@@ -53,10 +50,3 @@ export const FETCH_POST = "FETCH_POST"
 
 // PROFILE
 export const FETCH_PROFILE = "FETCH_PROFILE"
-
-
-// Emoji
-// export const EMOJI_TOGGLE = "EMOJI_TOGGLE"
-
-// STAR
-// export const STAR_TOGGLE = "STAR_TOGGLE"

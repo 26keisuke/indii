@@ -10,13 +10,19 @@ const AddColumnInput = styled.input`
     margin-bottom: 18px;
     font-family: ${props => props.theme.font};
 `
-
+// ここ変えてsetvalueに変えて以降確認できていないから後々エラー出る可能性あり（{App->confirm->ここ}からpropsでとってくるよりConfirmから直接propsで取ってくるようにした）
 class AddColumn extends Component {
+
+    constructor(props){
+        super(props)
+        this.props.setValue("")
+    }
+
     render () {
         return (
-            <form onSubmit={(e) => {e.preventDefault(); this.props.postAction(this.props.action, this.props.id)}}>
+            <form onSubmit={(e) => {e.preventDefault(); this.props.postAction(this.props.action, this.props.id, this.props.value)}}>
                 <AddColumnInput 
-                    onChange={(e) => this.props.handleChange(e)}
+                    onChange={(e) => this.props.setValue(e.target.value)}
                     type="text" 
                     placeholder="タイトルを入力..."/>
             </form>

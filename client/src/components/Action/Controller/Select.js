@@ -23,7 +23,7 @@ import Warning from "../../Search/Warning/Warning"
 
 import * as actions from "../../../actions"
 
-import { Box, BoxTransition, GreenMark, RedMark, Owner, OwnerIcon, ButtonWrapper, ButtonLeft } from "../Element/Box"
+import { Box, BoxTransition, GreenMark, RedMark, Owner, OwnerIcon, ButtonWrapper, ButtonLeft } from "../Element/Element"
 
 import getSuggestions from "../../__Mock__/method/getSuggestions"
 
@@ -41,7 +41,6 @@ class Select extends Component {
             blur: true,
         };
     };
-
     
     componentDidUpdate = (prevProps) => {
         if (prevProps.storage !== this.props.storage){ // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
@@ -112,12 +111,12 @@ class Select extends Component {
         this.props.setBackward(true);
         switch (this.props.index) {
             case "1":
-                break
+                return
             case "2":
                 this.props.setStep(0);
-                break
+                return
             default:
-                return null;
+                return
         }
     }
 
@@ -364,7 +363,7 @@ class Select extends Component {
                     </Owner>
                 )
             default:
-                return null;
+                return;
         }
     }
 

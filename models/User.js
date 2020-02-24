@@ -21,11 +21,11 @@ const userSchema = new Schema({
 
     followers: [{
         timeStamp: Date,
-        user: [{type: mongoose.Schema.Types.ObjectId, ref: "Draft"}],
+        user: {type: mongoose.Schema.Types.ObjectId, ref: "Draft"},
     }],
     follows: [{
         timeStamp: Date,
-        user: [{type: mongoose.Schema.Types.ObjectId, ref: "Draft"}],
+        user: {type: mongoose.Schema.Types.ObjectId, ref: "Draft"},
     }],
 
     draft: [{type: mongoose.Schema.Types.ObjectId, ref: "Draft"}],

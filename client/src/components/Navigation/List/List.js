@@ -38,11 +38,6 @@ class List extends Component {
     renderText = (index, selected) => {
         const { display } = this.props
         return display === "header" ? null : <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
-        // if(this.props.display === "header"){
-        //     return null
-        // } else {
-        //     return <TextSelected selected={!selected}>{screenName[index]}</TextSelected>
-        // }
     }
 
     renderList = () => {
@@ -63,12 +58,6 @@ class List extends Component {
 
             name !== "home" ? (url = "/" + name) : (url = "/")
 
-            // if (name !== "home") {
-            //     url = "/" + name;
-            // } else {
-            //     url = "/"
-            // }
-            
             return (
                 <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name)}>
                     <SelectBar selected={cate[name]}/>

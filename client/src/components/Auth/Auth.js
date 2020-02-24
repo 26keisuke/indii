@@ -4,7 +4,7 @@ import styled, { css, keyframes } from "styled-components"
 import axios from "axios"
 import { connect } from "react-redux"
 
-import { validateEmail } from "../Util/util"
+import { validateEmail, sendMessage } from "../Util/util"
 
 import * as actions from "../../actions"
 
@@ -13,9 +13,6 @@ import LogIn from "./LogIn/LogIn"
 
 import google from "../../images/google-logo.png"
 import facebook from "../../images/facebook-logo.png"
-
-
-let token;
 
 class Auth extends PureComponent {
 
@@ -56,10 +53,6 @@ class Auth extends PureComponent {
                 signBtn: !this.state.signBtn,
             })
         }
-    }
-
-    setRemember = () => {
-        this.setState({remember: !this.state.remember})
     }
 
     handleLogInChange = (e, type) => {
@@ -160,21 +153,30 @@ class Auth extends PureComponent {
 
     handleSubmit = (e, type) => {
         e.preventDefault()
+
+        const { signUp, logIn, remember } = this.state
+        
+
         if(type === "signUp") {
 
+            if(this.state.signUp.userName.length > 25) {
+                sendMessage("fail", "ユーザー名の長さが上限を超えています。")
+                return
+            }
+
             const value = {
-                username: this.state.signUp.userName,
-                email: this.state.signUp.email,
-                password: this.state.signUp.password,
+                username: signUp.userName,
+                email: signUp.email,
+                password: signUp.password,
             }
 
             this.props.postAction("SIGN_UP", "", value)
 
         } else if (type === "logIn") {
             const value = {
-                email: this.state.logIn.email,
-                password: this.state.logIn.password,
-                remember: this.state.remember,
+                email: logIn.email,
+                password: logIn.password,
+                remember: remember,
             }
 
             this.props.postAction("LOG_IN", "", value)
@@ -188,9 +190,9 @@ class Auth extends PureComponent {
                 postAction={this.props.postAction}
                 handleLogInChange={this.handleLogInChange}
                 handleSubmit={this.handleSubmit}
-                setRemember={this.setRemember}
+                setRemember={() => this.setState({remember: !this.state.remember})}
                 logInStates={this.state.logIn}
-                rememberState={this.state.remember}
+                remember={this.state.remember}
                 error={this.props.error}
             />
         )

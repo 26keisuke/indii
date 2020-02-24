@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
-// import { reducer as reduxForm } from "redux-form";
 
-import { USER_IS_LOGGEDIN,
+import { FETCH_USER,
          ON_SEARCH, OFF_SEARCH, 
          RESET_CATEGORY, SET_CATEGORY,
          NUDGE_ADD, NUDGE_CHECK,
@@ -331,7 +330,7 @@ function searchReducer(state=initialState.search, action) {
 
 function authReducer(state=initialState.auth, action) {
     switch(action.type) {
-        case USER_IS_LOGGEDIN:
+        case FETCH_USER:
             if(action.payload) {
                 return {
                     ...state,
@@ -357,7 +356,6 @@ function authReducer(state=initialState.auth, action) {
 
 export default combineReducers({
     auth: authReducer,
-    // form: reduxForm,
     profile: profileReducer,
     search: searchReducer,
     category: categoryReducer,

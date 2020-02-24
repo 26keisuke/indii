@@ -727,7 +727,7 @@ input:focus{
 
 
 
-
+/* 
 
 [type="checkbox"]:checked + label,
 [type="checkbox"]:not(:checked) + label
@@ -747,9 +747,9 @@ input:focus{
     width: 16px;
     height: 16px;
     border: 1px solid #ddd;
-    /* border-radius: 100%; */
     background: #fff;
 }
+
 [type="checkbox"]:checked + label:after,
 [type="checkbox"]:not(:checked) + label:after {
     content: '';
@@ -778,7 +778,7 @@ input:focus{
 [type="checkbox"]:not(:checked) {
     position: absolute;
     left: -9999px;
-}
+} */
 
 /*=======*/
 

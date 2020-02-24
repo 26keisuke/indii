@@ -9,11 +9,11 @@ import close_gray from "../../../images/close-gray.png"
 import tick_gray from "../../../images/tick-gray.png"
 import close from "../../../images/close-red.png"
 import tick from "../../../images/tick.png"
-import down from "../../../images/down.png";
 
 import PeopleFollow from "../../PeopleFollow"
 import Back from "../../Util/Back"
 import Feedback from "../Feedback/Feedback"
+import ArrowSpin from "../../Util/ArrowSpin"
 
 import { Space } from "../../Theme"
 
@@ -89,14 +89,13 @@ class Confirm extends Component {
                 <Space height="10px" backgroundColor="#f9f9f9"/>
                 <ConfirmBox>
                     <CollapseWrapper>
-                        <div>
-                            <p onClick={this.handleCollapseClick}></p>
-                            <CollapseBtn 
-                                src={down} 
-                                changed={this.state.btnChanged}
-                                isClosed={this.state.isClosed}
-                            />
-                        </div>
+                        <ArrowSpin
+                            size={40}
+                            rotate={90}
+                            handleClick={this.handleCollapseClick}
+                            changed={this.state.btnChanged}
+                            isOpened={!this.state.isClosed}
+                        />
                         <p onClick={this.handleCollapseClick}>
                             {this.state.isClosed ?  "基本情報を表示する" : "基本情報を隠す"}
                         </p>
@@ -461,48 +460,48 @@ const ConfirmText = styled.div`
     }
 `
 
-const spin_1 = keyframes`
-    from {
-        transform: rotate(270deg)
-    }
-    to {
-        transform: rotate(90deg)
-    }
-`
+// const spin_1 = keyframes`
+//     from {
+//         transform: rotate(270deg)
+//     }
+//     to {
+//         transform: rotate(90deg)
+//     }
+// `
 
-const spin_2 = keyframes`
-    from {
-        transform: rotate(90deg)
-    }
-    to {
-        transform: rotate(270deg)
-    }
-`
+// const spin_2 = keyframes`
+//     from {
+//         transform: rotate(90deg)
+//     }
+//     to {
+//         transform: rotate(270deg)
+//     }
+// `
 
-const CollapseBtn = styled.img`
-    width: 13px;
-    height: 13px;
-    margin-right: 6px;
-    transform: rotate(90deg);
-    pointer-events: none;
-    top:0px;
-    right:0px;
+// const CollapseBtn = styled.img`
+//     width: 13px;
+//     height: 13px;
+//     margin-right: 6px;
+//     transform: rotate(90deg);
+//     pointer-events: none;
+//     top:0px;
+//     right:0px;
 
-    ${props => props.changed
-    ? !props.isClosed
-    ? css`
-    animation-name: ${spin_1};
-    animation-duration: 400ms;
-    animation-fill-mode: forwards;
-    `
-    : css`
-    animation-name: ${spin_2};
-    animation-duration: 400ms;
-    animation-fill-mode: forwards;
-    `
-    : css`
-    `}
-`
+//     ${props => props.changed
+//     ? !props.isClosed
+//     ? css`
+//     animation-name: ${spin_1};
+//     animation-duration: 400ms;
+//     animation-fill-mode: forwards;
+//     `
+//     : css`
+//     animation-name: ${spin_2};
+//     animation-duration: 400ms;
+//     animation-fill-mode: forwards;
+//     `
+//     : css`
+//     `}
+// `
 
 const SubmitBtn = styled.div`
     display: flex;

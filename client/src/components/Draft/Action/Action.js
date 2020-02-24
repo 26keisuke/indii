@@ -26,10 +26,11 @@ class DraftAction extends Component {
 
     renderDraft = () => {
 
-        const mapped = this.props.draft.onEdit.map((elem) => {
-            if ((!elem.isDeleted) && (!elem.isUploaded)) {
+        const mapped = this.props.draft.onEdit
+            .filter(elem => (!elem.isDeleted) && (!elem.isUploaded))
+            .map((elem) => {
                 return (
-                    <DraftElement key={elem._id} onClick={() => this.selectDraft(elem._id)}>
+                    <DraftElement key={elem._id} onClick={() => this.selectDraft(elem._id, elem.topic)}>
                         <img src={elem.postImg ? elem.postImg.image : elem.topicSquareImg.image} alt={"ドラフトが傘下となっているトピックの写真"}/>
                         <div>
                             <p>{elem.postName}</p>
@@ -43,14 +44,38 @@ class DraftAction extends Component {
                         }
                     </DraftElement>
                 )
-            }
-        })
+            })
 
         return mapped;
     }
 
-    selectDraft = (idx) => {
+    // 同じトピックのものは投稿できない
+    topicLookup = (idx, topicId) => {
+
+        // 同じ下書きのtoggleはすぐに許可する
+        if(this.state.selected[idx] === true) { return [] }
+
+        const res = Object.keys(this.state.selected)
+            .filter(key => this.state.selected[key] === true)   // 既にfalseのものは省く
+            .map(key => {
+                const filtered = this.props.draft.onEdit.filter(draft => (!draft.isDeleted && !draft.isUploaded))
+                for(var l=0; l < filtered.length; l++){
+                    if(filtered[l]._id === key){
+                        if(filtered[l].topic === topicId){
+                            return 1
+                        }
+                    }
+                }
+            })
+
+        return res
+    }
+
+    selectDraft = (idx, topicId) => {
         var counter = 0
+
+        const res = this.topicLookup(idx, topicId)
+        if(res.length > 0) { return }
 
         if ((this.state.selected[idx] === false) || (this.state.selected[idx] === undefined)) {
             counter = this.state.counter + 1

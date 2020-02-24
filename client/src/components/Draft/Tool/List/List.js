@@ -120,8 +120,9 @@ class List extends Component {
     }
 
     renderSection = (ref) => {
-        const res = Object.entries(ref).map((section, index) => {
-            if(section[1]){
+        const res = Object.entries(ref)
+            .filter(section => !!section[1])
+            .map((section, index) => {
                 return (
                     <RefSection key={String(ref._id) + String(index)}>
                         { section[0] !== "_id"
@@ -141,25 +142,23 @@ class List extends Component {
                         }
                     </RefSection>
                 )
-            }
-        })
+            })
         return res;
     }
 
     renderRef = () => {
-        var counter = 0
-        const res = this.props.reference.map(ref => {
-            if (!ref.isDeleted) {
-                counter++
+        const res = this.props.reference
+            .filter(ref => !ref.isDeleted)
+            .map((ref, index) => {
                 return(
                     <RefElement key={ref._id}>
-                        <div>[{counter}]</div>
+                        <div>[{index}]</div>
                         <div>
                             {this.renderSection(ref)}
                         </div>
+                        { !this.props.readOnly &&
                         <ShowMoreWrapper>
                             <ShowMore
-                                // ref={this.moreRef}
                                 ref={this.setRef}
                                 handleClick={() => this.handleClick(ref._id)}
                                 show={this.state.isOpened === ref._id}
@@ -170,11 +169,10 @@ class List extends Component {
                                 action={[() => this.deleteRef(ref._id)]}
                             />
                         </ShowMoreWrapper>
+                        }
                     </RefElement>
                 )
-            }
-        })
-
+            })
         return res;
     }
 

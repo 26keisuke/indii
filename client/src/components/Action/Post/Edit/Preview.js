@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 import * as actions from "../../../../actions"
 
 import { Box, BoxTransition,
-         PreviewSection, PreviewTitle, PreviewUnderline,
+         Section,
          ButtonWrapper, ButtonLeft, ButtonRight,
-         FinalCheck } from "../../Element/Box"
+         FinalCheck } from "../../Element/Element"
 import { Space } from "../../../Theme"
 
 class EditPreviewTopic extends Component {
@@ -44,19 +44,8 @@ class EditPreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <PreviewSection>
-                            <div/>
-                            <p>トピック名</p>
-                        </PreviewSection>
-                        <PreviewTitle>{this.props.selectedTopic.name}</PreviewTitle>
-                        <PreviewUnderline/>
-
-                        <PreviewSection>
-                            <div/>
-                            <p>ポスト名</p>
-                        </PreviewSection>
-                        <PreviewTitle>{this.props.selectedPost.title}</PreviewTitle>
-                        <PreviewUnderline/>
+                        <Section title={"トピック名"} content={this.props.selectedTopic.name}/>
+                        <Section title={"ポスト名"} content={this.props.selectedPost.title}/>
                         
                         <FinalCheck>このポストを編集しますか？<span></span></FinalCheck>
                         <ButtonWrapper>

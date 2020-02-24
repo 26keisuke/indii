@@ -122,7 +122,7 @@ class DraftNavigation extends Component {
                 </DraftDelete>
                 <DraftUpload　onClick={this.uploadDraft}>
                     <p>アップロード</p>
-                    <img src={upload}/>
+                    <img src={upload} alt={"アップロード画面へと移行するボタン"}/>
                 </DraftUpload>
             </DraftTop>
         )
@@ -137,16 +137,16 @@ class DraftNavigation extends Component {
                 { counter > 0 ? <Border bottom={true}/> : "" }
                 { ((this.props.draft.nounce === this.state.id) || (counter > 0)) ? "" : <Draft draft={""}/>}
                 {
-                    this.props.draft.onEdit.map(elem => {
-                        if((!elem.isDeleted) && (!elem.isUploaded)) {
+                    this.props.draft.onEdit
+                        .filter(elem => ((!elem.isDeleted) && (!elem.isUploaded)))
+                        .map(elem => {
                             return (
                                 <Draft
                                     key={elem._id}
                                     draft={elem}
                                 />
                             )
-                        }
-                    })
+                        })
                 }
             </div>
         )

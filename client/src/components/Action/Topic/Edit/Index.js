@@ -22,10 +22,6 @@ const Wrapper = styled.div`
 `
 
 class InnerList extends PureComponent {
-    constructor(props) {
-        super(props)
-    }
-
     render () {
         const { column, taskMap, index } = this.props;
         const tasks = column.taskIds.map(taskId => (taskMap[taskId]));
@@ -45,7 +41,7 @@ class EditIndexTopic extends Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if(prevProps.columnName != this.props.columnName){
+        if(prevProps.columnName !== this.props.columnName){
             this.addNewIndex()
         }
     }

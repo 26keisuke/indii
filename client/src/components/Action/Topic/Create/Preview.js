@@ -6,12 +6,11 @@ import axios from "axios"
 import * as actions from "../../../../actions"
 
 import {Box, BoxTransition,
-    PreviewSection, PreviewTitle, PreviewUnderline,
+    Title, Section, PreviewList,
     ButtonWrapper, ButtonLeft, ButtonRight,
     FinalCheck,
-    PreviewList,
     TagElement,
-    FriendWrapper, FriendNone } from "../../Element/Box"
+    FriendWrapper, FriendNone } from "../../Element/Element"
 
 import { Space } from "../../../Theme"
 import Image from "../../Preview/Image"
@@ -87,37 +86,25 @@ class CreatePreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <PreviewSection>
-                            <div/>
-                            <p>トピック名</p>
-                        </PreviewSection>
-                        <PreviewTitle>{topicName}</PreviewTitle>
-                        <PreviewUnderline/>
-                        <PreviewSection>
-                            <div/>
-                            <p>トピックの画像</p>
-                        </PreviewSection>
-                        
+                        <Section title={"トピック名"} content={topicName}/>
+
+                        <Title title={"トピックの画像"}/>                        
                         <Image 
                             mobileImg={mobileImg}
                             squareImg={squareImg}
                             rectangleImg={rectangleImg}
                         />
 
-                        <PreviewSection>
-                            <div/>
-                            <p>このトピックに関連するタグ</p>
-                        </PreviewSection>
+                        <Title title={"このトピックに関連するタグ"}/>
                         <PreviewList>
                             {this.renderTags()}
                         </PreviewList>
-                        <PreviewSection>
-                            <div/>
-                            <p>このトピックに招待するフォロワー</p>
-                        </PreviewSection>
+
+                        <Title title={"このトピックに招待するフォロワー"}/>
                         <PreviewList>
                             {this.renderFriends()}
                         </PreviewList>
+
                         <FinalCheck>この内容でよろしいですか？<span>(作成後はいつでもトピックを消すことができます。)</span></FinalCheck>
                         <ButtonWrapper>
                             <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>

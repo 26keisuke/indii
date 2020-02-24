@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, ConfigUnderline } from "../../Element/Box"
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, ConfigUnderline } from "../../Element/Element"
 import ToggleBtn from "../../../Util/ToggleBtn"
 
 class CreateConfigurationPost extends Component {

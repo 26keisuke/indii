@@ -54,7 +54,7 @@ class PeopleFeed extends Component {
                     <p>{this.props.job}</p>
                     <p>{this.props.intro}</p>
                 </div>
-                <PeopleFollow/>
+                <PeopleFollow id={this.props.id}/>
             </PeopleElement>
         )
     }

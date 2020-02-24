@@ -6,7 +6,7 @@ import BraftEditor from 'braft-editor'
 import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
 
-import sample from "../../../images/sample0.jpg";
+import account from "../../../images/account.png"
 
 import Response from "../../Util/Response"
 
@@ -36,12 +36,14 @@ class Post extends PureComponent {
 
         if(this.props.content) {
 
+            // このように個別でやるか、heightで今日席的に区切り、残りはopacityとかでぼやかすか
+
             // filter out images
             var images = document.getElementsByClassName("bf-image")
             if(Object.keys(images).length > 0) {
-                for(var k in images) {
-                    if (images[k].style){
-                        images[k].style.display = "none"
+                for(var j in images) {
+                    if (images[j].style){
+                        images[j].style.display = "none"
                     }
                 }
             }
@@ -58,9 +60,9 @@ class Post extends PureComponent {
 
             var alignRight = document.getElementsByClassName("bfa-right")
             if(Object.keys(alignRight).length > 0) {
-                for(var k in alignRight) {
-                    if (alignRight[k].style){
-                        alignRight[k].style.display = "none"
+                for(var l in alignRight) {
+                    if (alignRight[l].style){
+                        alignRight[l].style.display = "none"
                     }
                 }
             }
@@ -121,7 +123,9 @@ class Post extends PureComponent {
                     :
                     <PostTop>
                         <div>
-                            <img src={sample} alt={"このポストの作成者の写真"}/>
+                            <Link to={`/profile/${this.props.userId}`}>
+                                <img src={this.props.photo || account} alt={"このポストの作成者の写真"}/>
+                            </Link>
                             <div>
                                 <div>
                                     <p>{this.props.name}</p>
@@ -200,7 +204,7 @@ const wrapperStyle = {
     display: "flex",
     justifyContent: "flex-end",
     zIndex:2,
-    paddingTop:"15px",
+    paddingTop:"13px",
 }
 
 const PostBox = styled(Link)`
@@ -227,7 +231,7 @@ const PostTop = styled.div`
         flex-direction: row;
         align-items: center;
 
-        & > img {
+        & img {
             width: 37px;
             height: 37px;
             border-radius: 5px;
@@ -278,13 +282,6 @@ const ArrowWrapper = styled.div`
 
 const PostMiddle = styled.div`
 
-    & > p {
-        font-size: 12px;
-        font-weight: bold;
-        color: #767676;
-        cursor: pointer;
-    }
-
     & > a {
         margin-left: 1px;
         font-size: 13px;
@@ -299,10 +296,9 @@ const PostMiddle = styled.div`
 
     /* title */
     & > p {
-        font-size: 18px;
+        font-size: 16px;
         color: #1C1C1C;
         margin-bottom: 5px;
-        font-weight: bold;
     }
 
     & > div p{

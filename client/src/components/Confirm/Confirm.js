@@ -31,7 +31,7 @@ class Confirm extends Component {
             buttonMessage: "",
             next: "",
 
-            // postAction用にdispatchするvalue(this.state.index && profile textarea)
+            // postAction用にdispatchするvalue(自由に使っていい)
             value: {},
 
             // Selectされたdraftを保存: [{_: true}, {_: false}]の形
@@ -130,6 +130,20 @@ class Confirm extends Component {
         }
     }
 
+    setValue = (value, name) => {
+        if(!name) {
+            this.setState({ value: value })
+        } else {
+            this.setState({ 
+                ...this.state,
+                value: {
+                    ...this.state.value,
+                    [name]: value,
+                }
+            })
+        }
+    }
+
     setTransparent = () => {
         this.setState({ transparent: true })
     }
@@ -221,7 +235,8 @@ class Confirm extends Component {
             case "GIVE_FEEDBACK":
                 return (
                     <Report
-                        handleChange = {this.props.reportChange}
+                        setValue={this.setValue}
+                        value={this.state.value}
                     />
                 )
             case "ADD_COLUMN":
@@ -230,7 +245,8 @@ class Confirm extends Component {
                         id={id}
                         action={action}
                         postAction={this.postAction}
-                        handleChange={this.props.addColumnChange}
+                        setValue={this.setValue}
+                        value={this.state.value}
                     />
                 )
             case "DELETE_DRAFT":
@@ -328,7 +344,6 @@ const ConfirmButton = styled.div`
         color: white;
         border: none;
         height:30px;
-        /* width: 80px; */
         padding: 0px 20px;
         border-radius: 3px;
         margin-right: 20px;

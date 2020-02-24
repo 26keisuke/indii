@@ -101,7 +101,7 @@ class Index extends Component {
         const { topic } = this.state
 
         if(topic.posts) {
-            for (var k in topic.order) {
+            for (const k in topic.order) {
                 const column = topic.column.find(elem => elem._id === topic.order[k])
                 const id = column._id
                 const title = column.title
@@ -115,7 +115,7 @@ class Index extends Component {
                     >
                         <p>{k}</p>
                         <p>{title}</p>
-                        <img src={indent}/>
+                        <img src={indent} alt={"一段階階層下のポストを示すアイコン"}/>
                     </IndexElement>
                 )
 
@@ -136,7 +136,7 @@ class Index extends Component {
                         >
                             <p>{idx}</p>
                             <p>{postName}</p>
-                            <img src={indent}/>
+                            <img src={indent} alt={"一段階階層下のポストを示すアイコン"}/>
                         </IndexElement>
                     )
                 }

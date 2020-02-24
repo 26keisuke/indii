@@ -414,6 +414,7 @@ app.post("/api/resend", (req, res) => {
 app.get("/api/feed", (req, res) => {
     // Post.find({contribution: { $exists: true, $ne: [] }}).sort({contribution: 1}).limit(10)
     Post.find({lastEdited: { $exists: true }}).sort({lastEdited: -1}).limit(10)
+    .populate("creator")
     .then(posts => {
         res.send(posts)
     })
@@ -480,6 +481,39 @@ app.post("/api/profile/:userId/intro", (req, res) => {
         user.intro= req.body.intro
         user.save()
         res.send("Success")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+app.post("/api/profile/:userId/follow", (req, res) => {
+    User.findById(req.params.userId)
+    .then(target => {
+        if(req.body.follow) {
+            target.followers.push({ timeStamp: Date.now(), user: req.user.id})
+        } else {
+            target.followers.map((user, index) => {
+                if(String(user.user) === String(req.user.id)) {
+                    target.followers.splice(index, 1)
+                }
+            })
+        }
+        User.findById(req.user.id)
+        .then(subject => {
+            if(req.body.follow) {
+                subject.follows.push({ timeStamp: Date.now(), user: target.id })
+            } else {
+                subject.follows.map((user, index) => {
+                    if(String(user.user) === String(target.id)) {
+                        subject.follows.splice(index, 1)
+                    }
+                })
+            }
+            target.save()
+            subject.save()
+            res.send("Success")
+        })
     })
     .catch(err => {
         console.log(err)
@@ -570,7 +604,7 @@ app.post("/api/topic/:topicId/post", isLoggedIn, (req, res) => {
 })
 
 app.get("/api/post/:postId", (req, res) => {
-    Post.findById(req.params.postId).populate({path: "topic", populate:{ path: "rectangleImg"}}).exec()
+    Post.findById(req.params.postId).populate({path: "topic", populate:{ path: "rectangleImg"}}).populate("creator").exec()
     .then(post => {
         res.send(post)
     })

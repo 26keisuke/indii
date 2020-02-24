@@ -8,7 +8,7 @@ import { MdCheck } from "react-icons/md"
 
 import Warning from "../../../Search/Warning/Warning"
 
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../../Element/Box"
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../../Element/Element"
 
 import friends from "../../../__Mock__/data/friend"
 

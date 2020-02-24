@@ -7,6 +7,7 @@ import * as actions from "../../actions"
 
 import sample from "../../images/sample1.png"
 import sample0 from "../../images/sample0.jpg"
+import account from "../../images/account.png"
 
 import { SlashTitle } from "../Feed/Trend/Trend"
 import People from "../People/People"
@@ -17,7 +18,7 @@ import { Space } from "../Theme"
 import SkeletonBox from "./Skeleton/SkeletonBox"
 import Image from "./Image/Image"
 import Slider from "./Slider/Slider"
-import Navigation from "./Navigation/Navigation"
+// import Navigation from "./Navigation/Navigation"
 import Response from "../Util/Response"
 
 class Post extends Component {
@@ -56,6 +57,11 @@ class Post extends Component {
     }
 
     renderRight = () => {
+        
+        if(this.props.post.fetched.creator) {
+            var { _id, userName, photo, comment, intro } = this.props.post.fetched.creator
+        }
+
         return(
             <div>
                 <Image/>
@@ -64,28 +70,33 @@ class Post extends Component {
                 <TitleWrapper>
                     <SlashTitle>
                         <p>このポストの著者</p>
-                        <p>//////////////////////////////</p>
+                        <p>{"//////////////////////////////"}</p>
                     </SlashTitle>
                 </TitleWrapper>
                 <People
-                    id={"123456789"}
-                    name={"飯塚啓介"} 
-                    job={"Chief株式会社 CEO"} 
-                    intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなど。よろしくお願いします。"}
+                    id={_id}
+                    photo={photo || account}
+                    name={userName} 
+                    job={comment} 
+                    intro={intro}
+                    skeleton={!this.props.post.fetched.creator}
                 />
                 <TitleWrapper>
                     <SlashTitle>
                         <p>参照</p>
-                        <p>////////////////////////////////////////</p>
+                        <p>{"////////////////////////////////////////"}</p>
                     </SlashTitle>
                 </TitleWrapper>
-                <List
-                    reference={this.props.post.fetched.ref || []}
-                />
+                <ListWrapper>
+                    <List
+                        readOnly={true}
+                        reference={this.props.post.fetched.ref || []}
+                    />
+                </ListWrapper>
                 <TitleWrapper>
                     <SlashTitle>
                         <p>関連するポスト</p>
-                        <p>////////////////////////////////</p>
+                        <p>{"////////////////////////////////"}</p>
                     </SlashTitle>
                 </TitleWrapper>
                 <Recommend
@@ -139,6 +150,10 @@ const LeftWrapper = styled.div`
 
 const TitleWrapper = styled.div`
     margin-top: 20px;
+`
+
+const ListWrapper = styled.div`
+    margin-left: -10px;
 `
 
 const HeaderTitle = styled.h1`

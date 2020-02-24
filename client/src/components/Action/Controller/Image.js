@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react"
 import styled, { css } from "styled-components"
 
 import Upload from "../../Util/Upload"
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../Element/Box"
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../Element/Element"
 import { Space } from "../../Theme"
 import Crop from "../../Util/Crop"
 import { Radio } from "../../Filter/Filter"

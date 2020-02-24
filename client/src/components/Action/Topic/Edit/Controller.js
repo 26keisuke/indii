@@ -9,7 +9,7 @@ import Image from "../../Controller/Image"
 import Tag from "../../Tag/Tag"
 
 import Select from "../../Controller/Select"
-import topics from "../../../__Mock__/data/topic"
+// import topics from "../../../__Mock__/data/topic"
 
 import "./EditTopic.css"
 

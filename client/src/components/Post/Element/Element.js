@@ -98,13 +98,13 @@ class Post extends Component {
                     <p>{this.props.title}</p>
                     <p>{this.props.content}</p>
                     <div>
-                        <img src={star_pressed}/>
+                        <img src={star_pressed} alt={"ポストのいいねボタン"}/>
                         <p>{this.props.count}</p>
                         <p>最後の編集: {this.props.date}</p>
                     </div>
                 </div>
                 <div>
-                    <img src={this.props.img}/>
+                    <img src={this.props.img} alt={"ポストの画像"}/>
                 </div>
             </PostElement>
         )

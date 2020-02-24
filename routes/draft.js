@@ -31,7 +31,12 @@ router.post("/draft/upload", (req, res) => {
             
             const imgId = mongoose.Types.ObjectId();
 
-            const { topic, topicName, postName, postImg, content, config, topicRectangleImg, topicSquareImg, topicMobileImg } = draft
+            const { 
+                topic, topicName,
+                postName, postImg,
+                content, ref,
+                config, 
+                topicRectangleImg, topicSquareImg, topicMobileImg } = draft
 
             new Image({_id: imgId, image: postImg}).save()
 
@@ -53,6 +58,7 @@ router.post("/draft/upload", (req, res) => {
                 postImg: imgId,
                 index: newIndex,
                 content: content,
+                ref: ref,
                 creator: req.user.id,
                 creationDate: Date.now(),
                 lastEdited: Date.now(),

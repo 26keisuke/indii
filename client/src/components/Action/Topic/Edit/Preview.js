@@ -4,15 +4,13 @@ import { connect } from "react-redux";
 
 import * as actions from "../../../../actions"
 
-import sample from "../../../../images/sample1.png"
-
 import {Box, BoxTransition,
-        PreviewSection, PreviewTitle, PreviewUnderline,
+        Title, Section,
         ButtonWrapper, ButtonLeft, ButtonRight,
         FinalCheck,
         TagElement,
         PreviewList,
-        PreviewIndex, IndexBox } from "../../Element/Box"
+        PreviewIndex, IndexBox } from "../../Element/Element"
 
 import { Space } from "../../../Theme"
 import Image from "../../Preview/Image"
@@ -99,18 +97,9 @@ class CreatePreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <PreviewSection>
-                            <div/>
-                            <p>トピック名</p>
-                        </PreviewSection>
-                        <PreviewTitle>{this.props.topicName}</PreviewTitle>
-                        <PreviewUnderline/>
+                        <Section title={"トピック名"} content={this.props.topicName}/>
 
-                        <PreviewSection>
-                            <div/>
-                            <p>トピックの画像</p>
-                        </PreviewSection>
-                        
+                        <Title title={"トピックの画像"}/>
                         <Image
                             originalSquareImg={this.props.originalSquareImg}
                             originalRectangleImg={this.props.originalRectangleImg}
@@ -121,19 +110,12 @@ class CreatePreviewTopic extends Component {
                             editedSquareImg={this.props.editedSquareImg}
                         />
 
-                        <PreviewSection>
-                            <div/>
-                            <p>このトピックに関連するタグ</p>
-                        </PreviewSection>
+                        <Title title={"このトピックに関連するタグ"}/>
                         <PreviewList>
                             {this.renderTags()}
                         </PreviewList>
 
-                        <PreviewSection>
-                            <div/>
-                            <p>目次</p>
-                        </PreviewSection>
-
+                        <Title title={"目次"}/>
                         {this.renderIndex()}
                         
                         <FinalCheck>この内容で編集を反映してよろしいですか？<span></span></FinalCheck>

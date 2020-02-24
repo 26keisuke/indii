@@ -69,9 +69,9 @@ class Profile extends Component {
                         ?
                         photo
                         ?
-                        <Link to={`/profile/${_id}`}><img src={photo}/></Link>
+                        <Link to={`/profile/${_id}`}><img src={photo} alt={"ユーザーのプロフィール画像"}/></Link>
                         :
-                        <Link to={`/profile/${_id}`}><img src={account}/></Link>
+                        <Link to={`/profile/${_id}`}><img src={account} alt={"ユーザーのデフォルトのプロフィール画像"}/></Link>
                         :
                         ""
                     }

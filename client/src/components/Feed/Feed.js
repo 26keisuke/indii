@@ -52,7 +52,9 @@ class Feed extends Component {
                         <PostFeed
                             key={elem._id}
                             id={elem._id}
-                            name={"飯塚　啓介"}
+                            userId={elem.creator._id}
+                            photo={elem.creator.photo}
+                            name={elem.creator.userName}
                             action={"CREATE_POST"}
                             date={elem.lastEdited}
                             topic={elem.topicName}

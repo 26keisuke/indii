@@ -139,7 +139,6 @@ class SignUp extends Component {
     }
 }
 
-/* 今はわざと三つに分けてる後々変える可能性が高いから */
 const InputWrapper = styled.div`
     display: flex;
     flex-direction: row;

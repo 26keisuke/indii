@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-import sample from "../../images/sample0.jpg"
 import { Link } from "react-router-dom"
+import Skeleton from "react-loading-skeleton"
 
 import PeopleFollow from "../PeopleFollow"
 
@@ -60,16 +60,27 @@ class People extends Component {
             <Link to={"/profile/" + this.props.id}>
                 <PeopleElement>
                     <div>
-                        <img src={sample}/>
+                        {this.props.skeleton 
+                            ? <div style={{marginRight: "10px"}}><Skeleton width={37} height={37}/></div> 
+                            : <img src={this.props.photo}/>
+                        }
                         <div>
-                            <p>{this.props.name}</p>
-                            <p>{this.props.job}</p>
+                            {this.props.skeleton 
+                                ? <p><Skeleton width={100} height={16}/></p> 
+                                : <p>{this.props.name}</p>
+                            }
+                            {this.props.skeleton 
+                                ? <p><Skeleton width={175} height={16}/></p> 
+                                : <p>{this.props.job}</p>
+                            }
                         </div>
+                        {!this.props.skeleton &&
                         <div>
-                            <PeopleFollow/>
+                            <PeopleFollow id={this.props.id}/>
                         </div>
+                        }
                     </div>
-                    <p>{this.props.intro}</p>
+                    {this.props.skeleton ? <p><Skeleton count={4} width={360} height={18}/></p> : <p>{this.props.intro}</p>}
                 </PeopleElement>
             </Link>
         )

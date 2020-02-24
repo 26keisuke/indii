@@ -1,6 +1,30 @@
+import React, { Component } from "react"
 import styled, { keyframes, css } from "styled-components"
 import { IoMdCheckmark, IoMdClose } from "react-icons/io";
 import { FaUserCheck } from "react-icons/fa"
+
+export class Section extends Component {
+    render() {
+        return (
+            <div>   
+                <Title title={this.props.title}/>
+                <PreviewTitle>{this.props.content}</PreviewTitle>
+                <PreviewUnderline/>
+            </div>
+        )
+    }
+}
+
+export class Title extends Component {
+    render() {
+        return (
+            <PreviewSection>
+                <div/>
+                <p>{this.props.title}</p>
+            </PreviewSection>
+        )
+    }
+}
 
 const enter = keyframes`
     0%{opacity: 0; padding-left: 0%}

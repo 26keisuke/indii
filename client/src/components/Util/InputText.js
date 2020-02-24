@@ -27,7 +27,7 @@ class InputText extends Component {
     render () {
         return (
             <Wrapper coordinates={this.props.animationCoordinates} duration={this.props.animationDuration}>
-                <Input width={this.props.width} focus={this.state.focus}>
+                <Input width={this.props.width} focus={this.state.focus} onSubmit={(e) => this.props.onSubmit(e)}>
                     <p>{this.props.placeholder}</p>
                     { this.props.type !== "textarea" 
                     ?
@@ -142,6 +142,7 @@ const Input = styled.form`
 `
 
 InputText.propTypes = {
+    onSubmit: PropTypes.func,
     value: PropTypes.string,
     maxLength: PropTypes.number,
     handleChange: PropTypes.func,

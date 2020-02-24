@@ -1,10 +1,13 @@
-// 余計なstateは管理しないこと！confirmのstateはconfirm上で管理して、postActionのvalueとidで管理すること
+// confirmation renderの引数いらない。reduxで既に送られている
 
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import axios from "axios";
 
 import * as actions from "../actions";
+
+import { sendMessage } from "./Util/util"
 
 import Header from "./Header/Header";
 import Navigation from "./Navigation/Navigation";
@@ -42,14 +45,24 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
             // この二つは将来的にreact-transition-groupなどで完結にする
             // onExitのアニメーションを適用させるためにある
             confirmationCancel: false,
             logInFormShow: true,
 
-            logInError: false,
+            // ポストをレポートする際のradio button
+            problems: {
+                problem0: false,
+                problem1: false,
+                problem2: false,
+                problem3: false,
+                problem4: false,
+            },
 
+            // Action/Topic/Editのindexのやつ
+            addColumn: "",
+
+            logInError: false,
         }
         this.confirmRef = React.createRef()
         this.authRef = React.createRef()
@@ -140,7 +153,7 @@ class App extends Component {
                 this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
-                    this.props.sendFeedBack(id, value)
+                    this.props.sendFeedBack(id, this.state.problems)
                     return
                 } else {
                     this.props.disableGray();
@@ -150,7 +163,7 @@ class App extends Component {
             case "ADD_COLUMN":
                 this.startAction("confirm")
                 if (id){
-                    this.props.addColumn(id, value);
+                    this.props.addColumn(id, this.state.addColumn);
                 }
                 this.props.disableGray();
                 return
@@ -179,7 +192,7 @@ class App extends Component {
             case "DELETE_REF":
                 this.startAction("confirm")
                 if(id) {
-                    this.props.deleteRef(id)
+                    this.props.ConfirmWrapperdeleteRef(id)
                     return
                 } else {
                     this.props.disableGray()
@@ -217,7 +230,6 @@ class App extends Component {
                 this.startAction("logIn")
                 this.props.logIn(value)
                 return
-
             default:
                 this.startAction("confirm")
                 this.props.disableGray();
@@ -225,18 +237,29 @@ class App extends Component {
         }
     }
 
+    handleReportChange = (state) => {
+        this.setState({
+            ...this.state,
+            problems: state,
+        })
+    }
+
+    handleAddColumnChange = (e) => {
+        this.setState({
+            ...this.state,
+            addColumn: e.target.value
+        })
+    }
+
     renderMessage = () => {
-
-        const { type, message } = this.props.update.updateMessage
-
-        switch(type){
+        switch(this.props.update.updateMessage.type){
             case "success":
                 return (
-                    <Message type={"SUCCESS"} message={message}/>
+                    <Message type={"SUCCESS"} message={this.props.update.updateMessage.message}/>
                 )
             case "fail":
                 return (
-                    <Message type={"FAIL"} message={message}/>
+                    <Message type={"FAIL"} message={this.props.update.updateMessage.message}/>
                 )
             default:
                 return;
@@ -268,11 +291,14 @@ class App extends Component {
                             ref={this.confirmRef}
                             cancel={this.state.confirmationCancel}
                             postAction={this.postAction}
+                            reportChange={this.handleReportChange}
+                            addColumnChange={this.handleAddColumnChange}
                         />
                         }
                         { update.updateMessage.on && this.renderMessage()} 
                         <div className="fakebox">
                             <Route exact path="/" component={Feed} />
+                            <Route path="/profile" component={Profile} />
                             <Route exact path="/draft" render={() => (auth.loggedIn ? <Draft/> : <Redirect to="/"/>)} />
                             <Route path="/draft/edit/:id" component={DraftEditor} />
                             <Route path="/search" component={SearchResult} />
@@ -296,10 +322,10 @@ class App extends Component {
     }
 };
 
-function mapStateToProps({ update, auth }){
+function mapStateToProps(state){
     return {
-        update,
-        auth,
+        update: state.update,
+        auth: state.auth
     }
 }
 

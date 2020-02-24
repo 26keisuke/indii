@@ -9,6 +9,8 @@ import ShowMore from "./ShowMore"
 import Emoji from "./Emoji"
 import Star from "./Star"
 
+let ct = 0;
+
 class Response extends Component {
 
     constructor(props) {
@@ -23,20 +25,15 @@ class Response extends Component {
         }
         this.emojiRef = React.createRef();
         this.actionRef = React.createRef();
-
-        // もし既にfetchuserがcallされていてこのcomponentに戻ってきた場合はtrueになる
-        if(this.props.auth.loggedIn) {
-            this.props.fetchUser()
-            this.setUpdater() 
-        }
     }
 
-    componentDidUpdate() {
-        if(!this.props.isOpened) {
-            this.setState({
-                showMore: false,
-                showEmoji: false,
-            })
+    componentDidMount() {
+        // こいつが５回もコールされてるから、グローバルカウンターで一回にしてる
+        // もし既にfetchuserがcallされていてこのcomponentに戻ってきた場合はtrueになる => componentDidUpadateが通用しない
+        if(this.props.auth.loggedIn && (ct == 0)) {
+            this.props.fetchUser()
+            this.setUpdater() 
+            ct++
         }
     }
 
@@ -82,14 +79,23 @@ class Response extends Component {
         }, 5000)
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
+
+        if(prevProps.isOpened && !this.props.isOpened) {
+            this.setState({
+                showMore: false,
+                showEmoji: false,
+            })
+        }
+
         if (this.state.showEmoji || this.state.showMore) {
             document.addEventListener("mousedown", this.outsideClick)
         } else {
             document.removeEventListener("mousedown", this.outsideClick)
         }
 
-        // 初期のfetchUserだとloggedInはfalseからtrueに変わる
+        // 初期のfetchUserだとloggedInはfalseからtrueに変わる。
+        // componentDidMountでやれるのではないかと思うが、reduxのためできない => mountまでにpropsがupdateされない
         if (!prevProps.auth.loggedIn && this.props.auth.loggedIn){
             this.props.fetchUser()
             this.setUpdater()
@@ -110,9 +116,9 @@ class Response extends Component {
         if (prevProps.auth.info.postRating !== this.props.auth.info.postRating){
             const ls = this.props.auth.info.postRating;
             var rate = null;
-            for(var i = 0; i < ls.length; i++) {
-                if(ls[i].post === this.props.postId) {
-                    rate = ls[i].rate;
+            for(var j = 0; j < ls.length; j++) {
+                if(ls[j].post === this.props.postId) {
+                    rate = ls[j].rate;
                     break
                 };
             };

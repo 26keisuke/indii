@@ -7,7 +7,7 @@ const Upload = ( props ) => {
     const {file, setFile, storage, baseStyle, activeStyle, acceptStyle, rejectStyle, message, caution, onDropped} = props
 
     const {
-        acceptedFiles,
+        // acceptedFiles,
         getRootProps,
         getInputProps,
         isDragAccept, 
@@ -45,7 +45,12 @@ const Upload = ( props ) => {
         if(onDropped && ((file.preview !== null) && (file.preview !== undefined))) {
             onDropped(file.preview)
         }
-    },[storage, file])
+    },[
+        storage,
+        file, 
+        // こっからしたはいらないかもしれない
+        onDropped
+    ])
 
     const style = useMemo(() => ({
         ...baseStyle,
@@ -54,7 +59,13 @@ const Upload = ( props ) => {
         ...(isDragActive ? activeStyle : {})
     }), [
         isDragActive,
-        isDragReject
+        isDragReject,
+        // こっからしたはいらないかもしれない
+        acceptStyle,
+        activeStyle, 
+        baseStyle, 
+        isDragAccept,
+        rejectStyle,
     ]);
 
     return (

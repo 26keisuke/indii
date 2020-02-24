@@ -11,6 +11,8 @@ class Element extends Component {
         switch(action){
             case "EDIT_REQUEST":
                 return "あなたのポストへの編集要請を出しました。"
+            default:
+                return;
         }
     }
 
@@ -20,7 +22,7 @@ class Element extends Component {
                 <div className="notif">
                     <div className="notif-unread"/>
                     <div className="notif-profile">
-                        <img src={sample} className="notif-people-img"/>
+                        <img src={sample} className="notif-people-img" alt={"行動を起こした人のプロフィール写真"}/>
                         <div>
                             <p className="notif-people-name"><span>{this.props.name}</span>さんが、{this.renderAction(this.props.action)}</p>
                             <p className="notif-people-date">{this.props.date}</p>

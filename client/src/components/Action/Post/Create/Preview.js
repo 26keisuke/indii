@@ -6,10 +6,10 @@ import axios from "axios"
 import * as actions from "../../../../actions"
 
 import {Box, BoxTransition,
-        PreviewSection, PreviewTitle, PreviewUnderline,
+        Title, Section, PreviewTitle,
         ButtonWrapper, ButtonLeft, ButtonRight,
         FinalCheck,
-        PreviewConfig, ConfigUnderline } from "../../Element/Box"
+        PreviewConfig, ConfigUnderline } from "../../Element/Element"
 
 import { Space } from "../../../Theme"
 
@@ -66,25 +66,11 @@ class CreatePreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <PreviewSection>
-                            <div/>
-                            <p>トピック名</p>
-                        </PreviewSection>
-                        <PreviewTitle>{this.props.selectedTopic.topicName}</PreviewTitle>
-                        <PreviewUnderline/>
-
-                        <PreviewSection>
-                            <div/>
-                            <p>ポスト名</p>
-                        </PreviewSection>
-                        <PreviewTitle>{this.props.postName}</PreviewTitle>
-                        <PreviewUnderline/>
+                        <Section title={"トピック名"} content={this.props.selectedTopic.topicName}/>
+                        <Section title={"ポスト名"} content={this.props.postName}/>
                         
                         <form>
-                            <PreviewSection>
-                                <div/>
-                                <p>承認無しに変更を許可する</p>
-                            </PreviewSection>
+                            <Title title={"承認無しに変更を許可する"}/>
                             <PreviewConfig config={this.props.config.allowEdit}>
                                 <PreviewTitle>{this.props.config.allowEdit ? "許可" : "許可しない"}</PreviewTitle>
                                 <div>

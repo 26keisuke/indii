@@ -6,8 +6,8 @@ import Back from "../../../Util/Back";
 import EditPreviewPost from "./Preview"
 
 import Select from "../../Controller/Select"
-import topics from "../../../__Mock__/data/topic"
-import posts from "../../../__Mock__/data/post"
+// import topics from "../../../__Mock__/data/topic"
+// import posts from "../../../__Mock__/data/post"
 
 import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
@@ -65,7 +65,7 @@ class EditPost extends Component {
                         subTitle="ポスト名"
                         type="Match"
                         content="Post"
-                        data={posts}
+                        // data={posts}
                         helper="owner"
                         transition={true}
                         searchByVariable="title"
