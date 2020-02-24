@@ -138,7 +138,6 @@ class DraftNavigation extends Component {
                 { ((this.props.draft.nounce === this.state.id) || (counter > 0)) ? "" : <Draft draft={""}/>}
                 {
                     this.props.draft.onEdit
-                        .filter(elem => ((!elem.isDeleted) && (!elem.isUploaded)))
                         .map(elem => {
                             return (
                                 <Draft

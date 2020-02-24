@@ -12,7 +12,7 @@ const router = express.Router()
 router.get("/draft", (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            Draft.find({_id: {$in: user.draft}}).limit(10).populate("topicSquareImg").populate("postImg").exec()
+            Draft.find({_id: {$in: user.draft}, isDeleted: false, isUploaded: false}).populate("topicSquareImg").populate("postImg").exec()
             .then(draft => {
                 res.send(draft)
             })
@@ -38,7 +38,9 @@ router.post("/draft/upload", (req, res) => {
                 config, 
                 topicRectangleImg, topicSquareImg, topicMobileImg } = draft
 
-            new Image({_id: imgId, image: postImg}).save()
+            if(postImg){
+                new Image({_id: imgId, image: postImg}).save()
+            }
 
             var newIndex = index.slice()
             if(addColumn === true) {
@@ -51,11 +53,11 @@ router.post("/draft/upload", (req, res) => {
             const data = {
                 topic: topic,
                 topicName: topicName,
-                topicRectangleImg: topicRectangleImg.id,
-                topicSquareImg: topicSquareImg.id,
-                topicMobileImg: topicMobileImg.id,
+                topicRectangleImg: topicRectangleImg,
+                topicSquareImg: topicSquareImg,
+                topicMobileImg: topicMobileImg,
                 postName: postName,
-                postImg: imgId,
+                postImg: postImg ? imgId : undefined,
                 index: newIndex,
                 content: content,
                 ref: ref,
@@ -125,13 +127,14 @@ router.post("/draft/upload", (req, res) => {
                     } else {
 
                         const insertColumn = index[0]
-                        const insertIndex = index[1]
+                        const insertIndex = index[1] + 1
 
                         // topicElem.postsをupdate
-                        
+
                         for (var l in topicElem.posts) {
-                            if((topicElem.posts[l][0] === insertColumn) && (topicElem.posts[l][1] >= insertIndex)) {
-                                topicElem.posts[l][1] = topicElem.posts[l][1] + 1
+                            if((topicElem.posts[l].index[0] === insertColumn) && (topicElem.posts[l].index[1] >= insertIndex)) {
+                                // Warning: topicElemから.save()してもできないので、Postをもう一回取ってくるようにしている
+                                Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.1": 1}})
                             }
                         }
 

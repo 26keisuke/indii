@@ -56,12 +56,11 @@ class DraftAction extends Component {
         if(this.state.selected[idx] === true) { return [] }
 
         const res = Object.keys(this.state.selected)
-            .filter(key => this.state.selected[key] === true)   // 既にfalseのものは省く
+            .filter(key => this.state.selected[key] === true)
             .map(key => {
-                const filtered = this.props.draft.onEdit.filter(draft => (!draft.isDeleted && !draft.isUploaded))
-                for(var l=0; l < filtered.length; l++){
-                    if(filtered[l]._id === key){
-                        if(filtered[l].topic === topicId){
+                for(var l=0; l < this.props.draft.onEdit.length; l++){
+                    if(this.props.draft.onEdit[l]._id === key){
+                        if(this.props.draft.onEdit[l].topic === topicId){
                             return 1
                         }
                     }

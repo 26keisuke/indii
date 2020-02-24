@@ -325,7 +325,7 @@ export const fetchDraft = (id) => async (dispatch) => {
 
 const sendMessage = (type, message, duration, dispatch) => {
     dispatch(updateMessage(type, message));
-    setTimeout(() => resetMessage(), duration)
+    setTimeout(() => dispatch(resetMessage()), duration)
 }
 
 // exportを消したから後でバグ起きるかもしれない

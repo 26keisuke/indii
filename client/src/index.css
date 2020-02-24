@@ -727,8 +727,6 @@ input:focus{
 
 
 
-/* 
-
 [type="checkbox"]:checked + label,
 [type="checkbox"]:not(:checked) + label
 {
@@ -778,7 +776,7 @@ input:focus{
 [type="checkbox"]:not(:checked) {
     position: absolute;
     left: -9999px;
-} */
+}
 
 /*=======*/
 
