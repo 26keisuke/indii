@@ -51,7 +51,7 @@
     margin-left: 10px;
 }
 
-.topic-action-add-button{
+/* .topic-action-add-button{
     border: none;
     font-size: 11px;
     width: 85px;
@@ -61,7 +61,7 @@
     font-family: "Gennokaku Gothic";
     white-space: nowrap;
     background-color: #ffffff;
-}
+} */
 
 .topic-action-add-button:focus{
     outline:none;

@@ -50,6 +50,8 @@ class CreatePreviewTopic extends Component {
     };
 
     renderIndex = () => {
+        console.log(this.props.editedOrder)
+        console.log(this.props.editedPosts)
         return(
             <PreviewIndex>
                 <div>
@@ -105,9 +107,9 @@ class CreatePreviewTopic extends Component {
                             originalRectangleImg={this.props.originalRectangleImg}
                             originalMobileImg={this.props.originalMobileImg}
                             
-                            editedMobileImg={this.props.editedMobileImg}
-                            editedRectanlgeImg={this.props.editedRectanlgeImg}
-                            editedSquareImg={this.props.editedSquareImg}
+                            mobileImg={this.props.editedMobileImg}
+                            rectangleImg={this.props.editedRectangleImg}
+                            squareImg={this.props.editedSquareImg}
                         />
 
                         <Title title={"このトピックに関連するタグ"}/>

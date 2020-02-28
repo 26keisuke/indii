@@ -36,13 +36,6 @@ class CreateTopic extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                // return <CreateDecideTopic 
-                //         back={this.state.back} 
-                //         setBackward={this.setBackward} 
-                //         storage="createTopicName"
-                //         setTopicName={this.setTopicName} 
-                //         setStep={this.setStep}
-                //         />
                 return  <Select
                             placeholder="トピックを入力"
                             index="1"
@@ -128,12 +121,20 @@ class CreateTopic extends Component {
             topicName: name
         })
     }
-    setImage = (img, type) => {
-        const name = String(type) + "Img"
+    // setImage = (img, type) => {
+    //     const name = String(type) + "Img"
+    //     this.setState({
+    //         [name]: img
+    //     })
+    // }
+    setImage = (mobile, square, rectangle) => {
         this.setState({
-            [name]: img
+            mobileImg: mobile,
+            squareImg: square,
+            rectanlgeImg: rectangle,
         })
     }
+
 
     render() {
          

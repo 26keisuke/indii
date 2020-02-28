@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { IoIosMore } from "react-icons/io"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import HoverIcon from "./HoverIcon"
 
@@ -42,11 +42,13 @@ const ShowBox = styled(HoverIcon)`
         top: -12px;
         left: -14px;
 
-        &:hover ~ ${MoreBtn}{
-            animation-name: inflate;
-            animation-duration: 300ms;
-            animation-fill-mode: forwards;
-        }
+        ${props => props.hover && css`
+            &:hover ~ ${MoreBtn}{
+                animation-name: inflate;
+                animation-duration: 300ms;
+                animation-fill-mode: forwards;
+            }  
+        `}
     }
 
 `
@@ -58,10 +60,10 @@ const ShowMore = React.forwardRef((props, ref) => (
 class ShowMoreWrapped extends Component {
     render () {
 
-        const { innerRef, handleClick, show, left, bottom, action, actionName, shadow } = this.props
+        const { innerRef, handleClick, show, left, bottom, action, actionName, shadow, hover } = this.props
 
         return (
-            <ShowBox ref={innerRef} shadow={shadow}>
+            <ShowBox ref={innerRef} shadow={shadow} hover={hover}>
                 <p onClick={handleClick}></p>
                 <Action show={show} left={left} bottom={bottom}>
                     { action.map((elem, index) => 
@@ -77,6 +79,7 @@ class ShowMoreWrapped extends Component {
 
 ShowMore.defaultProps = {
     shadow: true,
+    hover: true,
 }
 
 export default ShowMore

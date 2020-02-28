@@ -9,7 +9,7 @@ import { FETCH_USER,
          ENABLE_GRAY, DISABLE_GRAY, 
          UPDATE_MESSAGE, RESET_MESSAGE,
          SHOW_CONFIRMATION, HIDE_CONFIRMATION,
-         ADD_COLUMN, 
+         ADD_COLUMN, REVERT_COLUMN,
          SHOW_LOGIN, HIDE_LOGIN,
          SEARCH_TOPIC, SEARCH_POST,
          FETCH_TOPIC,
@@ -56,7 +56,8 @@ const initialState = {
 
     },
     index: {
-        columnName: ""
+        columnName: "",
+        revert: false,
     },
     update: {
         fetching: false,
@@ -179,6 +180,11 @@ function indexReducer(state=initialState.index, action) {
             return {
                 ...state,
                 columnName: action.payload.name,
+            }
+        case REVERT_COLUMN:
+            return {
+                ...state,
+                revert: action.payload.trigger,
             }
         default:
             return state

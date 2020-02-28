@@ -75,6 +75,7 @@ class CreatePost extends Component {
                         setBackward={this.setBackward} 
                         setValue={this.setPost} 
                         setStep={this.setStep}
+                        topicId={this.state.selectedTopic._id}
                         />
             case 2:
                 return <CreateConfigurationPost

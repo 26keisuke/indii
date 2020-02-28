@@ -3,7 +3,7 @@
 // 同じように、CreatePostでスライド1から2に移る時に2の最初のrenderMarkやrenderWarningが効かない
 // ============
 
-// 将来的には、getSuggestionの中のreturn [{added: true}]の部分を再考する。ここのせいでより複雑になっている
+// 将来的には、getSuggestionの中のreturn [{added: true}]の部分を変える。ここのせいでより複雑になっている
 
 import React, { Component } from "react";
 import PropTypes from "prop-types"
@@ -39,41 +39,13 @@ class Select extends Component {
             value: localStorage.getItem(this.props.storage) || "",
             suggestions: [],
             blur: true,
-            showWarning: false,
-            warningId: "",
-            text: "",
-            mark: "",
         };
     };
-
-    componentDidMount() {
-        if (this.props.content === "Topic") {
-            this.setState({ text: "トピック" })
-        } else if (this.props.content === "Post") {
-            this.setState({ text: "ポスト" })
-        }
-    }
     
-    componentDidUpdate(prevProps, prevState) {
-
-        const flag = this.props.type === "Unique"
-        const renderWarning = flag ? this.renderUniqueWarning : this.renderMatchWarning;
-
-        const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
-
+    componentDidUpdate = (prevProps) => {
         if (prevProps.storage !== this.props.storage){ // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
             this.setState({
-                value: localStorage.getItem(this.props.storage) || "",
-                showWarning: false,
-                mark: "",
-            }, () => {
-                if(this.props.content === "Topic") {
-                    this.props.searchTopic(this.props.type, this.state.value)  
-                } else if (this.props.content === "Post") {
-                    this.props.searchPost(this.props.type, this.state.value, this.props.topicId)
-                }
-                renderWarning();
-                renderMark();
+                value: localStorage.getItem(this.props.storage) || ""
             })
         } else if(prevProps.topic.search !== this.props.topic.search) {
             this.setState({
@@ -84,15 +56,11 @@ class Select extends Component {
                 suggestions: this.props.post.search,
             })
         }
-
-        if(prevState.suggestions !== this.state.suggestions) { renderWarning(); renderMark(); }
     }
 
     onChange = (event, { newValue }) => {
         this.setState({
-            value: newValue,
-            showWarning: false,
-            mark: "", // ここでもshowWarningを消している理由は、すぐにwarningを消すことでユーザーの不快感をなくすため
+            value: newValue
         });
         localStorage.setItem(this.props.storage, newValue);
     };
@@ -163,7 +131,9 @@ class Select extends Component {
                 return null;
             }
         }
-
+        this.setState({
+            blur: true,
+        });
         this.props.setBackward(false);
         switch (this.props.index) {
             case "1":
@@ -175,24 +145,21 @@ class Select extends Component {
             default:
                 return null;
         }
-
         this.props.setValue(suggestion);
     };
 
     renderUniqueMark = () =>{
-        if(this.state.blur) {
-            return;
-        } else if(!this.state.value) {
-            setTimeout(() => { this.setState({ mark: "" }) }, 800)
+        if(!this.state.value || this.state.blur) {
+            return null;
         } else {
+            const success = () => {return <GreenMark/>}
+            const fail = () => {return <RedMark/>}
             if(this.state.value) {
-                setTimeout(() => {
-                    if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
-                        this.setState({ mark: "GREEN" })
-                    } else {
-                        this.setState({ mark: "RED" })
-                    };
-                },800)
+                if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
+                    return success();
+                } else {
+                    return fail();
+                };
             };
         };
     };
@@ -215,11 +182,17 @@ class Select extends Component {
 
     // Suggestionをrenderする時の動作
     renderUniqueSuggestion = suggestion => {
+        var words = ""
+        if(this.props.content === "Topic") {
+            words = "トピック"
+        } else if (this.props.content === "Post") {
+            words = "ポスト"
+        }
         if (suggestion.added) {
             return (
                 <New
                     handleClick={this.handleClick}
-                    text={[`新しい${this.state.text}`,"を追加する"]}
+                    text={[`新しい${words}`,"を追加する"]}
                     value={this.state.value}
                 >
                     <IoIosAddCircleOutline/>
@@ -231,9 +204,7 @@ class Select extends Component {
                 <Topic
                     handleClick={this.handleClick}
                     suggestion={suggestion}
-                    // もしかしたら後々エラーになるかも、消した理由はsuggestion[target]でhandleclickではなく
-                    // suggestion全体をhandleClickしたかったため
-                    // target={this.props.searchByVariable}
+                    target={this.props.searchByVariable}
                 />
             );
         } else if (this.props.content === "Post") {
@@ -286,52 +257,58 @@ class Select extends Component {
         )
     }
 
-    // Warningを出す動作 setTimeoutを設けてるのは、flickering effectをなくすため
+    // Warningを出す動作
     renderUniqueWarning = () => {
-        if(this.state.blur) {
-            return;
-        } else if(!this.state.value) {
-            setTimeout(() => {this.setState({ showWarning: false })}, 800)
-            return;
+        if(!this.state.value || this.state.blur) {
+            return null;
         } else {
-            setTimeout(() => {
+            var text = ""
+            if (this.props.content === "Topic") {
+                text = "トピック"
+            } else if (this.props.content === "Post") {
+                text = "ポスト"
+            }
+            const success = () => { return null; }
+            const fail = () => {
+                return (
+                    <Warning>
+                        <p>
+                            既に{text}<Link to={"/"}>"{this.state.value}"</Link>は存在しています。代わりに<Link to={"/action/post/create"}>新しいポスト</Link>を追加しますか？
+                        </p>
+                    </Warning>
+                )
+            };
+            if(this.state.value) {
                 if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
-                    return;
+                    return success();
                 } else {
-                    if(this.state.suggestions.length !== 0){
-                        this.setState({ 
-                            showWarning: true,
-                            warningId: this.state.suggestions[0]._id
-                        })
-                    }
-                    return;
+                    return fail();
                 };
-            }, 800)
+            };
         };
     };
 
     renderMatchWarning = () => {
-        if(this.state.blur) {
-            return;
-        } else if(!this.state.value) {
-            setTimeout(() => {this.setState({ showWarning: false })}, 800)
-            return;
+        if(!this.state.value || this.state.blur) {
+            return false;
         } else {
-            setTimeout(() => {
+            const success = () => {return false}
+            const fail = () => {
+                return (
+                    <Warning>
+                        <p>
+                            トピック「{this.state.value}」はまだ作られていません。<Link to={"/action/topic/create"}>新しく作成しますか？</Link>
+                        </p>
+                    </Warning>
+                )
+            };
+            if(this.state.value) {
                 if(this.state.suggestions.length > 0){ 
-                    if(this.state.showWarning){
-                        this.setState({ 
-                            showWarning: false,
-                        });
-                    }
-                    return;
+                    return success();
                 } else {
-                    this.setState({ 
-                        showWarning: true,
-                    });
-                    return;
+                    return fail();
                 };
-            }, 800)
+            };
         };
     };
 
@@ -354,13 +331,14 @@ class Select extends Component {
     // Enter keyを押した時の動作
     formUniqueSubmit = (e) => {
         e.preventDefault();
+        const success = () => this.handleClick(this.state.value);
+        const fail = () => { return null; }
 
         if(this.state.value) {
-            if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){
-                this.handleClick(this.state.value);
-                return;
+            if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
+                return success();
             } else {
-                return;
+                return fail();
             };
         };
     };
@@ -401,23 +379,22 @@ class Select extends Component {
 
     render () {
 
-        const { placeholder, type, searchBox, back, transition, index, title, subTitle, } = this.props
-        const { mark, text, value, suggestions, showWarning, warningId } = this.state
-
+        const { value, suggestions } = this.state;
         const inputProps = {
-            placeholder,
+            placeholder: this.props.placeholder,
             value,
             onChange: this.onChange,
             onFocus: this.handleFocus,
             onBlur: this.handleBlur,
         };
 
-        const flag = type === "Unique"
+        const flag = this.props.type === "Unique"
 
         const formSubmit = flag ? this.formUniqueSubmit : this.formMatchSubmit
-        // const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
+        const renderWarning = flag ? this.renderUniqueWarning : this.renderMatchWarning
+        const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
 
-        if (searchBox) {
+        if (this.props.searchBox) {
             return (
                 <form onSubmit={(e) => this.formBoxSubmit(e)} className="search-box">
                     <img 
@@ -439,38 +416,14 @@ class Select extends Component {
         } else {
             return ( 
                 <Box>
-                    <BoxTransition back={back} transition={transition}>
+                    <BoxTransition back={this.props.back} transition={this.props.transition}>
                         <div> 
-                            { showWarning && flag &&
-                            <Warning>
-                                <p>
-                                    既に{text}
-                                    <Link to={`/topic/${warningId}`}>
-                                        "{value}"
-                                    </Link>
-                                    は存在しています。代わりに
-                                    <Link to={"/action/post/create"}>
-                                        新しいポスト
-                                    </Link>
-                                    を追加しますか？
-                                </p>
-                            </Warning>
-                            }
-                            { showWarning && !flag &&
-                            <Warning>
-                                <p>
-                                    トピック「{value}」はまだ作られていません。
-                                    <Link to={"/action/topic/create"}>
-                                        新しく作成しますか？
-                                    </Link>
-                                </p>
-                            </Warning>
-                            }
-                            <p>{index}. {title}</p>
+                            {renderWarning()}
+                            <p>{this.props.index}. {this.props.title}</p>
                             {this.renderHelper()}
                         </div> 
                         <form onSubmit={(e) => formSubmit(e)}>
-                            <p>{ subTitle }</p>
+                            <p>{ this.props.subTitle }</p>
                             { flag
                             ?
                             <Autosuggest
@@ -493,8 +446,7 @@ class Select extends Component {
                                 inputProps={inputProps} 
                             />
                             }
-                            {mark === "GREEN" && <GreenMark/>}
-                            {mark === "RED" && <RedMark/>}
+                            {renderMark()}
                         </form>
                         {this.renderButton()}
                     </BoxTransition>
@@ -523,6 +475,7 @@ Select.propTypes = {
     setStep: PropTypes.func,
     topicId: PropTypes.string,
 }
+
 
 function mapStateToProps(state) {
     return {

@@ -3,6 +3,7 @@ import styled, { ThemeProvider, css } from "styled-components";
 
 export const Space = styled.div`
     height: ${props => props.height};
+    width: ${props => String(props.width) + "px"};
     background-color: ${props => props.backgroundColor};
 `
 

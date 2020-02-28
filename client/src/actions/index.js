@@ -1,7 +1,6 @@
 import axios from "axios";
 import { FETCH_USER,
-         ON_SEARCH,
-         OFF_SEARCH, 
+         ON_SEARCH, OFF_SEARCH, 
          SET_CATEGORY, 
          RESET_CATEGORY,
          NUDGE_ADD,
@@ -15,7 +14,7 @@ import { FETCH_USER,
          RESET_MESSAGE,
          SHOW_CONFIRMATION,
          HIDE_CONFIRMATION,
-         ADD_COLUMN,
+         ADD_COLUMN, REVERT_COLUMN,
          SHOW_LOGIN, HIDE_LOGIN,
          SEARCH_POST, SEARCH_TOPIC,
          FETCH_DRAFT,
@@ -99,6 +98,10 @@ export const hideConfirmation = () => (dispatch) => {
     dispatch({type: HIDE_CONFIRMATION})
 }
 
+export const revertColumn = (trigger) => (dispatch) => {
+    dispatch({type: REVERT_COLUMN, payload: {trigger}})
+}
+
 export const addColumn = (id, name) => (dispatch) => {
     dispatch({type: ADD_COLUMN, payload: {id: id, name: name}})
 }
@@ -120,8 +123,13 @@ export const searchTopic = (type, value) => async (dispatch) => {
     dispatch({type: SEARCH_TOPIC, payload: {suggestions: res}})
 } 
 
-export const searchPost = (type, value) => async (dispatch) => {
-    const url = "/api/post/search/" + String(type) + "/" + String(value)
+export const searchPost = (type, value, topicId) => async (dispatch) => {
+    var url = "/api/post/search/" + String(type) + "/" + String(value)
+
+    if(topicId){
+        url = url + "/" + String(topicId)
+    }
+
     const res = await cancelOnMultipleSearch(url)
     dispatch({type: SEARCH_POST, payload: {suggestions: res}})
 }
@@ -133,8 +141,6 @@ export const draftUpdated = () => (dispatch) => {
 export const draftRead = () => (dispatch) => {
     dispatch({type: DRAFT_READ})
 }
-
-// ==== NEWLY ADDED (JUST FOR DEBUGGING PUPRPOSE) =======
 
 export const deletePost = (id) => async (dispatch) => {
     const url = "/api/post/delete";
@@ -294,8 +300,8 @@ export const updateIntro = (id, value) => async (dispatch) => {
 
 // ====== FETCH =====
 
-export const fetchTopic = (id) => async (dispatch) => {
-    const url = "/api/topic/" + String(id)
+export const fetchTopic = (id, type) => async (dispatch) => {
+    const url = "/api/topic/" + String(id) + "/" + String(type)
     const res = await axios.get(url)
     dispatch({type: FETCH_TOPIC, payload: res.data})
 }

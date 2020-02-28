@@ -63,22 +63,22 @@ function ActionImage(props) {
     const display3 = flag3 ? props.initialVal3 : url3
 
     useEffect (() => {
-        if(!flag1){
+        if(!flag1 && props.storage1){
             localStorage.setItem(props.storage1, url1)
         }
-    }, [url1])
+    }, [url1, props.storage1])
 
     useEffect (() => {
-        if(!flag2){
+        if(!flag2 && props.storage2){
             localStorage.setItem(props.storage2, url2)
         }
-    }, [url2])
+    }, [url2, props.storage2])
 
     useEffect (() => {
-        if(!flag3){
+        if(!flag3 && props.storage3){
             localStorage.setItem(props.storage3, url3)
         }
-    }, [url3])
+    }, [url3, props.storage3])
 
     const handleBack = () => {
         props.setBackward(true);
@@ -94,11 +94,17 @@ function ActionImage(props) {
 
         switch(toggle) {
             case "mobile":
-                return setUrl1(null)
+                setUrl1(null)
+                setFile1({preview: null})
+                return 
             case "topic":
-                return setUrl2(null)
+                setUrl2(null)
+                setFile2({preview: null})
+                return 
             case "post":
-                return setUrl3(null)
+                setUrl3(null)
+                setFile3({preview: null})
+                return 
             default:
                 return null
         }
@@ -113,9 +119,6 @@ function ActionImage(props) {
             console.log("Illegal attempt to bypass sending a file");
         }
 
-        props.setBackward(false)
-        props.setStep(2);
-
         // For uncrop op
         // if(flag) {
         //     props.setImage(props.initialVal) 
@@ -123,23 +126,35 @@ function ActionImage(props) {
         //     props.setImage(file.preview)
         // }
 
-        if(flag1) {
-            props.setImage(props.initialVal1) 
-        } else  {
-            props.setImage(url1, "mobile")
-        }
+        const mobile = flag1 ? props.initialVal1 : url1
+        const square = flag2 ? props.initialVal2 : url2
+        const rectangle = flag3 ? props.initialVal3 : url3
 
-        if(flag2) {
-            props.setImage(props.initialVal2) 
-        } else  {
-            props.setImage(url2, "square")
-        }
+        props.setImage(mobile, square, rectangle)
 
-        if(flag3) {
-            props.setImage(props.initialVal3) 
-        } else  {
-            props.setImage(url3, "rectangle")
-        }
+        // バグがなければ後で消すこと
+
+        // if(flag1) {
+        //     props.setImage(props.initialVal1, "mobile") 
+        // } else  {
+        //     props.setImage(url1, "mobile")
+        // }
+
+        // if(flag2) {
+        //     props.setImage(props.initialVal2, "square") 
+        // } else  {
+        //     props.setImage(url2, "square")
+        // }
+
+        // if(flag3) {
+        //     props.setImage(props.initialVal3, "rectangle") 
+        // } else  {
+        //     props.setImage(url3, "rectangle")
+        // }
+
+        props.setBackward(false)
+        props.setStep(2);
+
     };
 
     const getConfig = (name) => {
@@ -204,7 +219,7 @@ function ActionImage(props) {
                             id="mobile" 
                             name="preview" 
                             onClick={() => setToggle("mobile")} 
-                            checked={toggle === "mobile"}
+                            defaultChecked={toggle === "mobile"}
                         />
                         <label htmlFor="mobile">モバイルでの表示</label>
                     </div>
@@ -219,7 +234,7 @@ function ActionImage(props) {
                             id="topic" 
                             name="preview" 
                             onClick={() => setToggle("topic")} 
-                            checked={toggle === "topic"}
+                            defaultChecked={toggle === "topic"}
                         />
                         <label htmlFor="topic">トピック画面での表示</label>
                     </div>
@@ -234,7 +249,7 @@ function ActionImage(props) {
                             id="post" 
                             name="preview" 
                             onClick={() => setToggle("post")} 
-                            checked={toggle === "post"}
+                            defaultChecked={toggle === "post"}
                         />
                         <label htmlFor="post">ポスト画面での表示</label>
                     </div>

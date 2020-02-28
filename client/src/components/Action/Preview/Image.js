@@ -3,16 +3,18 @@ import styled from "styled-components"
 
 import { PreviewImg } from "../Controller/Image"
 
+import { Space } from "../../Theme"
+
 class Image extends Component {
     render () {
 
         const { 
-        mobileImg, 
-        squareImg, 
-        rectangleImg, 
-        originalSquareImg,
-        originalRectangleImg,
-        originalMobileImg,
+            mobileImg, 
+            squareImg, 
+            rectangleImg, 
+            originalSquareImg,
+            originalRectangleImg,
+            originalMobileImg,
         } = this.props
 
         const flag = this.props.originalSquareImg
@@ -32,6 +34,7 @@ class Image extends Component {
                         alt={"変更が適用された後のモバイル用のトピックの画像プレビュー"}/>
                 </PreviewImg>
 
+                { flag && <Space height={"30px"}/> }
                 { flag && <Text>Before:</Text> }
                 
                 { flag &&
@@ -46,6 +49,7 @@ class Image extends Component {
 
                 {/* トピック */}
 
+                { flag && <Space height={"30px"}/> }
                 { flag && <Text>After:</Text> }
 
                 <PreviewImg topic={true}>
@@ -57,6 +61,7 @@ class Image extends Component {
                     />
                 </PreviewImg>
 
+                { flag && <Space height={"30px"}/> }
                 { flag && <Text>Before:</Text> }
                 
                 { flag && 
@@ -72,6 +77,7 @@ class Image extends Component {
 
                 {/* ポスト */}
 
+                { flag && <Space height={"30px"}/> }
                 { flag && <Text>After:</Text> }
 
                 <PreviewImg>
@@ -83,6 +89,7 @@ class Image extends Component {
                     />
                 </PreviewImg>
 
+                { flag && <Space height={"30px"}/> }
                 { flag && <Text>Before:</Text> }
                 
                 { flag &&

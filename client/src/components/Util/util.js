@@ -21,7 +21,9 @@ export function fmtDate(time) {
     const dateDiff = d === 0
     const hourDiff = h === 0
 
-    if(yearDiff && monthDiff && dateDiff && hourDiff) {
+    if (yearDiff && monthDiff && dateDiff && hourDiff && (mi <= 3)) {
+        return "たった今"
+    } else if(yearDiff && monthDiff && dateDiff && hourDiff) {
         return String(mi) + "分前"
     } else if (yearDiff && monthDiff && dateDiff) {
         return String(h) + "時間前"
@@ -49,4 +51,18 @@ export function checkAuth(e, context) {
 export function sendMessage(type, message, duration, context) {
     context.updateMessage(type, message);
     setTimeout(() => context.resetMessage(), duration)
+}
+
+export function arrObjLookUp(obj, field, attr){
+    for(var i=0; i < obj.length; i++){
+        if(obj[i][field] === attr){
+            return obj[i]
+        }
+    }
+    return
+}
+
+export function deepCopyArrOfObj(obj){
+    const newObj = JSON.parse(JSON.stringify(obj))
+    return newObj
 }

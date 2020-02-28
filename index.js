@@ -531,7 +531,7 @@ app.post("/api/topic", isLoggedIn, (req, res) => {
     const ls = [
         {_id: topicRectangleImgId, image: req.body.rectangleImg},
         {_id: topicSquareImgId, image: req.body.squareImg},
-        {_id: topicMobileImgId, image: req.body.MobileImg},
+        {_id: topicMobileImgId, image: req.body.mobileImg},
     ]
 
     Image.insertMany(ls)
@@ -575,16 +575,6 @@ app.post("/api/topic", isLoggedIn, (req, res) => {
         })
 })
 
-app.get("/api/topic/:topicId", (req, res) => {
-    Topic.findById(req.params.topicId).populate("column.posts").exec()
-        .then(topic => {
-            res.send(topic)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-})
-
 app.post("/api/topic/:topicId/post", isLoggedIn, (req, res) => {
     const data = Object.assign({user: req.user.id, type: "New", creationDate: Date.now()}, req.body)
     new Draft(data)
@@ -601,6 +591,38 @@ app.post("/api/topic/:topicId/post", isLoggedIn, (req, res) => {
         console.log(err)
         res.send("Fail: POST /api/topic/:topicId/post")
     })
+})
+
+app.get("/api/topic/:topicId/:type", (req, res) => {
+    const type = req.params.type
+    switch(type){
+        case "ALL":
+            Topic.findById(req.params.topicId)
+                .populate("rectangleImg")
+                .populate("mobileImg")
+                .populate("squareImg")
+                // .populate({path: "column.posts", populate: {path: "postImg"}})
+                .populate({path: "posts", populate: {path: "postImg"}})
+                .exec()
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        case "INDEX":
+            Topic.findById(req.params.topicId).populate("column.posts").exec()
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        default:
+            return
+    } 
 })
 
 app.get("/api/post/:postId", (req, res) => {
@@ -738,6 +760,34 @@ app.get("/api/topic/search/:type/:term", (req, res) => {
         })
 })
 
+// post searchはtopicId内で検索するやり方と、postIdでpost全体から検索する方法の二種類
+// Method 1
+app.get("/api/post/search/:type/:term/:topicId", (req, res) => {
+    const type = req.params.type
+    const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
+    // ここのpostImgの方はpopulateされない可能性あり
+    Topic.findById(req.params.topicId)
+        .populate({path: "posts", populate: [{path: "topicSquareImg"}, {path: "postImg"}]})
+        .exec()
+        .then(topic => {
+            var result = []
+            var regEx = new RegExp(value)
+            for(var k in topic.posts){
+                if(regEx.exec(topic.posts[k].postName)) {
+                    result.push(topic.posts[k])
+                }
+            }
+            if(result.length === 0){
+                result = type === "Match" ? [] : [{added: true}]
+            }
+            res.send(result)
+        })
+        .catch(err => {
+            console.log(err)
+            res.send([])
+        })
+})
+// Method 2
 app.get("/api/post/search/:type/:term", (req, res) => {
     const type = req.params.type
     const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 

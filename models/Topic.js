@@ -16,7 +16,7 @@ const topicSchema = new Schema({
     order: [mongoose.ObjectId], // Column Order (by Id in "column")
     likes: {type: Number, default: 0},
     postCount: {type: Number, default: 0},
-    posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}]
+    posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}] // これに関しては、Indexの順番じゃなくていい
 })
 
 const Topic = mongoose.model("Topic", topicSchema)

@@ -244,7 +244,7 @@ class Confirm extends Component {
                     <AddColumn
                         id={id}
                         action={action}
-                        postAction={this.postAction}
+                        postAction={this.props.postAction}
                         setValue={this.setValue}
                         value={this.state.value}
                     />

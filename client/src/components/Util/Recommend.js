@@ -30,6 +30,9 @@ const TrendElement = styled.div`
     flex-direction: row;
     align-items: center;
     margin-bottom: 25px;
+    box-shadow: 1px 1px 10px #d2d2d2;
+    padding: 15px;
+    border-radius: 4px;
 
     & > div {
 

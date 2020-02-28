@@ -7,6 +7,11 @@ import PeopleFollow from "../PeopleFollow"
 
 const PeopleElement = styled.div`
 
+    padding: 15px;
+    box-shadow: 1px 1px 10px #d2d2d2;
+    border-radius: 4px;
+    cursor: pointer;
+
     & > p {
         font-size: 11px;
         margin: 0px 1px;

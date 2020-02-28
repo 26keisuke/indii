@@ -484,8 +484,30 @@ export const PreviewConfig = styled.div`
 
 `
 
+export const RevertBtn = styled.p`
+    margin-left: 185px;
+    text-decoration: underline;
+    color: #747474 !important;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 11px !important;
+    margin-bottom: 0px !important;
+`
+
 export const ConfigUnderline = styled.div`
     width: 440px;
     border-bottom: 1px solid #838383;
     margin-bottom: 30px;
+`
+
+export const AddBtn = styled.div`
+    border: none;
+    font-size: 11px;
+    width: 85px;
+    color: #333333;
+    margin-left: 28px;
+    cursor: pointer;
+    white-space: nowrap;
+    background-color: #ffffff;
+    outline:none;
 `

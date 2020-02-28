@@ -96,33 +96,44 @@ router.post("/draft/upload", (req, res) => {
 
                         const newColumn = {
                             _id: columnId,
-                            index: index[0] + 1,
+                            index: threshold,
                             title: postName,
                             posts: []
                         }
                         newColumn.posts.push(newPost)
 
-                        topicElem.column.push(newColumn)
+                        topicElem.splice(threshold, 0, newColumn)
+
+                        // topicElem.column.push(newColumn) <- これだと、順番がそろわない（columnは順番がそろわなくてはいけない）
 
                         // topicElem.postsをupdate
 
+                        var promises = []
+
                         for (var l in topicElem.posts) {
-                            if(topicElem.posts[l][0] >= threshold) {
-                                topicElem.posts[l][0] = topicElem.posts[l][0] + 1
+                            if(topicElem.posts[l].index[0] >= threshold) {
+                                promises.push(
+                                    Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.0": 1}})
+                                )
                             }
                         }
 
-                        topicElem.posts.push(newPost)
+                        Promise.all(promises)
+                        .then(() => {
+                            // 注意: このthenの中にこいつらをいれないとupdateは反映されない
 
-                        // orderをupdate
+                            topicElem.posts.push(newPost)
 
-                        topicElem.order.splice(threshold, 0, columnId)
+                            // orderをupdate
 
-                        // postCountをアップデート
+                            topicElem.order.splice(threshold, 0, columnId)
 
-                        topicElem.postCount++;
+                            // postCountをアップデート
 
-                        topicElem.save()
+                            topicElem.postCount++;
+
+                            topicElem.save() 
+                        })
 
                     } else {
 
@@ -131,29 +142,35 @@ router.post("/draft/upload", (req, res) => {
 
                         // topicElem.postsをupdate
 
+                        var promises = []
+
                         for (var l in topicElem.posts) {
                             if((topicElem.posts[l].index[0] === insertColumn) && (topicElem.posts[l].index[1] >= insertIndex)) {
                                 // Warning: topicElemから.save()してもできないので、Postをもう一回取ってくるようにしている
-                                Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.1": 1}})
+                                promises.push(
+                                    Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.1": 1}})
+                                )   
                             }
                         }
 
-                        topicElem.posts.push(newPost)
+                        Promise.all(promises)
+                        .then(() => {
+                            topicElem.posts.push(newPost)
 
-                        // topicElem.column.postsをupdate
+                            // topicElem.column.postsをupdate
 
-                        for (var m in topicElem.column) {
-                            if(topicElem.column[m].index === insertColumn) {
-                                topicElem.column[m].posts.splice(insertIndex, 0, newPost)
+                            for (var m in topicElem.column) {
+                                if(topicElem.column[m].index === insertColumn) {
+                                    topicElem.column[m].posts.splice(insertIndex, 0, newPost)
+                                }
                             }
-                        }
 
-                        // postCountをアップデート
+                            // postCountをアップデート
 
-                        topicElem.postCount++;
+                            topicElem.postCount++;
 
-                        topicElem.save()
-
+                            topicElem.save()
+                        })
                     }
 
                     draft.isUploaded = true

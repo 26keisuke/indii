@@ -42,7 +42,6 @@ class Select extends Component {
             showWarning: false,
             warningId: "",
             text: "",
-            mark: "",
         };
     };
 
@@ -55,25 +54,9 @@ class Select extends Component {
     }
     
     componentDidUpdate(prevProps, prevState) {
-
-        const flag = this.props.type === "Unique"
-        const renderWarning = flag ? this.renderUniqueWarning : this.renderMatchWarning;
-
-        const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
-
         if (prevProps.storage !== this.props.storage){ // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
             this.setState({
-                value: localStorage.getItem(this.props.storage) || "",
-                showWarning: false,
-                mark: "",
-            }, () => {
-                if(this.props.content === "Topic") {
-                    this.props.searchTopic(this.props.type, this.state.value)  
-                } else if (this.props.content === "Post") {
-                    this.props.searchPost(this.props.type, this.state.value, this.props.topicId)
-                }
-                renderWarning();
-                renderMark();
+                value: localStorage.getItem(this.props.storage) || ""
             })
         } else if(prevProps.topic.search !== this.props.topic.search) {
             this.setState({
@@ -85,14 +68,18 @@ class Select extends Component {
             })
         }
 
-        if(prevState.suggestions !== this.state.suggestions) { renderWarning(); renderMark(); }
+        if(prevState.suggestions !== this.state.suggestions) {
+            const flag = this.props.type === "Unique"
+            const renderWarning = flag ? this.renderUniqueWarning : this.renderMatchWarning;
+            renderWarning();
+        }
     }
 
     onChange = (event, { newValue }) => {
+        console.log("CHANGED")
         this.setState({
             value: newValue,
             showWarning: false,
-            mark: "", // ここでもshowWarningを消している理由は、すぐにwarningを消すことでユーザーの不快感をなくすため
         });
         localStorage.setItem(this.props.storage, newValue);
     };
@@ -163,7 +150,9 @@ class Select extends Component {
                 return null;
             }
         }
-
+        this.setState({
+            blur: true,
+        });
         this.props.setBackward(false);
         switch (this.props.index) {
             case "1":
@@ -180,19 +169,19 @@ class Select extends Component {
     };
 
     renderUniqueMark = () =>{
-        if(this.state.blur) {
+        if(!this.state.value || this.state.blur) {
             return;
-        } else if(!this.state.value) {
-            setTimeout(() => { this.setState({ mark: "" }) }, 800)
         } else {
             if(this.state.value) {
-                setTimeout(() => {
-                    if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
-                        this.setState({ mark: "GREEN" })
-                    } else {
-                        this.setState({ mark: "RED" })
-                    };
-                },800)
+                if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
+                    setTimeout(() => {
+                        return <GreenMark/>;
+                    }, 800)
+                } else {
+                    setTimeout(() => {
+                        return <RedMark/>;
+                    }, 800)
+                };
             };
         };
     };
@@ -215,6 +204,12 @@ class Select extends Component {
 
     // Suggestionをrenderする時の動作
     renderUniqueSuggestion = suggestion => {
+        // var words = ""
+        // if(this.props.content === "Topic") {
+        //     words = "トピック"
+        // } else if (this.props.content === "Post") {
+        //     words = "ポスト"
+        // }
         if (suggestion.added) {
             return (
                 <New
@@ -286,52 +281,54 @@ class Select extends Component {
         )
     }
 
-    // Warningを出す動作 setTimeoutを設けてるのは、flickering effectをなくすため
+    // Warningを出す動作
     renderUniqueWarning = () => {
-        if(this.state.blur) {
-            return;
-        } else if(!this.state.value) {
-            setTimeout(() => {this.setState({ showWarning: false })}, 800)
-            return;
+        if(!this.state.value || this.state.blur) {
+            return null;
         } else {
-            setTimeout(() => {
-                if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
-                    return;
-                } else {
-                    if(this.state.suggestions.length !== 0){
-                        this.setState({ 
-                            showWarning: true,
-                            warningId: this.state.suggestions[0]._id
-                        })
-                    }
-                    return;
-                };
-            }, 800)
+            console.log(this.state.value, this.state.suggestions)
+            if(this.state.value) {
+                setTimeout(() => {
+                    if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){ 
+                        return;
+                    } else {
+                        if(this.state.suggestions.length !== 0){
+                            this.setState({ 
+                                showWarning: true,
+                                warningId: this.state.suggestions[0]._id
+                            })
+                        }
+                        return;
+                    };
+                }, 800)
+            };
         };
     };
 
     renderMatchWarning = () => {
-        if(this.state.blur) {
-            return;
-        } else if(!this.state.value) {
-            setTimeout(() => {this.setState({ showWarning: false })}, 800)
-            return;
+        if(!this.state.value || this.state.blur) {
+            return false;
         } else {
-            setTimeout(() => {
-                if(this.state.suggestions.length > 0){ 
-                    if(this.state.showWarning){
+            console.log(this.state.value, this.state.suggestions)
+            if(this.state.value) {
+                setTimeout(() => {
+                    if(this.state.suggestions.length > 0){ 
+                        if(this.state.showWarning){
+                            this.setState({ 
+                                showWarning: false,
+                            });
+                        }
+                        return;
+                    } else {
                         this.setState({ 
-                            showWarning: false,
+                            showWarning: true,
                         });
-                    }
-                    return;
-                } else {
-                    this.setState({ 
-                        showWarning: true,
-                    });
-                    return;
-                };
-            }, 800)
+                        return;
+                    };
+                }, 800)
+            } else {
+                // setTimeout(() => {this.setState({ showWarning: false })}, 800)
+            }
         };
     };
 
@@ -402,7 +399,7 @@ class Select extends Component {
     render () {
 
         const { placeholder, type, searchBox, back, transition, index, title, subTitle, } = this.props
-        const { mark, text, value, suggestions, showWarning, warningId } = this.state
+        const { text, value, suggestions, showWarning, warningId } = this.state
 
         const inputProps = {
             placeholder,
@@ -415,7 +412,7 @@ class Select extends Component {
         const flag = type === "Unique"
 
         const formSubmit = flag ? this.formUniqueSubmit : this.formMatchSubmit
-        // const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
+        const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
 
         if (searchBox) {
             return (
@@ -493,8 +490,7 @@ class Select extends Component {
                                 inputProps={inputProps} 
                             />
                             }
-                            {mark === "GREEN" && <GreenMark/>}
-                            {mark === "RED" && <RedMark/>}
+                            {renderMark()}
                         </form>
                         {this.renderButton()}
                     </BoxTransition>

@@ -30,7 +30,7 @@ class Index extends Component {
 
         for (var key in  draftList) {
             if( draftList[key]._id === this.props.id) {
-                this.props.fetchTopic(draftList[key].topic)
+                this.props.fetchTopic(draftList[key].topic, "INDEX")
                 this.setState({
                     draft: draftList[key]
                 })
@@ -204,6 +204,7 @@ const IndexElement = styled.div`
     padding: 13px 15px;
     border-bottom: 1px solid #d2d2d2;
     cursor: pointer;
+    transition: 100ms;
 
     ${ props => props.selected && css`
         border-left: 2px solid #636480;

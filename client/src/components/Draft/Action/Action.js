@@ -74,7 +74,7 @@ class DraftAction extends Component {
         var counter = 0
 
         const res = this.topicLookup(idx, topicId)
-        if(res.length > 0) { return }
+        if(res[0]) { return }
 
         if ((this.state.selected[idx] === false) || (this.state.selected[idx] === undefined)) {
             counter = this.state.counter + 1

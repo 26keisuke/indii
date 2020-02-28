@@ -11,6 +11,7 @@ const PeopleElement = styled(Link)`
     background-color: rgba(0,0,0,0);
     cursor: pointer;
     
+    
     &:hover {
         background-color: rgba(233, 233, 238, 0.25);
     }

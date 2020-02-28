@@ -3,6 +3,8 @@ import React, { Component } from "react"
 import Autosuggest from "react-autosuggest";
 import { IoIosClose } from "react-icons/io"
 
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, RevertBtn } from "../Element/Element"
+
 import Warning from "../../Search/Warning/Warning"
 
 const topics = [
@@ -208,8 +210,8 @@ class ActionTag extends Component {
             console.log("Illegal attempt to bypass sending a file");
         };
         this.props.setBackward(false);
-        this.props.setStep(3);
         this.props.setTags(this.state.tags);
+        this.props.setStep(3);
     }
 
     formSubmit = (e) => {
@@ -257,7 +259,7 @@ class ActionTag extends Component {
                         {this.state.tags.length < max && this.state.illegal ? this.renderWarning("illegal"): ""}
                         <p className="topic-form-area-top-title">3. トピックに関するタグを追加</p>
                         {   this.props.initialVal
-                        ? <p　onClick={this.handleRevert} className="topic-form-area-top-revert">元に戻す</p>
+                        ? <RevertBtn　onClick={this.handleRevert}>元に戻す</RevertBtn>
                         : ""
                         }
                     </div> 

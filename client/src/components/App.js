@@ -29,6 +29,8 @@ import Filter from "./Util/Filter"
 import Auth from "./Auth/Auth"
 import Verification from "./Verification/Verification"
 
+const authList = ["SIGN_UP", "LOG_IN"]
+
 const ConfirmWrapper = React.forwardRef((props, ref) => (
      <Confirm innerRef={ref} {...props}/>
 ))
@@ -75,14 +77,14 @@ class App extends Component {
 
         if(this.props.auth.showForm) {
             if(this.authRef.current.contains(e.target)) {
-                return null;
+                return;
             }
             this.startAction("logIn")
         }
 
         if(this.props.update.confirmation.on) {
             if(this.confirmRef.current.contains(e.target)) {
-                return null;
+                return;
             } 
             this.startAction("confirm")
         }
@@ -121,12 +123,20 @@ class App extends Component {
     }
 
     postAction = (action, id, value) => {
+
+        // 初期に共通して行うこと
+        if(authList.includes(action)){
+            this.props.isFetching()
+            this.startAction("logIn")
+        } else {
+            this.startAction("confirm")
+        }
+
         switch(action){
 
-            // ======== PopUp関係 ==========
+            // ======== Confirm(PopUp)関係 ==========
 
             case "POST_DELETE":
-                this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
                     this.props.deletePost(id)
@@ -137,7 +147,6 @@ class App extends Component {
                 }
 
             case "GIVE_FEEDBACK":
-                this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
                     this.props.sendFeedBack(id, value)
@@ -148,15 +157,20 @@ class App extends Component {
                 }
 
             case "ADD_COLUMN":
-                this.startAction("confirm")
                 if (id){
                     this.props.addColumn(id, value);
                 }
                 this.props.disableGray();
                 return
+
+            case "REVERT_COLUMN":
+                if (id){
+                    this.props.revertColumn(true);
+                }
+                this.props.disableGray();
+                return
             
             case "DRAFT_DELETE_CHECK":
-                this.startAction("confirm")
                 if (id){
                     this.props.isFetching()
                     this.props.deleteDraft(id)
@@ -167,7 +181,6 @@ class App extends Component {
                 }
 
             case "DRAFT_UPLOAD_CHECK":
-                this.startAction("confirm")
                 if (value){
                     this.props.uploadDraft(value)
                     return
@@ -177,7 +190,6 @@ class App extends Component {
                     return
                 }
             case "DELETE_REF":
-                this.startAction("confirm")
                 if(id) {
                     this.props.deleteRef(id)
                     return
@@ -186,7 +198,6 @@ class App extends Component {
                     return
                 }
             case "SELF_INTRO":
-                this.startAction("confirm")
                 if(id) {
                     this.props.updateIntro(id, value)
                     return
@@ -196,7 +207,6 @@ class App extends Component {
                 }
 
             case "SELF_IMAGE":
-                this.startAction("confirm")
                 if(id) {
                     this.props.updateImage(id, value)
                     return
@@ -208,18 +218,13 @@ class App extends Component {
             // ======== logIn系 ==========
 
             case "SIGN_UP":
-                this.props.isFetching()
-                this.startAction("logIn")
                 this.props.signUp(value)
                 return
             case "LOG_IN":
-                this.props.isFetching()
-                this.startAction("logIn")
                 this.props.logIn(value)
                 return
 
             default:
-                this.startAction("confirm")
                 this.props.disableGray();
                 return null;
         }

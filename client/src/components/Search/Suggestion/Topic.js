@@ -55,16 +55,23 @@ const TopicInfo = styled.div`
 `
 
 class Topic extends Component {
+
+    handleClick = () => {
+        const { handleClick, suggestion　} = this.props
+
+        return handleClick(suggestion)
+    }
+
     render () {
 
-        const {suggestion, target, url, handleClick} = this.props
+        const { suggestion, url, } = this.props
 
         const tags = suggestion.tags.map(tag => 
             <p key={tag}>#{tag}</p>
         )
 
         return (
-            <Link key={suggestion._id} to={url} onClick={() => handleClick(suggestion[target])}>
+            <Link key={suggestion._id} to={url} onClick={this.handleClick}>
                 <TopicElement>
                     <img src={suggestion.squareImg.image} alt="検索結果のトピック一覧のメイン画像"/>
                     <TopicName>
