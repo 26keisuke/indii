@@ -21,18 +21,22 @@ const userSchema = new Schema({
 
     followers: [{
         timeStamp: Date,
-        user: {type: mongoose.Schema.Types.ObjectId, ref: "Draft"},
+        user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     }],
     follows: [{
         timeStamp: Date,
-        user: {type: mongoose.Schema.Types.ObjectId, ref: "Draft"},
+        user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     }],
 
     draft: [{type: mongoose.Schema.Types.ObjectId, ref: "Draft"}],
     post: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}],
-    edit: [{
+    editPost: [{
         timeStamp: Date,
         post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+    }],
+    editTopic: [{
+        timeStamp: Date,
+        topic: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" },
     }],
 
     likedPost: [{
@@ -51,8 +55,12 @@ const userSchema = new Schema({
 
     activity: [{
         //将来的にはlogin履歴などを全部ここにいれる
-        type: String,
+        type: {type: String, enum: [""]},
         timeStamp: Date,
+        topic: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" }, // こっから下は任意
+        post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
+        user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+        draft: {type: mongoose.Schema.Types.ObjectId, ref: "Draft"},
     }]
 })
 

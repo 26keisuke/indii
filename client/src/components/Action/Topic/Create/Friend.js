@@ -229,7 +229,7 @@ class CreateFriendsTopic extends Component {
                     <form onSubmit={this.formSubmit}>
                         <p>フォロワーを検索</p>
                         <Autosuggest
-                            className="topic-form-area-search" 
+                            // className="topic-form-area-search" 
                             suggestions={this.state.suggestions}
                             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                             onSuggestionsClearRequested={this.onSuggestionsClearRequested}

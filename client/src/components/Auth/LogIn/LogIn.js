@@ -1,6 +1,9 @@
 import React, { Component } from "react"
+import { connect } from "react-redux"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+
+import * as actions from "../../../actions"
 
 import { IoMdMail, IoIosLock } from "react-icons/io"
 
@@ -9,6 +12,12 @@ import { Space } from "../../Theme"
 
 class LogIn extends Component {
 
+    componentWillUnmount() {
+        if(this.props.auth.logInError) {
+            this.props.logInError(null)
+        }
+    }
+
     render () {
         return (
             <form>
@@ -16,7 +25,7 @@ class LogIn extends Component {
                     <div/>
                     <p>OR</p>
                     <div/>
-                    { this.props.error &&
+                    { this.props.auth.logInError &&
                     <Message>
                         <div/>
                         <p>Emailかパスワードが間違っています。</p>
@@ -172,4 +181,10 @@ const Remember = styled.div`
     margin-bottom: 18px;
 `
 
-export default LogIn
+function mapStateToProps({auth}){
+    return {
+        auth
+    }
+}
+
+export default connect(mapStateToProps, actions)(LogIn)

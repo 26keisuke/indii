@@ -9,8 +9,8 @@ import { FETCH_USER,
          ENABLE_GRAY, DISABLE_GRAY, 
          UPDATE_MESSAGE, RESET_MESSAGE,
          SHOW_CONFIRMATION, HIDE_CONFIRMATION,
-         ADD_COLUMN, REVERT_COLUMN,
-         SHOW_LOGIN, HIDE_LOGIN,
+         ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
+         SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
          SEARCH_TOPIC, SEARCH_POST,
          FETCH_TOPIC,
          FETCH_DRAFT, 
@@ -50,6 +50,7 @@ const initialState = {
     auth: {
         showForm: false,
         loggedIn: false,
+        logInError: null,
         info: {}
     },
     notif: {
@@ -58,6 +59,7 @@ const initialState = {
     index: {
         columnName: "",
         revert: false,
+        deleteId: "",
     },
     update: {
         fetching: false,
@@ -185,6 +187,11 @@ function indexReducer(state=initialState.index, action) {
             return {
                 ...state,
                 revert: action.payload.trigger,
+            }
+        case DELETE_COLUMN:
+            return {
+                ...state,
+                deleteId: action.payload.id,
             }
         default:
             return state
@@ -354,6 +361,11 @@ function authReducer(state=initialState.auth, action) {
             return {
                 ...state,
                 showForm: false,
+            }
+        case LOG_IN_ERROR:
+            return {
+                ...state,
+                logInError: action.payload.error,
             }
         default:
             return state;

@@ -5,14 +5,14 @@ import styled from "styled-components"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { GoPlusSmall } from "react-icons/go"
 
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, RevertBtn, AddBtn } from "../../Element/Element"
-import { Space } from "../../../Theme"
+import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, RevertBtn, AddBtn } from "../../../Element/Element"
+import { Space } from "../../../../Theme"
 
-import { sendMessage, arrObjLookUp, deepCopyArrOfObj } from "../../../Util/util"
+import { sendMessage, arrObjLookUp, deepCopyArrOfObj } from "../../../../Util/util"
 
-import * as actions from "../../../../actions"
+import * as actions from "../../../../../actions"
 
-import Column from "./Column"
+import Column from "./Column/Column"
 
 const Wrapper = styled.div`
     position: relative;
@@ -35,16 +35,6 @@ const IndexBox = styled.div`
     }
 `
 
-// ここは本来PureComponentだったが、deep comparisonするために（column.title）Componentに変えた
-// 将来的には、deep objでshouldComponentUpdateする
-class InnerList extends Component {
-    render () {
-        const { column, postMap, index, handleChange } = this.props;
-        const posts = column.posts.map(id => arrObjLookUp(postMap, "_id", id));
-        return <Column column={column} posts={posts} index={index} handleChange={handleChange}/>
-    }
-}
-
 class EditIndexTopic extends Component {
 
     constructor(props) {
@@ -61,8 +51,10 @@ class EditIndexTopic extends Component {
     }
 
     componentDidUpdate = (prevProps) => {
-        if(prevProps.index.columnName !== this.props.index.columnName){
+        if((prevProps.index.columnName !== this.props.index.columnName) && (this.props.index.columnName)){
             this.addNewIndex()
+            this.props.addColumn(""); // リセット
+            sendMessage("succes", "コラムを削除しました。", 3000, this.props)
         }
 
         if((prevProps.index.revert === false) && (this.props.index.revert === true)){
@@ -73,6 +65,38 @@ class EditIndexTopic extends Component {
             })
             this.props.revertColumn(false)
             sendMessage("succes", "変更を元に戻しました。", 3000, this.props)
+        }
+
+        if(prevProps.index.deleteId !== this.props.index.deleteId) {
+
+            // get column from this.state.columns ... 0
+            const column = arrObjLookUp(this.state.columns, "_id", this.props.index.deleteId)
+
+            // delete column from this.state.columns using 0
+            const copiedColumns = deepCopyArrOfObj(this.state.columns)
+            copiedColumns.splice(column.index, 1)
+
+            var newPosts = []
+            const copiedPosts = deepCopyArrOfObj(this.state.posts)
+        
+            for(var i=column.index; i < copiedColumns.length; i++){
+                // update column index of remaining columns 
+                copiedColumns[i].index = copiedColumns[i].index - 1
+                // update column index of remaining indexes
+                this.findPostsAndIncrement(0, copiedColumns[i].posts.length, copiedColumns[i].posts, -1, newPosts, true)
+            }
+
+            this.replaceOldWithModified(newPosts, copiedPosts)
+
+            // delete from order using 0
+            const copiedOrder = deepCopyArrOfObj(this.state.order)
+            copiedOrder.splice(column.index, 1)
+
+            this.setState({
+                columns: copiedColumns,
+                posts: copiedPosts,
+                order: copiedOrder,
+            })
         }
     }
 
@@ -137,16 +161,7 @@ class EditIndexTopic extends Component {
             }
         }
 
-        var foundPost = {}
-
-        // 変更のあったpostを全て追加する
-        for (var l=0; l < oldPost.length; l++) {
-            foundPost = arrObjLookUp(postStore, "_id", oldPost[l]._id)
-            if(!!foundPost){
-                oldPost[l] = foundPost
-                continue
-            } 
-        }
+        this.replaceOldWithModified(postStore, oldPost)
 
         this.setState({
             ...this.state,
@@ -181,7 +196,7 @@ class EditIndexTopic extends Component {
         return [newColumn, newPosts]
     }
 
-    findPostsAndIncrement = (startCond, endCond, lookUpIdList, incrementVal, storeArray) => {
+    findPostsAndIncrement = (startCond, endCond, lookUpIdList, incrementVal, storeArray, isColumn) => {
 
         var targetPost = {}
         var newArray = {}
@@ -189,8 +204,23 @@ class EditIndexTopic extends Component {
         for (var i=startCond; i<endCond; i++){
             targetPost = arrObjLookUp(this.state.posts, "_id", lookUpIdList[i])
             newArray = deepCopyArrOfObj(targetPost)
-            newArray.index[1] = newArray.index[1]+incrementVal
+            if(isColumn) {
+                newArray.index[0] = newArray.index[0]+incrementVal
+            } else {
+                newArray.index[1] = newArray.index[1]+incrementVal
+            }
             storeArray.push(newArray)
+        }
+    }
+
+    replaceOldWithModified = (newList, oldList) => {
+        var found = {}
+        for (var i=0; i < oldList.length; i++) {
+            found = arrObjLookUp(newList, "_id", oldList[i]._id)
+            if(!!found){
+                oldList[i] = found
+                continue
+            }
         }
     }
 
@@ -271,16 +301,11 @@ class EditIndexTopic extends Component {
 
             var combinedColumns = deepCopyArrOfObj(this.state.columns)
             var combinedPosts = deepCopyArrOfObj(this.state.posts)
-            var found = {}
+            // var found = {}
 
             combinedColumns[source.droppableId] = newColumn
 
-            for(var m=0; m < combinedPosts.length; m++){
-                found = arrObjLookUp(newPosts, "_id", combinedPosts[m]._id)
-                if(!!found) {
-                    combinedPosts[m] = found
-                }
-            }
+            this.replaceOldWithModified(newPosts, combinedPosts)
 
             this.setState({
                 ...this.state,
@@ -339,14 +364,8 @@ class EditIndexTopic extends Component {
         }
 
         var combinedPosts = deepCopyArrOfObj(this.state.posts)
-        var found = {}
 
-        for(var r=0; r < combinedPosts.length; r++){
-            found = arrObjLookUp(changed, "_id", combinedPosts[r]._id)
-            if(!!found) {
-                combinedPosts[r] = found
-            }
-        }
+        this.replaceOldWithModified(changed, combinedPosts)
 
         this.setState({
             ...this.state,
@@ -432,6 +451,17 @@ class EditIndexTopic extends Component {
         })
     }
 
+    handleDelete = (columnId, columnTitle) => {
+        const id = columnId;
+        const action = "DELETE_COLUMN";
+        const title = "コラムの削除";
+        const message = `コラム"${columnTitle}"を削除しますか？`;
+        const caution = "";
+        const buttonMessage = "削除する";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        this.props.enableGray();
+    }
+
     renderTask = () => {
 
         return (
@@ -455,6 +485,7 @@ class EditIndexTopic extends Component {
                                                 postMap={this.state.posts}
                                                 index={index}
                                                 handleChange={this.handleNameChange}
+                                                handleDelete={this.handleDelete}
                                             />
                                         )
                                     })
@@ -495,6 +526,16 @@ class EditIndexTopic extends Component {
                 </BoxTransition>
             </Box>
         )
+    }
+}
+
+// ここは本来PureComponentだったが、deep comparisonするために（column.title）Componentに変えた
+// 将来的には、deep objでshouldComponentUpdateする
+class InnerList extends Component {
+    render () {
+        const { column, postMap, index, handleChange, handleDelete } = this.props;
+        const posts = column.posts.map(id => arrObjLookUp(postMap, "_id", id));
+        return <Column column={column} posts={posts} index={index} handleChange={handleChange} handleDelete={handleDelete}/>
     }
 }
 

@@ -6,14 +6,59 @@ import { Box, BoxTransition, BoxTitle, TagList, TagBox, TagIcon, ButtonWrapper, 
 import { Space } from "../../Theme"
 import Warning from "../../Search/Warning/Warning"
 
+// const topics = [
+//     {
+//         imgUrl: "",
+//         name: "C"
+//     },
+//     {
+//         imgUrl: "",
+//         name: "C0"
+//     },
+//     {
+//         imgUrl: "",
+//         name: "C00"
+//     },
+//     {
+//         imgUrl: "",
+//         name: "C000"
+//     },
+//     {
+//         imgUrl: "",
+//         name: "C0000"
+//     }
+// ]
+
+// const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// const getSuggestions = value => {
+//   const escapedValue = escapeRegexCharacters(value.trim());
+  
+//   if (escapedValue === '') {
+//     return [];
+//   }
+
+//   const regex = new RegExp('^' + escapedValue, 'i');
+//   const suggestions = topics.filter(topic => regex.test(topic.name));
+  
+//   if (suggestions.length === 0) {
+//     return [
+//       { added: true } 
+//     ];
+//   }
+  
+//   return suggestions;
+// }
+
 class ActionTag extends Component {
 
     constructor(props){
         super(props)
+        const tags = this.props.initialVal || this.initializeTags()
         this.state = {
             value: "",
             suggestions: [],
-            tags: this.initializeTags() || this.props.initialVal || [],
+            tags: tags,
             duplicate: false,
             illegal: false,
             limit: false,
@@ -22,22 +67,14 @@ class ActionTag extends Component {
 
     initializeTags = () => {
         const cache = localStorage.getItem(this.props.storage)
-        if ((cache === null) || (cache === "undefined")){
-            return false
+        if (cache === null){
+            return []
+        } else if (cache === "undefined"){
+            return []
         } else {
             return JSON.parse(cache)
         }
     }
-
-    getSuggestionValue = suggestion => {};
-
-    renderSuggestion = suggestion => {};
-
-    onSuggestionsFetchRequested = ({ value }) => {};
-
-    onSuggestionsClearRequested = () => {};
-
-    onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {};
 
     onChange = (event, { newValue }) => {
         this.setState({
@@ -45,6 +82,26 @@ class ActionTag extends Component {
         });
         this.checkForDuplicate(newValue);
         this.checkForIllegalValue(newValue);
+    };
+
+    getSuggestionValue = suggestion => {
+        // if (suggestion.added) {
+        //   return this.state.value;
+        // }
+        // return suggestion.name;
+    };
+
+    renderSuggestion = suggestion => {
+        // if (suggestion.added) {
+        //   return false;
+        // }
+        // return (
+        //     <div className="search-result-wrapper">
+        //         <div className="search-result">
+        //             {suggestion.name}
+        //         </div>
+        //     </div>
+        // )
     };
 
     renderWarning = (flag) => {
@@ -72,6 +129,25 @@ class ActionTag extends Component {
         }
     }
 
+    onSuggestionsFetchRequested = ({ value }) => {
+        // this.setState({
+        //   suggestions: getSuggestions(value)
+        // });
+    };
+
+    onSuggestionsClearRequested = () => {
+        // this.setState({
+        //   suggestions: []
+        // });
+    };
+
+    onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {
+        // this.setState({
+        //     value: suggestion.name
+        // });
+    };
+
+    // This function is reaking the immutability constraint!!
     deleteTag = (e) => {
         const res = this.state.tags.filter((tag) => 
             tag.toLowerCase() !== e
@@ -134,7 +210,10 @@ class ActionTag extends Component {
     formSubmit = (e) => {
         e.preventDefault();
 
-        if((this.state.value === "") || this.state.duplicate || this.state.illegal) {
+        if(this.state.value === ""){
+            return false;
+        }
+        if(this.state.duplicate || this.state.illegal) {
             return false;
         };
         if(this.state.tags.length >= this.props.max){
@@ -162,16 +241,15 @@ class ActionTag extends Component {
             onChange: this.onChange,
         };
 
-        const { tags, duplicate, illegal, limit, suggestions } = this.state
         const { max, back, initialVal } = this.props
 
         return (
             <Box>
                 <BoxTransition back={back} transition={true}>
                     <div> 
-                        {tags.length < max && duplicate ? this.renderWarning("sameVal"): ""}
-                        {limit ? this.renderWarning("limit") : ""}
-                        {tags.length < max && illegal ? this.renderWarning("illegal"): ""}
+                        {this.state.tags.length < max && this.state.duplicate ? this.renderWarning("sameVal"): ""}
+                        {this.state.limit ? this.renderWarning("limit") : ""}
+                        {this.state.tags.length < max && this.state.illegal ? this.renderWarning("illegal"): ""}
                         <BoxTitle>3. トピックに関するタグを追加</BoxTitle>
                         {   initialVal
                         ? <RevertBtn　onClick={this.handleRevert}>元に戻す</RevertBtn>
@@ -184,7 +262,7 @@ class ActionTag extends Component {
                         </TagList>
                         <Space height={"27px"}/>
                         <Autosuggest
-                            suggestions={suggestions}
+                            suggestions={this.state.suggestions}
                             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                             getSuggestionValue={this.getSuggestionValue}

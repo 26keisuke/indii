@@ -9,7 +9,7 @@ import Image from "../models/Image"
 
 const router = express.Router()
 
-router.get("/draft", (req, res) => {
+router.get("/", (req, res) => {
     User.findById(req.user.id)
         .then(user => {
             Draft.find({_id: {$in: user.draft}, isDeleted: false, isUploaded: false}).populate("topicSquareImg").populate("postImg").exec()
@@ -22,7 +22,7 @@ router.get("/draft", (req, res) => {
         })
 })
 
-router.post("/draft/upload", (req, res) => {
+router.post("/upload", (req, res) => {
 
     const { draftId, index, addColumn } = req.body.value
     
@@ -185,7 +185,7 @@ router.post("/draft/upload", (req, res) => {
         })
 })
 
-router.post("/draft/delete", (req, res) => {
+router.post("/delete", (req, res) => {
     Draft.updateMany(
         { _id: { $in: req.body.subject }},
         { $set: { isDeleted: true }},
@@ -195,7 +195,7 @@ router.post("/draft/delete", (req, res) => {
         })
 })
 
-router.post("/draft/:id", (req, res) => {
+router.post("/:id", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
         draft.content = req.body.content
@@ -212,7 +212,7 @@ router.post("/draft/:id", (req, res) => {
     })
 })
 
-router.post("/draft/:id/image", (req, res) => {
+router.post("/:id/image", (req, res) => {
 
     const imgId = mongoose.Types.ObjectId();
 
@@ -229,7 +229,7 @@ router.post("/draft/:id/image", (req, res) => {
     })
 })
 
-router.post("/draft/:id/ref", (req, res) => {
+router.post("/:id/ref", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
         draft.ref.push(req.body.ref)
@@ -241,7 +241,7 @@ router.post("/draft/:id/ref", (req, res) => {
     })
 })
 
-router.delete("/draft/:id/ref/:refId", (req, res) => {
+router.delete("/:id/ref/:refId", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
         for(var k in draft.ref) {

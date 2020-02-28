@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import styled, { keyframes, css } from "styled-components"
-import { IoMdCheckmark, IoMdClose } from "react-icons/io";
+import { IoMdCheckmark, IoMdClose, IoIosClose } from "react-icons/io";
 import { FaUserCheck } from "react-icons/fa"
 
 export class Section extends Component {
@@ -53,6 +53,19 @@ export const Box = styled.div`
             width: 0px !important;
         }
     `};
+`
+
+export const BoxTitle = styled.p`
+    color: #333333;
+    font-size: 14px;
+    margin-bottom: 15px;
+    white-space: nowrap;
+
+    & > span {
+        color: #333333;
+        font-size: 9px;
+        margin-left: 20px;
+    }
 `
 
 export const BoxTransition = styled.div`
@@ -371,6 +384,7 @@ export const IndexBox = styled.div`
     font-size: 12px;
     margin-top: 20px;
     margin-bottom: 40px;
+    align-items: baseline;
 
     & p {
         line-height: 25px;
@@ -378,7 +392,7 @@ export const IndexBox = styled.div`
 
     & > div:nth-child(1) {
         text-align: left;
-        margin-left: 10px;
+        margin-left: 16px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -396,7 +410,7 @@ export const IndexBox = styled.div`
 
     & > div:nth-child(2) {
         text-align: end;
-        margin-right: 10px;
+        margin-right: 30px;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -408,6 +422,7 @@ export const IndexBox = styled.div`
         & > div:nth-child(2) {
             font-weight: bold;
             color: #555555;
+            margin-right: -15px;
         }
     }
 `
@@ -510,4 +525,36 @@ export const AddBtn = styled.div`
     white-space: nowrap;
     background-color: #ffffff;
     outline:none;
+`
+
+export const TagList = styled.div`
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    left: 0px;
+    top: -2px;
+`
+
+export const TagBox = styled.div`
+    position: relative;   
+
+    & > p {
+        padding: 2px;
+        height: 15px;
+        border: 0.5px solid #636480;
+        border-radius: 3px;
+        padding-right: 15px;
+        margin-right: 10px;
+        font-size: 10px;
+        padding-left:4px;
+        cursor: pointer;
+        color: #646380;
+    }
+`
+
+export const TagIcon = styled(IoIosClose)`
+    position: absolute;
+    pointer-events: none;
+    top: 4px;
+    right: 13px;
 `

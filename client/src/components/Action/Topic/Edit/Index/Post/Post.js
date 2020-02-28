@@ -4,9 +4,9 @@ import { Draggable } from "react-beautiful-dnd"
 
 import { FaUserCheck } from "react-icons/fa"
 
-import { fmtDate } from "../../../Util/util"
+import { fmtDate } from "../../../../../Util/util"
 
-import star_pressed from "../../../../images/star-pressed.png"
+import star_pressed from "../../../../../../images/star-pressed.png"
 
 const PermissionIcon = styled(FaUserCheck)`
     transform: scale(1.0);

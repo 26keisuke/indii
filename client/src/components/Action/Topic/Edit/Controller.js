@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import axios from "axios"
 
-import EditIndexTopic from "./Index"
+import Index from "./Index/Index"
 import EditPreviewTopic from "./Preview"
 
 import ActionProgress from "../../Progress/Progress"
@@ -31,7 +31,7 @@ class CreatePost extends Component {
                 squareImg: "",
                 tags: [],
                 posts: [],
-                column: [],
+                columns: [],
                 order: [],
             },
             edited: {
@@ -40,10 +40,14 @@ class CreatePost extends Component {
                 squareImg: "",
                 tags: [],
                 posts: [],
-                column: [],
+                columns: [],
                 order: [],
             },
         }
+    }
+
+    componentWillUnmount() {
+        localStorage.clear()
     }
 
     renderStep = () => {
@@ -73,6 +77,10 @@ class CreatePost extends Component {
                         initialVal2={this.state.original.squareImg}
                         initialVal3={this.state.original.rectangleImg}
 
+                        storage1="editTopicImg1"
+                        storage2="editTopicImg2"
+                        storage3="editTopicImg3"
+
                         setImage={this.setImage} 
                         setStep={this.setStep}
                         />
@@ -89,22 +97,22 @@ class CreatePost extends Component {
                         />
             case 3:
 
-                return <EditIndexTopic
+                return <Index
                         back={this.state.back} 
                         setBackward={this.setBackward} 
 
                         initialVal1={this.state.original.posts}
-                        initialVal2={this.state.original.column}
+                        initialVal2={this.state.original.columns}
                         initialVal3={this.state.original.order}
 
                         setIndex={this.setIndex} 
                         setStep={this.setStep}
                         />
             case 4:
-
                 return <EditPreviewTopic
                         back={this.state.back} 
                         setBackward={this.setBackward} 
+                        topicId={this.state.topic._id}
                         topicName={this.state.topic.topicName}
 
                         originalSquareImg={this.state.original.squareImg}
@@ -115,7 +123,7 @@ class CreatePost extends Component {
                         editedRectangleImg={this.state.edited.rectangleImg}
                         editedSquareImg={this.state.edited.squareImg}
 
-                        originalPost={this.state.original.posts}
+                        originalPosts={this.state.original.posts}
                         originalColumns={this.state.original.columns}
                         originalOrder={this.state.original.order}
 
@@ -194,7 +202,7 @@ class CreatePost extends Component {
                     squareImg: res.data.squareImg.image,
                     tags: res.data.tags,
                     posts: res.data.posts,
-                    column: res.data.column,
+                    columns: res.data.column,
                     order: res.data.order,
                 }
             })

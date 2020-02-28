@@ -33,6 +33,10 @@ class CreateTopic extends Component {
         }
     }
 
+    componentWillUnmount() {
+        localStorage.clear()
+    }
+
     renderStep = () => {
         switch (this.state.step) {
             case 0:

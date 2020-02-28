@@ -14,8 +14,8 @@ import { FETCH_USER,
          RESET_MESSAGE,
          SHOW_CONFIRMATION,
          HIDE_CONFIRMATION,
-         ADD_COLUMN, REVERT_COLUMN,
-         SHOW_LOGIN, HIDE_LOGIN,
+         ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
+         SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
          SEARCH_POST, SEARCH_TOPIC,
          FETCH_DRAFT,
          DRAFT_UPDATED, DRAFT_READ, 
@@ -102,8 +102,12 @@ export const revertColumn = (trigger) => (dispatch) => {
     dispatch({type: REVERT_COLUMN, payload: {trigger}})
 }
 
-export const addColumn = (id, name) => (dispatch) => {
-    dispatch({type: ADD_COLUMN, payload: {id: id, name: name}})
+export const addColumn = (name) => (dispatch) => {
+    dispatch({type: ADD_COLUMN, payload: {name}})
+}
+
+export const deleteColumn = (id) => (dispatch) => {
+    dispatch({type: DELETE_COLUMN, payload: {id}})
 }
 
 export const showLogin = () => (dispatch) => {
@@ -247,20 +251,26 @@ export const logIn = (value) => async (dispatch) => {
     axios.post(url, value)
         .then(user => {
             if(!user.data.userName) { // if user is not found, return error message
+                dispatch(disableGray())
                 dispatch(endFetching())
-                this.setState({ logInError: true })
+                dispatch(logInError(true))
                 return
             }
             dispatch(disableGray())
             dispatch(endFetching())
             sendMessage("success", `${user.data.userName}さん、お帰りなさい。`, 3000, dispatch)
             dispatch(fetchUser())
+            dispatch(logInError(false))
             return
         })
         .catch(err => {
             console.log(err)
             return
         })
+}
+
+export const logInError = (error) => (dispatch) => {
+    dispatch({type: LOG_IN_ERROR, payload: {error}})
 }
 
 export const updateImage = (id, value) => async (dispatch) => {

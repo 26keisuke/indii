@@ -50,7 +50,7 @@ class App extends Component {
             confirmationCancel: false,
             logInFormShow: true,
 
-            logInError: false,
+            // logInError: false,
 
         }
         this.confirmRef = React.createRef()
@@ -61,11 +61,15 @@ class App extends Component {
         this.props.fetchUser();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         if (this.props.update.confirmation.on || this.props.auth.showForm) {
             document.addEventListener("mousedown", this.outsideClick)
         } else {
             document.removeEventListener("mousedown", this.outsideClick)
+        }
+
+        if((prevProps.auth.logInError === null) && (this.props.auth.logInError === false)) {
+            this.startAction("logIn")
         }
     }
 
@@ -127,7 +131,6 @@ class App extends Component {
         // 初期に共通して行うこと
         if(authList.includes(action)){
             this.props.isFetching()
-            this.startAction("logIn")
         } else {
             this.startAction("confirm")
         }
@@ -157,19 +160,26 @@ class App extends Component {
                 }
 
             case "ADD_COLUMN":
-                if (id){
-                    this.props.addColumn(id, value);
+                if (value){
+                    this.props.addColumn(value);
                 }
                 this.props.disableGray();
                 return
 
             case "REVERT_COLUMN":
-                if (id){
+                if (id) {
                     this.props.revertColumn(true);
                 }
                 this.props.disableGray();
                 return
-            
+
+            case "DELETE_COLUMN":
+                if (id) {
+                    this.props.deleteColumn(id)
+                }
+                this.props.disableGray();
+                return
+
             case "DRAFT_DELETE_CHECK":
                 if (id){
                     this.props.isFetching()
@@ -219,6 +229,7 @@ class App extends Component {
 
             case "SIGN_UP":
                 this.props.signUp(value)
+                this.startAction("logIn")
                 return
             case "LOG_IN":
                 this.props.logIn(value)
@@ -263,7 +274,7 @@ class App extends Component {
                             ref={this.authRef} 
                             show={this.state.logInFormShow}
                             postAction={this.postAction}
-                            error={this.state.logInError}
+                            // error={this.state.logInError}
                         /> 
                         }
                         { update.fetching && <Loading/>}

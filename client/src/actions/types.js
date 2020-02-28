@@ -29,9 +29,12 @@ export const HIDE_CONFIRMATION = "HIDE_CONFIRMATION"
 
 export const ADD_COLUMN = "ADD_COLUMN"
 export const REVERT_COLUMN = "REVERT_COLUMN"
+export const DELETE_COLUMN = "DELETE_COLUMN"
 
+// AUTH
 export const SHOW_LOGIN = "SHOW_LOGIN"
 export const HIDE_LOGIN = "HIDE_LOGIN"
+export const LOG_IN_ERROR = "LOG_IN_ERROR"
 
 // Feed
 export const FETCH_FEED = "FETCH_FEED"

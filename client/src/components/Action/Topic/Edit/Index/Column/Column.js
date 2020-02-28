@@ -1,10 +1,10 @@
 import React, { Component, } from "react"
 import styled from "styled-components"
-import Post from "./Post"
+import Post from "../Post/Post"
 import { Droppable, Draggable } from "react-beautiful-dnd"
-import ShowMore from "../../../Util/ShowMore"
+import ShowMore from "../../../../../Util/ShowMore"
 import { GiHamburgerMenu } from "react-icons/gi"
-import { Space } from "../../../Theme" 
+import { Space } from "../../../../../Theme" 
 
 const Container = styled.div`
     margin: 8px;
@@ -161,7 +161,7 @@ class Column extends Component {
                                 left="-157px"
                                 bottom="-38px"
                                 actionName={["このコラムを削除する"]}
-                                action={[() => console.log("HELLO")]}
+                                action={[() => this.props.handleDelete(this.props.column._id, this.props.column.title)]}
                             />
                         </ShowMoreWrapper>
                         :

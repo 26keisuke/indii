@@ -414,7 +414,7 @@
 
 /*== tags ==*/
 
-.topic-form-tags{
+/* .topic-form-tags{
     display: flex;
     flex-direction: row;
     position: absolute;
@@ -424,9 +424,9 @@
 
 .topic-form-tags-box{
     position: relative;   
-}
+} */
 
-.topic-form-tags-tags {
+/* .topic-form-tags-tags {
     padding: 2px;
     height: 15px;
     border: 0.5px solid #636480;
@@ -437,14 +437,14 @@
     padding-left:4px;
     cursor: pointer;
     color: #646380;
-}
+} */
 
-.topic-form-tags-icon{
+/* .topic-form-tags-icon{
     position: absolute;
     pointer-events: none;
     top: 4px;
     right: 13px;
-}
+} */
 
 /*-= friends =*/
 

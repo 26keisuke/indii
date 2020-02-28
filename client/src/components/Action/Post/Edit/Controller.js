@@ -24,16 +24,13 @@ class EditPost extends Component {
         }
     }
 
+    componentWillUnmount() {
+        localStorage.clear()
+    }
+
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                // return <ActionDecideTopic 
-                //         back={this.state.back} 
-                //         setBackward={this.setBackward} 
-                //         storage="editPostTopic"
-                //         setTopic={this.setTopic}
-                //         setStep={this.setStep}
-                //         />
                 return <Select
                         placeholder="トピックを入力..."
                         index="1"
