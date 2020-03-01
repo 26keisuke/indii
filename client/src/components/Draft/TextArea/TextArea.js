@@ -6,6 +6,33 @@ import axios from "axios";
 
 import * as actions from "../../../actions"
 
+const controls = [
+    "undo",
+    "redo",
+    "bold",
+    "italic",
+    "underline",
+    'list-ol',
+    'list-ul',
+    'superScript',
+    "separator",
+    "blockQuote",
+    "code",
+    "link",
+    "media",
+    "hr",
+]
+
+const zeroControls = [
+    "undo",
+    "redo",
+    "bold",
+    "italic",
+    "underline",
+    'superScript',
+    "link",
+]
+
 class TextArea extends React.Component {
 
     constructor(props) {
@@ -16,10 +43,12 @@ class TextArea extends React.Component {
     }
 
     componentDidMount() {
+        window.addEventListener("beforeunload", this.handleWindowClose);
+
         this.autoSave = setInterval(() => {
             this.sendUpdate(false)
-            this.props.setUpdate()
-        }, 20000)
+            // this.props.setUpdate()
+        }, 60000)
     }
 
     componentDidUpdate(prevProps) {
@@ -30,15 +59,28 @@ class TextArea extends React.Component {
         }
     }
 
-    // このリクエストが受理されてアップデートされる前に次のページのcomponentDidMountがcallされているから、draftUpdatedを呼ばなきゃいけない
     componentWillUnmount() {
+        window.removeEventListener("beforeunload", this.handleWindowClose);
+
         clearInterval(this.autoSave)
         this.sendUpdate(true)
     }
 
+    // このリクエストが受理されてアップデートされる前に次のページのcomponentDidMountがcallされているから、draftUpdatedを呼ばなきゃいけない
     sendUpdate = (timeUpdate) => {
         const url = "/api/draft/" + this.props.draft._id
         axios.post(url, {timeUpdate: timeUpdate, content: JSON.stringify(this.state.editorState.toHTML())})
+            .then(() => {
+                if(timeUpdate){
+                    this.props.draftUpdated()
+                }
+            })
+            .catch(err => console.error(err))
+    }
+
+    handleWindowClose = () => {
+        const url = "/api/draft/" + this.props.draft._id
+        axios.post(url, {timeUpdate: true, content: JSON.stringify(this.state.editorState.toHTML())})
             .then(this.props.draftUpdated())
             .catch(err => console.error(err))
     }
@@ -55,22 +97,7 @@ class TextArea extends React.Component {
                 <BraftEditor
                     language="jpn"
                     placeholder="ここに入力してください..."
-                    controls={[
-                        "undo",
-                        "redo",
-                        "bold",
-                        "italic",
-                        "underline",
-                        'list-ol',
-                        'list-ul',
-                        'superScript',
-                        "separator",
-                        "blockQuote",
-                        "code",
-                        "link",
-                        "media",
-                        "hr",
-                    ]}
+                    controls={this.props.draft.type === "Zero" ? zeroControls : controls}
                     value={editorState}
                     controlBarClassName="draft-area-tools"
                     contentClassName="draft-area-textarea"

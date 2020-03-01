@@ -1,25 +1,25 @@
-.topic-form-wrapper{
+/* .topic-form-wrapper{
     height: 100%;
     padding-top:40px;
-}
-
+} */
+/* 
 .topic-form-wrapper ::-webkit-scrollbar {
     width: 10px;  
-}
-
+} */
+/* 
 .topic-form{
     position: relative;
     display: flex;
     justify-content: center;
     height: 100%;
-}
+} */
 
-.topic-form-title{
+/* .topic-form-title{
     z-index: 10;
     position: absolute;
     font-size: 16px;
     top: -23px;
-}
+} */
 
 /* .topic-form-helper{
     display: flex;
@@ -40,7 +40,7 @@
     margin-right: 10px;
 } */
 
-.topic-form-back-wrapper{
+/* .topic-form-back-wrapper{
     margin-top:-30px;
 }
 
@@ -50,17 +50,17 @@
     position: absolute;
     background-color: #ffffff;
     z-index:2;
-}
+} */
 
-.topic-form-progress{
+/* .topic-form-progress{
     position: absolute;
     display: flex;
     flex-direction: row;
     align-items: center;
     top: 30px;
-}
+} */
 
-.topic-form-progress-name{
+/* .topic-form-progress-name{
     position: absolute;
     font-size: 10px;
     color: #585858;
@@ -69,9 +69,9 @@
     bottom: -20px;
     left: -27px;
     text-align: center;
-}
+} */
 
-.topic-form-progress-circle {
+/* .topic-form-progress-circle {
     position: relative;
     width: 45px;
     height: 45px;
@@ -79,15 +79,9 @@
     z-index: 5;
     opacity: 1;
     background-color: #c4c4c4;
-}
+} */
 
-.topic-form-progress-circle-animation{
-    animation-name: show;
-    animation-duration: 3s;
-    animation-fill-mode: forwards;
-}
-
-.topic-form-progress-circle-done{
+/* .topic-form-progress-circle-done{
     position: relative;
     width: 45px;
     height: 45px;
@@ -95,106 +89,99 @@
     z-index: 2;
     opacity: 0;
     background-color: #c4c4c4;
-}
+} */
 
-.topic-form-progress-circle p{
+/* .topic-form-progress-circle p{
     position: absolute;
     color: #ffffff;
     top:10px;
     left:17px;
     font-size: 17px;
-}
+} */
 
-.topic-form-progress-circle-fake {
+/* .topic-form-progress-circle-fake {
     position: absolute;
     width: 45px;
     height: 45px;
     border-radius: 50%;
     z-index: 4;
     background-color: #455964;
-}
+} */
 
-.topic-form-progress-circle-fake p{
+/* .topic-form-progress-circle-fake p{
     position: absolute;
     color: #ffffff;
     top:10px;
     left:17px;
     font-size: 17px;
-}
+} */
 
-.topic-form-progress-fake-for-circle{
+/* .topic-form-progress-fake-for-circle{
     position: relative;
     z-index: 5;
-}
+} */
 
-.topic-form-progress-fake-for-bar{
+/* .topic-form-progress-fake-for-bar{
     position: relative;
     z-index: 3;
-}
+} */
 
-.topic-form-progress-bar {
+/* .topic-form-progress-bar {
     z-index: 2;
     width: 55px;
     height: 8px;
     margin-left: -2px;
     margin-right: -2px;
     background-color: #c4c4c4;
-}
+} */
 
-.topic-form-progress-bar-fake {
+/* .topic-form-progress-bar-fake {
     position: absolute;
     z-index: 3;
     height: 8px;
     background-color: #455964;
     left: -2px;
     top: 0px;
-}
+} */
 
-.topic-form-progress-bar-fake-animation{
-    animation-name: progressBarExtend;
-    animation-duration: 800ms;
-    animation-fill-mode: forwards;
-    animation-timing-function: ease-in-out;
-}
-
-.topic-form-progress-bar-fake-done {
+/* .topic-form-progress-bar-fake-done {
     position: absolute;
     width:55px;
     height: 8px;
     background-color: #455964;
     left: -2px;
     top: 0px;
-}
+} */
 
-.topic-form-area{
+/* .topic-form-area{
     display: flex;
     flex-direction: column;
     padding-top: 140px;
     width: 800px;
-}
+} */
 
-.topic-form-area-wrapper{
+/* .topic-form-area-wrapper{
     padding-left: 22.5%;
     width: 600px;   
-}
+} */
 
-.topic-form-area-wrapper-show{
+/* .topic-form-area-wrapper-show{
     animation-name: topicShow;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-}
+} */
 
-.topic-form-area-wrapper-enter{
+/* .topic-form-area-wrapper-enter{
     animation-name: topicEnter;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-}
-
+} */
+/* 
 .topic-form-area-top{
     position: relative;
     display: flex;
     align-items: center;
-}
+} */
 /* 
 .topic-form-area-top-revert{
     margin-left: 185px;
@@ -203,20 +190,20 @@
     cursor: pointer;
     white-space: nowrap;
 } */
-
+/* 
 .topic-form-area-top-wrapper{
     position: relative;
-}
+} */
 
-.topic-form-area-top-circle{
+/* .topic-form-area-top-circle{
     background-color: #9EAEE6;
     width: 6px;
     height: 6px;
     border-radius: 100%;
     position: absolute;
     top: 4px;
-}
-
+} */
+/* 
 .topic-form-area-top-title{
     color: #333333;
     font-size: 14px;
@@ -228,13 +215,13 @@
     color: #333333;
     font-size: 9px;
     margin-left: 20px;
-}
+} */
 
-.topic-form-area-middle{
+/* .topic-form-area-middle{
     position: relative;
-}
+} */
 
-.topic-form-area-input-title {
+/* .topic-form-area-input-title {
     color: #585858;
     font-size: 10px;
     margin-left: 9px;
@@ -245,9 +232,9 @@
     margin-top: 22px;
     margin-bottom: 7px;
     font-size: 14px;
-}
+} */
 
-.topic-form-area-middle-icon{
+/* .topic-form-area-middle-icon{
     width: 25px;
     height: 25px;
     position: absolute;
@@ -255,18 +242,18 @@
     top: 27px;
     color: #333333;
     cursor: pointer;
-}
+} */
 
-.green{
+/* .green{
     color: #4CD964;
 }
 
 .red{
     color: #FF5F5F;
-}
+} */
 
 /*== button ==*/
-
+/* 
 .topic-form-button{
     width: 444px;
     display: flex;
@@ -293,11 +280,11 @@
     color: #ffffff;
     font-family: "Gennokaku Gothic";
     outline:0;
-}
+} */
 
 /*== search ==*/
 
-
+/* 
 .topic-form-area-middle .react-autosuggest__input{
     width: 435px;
     height: 36px;
@@ -350,7 +337,7 @@
 .topic-form-area-middle .react-autosuggest__input--focused {
     outline: none;
     border-bottom: 0.5px solid #9EAEE6;
-}
+} */
 
 
 /*== thumb preview ==*/
@@ -559,23 +546,23 @@
     transform: scale(1.3);
     color: #4CD964;
 } */
-
+/* 
 .topic-form-friends-none{
     font-size: 11px;
-}
+} */
 
 /* == preview css ==*/
-
+/* 
 .topic-form-preview-input{
     width: 440px;
     border-bottom: 1px solid #838383;
     margin-bottom: 30px;
-}
-
+} */
+/* 
 .thumb-preview-box{
     margin-bottom:40px;
-}
-
+} */
+/* 
 .topic-form-preview-tags{
     display: flex;
     flex-wrap: wrap;
@@ -604,15 +591,15 @@
     margin-left: 10px;
     font-size: 10px;
     color:#838383;
-}
+} */
 
 /*=== configuration ==*/
-
+/* 
 .topic-form-config-input{
     width: 440px;
     border-bottom: 1px solid #838383;
     margin-bottom: 30px;
-}
+} */
 
 /* .topic-form-config-text{
     margin-top: 15px;
@@ -673,7 +660,7 @@
     animation-fill-mode: forwards;
     background-color: #d2d2d2 !important;
 } */
-
+/* 
 .topic-form-config-toggle-on{
     position:absolute;
     top: -10px;
@@ -700,7 +687,7 @@
     border: none;
     border-radius: 100%;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
-}
+} */
 
 /* .topic-form-config-layer{
     border: 1px solid #d2d2d2;
@@ -714,7 +701,7 @@
     position: relative;
 } */
 
-@keyframes topicShow{
+/* @keyframes topicShow{
     0%{opacity: 0; padding-left: 45%}
     100%{opacity: 1; padding-left: 22.5%;}
 }
@@ -722,14 +709,9 @@
 @keyframes topicEnter{
     0%{opacity: 0; padding-left: 0%}
     100%{opacity: 1; padding-left: 22.5%;}
-}
+} */
 
-@keyframes progressBarExtend {
-    0%{width: 0px}
-    100%{width: 55px}
-}
-
-
+/* 
 .disable{
     opacity: 0.2;
     pointer-events: none;
@@ -750,7 +732,7 @@
 
 .space{
     height: 220px;
-}
+} */
 
 /*= gradient animation ==*/
 /*= from https://www.gradient-animator.com/

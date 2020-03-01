@@ -3,5 +3,5 @@ export function isLoggedIn(req,res,next) {
         return next();
     }
     console.log("NOT AUTHENTICATED")
-    return res.send("NO_AUTH")
+    return res.redirect("/")
 }

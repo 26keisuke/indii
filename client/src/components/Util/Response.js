@@ -128,6 +128,8 @@ class Response extends Component {
 
     componentWillUnmount() {
 
+        ct = 0;
+
         if (!this.props.skeleton && this.props.auth.loggedIn){
             if(this.state.madeStarAction) {
                 axios.post(`/api/post/${this.props.postId}/star`, {like: this.state.showStar})

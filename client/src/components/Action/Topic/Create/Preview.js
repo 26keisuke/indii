@@ -6,11 +6,15 @@ import axios from "axios"
 import * as actions from "../../../../actions"
 
 import {Box, BoxTransition,
-    Title, Section, PreviewList,
-    ButtonWrapper, ButtonLeft, ButtonRight,
+    PreviewList,
     FinalCheck,
     TagElement,
     FriendWrapper, FriendNone } from "../../Element/Element"
+
+import TwoButtons from "../../Element/TwoButtons"
+
+import Section from "../../Element/Section"
+import Title from "../../Element/Title"
 
 import { Space } from "../../../Theme"
 import Image from "../../Preview/Image"
@@ -66,7 +70,7 @@ class CreatePreviewTopic extends Component {
         if(this.props.friends.length > 0){
             var res = this.props.friends.map((friend,index) => 
                 <FriendWrapper key={index}>
-                    <img src={friend.imgUrl}/>
+                    <img src={friend.photo}/>
                 </FriendWrapper>    
             )
         } else {
@@ -86,7 +90,7 @@ class CreatePreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <Section title={"トピック名"} content={topicName}/>
+                        <Section title={"トピック名"} content={topicName} width={440}/>
 
                         <Title title={"トピックの画像"}/>                        
                         <Image 
@@ -106,10 +110,11 @@ class CreatePreviewTopic extends Component {
                         </PreviewList>
 
                         <FinalCheck>この内容でよろしいですか？<span>(作成後はいつでもトピックを消すことができます。)</span></FinalCheck>
-                        <ButtonWrapper>
-                            <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                            <ButtonRight onClick={this.handleForward}>作成する</ButtonRight>
-                        </ButtonWrapper>
+                        <TwoButtons
+                            handleBack={this.handleBack}
+                            handleForward={this.handleForward}
+                            text={["戻る", "作成する"]}
+                        />
                         <Space height="220px"/>
                     </div>
                 </BoxTransition>

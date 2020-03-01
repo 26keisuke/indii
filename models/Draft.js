@@ -3,25 +3,44 @@ import mongoose from "mongoose"
 const { Schema } = mongoose
 
 const draftSchema = new Schema({
-    topic: { type: mongoose.Schema.Types.ObjectId, ref:"Topic" },
-    topicName: String, // for fast lookup
-    topicRectangleImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, // for fast lookup
+    topic: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" },
+
+    // for fast lookup
+    topicName: String, 
+    topicRectangleImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"},
     topicSquareImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"},
     topicMobileImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
+
     postName: String,
     postImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     creationDate: Date,
     editDate: [Date],
-    date: Date, // delete this after
+
     user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     content: String,
     config: {
         allowEdit: Boolean
     },
-    type: String,
+    
+    type: {type: String, enum: ["New", "Edit", "Zero"]}, // zeroは概要Editする時
+
     isValid: {type: Boolean, default: true}, // 同じタイトルのコンテンツが他のユーザーによって投稿された場合
     isDeleted: {type: Boolean, default: false},
     isUploaded: {type: Boolean, default: false},
+
+    // 他のユーザーのポストをedit時のみに使うもの
+    editPostId: { type: mongoose.Schema.Types.ObjectId, ref: "Post"}, 
+    editCreator: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+    editCreationDate: Date,
+    editLastEdited: Date,
+    editLastEditedAuthor: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+    editIsConfirmed: {type: Boolean, default: false}, // こいつはallowEditの時に必要。後処理としてのログ。
+    // editContribution: [{
+    //     timeStamp: Date,
+    //     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    // }],
+    editIndex: [Number],
+
     ref: [{
         refType: String,
         title: String,

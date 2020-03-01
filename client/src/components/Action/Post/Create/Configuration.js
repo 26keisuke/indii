@@ -1,8 +1,9 @@
 import React, { Component } from "react"
-import styled from "styled-components"
 
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, ConfigUnderline } from "../../Element/Element"
-import ToggleBtn from "../../../Util/ToggleBtn"
+import { Box, BoxTransition, } from "../../Element/Element"
+
+import Config from "../../Element/Config"
+import TwoButtons from "../../Element/TwoButtons"
 
 class CreateConfigurationPost extends Component {
 
@@ -42,65 +43,24 @@ class CreateConfigurationPost extends Component {
                         <p>3. 初期設定</p>
                     </div> 
 
-                    <form onSubmit={this.formSubmit}>
-                        <ConfigInput>承認無しに変更を許可する</ConfigInput>
-                        <ConfigBox>
-                            <div>
-                                <p>{this.state.allowEdit.on ? "許可" : "許可しない"}</p>
-                                <span>{this.state.allowEdit.on && "(推奨)"}</span>
-                            </div>
-                            <ToggleBtn
-                                on={this.state.allowEdit.on}
-                                handleClick={() => this.toggleButton("allowEdit")}
-                            />
-                        </ConfigBox>
-                        <ConfigUnderline/>
-                    </form>
+                    <Config
+                        width={433}
+                        title={"承認無しに変更を許可する"}
+                        text={["許可", "許可しない"]}
+                        recommend={true}
+                        on={this.state.allowEdit.on}
+                        handleClick={() => this.toggleButton("allowEdit")}
+                    />
 
-
-                    <ButtonWrapper>
-                        <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                        <ButtonRight onClick={this.handleForward}>次へ進む</ButtonRight>
-                    </ButtonWrapper>
+                    <TwoButtons
+                        handleBack={this.handleBack}
+                        handleForward={this.handleForward}
+                        text={["戻る", "次へ進む"]}
+                    />
                 </BoxTransition>
             </Box>
         )
     }
 }
-
-
-const ConfigBox = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 433px;
-    align-items: center;
-    justify-content: space-between;
-
-    & > div:nth-child(1) {
-
-        display: flex;
-        align-items: center;
-
-        & > p {
-            margin-top: 15px;
-            margin-left: 9px;
-            margin-bottom: 7px;
-            font-size: 14px;
-        }
-
-        & > span {
-            color: #666666;
-            font-size: 10px;
-            margin-top: 10px;
-            margin-left: 7px;
-        }
-    }
-`
-
-
-const ConfigInput = styled.p`
-    color: #333333 !important;
-    font-size: 11px !important;
-`
 
 export default CreateConfigurationPost

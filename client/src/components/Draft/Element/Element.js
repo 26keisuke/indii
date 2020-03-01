@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
 
-import { fmtDate } from "../../Util/util"
+import { fmtDate, renderType } from "../../Util/util"
 
 const DraftBox = styled(Link)`
     border-bottom: 1px solid #d2d2d2;   
@@ -63,6 +63,10 @@ const Date = styled.div`
     display: flex;
     align-items: center;
     margin-left: auto;
+
+    & > div {
+        margin-left: 10px;
+    }
 `
 
 const Nil = styled.div`
@@ -76,6 +80,8 @@ class Draft extends Component {
     renderType(type){
         switch(type){
             case "Edit":
+                return "編集 "
+            case "Zero":
                 return "編集 "
             case "New":
                 return "新規作成 "
@@ -124,7 +130,7 @@ class Draft extends Component {
                         }
                         <p>・</p>
                         { flag
-                        ? <p>{this.renderType(type)}</p>
+                        ? <p>{renderType(type)}</p>
                         : (
                             <div style={{marginRight: "5px"}}>
                                 <Skeleton width={55} height={12}/>
@@ -132,7 +138,11 @@ class Draft extends Component {
                         )
                         }
                         <Date>
-                            前回の編集日: { flag ? date : <Skeleton width={80} height={12}/>}
+                            前回の編集日: 
+                            { flag 
+                            ? <div>{ date }</div> 
+                            : <div><Skeleton width={60} height={12}/></div>
+                            }
                         </Date>
                     </div>
                 </DraftLeft>

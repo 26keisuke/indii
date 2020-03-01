@@ -6,6 +6,7 @@ export const FEEDBACK_SENT = "FEEDBACK_SENT"
 
 export const ON_SEARCH = "ON_SEARCH"
 export const OFF_SEARCH = "OFF_SEARCH"
+export const SEARCH_FETCHING = "SEARCH_FETCHING"
 
 export const RESET_CATEGORY = "RESET_CATEGORY"
 export const SET_CATEGORY = "SET_CATEGORY"
@@ -27,6 +28,8 @@ export const RESET_MESSAGE = "RESET_MESSAGE"
 export const SHOW_CONFIRMATION = "SHOW_CONFIRMATION"
 export const HIDE_CONFIRMATION = "HIDE_CONFIRMATION"
 
+
+// INDEX
 export const ADD_COLUMN = "ADD_COLUMN"
 export const REVERT_COLUMN = "REVERT_COLUMN"
 export const DELETE_COLUMN = "DELETE_COLUMN"
@@ -43,6 +46,8 @@ export const FETCH_FEED = "FETCH_FEED"
 export const FETCH_DRAFT = "FETCH_DRAFT"
 export const DRAFT_UPDATED = "DRAFT_UPDATED"
 export const DRAFT_READ = "DRAFT_READ"
+export const CHANGE_DRAFTNAME = "CHANGE_DRAFTNAME"
+export const CHANGE_DRAFTCONFIG = "CHANGE_DRAFTCONFIG"
 
 // TOPIC
 export const SEARCH_TOPIC = "SEARCH_TOPIC"
@@ -54,3 +59,9 @@ export const FETCH_POST = "FETCH_POST"
 
 // PROFILE
 export const FETCH_PROFILE = "FETCH_PROFILE"
+
+// FOLLOW
+export const SEARCH_FOLLOWER = "SEARCH_FOLLOWER"
+
+// IMAGE 
+export const REVERT_IMG = "REVERT_IMG"

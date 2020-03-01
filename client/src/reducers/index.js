@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 import { FETCH_USER,
-         ON_SEARCH, OFF_SEARCH, 
+         ON_SEARCH, OFF_SEARCH, SEARCH_FETCHING,
          RESET_CATEGORY, SET_CATEGORY,
          NUDGE_ADD, NUDGE_CHECK,
          SEARCH_TERM,
@@ -10,8 +10,9 @@ import { FETCH_USER,
          UPDATE_MESSAGE, RESET_MESSAGE,
          SHOW_CONFIRMATION, HIDE_CONFIRMATION,
          ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
+         REVERT_IMG,
          SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
-         SEARCH_TOPIC, SEARCH_POST,
+         SEARCH_TOPIC, SEARCH_POST, SEARCH_FOLLOWER,
          FETCH_TOPIC,
          FETCH_DRAFT, 
          FETCH_POST,
@@ -29,6 +30,8 @@ const initialState = {
         setting: false
     },
     search: {
+        actionFetching: false, // action内のsearchBoxから検索中（axiosでfetchingしている最中）
+        barFetching: false,　// header内のsearchBoxから検索中
         onSearch: false,
         searchResult: {
             topic: [],
@@ -60,6 +63,9 @@ const initialState = {
         columnName: "",
         revert: false,
         deleteId: "",
+    },
+    image: {
+        revert: false,
     },
     update: {
         fetching: false,
@@ -98,10 +104,23 @@ const initialState = {
     }
 }
 
+function imageReducer(state=initialState.image, action) {
+    switch(action.type) {
+        case REVERT_IMG:
+            return {
+                ...state,
+                revert: action.payload.revert
+            }
+        default:
+            return state
+    }
+}
+
 function profileReducer(state=initialState.profile, action) {
     switch(action.type) {
         case FETCH_PROFILE:
             return {
+                ...state,
                 user: action.payload
             }
         default:
@@ -122,7 +141,7 @@ function draftReducer(state=initialState.draft, action) {
                 onEdit: action.payload.data,
                 nounce: action.payload.nounce
             }
-        case DRAFT_UPDATED:
+        case DRAFT_UPDATED:　// これnounceがあるからいらないのではないか？
             return {
                 ...state,
                 isUpdated: true,
@@ -140,6 +159,7 @@ function draftReducer(state=initialState.draft, action) {
 function postReducer(state=initialState.post, action) {
     switch(action.type) {
         case SEARCH_POST:
+            console.log("search終了")
             return {
                 ...state,
                 search: action.payload.suggestions
@@ -162,6 +182,7 @@ function postReducer(state=initialState.post, action) {
 function topicReducer(state=initialState.topic, action) {
     switch(action.type) {
         case SEARCH_TOPIC:
+            console.log("search終了")
             return {
                 ...state,
                 search: action.payload.suggestions
@@ -314,17 +335,37 @@ function categoryReducer(state=initialState.category, action) {
 
 function searchReducer(state=initialState.search, action) {
     switch(action.type) {
-        case ON_SEARCH:
-            console.log("SEARCHING")
-            return {
-                ...state,
-                onSearch: true
+        // case ON_SEARCH:
+        //     console.log("SEARCHING")
+        //     return {
+        //         ...state,
+        //         onSearch: true
+        //     }
+        // case OFF_SEARCH:
+        //     console.log("SEARCH ENDED")
+        //     return {
+        //         ...state,
+        //         onSearch: false
+        //     }
+        case SEARCH_FETCHING:
+            if(action.payload.type === "ACTION"){
+                return {
+                    ...state,
+                    actionFetching: action.payload.onSearch,
+                }
+            } else {
+                return {
+                    ...state,
+                    barFetching: action.payload.onSearch,
+                }
             }
-        case OFF_SEARCH:
-            console.log("SEARCH ENDED")
+        case SEARCH_FOLLOWER:
             return {
                 ...state,
-                onSearch: false
+                searchResult: {
+                    ...state.searchResult,
+                    people: action.payload.suggestions,
+                }
             }
         case SEARCH_TERM:
             return {
@@ -383,4 +424,5 @@ export default combineReducers({
     topic: topicReducer,
     draft: draftReducer,
     post: postReducer,
+    image: imageReducer,
 });

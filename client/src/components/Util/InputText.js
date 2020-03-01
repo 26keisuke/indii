@@ -1,3 +1,5 @@
+// 使いずらすぎる。アニメーションは別にすべき。
+
 import React, { Component} from "react"
 import styled, { css, keyframes } from "styled-components"
 import PropTypes from "prop-types"
@@ -80,11 +82,21 @@ const Button = styled.button`
 
 const Wrapper = styled.div`
     display: flex;
-    position: absolute;
-    top: 0px;
-    animation-name: ${props=> fadeIn(props.coordinates)};
-    animation-duration: ${props => props.duration}ms;
-    animation-fill-mode: forwards;
+
+    ${props => props.coordinates
+    ? css`
+        position: absolute;
+        top: 0px;
+    `
+    : css`
+        position: relative;
+    `}
+
+    ${props => props.coordinates && props.duration && css`
+        animation-name: ${props => fadeIn(props.coordinates)};
+        animation-duration: ${props => props.duration}ms;
+        animation-fill-mode: forwards;
+    `}
 `
 
 const Input = styled.form`

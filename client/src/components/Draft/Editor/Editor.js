@@ -1,12 +1,16 @@
 import React, { Component } from "react"
-import styled, { css, keyframes } from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import { MdCheck } from "react-icons/md"
 
+import * as actions from "../../../actions"
+
 import Screen from "../../Util/Screen"
 import TextArea from "../TextArea/TextArea"
 import Tool from "../Tool/Tool"
+
+import { renderType } from "../../Util/util"
 
 const EditorNavi = styled.div`
     display: flex;
@@ -98,11 +102,34 @@ class Editor extends Component {
 
     // retrieve draft and check for ownership
     componentDidMount() {
+        this.fetchTargetDraft(true)
+    }
+
+
+    componentDidUpdate(prevProps) {
+        if(this.props.draft.isUpdated) {
+            this.props.fetchDraft(Math.random().toString(36).substring(2, 15))
+            // this.props.draftRead()
+        }
+
+        if(prevProps.draft.nounce !== this.props.draft.nounce){
+            this.fetchTargetDraft()
+        }
+    }
+
+    fetchTargetDraft = (initial) => {
         const { draft, auth, history } = this.props
 
         for (var key in draft.onEdit) {
             if(draft.onEdit[key]._id === this.props.match.params.id) {
-                if(draft.onEdit[key].user === auth.info._id) {
+                if(initial){
+                    if(draft.onEdit[key].user === auth.info._id) {
+                        this.setState({
+                            draft: draft.onEdit[key]
+                        })
+                        return;
+                    }
+                } else {
                     this.setState({
                         draft: draft.onEdit[key]
                     })
@@ -110,6 +137,7 @@ class Editor extends Component {
                 }
             }
         }
+        
         history.push('/')
     }
 
@@ -120,21 +148,12 @@ class Editor extends Component {
         }, 5000)
     }
 
-    renderType(type){
-        switch(type){
-            case "Edit":
-                return "編集"
-            case "New":
-                return "新規作成"
-        }
-    }
-
     renderTitle() {
         return (
             <div>
                 <EditorNavi>
                     <p>ポスト ></p>
-                    <p>{this.renderType(this.state.draft.type)} ></p>
+                    <p>{renderType(this.state.draft.type)} ></p>
                     <p>{this.state.draft.topicName}</p>
                 </EditorNavi>
             </div>
@@ -188,4 +207,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, null)(withRouter(Editor))
+export default connect(mapStateToProps, actions)(withRouter(Editor))

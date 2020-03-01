@@ -1,37 +1,16 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-import axios from "axios"
-
+import { connect } from "react-redux"
 import Autosuggest from "react-autosuggest";
 import { IoMdClose } from "react-icons/io"
 import { MdCheck } from "react-icons/md"
 
+import * as actions from "../../../../actions"
+
 import Warning from "../../../Search/Warning/Warning"
-
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../../Element/Element"
-
-import friends from "../../../__Mock__/data/friend"
-
-const escapeRegexCharacters = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-const getSuggestions = value => {
-  const escapedValue = escapeRegexCharacters(value.trim());
-  
-  if (escapedValue === '') {
-    return [];
-  }
-
-  const regex = new RegExp('^' + escapedValue, 'i');
-  const suggestions = friends.filter(friend => regex.test(friend.name));
-  
-  if (suggestions.length === 0) {
-    return [
-      { added: true } 
-    ];
-  }
-  
-  return suggestions;
-}
+import { Box, BoxTransition　} from "../../Element/Element"
+import { Space } from "../../../Theme"
+import TwoButtons from "../../Element/TwoButtons"
 
 class CreateFriendsTopic extends Component {
 
@@ -47,6 +26,14 @@ class CreateFriendsTopic extends Component {
         };
     };
 
+    componentDidUpdate(prevProps) {
+        if(prevProps.search.searchResult.people !== this.props.search.searchResult.people) {
+            this.setState({
+                suggestions: this.props.search.searchResult.people,
+            })
+        }
+    }
+
     onChange = (event, { newValue }) => {
         this.setState({
             value: newValue,
@@ -58,7 +45,7 @@ class CreateFriendsTopic extends Component {
         if (suggestion.added) {
           return this.state.value;
         }
-        return suggestion.name;
+        return suggestion.userName;
     };
 
     renderSuggestion = suggestion => {
@@ -71,12 +58,12 @@ class CreateFriendsTopic extends Component {
         }
 
         return (
-            <FriendSearch key={suggestion.id}　checked={flag}>
-                <img src={suggestion.imgUrl} alt={"友達検索結果の参考画像"}/>
+            <FriendSearch key={suggestion._id}　checked={flag}>
+                <img src={suggestion.photo} alt={"友達検索結果の参考画像"}/>
                 <div>
-                    <p>{suggestion.name}</p>
+                    <p>{suggestion.userName}</p>
                 </div>
-                <p>{suggestion.job}</p>
+                <p>{suggestion.comment}</p>
                 <div>
                     <CheckIcon checked={flag}/>
                 </div>
@@ -103,24 +90,15 @@ class CreateFriendsTopic extends Component {
         }
     }
 
-    onSuggestionsFetchRequested = ({ value }) => {
-
-        axios.get(`/api/friend/${value}`)
-        .then(res => {
-            console.log(res)
-        })
-
-
-
-        this.setState({
-          suggestions: getSuggestions(value)
-        });
+    onSuggestionsFetchRequested = async ({ value }) => {
+        this.props.searchFetching("ACTION", true)
+        this.props.searchFollower(value)
     };
 
     onSuggestionsClearRequested = () => {
-        this.setState({
-          suggestions: []
-        });
+        // this.setState({
+        //   suggestions: []
+        // });
     };
 
     onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {
@@ -128,41 +106,29 @@ class CreateFriendsTopic extends Component {
             this.setState({limit: true})
             return false
         }
-        this.setState({limit: false})
-        this.setState({
-            value: ""
-        });
-        const res = this.state.friends.filter((friend) => {
-            return friend.id === suggestion.id
-        })
+        const res = this.state.friends.filter((friend) => 
+            friend.id === suggestion.id
+        )
         if(res.length > 0){
-            this.setState({flag: true})
+            this.setState({
+                flag: true,
+                limit: false,
+                value: ""
+            })
         } else {
             this.setState({
-                friends: [...this.state.friends, suggestion]
+                friends: [...this.state.friends, suggestion],
+                limit: false,
+                value: ""
             })
         }
     };
 
-    // simply checking for lowercase duplicates might not be the best idea.
-    // some terms may have different meanings based on capitalization.
-    // Also this function is breaking the immutability constraint!!
-    deleteFriend = (e) => {
-        const html = e.target.innerHTML;
-        const res = this.state.tags.filter((tag) => 
-            tag.toLowerCase() !== html.toLowerCase()
-        );
-        this.setState({
-            tags: res
-        });
-    };
-
     checkForDuplicates = (suggestion) => {
         var isDuplicate = false;
-        const friends = this.state.friends;
         if(suggestion){
-            friends.forEach(function(friend){
-                if(suggestion.id === friend.id){
+            this.state.friends.forEach((friend) => {
+                if(suggestion._id === friend._id){
                     isDuplicate = true;
                 } ;
             });
@@ -187,7 +153,7 @@ class CreateFriendsTopic extends Component {
 
     deleteFromList = (id) => {
         const res = this.state.friends.filter((friend) => 
-            friend.id !== id
+            friend._id !== id
         );
         this.setState({
             friends: res
@@ -196,13 +162,13 @@ class CreateFriendsTopic extends Component {
 
     renderFriends = () => {
         const target = this.state.friends.map(friend => 
-            <FriendElement key={friend.id}>
+            <FriendElement key={friend._id}>
                 <div>
-                    <CloseIcon onClick={() => this.deleteFromList(friend.id)}/>
+                    <CloseIcon onClick={() => this.deleteFromList(friend._id)}/>
                 </div>
                 <img 
-                    src={friend.imgUrl} 
-                    onClick={() => this.deleteFromList(friend.id)} 
+                    src={friend.photo} 
+                    onClick={() => this.deleteFromList(friend._id)} 
                     alt={"選んだ友達の画像"}
                 />
             </FriendElement>
@@ -228,6 +194,7 @@ class CreateFriendsTopic extends Component {
                     </div> 
                     <form onSubmit={this.formSubmit}>
                         <p>フォロワーを検索</p>
+                        <Space height={"8px"}/>
                         <Autosuggest
                             // className="topic-form-area-search" 
                             suggestions={this.state.suggestions}
@@ -239,15 +206,16 @@ class CreateFriendsTopic extends Component {
                             inputProps={inputProps} 
                         />
                     </form>
-                    <ButtonWrapper>
-                        <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                        <ButtonRight onClick={this.handleForward}>次へ進む</ButtonRight>
-                    </ButtonWrapper>
+                    <TwoButtons
+                        handleBack={this.handleBack}
+                        handleForward={this.handleForward}
+                        text={["戻る", "次へ進む"]}
+                    />
                     <FriendTitle>招待リスト</FriendTitle>
                     <FriendBox>
                         {this.renderFriends()}
                     </FriendBox>
-                    <div className="space"/>
+                    <Space height={"220px"}/>
                 </BoxTransition>
             </Box>
         )
@@ -353,7 +321,12 @@ const CheckIcon = styled(MdCheck)`
     transform: scale(1.3);
     color: #4CD964;
     opacity: ${props => props.checked ? 1 : 0};
-    
 `
 
-export default CreateFriendsTopic;
+function mapStateToProps({search}){
+    return {
+        search,
+    }
+}
+
+export default connect(mapStateToProps, actions)(CreateFriendsTopic);

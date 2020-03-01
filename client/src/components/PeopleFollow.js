@@ -24,9 +24,14 @@ class FollowBtn extends Component {
     componentDidMount() {
         // こいつが５回もコールされてるから、グローバルカウンターで一回にしてる
         if(this.props.auth.loggedIn && (ct == 0)) {
+            this.checkIfFollows()
             this.setUpdater() 
             ct++
         }
+    }
+
+    componentWillMount() {
+        ct = 0;
     }
 
     setUpdater = () => {
@@ -56,21 +61,29 @@ class FollowBtn extends Component {
         }
     }
 
+    checkIfFollows = () => {
+        const ls = this.props.auth.info.follows;
+        var followed = false;
+        for(var i = 0; i < ls.length; i++) {
+            if(ls[i].user === this.props.id) {
+                followed = true
+                break
+            };
+        };
+        this.setState({ follow: followed })
+    }
+
     componentDidUpdate(prevProps) {
         if (!prevProps.auth.loggedIn && this.props.auth.loggedIn){
             this.setUpdater()
         }
 
-        if (prevProps.auth.info.follows !== this.props.auth.info.follows){
-            const ls = this.props.auth.info.follows;
-            var followed = false;
-            for(var i = 0; i < ls.length; i++) {
-                if(ls[i].user === this.props.id) {
-                    followed = true
-                    break
-                };
-            };
-            this.setState({ follow: followed })
+        if((!prevProps.auth.info.follows || !prevProps.id) && (this.props.id && this.props.auth.info.follows)) {
+            this.checkIfFollows()
+        }
+
+        if (prevProps.auth.info.follows && (prevProps.auth.info.follows.length !== this.props.auth.info.follows.length)){
+            this.checkIfFollows()
         }
     }
 

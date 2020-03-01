@@ -17,8 +17,16 @@ router.post("/login", passport.authenticate("local", {failureRedirect: "/"}),
 )
 
 router.get("/logout", (req, res) => {
-    req.logout();
-    res.redirect("/")
+
+    User.findById(req.user.id)
+    .then(user => {
+        user.activity.push({timeStamp: Date.now(), type: "LOG_OUT"})
+        user.save()
+        .then(() => {
+            req.logout();
+            res.redirect("/")
+        })
+    })
 })
 
 router.get("/current_user", (req, res) => {
@@ -44,6 +52,7 @@ router.get("/confirmation/:tokenId", (req, res) => {
             if(!user) { console.log("User not found"); return; }
             if(user.isVerified) { console.log("User is already verified"); return; }
             user.isVerified = true;
+            user.verifiedDate = Date.now();
             user.save()
             .then(user => {
                 console.log("User is now verified")
@@ -182,6 +191,25 @@ router.post("/resend", (req, res) => {
             return;
         })
     })
+})
+
+// もしcurrent_userでもfollowersをpopulateしても平気そうならば、そっちの方がいいと思う。
+router.get("/friend/:name", (req, res) => {
+    User.findById(req.user.id).populate("followers.user")
+    .then(user => {
+        var result = []
+        const regEx = RegExp('^' + req.params.name, 'i')
+
+        if(user.followers.length === 0){ res.send([]); return; }
+    
+        for(var i=0; i < user.followers.length; i++){
+            if(regEx.exec(user.followers[i].user.userName)){
+                result.push(user.followers[i].user)
+            }
+        }
+        res.send(result)
+    })
+
 })
 
 export default router

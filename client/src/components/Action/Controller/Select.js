@@ -23,7 +23,8 @@ import Warning from "../../Search/Warning/Warning"
 
 import * as actions from "../../../actions"
 
-import { Box, BoxTransition, GreenMark, RedMark, Owner, OwnerIcon, ButtonWrapper, ButtonLeft } from "../Element/Element"
+import { Box, BoxTransition, GreenMark, RedMark, Owner, OwnerIcon, Eclipse, EclipseWrapper } from "../Element/Element"
+import { ButtonWrapper, ButtonLeft, } from "../Element/TwoButtons"
 
 import getSuggestions from "../../__Mock__/method/getSuggestions"
 
@@ -39,6 +40,7 @@ class Select extends Component {
             value: localStorage.getItem(this.props.storage) || "",
             suggestions: [],
             blur: true,
+            onSearch: false,
             showWarning: false,
             warningId: "",
             text: "",
@@ -58,7 +60,6 @@ class Select extends Component {
 
         const flag = this.props.type === "Unique"
         const renderWarning = flag ? this.renderUniqueWarning : this.renderMatchWarning;
-
         const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
 
         if (prevProps.storage !== this.props.storage){ // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
@@ -100,8 +101,10 @@ class Select extends Component {
     onSuggestionsFetchRequested = ({ value }) => {
         if(!this.props.data) {
             if(this.props.content === "Topic") {
+                this.props.searchFetching("ACTION", true)
                 this.props.searchTopic(this.props.type, value)  
             } else if (this.props.content === "Post") {
+                this.props.searchFetching("ACTION", true)
                 this.props.searchPost(this.props.type, value, this.props.topicId)  // topicIdがある場合はtopic内で検索される
             }
         } else {
@@ -111,15 +114,12 @@ class Select extends Component {
         }
     };
 
-    onSuggestionsClearRequested = () => {
-        this.setState({
-            suggestions: []
-        });
-    };
+    // onBlurの時どうするかMethod => なにもしない
+    onSuggestionsClearRequested = () => {};
 
     handleFocus = () => {
         if(this.props.searchBox) {
-            this.props.onSearch()
+            this.setState({onSearch: true})
             return
         }
 
@@ -130,7 +130,7 @@ class Select extends Component {
 
     handleBlur = () => {
         if(this.props.searchBox) {
-            this.props.offSearch()
+            this.setState({onSearch: false})
             return
         }
 
@@ -160,11 +160,12 @@ class Select extends Component {
 
         if(this.props.type === "Unique"){
             if(this.state.suggestions.length === 0 || !this.state.suggestions[0].added){ 
-                return null;
+                return;
             }
         }
 
         this.props.setBackward(false);
+
         switch (this.props.index) {
             case "1":
                 this.props.setStep(1);
@@ -173,7 +174,7 @@ class Select extends Component {
                 this.props.setStep(2);
                 break
             default:
-                return null;
+                return;
         }
 
         this.props.setValue(suggestion);
@@ -231,9 +232,6 @@ class Select extends Component {
                 <Topic
                     handleClick={this.handleClick}
                     suggestion={suggestion}
-                    // もしかしたら後々エラーになるかも、消した理由はsuggestion[target]でhandleclickではなく
-                    // suggestion全体をhandleClickしたかったため
-                    // target={this.props.searchByVariable}
                 />
             );
         } else if (this.props.content === "Post") {
@@ -251,7 +249,7 @@ class Select extends Component {
                 <Topic
                     handleClick={this.handleClick}
                     suggestion={suggestion}
-                    target={this.props.searchByVariable}
+                    // target={this.props.searchByVariable}
                 />
             )
         } else if (this.props.content === "Post") {
@@ -281,7 +279,7 @@ class Select extends Component {
                 url="/search/from_suggestion"
                 handleClick={this.handleClick}
                 suggestion={suggestion}
-                target={this.props.searchByVariable}
+                // target={this.props.searchByVariable}
             />
         )
     }
@@ -359,9 +357,7 @@ class Select extends Component {
             if(this.state.suggestions.length > 0 && this.state.suggestions[0].added){
                 this.handleClick(this.state.value);
                 return;
-            } else {
-                return;
-            };
+            }
         };
     };
 
@@ -401,8 +397,8 @@ class Select extends Component {
 
     render () {
 
-        const { placeholder, type, searchBox, back, transition, index, title, subTitle, } = this.props
-        const { mark, text, value, suggestions, showWarning, warningId } = this.state
+        const { content, placeholder, type, searchBox, back, transition, index, title, subTitle, } = this.props
+        const { mark, text, value, suggestions, showWarning, warningId, onSearch } = this.state
 
         const inputProps = {
             placeholder,
@@ -415,13 +411,12 @@ class Select extends Component {
         const flag = type === "Unique"
 
         const formSubmit = flag ? this.formUniqueSubmit : this.formMatchSubmit
-        // const renderMark = flag ? this.renderUniqueMark : this.renderMatchMark
 
         if (searchBox) {
             return (
                 <form onSubmit={(e) => this.formBoxSubmit(e)} className="search-box">
                     <img 
-                        src={this.props.search.onSearch ? searchClick : search}  
+                        src={onSearch ? searchClick : search}
                         className="search-icon"
                         alt={"検索バーにある検索アイコン"}
                     />
@@ -437,6 +432,7 @@ class Select extends Component {
                 </form>
             )
         } else {
+
             return ( 
                 <Box>
                     <BoxTransition back={back} transition={transition}>
@@ -445,7 +441,7 @@ class Select extends Component {
                             <Warning>
                                 <p>
                                     既に{text}
-                                    <Link to={`/topic/${warningId}`}>
+                                    <Link to={`/${content}/${warningId}`}>
                                         "{value}"
                                     </Link>
                                     は存在しています。代わりに
@@ -459,8 +455,8 @@ class Select extends Component {
                             { showWarning && !flag &&
                             <Warning>
                                 <p>
-                                    トピック「{value}」はまだ作られていません。
-                                    <Link to={"/action/topic/create"}>
+                                    {text}「{value}」はまだ作られていません。
+                                    <Link to={`/action/${content}/create`}>
                                         新しく作成しますか？
                                     </Link>
                                 </p>
@@ -493,8 +489,15 @@ class Select extends Component {
                                 inputProps={inputProps} 
                             />
                             }
-                            {mark === "GREEN" && <GreenMark/>}
-                            {mark === "RED" && <RedMark/>}
+                            {this.props.search.actionFetching && 
+                                <EclipseWrapper>
+                                    <Eclipse>
+                                        <div></div>
+                                    </Eclipse>
+                                </EclipseWrapper>
+                            }
+                            {(!this.props.search.actionFetching && (mark === "GREEN")) && <GreenMark/>}
+                            {(!this.props.search.actionFetching && (mark === "RED")) && <RedMark/>}
                         </form>
                         {this.renderButton()}
                     </BoxTransition>

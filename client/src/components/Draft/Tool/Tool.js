@@ -6,6 +6,7 @@ import { connect } from "react-redux"
 import axios from "axios"
 
 import { FaGlobe, FaClipboardList, FaImage } from "react-icons/fa"
+import { IoIosInformationCircleOutline, IoIosSettings } from "react-icons/io"
 
 import * as actions from "../../../actions"
 import { sendMessage } from "../../Util/util"
@@ -21,15 +22,16 @@ import {
         mediaList,
         generalList,
         stateName} from "./Data/data"
-        
+
+import Info from "./Info/Info"
+import Title from "./Title/Title"
 import Button from "../../Util/Button"
+import Config from "./Config/Config"
 import Form from "./Form/Form"
 import List from "./List/List"
 import Carousel from "./Carousel/Carousel"
-import ArrowSpin from "../../Util/ArrowSpin"
 import Image from "./Image/Image"
 import { Space } from "../../Theme"
-// import { id } from "date-fns/locale";
 
 class Reference extends Component {
 
@@ -39,7 +41,7 @@ class Reference extends Component {
 
             toggle: "website",
 
-            reference: [],
+            // reference: [], こいつをdefineしてしまうとうまくいかない（何故だかはよくわからん）
             tempReference: {},
 
             transparent: true,
@@ -122,6 +124,24 @@ class Reference extends Component {
                 isOpened: false,
                 changed: false,
             },
+            info: {
+                isOpened: false,
+                changed: false,
+
+                postName: "", // undefinedじゃなくてこれにしないと,warningが出る
+                topicName: undefined,
+                author: undefined,
+                creationDate: undefined,
+                lastEdited: undefined,
+                lastEditedAuthor: undefined,
+                config: {
+                    allowEdit: false,
+                }
+            },
+            config: {
+                isOpened: false,
+                changed: false,
+            },
 
             // image
             file: {preview: null}, // Uploadされた時
@@ -131,23 +151,26 @@ class Reference extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         // tempReferenceの部分は、最初にinitializeした時に呼ばれる（空白のobjがaxiosで送られる）から必要
-        if((prevState.reference !== this.state.reference) && (this.state.tempReference.refType)) {
-            
+
+        if(prevProps.draft.ref && this.props.draft.ref){
+            var prev = prevProps.draft.ref.filter(r => r.isDeleted === false).length
+            var now = this.props.draft.ref.filter(r => r.isDeleted === false).length
+        }
+
+        if(prevState.reference && (prevState.reference.length !== this.state.reference.length) && this.state.tempReference.refType) {
+
             axios.post(`/api/draft/${this.props.draft._id}/ref`, {ref: this.state.tempReference})
             .then(
                 this.setState({
-                    ...this.state,
                     tempReference: {},
+                    transparent: true
                 })
             )
             .catch(err => {
                 console.log(err)
             })
 
-            this.setState({ transparent: true })
-
-        } else if (prevProps.draft !== this.props.draft) {
-
+        } else if ((!prevProps.draft.ref && (this.props.draft.ref.length > 0)) || (prev != now)) {
             this.setState({
                 reference: this.props.draft.ref || []
             })
@@ -157,7 +180,66 @@ class Reference extends Component {
 
             const empty = this.checkForRequired()
             empty ? this.setState({ transparent: true }) : this.setState({ transparent: false })
+        }
 
+        // userが空欄にした時は、""になる
+        if((!this.state.info.postName) && (!this.state.info.author) && (this.props.draft.postName)){
+            var author;
+            var creationDate;
+            var lastEdited;
+            var lastEditedAuthor;
+
+            if(this.props.draft.type === "New") {
+                author = this.props.auth.info
+                creationDate = this.props.draft.creationDate
+            } else {
+                if(this.props.draft.type === "Edit") {
+                    author = this.props.draft.editCreator
+                    creationDate = this.props.draft.editCreationDate
+                }
+                lastEdited = this.props.draft.editLastEdited
+                lastEditedAuthor = this.props.draft.editLastEditedAuthor
+            }
+
+            this.setState({
+                ...this.state,
+                info: {
+                    ...this.state.info,
+                    postName: this.props.draft.postName,
+                    topicName: this.props.draft.topicName,
+                    author: author,
+                    creationDate: creationDate,
+                    lastEdited: lastEdited,
+                    lastEditedAuthor: lastEditedAuthor,
+                    config: {
+                        ...this.state.info.config,
+                        allowEdit: this.props.draft.config.allowEdit,
+                    }
+                }
+            })
+        }
+
+        if(prevProps.draft.postName && (prevProps.draft.postName !== this.props.draft.postName)) {
+            this.setState({
+                ...this.state,
+                info: {
+                    ...this.state.info,
+                    postName: this.props.draft.postName,
+                }
+            })
+        }
+
+        if(prevProps.draft.config !== this.props.draft.config) {
+            this.setState({
+                ...this.state,
+                info: {
+                    ...this.state.info,
+                    config: {
+                        ...this.state.info.config,
+                        allowEdit: this.props.draft.config.allowEdit,
+                    }
+                }
+            })
         }
     }
 
@@ -213,11 +295,12 @@ class Reference extends Component {
                 ...this.state[name],
                 [stateName]: date
             }
-            
         })
     }
 
     handleImgClick = () => {
+        this.setState({file: {preview: null}})
+
         axios.post(`/api/draft/${this.props.draft._id}/image`, {img: this.state.url})
         .then(
             sendMessage("success", "メイン画像を保存しました。", 3000, this.props)
@@ -291,32 +374,113 @@ class Reference extends Component {
         })
     }
 
+    handleConfigClick = (name) => {
+
+        if(this.props.draft.type === "Edit") {
+            if(this.props.draft.editCreator._id !== this.props.auth.info._id){
+                sendMessage("fail", "このポストのオーナーしか設定を変更できません。", 3000, this.props)
+                return
+            }
+        }
+
+        const id = this.props.draft._id;
+        const action = "CHANGE_DRAFTCONFIG";
+        const title = "設定の変更";
+        const message = "この設定を変更しますか？";
+        const caution = "";
+        const buttonMessage = "変更する";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage, "", name);
+        this.props.enableGray();
+    }
+
+    handleNameSubmit = (e) => {
+        e.preventDefault()
+        if(!this.state.info.postName){
+            sendMessage("fail", "ポスト名が入力されていません。", 3000, this.props)
+            return
+        }
+        this.props.changeDraftName(this.props.draft._id, this.state.info.postName, false);
+    }
+
+    revertClick = () => {
+        const id = this.props.draft._id;
+        const action = "CHANGE_DRAFTNAME";
+        const title = "ポスト名を元に戻す";
+        const message = "ポスト名を最初の状態に戻しますか？";
+        const caution = "";
+        const buttonMessage = "元に戻す";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        this.props.enableGray();
+    }
+
+    handleChange = (e) => {
+        this.setState({
+            ...this.state,
+            info:{
+                ...this.state.info,
+                postName: e.target.value,
+            }
+        })
+    }
+
+    handleBlur = () => {
+        this.setState({
+            ...this.state,
+            info:{
+                ...this.state.info,
+                focus: false
+            }
+        })
+    }
+
+    handleFocus = () => {
+        this.setState({
+            ...this.state,
+            info:{
+                ...this.state.info,
+                focus: true
+            }
+        })
+    }
+
     render () { 
 
         const { file, url } = this.state
         const initialVal = this.props.draft.postImg && this.props.draft.postImg.image
 
-        // const flag = ((file.preview === null) || (file.preview === undefined))
-        // const display = flag ? initialVal : file.preview
-
         const display = !url ? initialVal : url
 
         return (
-            <div>
-                <RightInsideTitle onClick={() => this.handleClick("refAdd")}>
-                    参照を追加
-                    <IconRefAdd/>
-                    <ArrowWrapper>
-                        <ArrowSpin
-                            size={32}
-                            handleClick={() => this.handleClick("refAdd")}
-                            isOpened={this.state.refAdd.isOpened}
-                            changed={this.state.refAdd.changed}
-                        />
-                    </ArrowWrapper>
-                </RightInsideTitle>
+            <Box>
+                <Title
+                    title="基本情報"
+                    icon={<InfoIcon/>}
+                    isOpened={this.state.info.isOpened}
+                    changed={this.state.info.changed}
+                    handleClick={() => this.handleClick("info")}
+                />
+                <Collapse isOpened={this.state.info.isOpened}>
+                    <Info
+                        edit={this.props.draft.type === "Edit"}
+                        revertClick={this.revertClick}
+                        handleSubmit={this.handleNameSubmit}
+                        handleChange={this.handleChange}
+                        value={this.state.info}
+                        handleBlur={this.handleBlur}
+                        handleFocus={this.handleFocus}
+                        focus={this.state.info.focus}
+                    />
+                </Collapse>
+
+                <Title
+                    title="参照を追加"
+                    icon={<FaGlobe/>}
+                    isOpened={this.state.refAdd.isOpened}
+                    changed={this.state.refAdd.changed}
+                    handleClick={() => this.handleClick("refAdd")}
+                />
                 <Collapse isOpened={this.state.refAdd.isOpened}>
-                    <RefBox>
+                    <div>
                         <Carousel
                             list={nameList}
                             state={stateName}
@@ -348,43 +512,36 @@ class Reference extends Component {
                             </Button>
                             }
                         </RefButtonWrapper>
-                    </RefBox>
+                    </div>
                     <Space height="20px"/>
                 </Collapse>
 
-                
-                <RightInsideTitle onClick={() => this.handleClick("refList")}>
-                    参照一覧
-                    <IconRefList/>
-                    <ArrowWrapper>
-                        <ArrowSpin
-                            size={32}
-                            handleClick={() => this.handleClick("refList")}
-                            isOpened={this.state.refList.isOpened}
-                            changed={this.state.refList.changed}
-                        />
-                    </ArrowWrapper>
-                </RightInsideTitle>
+                <Title
+                    title="参照一覧"
+                    icon={<FaClipboardList/>}
+                    isOpened={this.state.refList.isOpened}
+                    changed={this.state.refList.changed}
+                    handleClick={() => this.handleClick("refList")}
+                />
                 <Collapse isOpened={this.state.refList.isOpened}>
                     <List
-                        reference={this.state.reference}
+                        id={this.props.draft._id}
+                        reference={this.state.reference || []}
                     />
                     <Space height="20px"/>
                 </Collapse>
-
-                <RightInsideTitle onClick={() => this.handleClick("refImg")}>
-                    メイン画像を追加
-                    <IconImage/>
-                    <ArrowWrapper>
-                        <ArrowSpin
-                            size={32}
-                            handleClick={() => this.handleClick("refImg")}
-                            isOpened={this.state.refImg.isOpened}
-                            changed={this.state.refImg.changed}
-                        />
-                    </ArrowWrapper>
-                </RightInsideTitle>
-                <Collapse isOpened={this.state.refImg.isOpened}>
+            
+                { this.props.draft.type !== "Zero" &&
+                ([<Title
+                    key={"imgTitle"}
+                    title="メイン画像を追加"
+                    icon={<FaImage/>}
+                    isOpened={this.state.refImg.isOpened}
+                    changed={this.state.refImg.changed}
+                    handleClick={() => this.handleClick("refImg")}
+                />
+                ,
+                <Collapse key={"imgCollapse"} isOpened={this.state.refImg.isOpened}>
                     <Image
                         // uploadのprops
                         display={display}
@@ -403,7 +560,7 @@ class Reference extends Component {
                         }}
                         config={"postImg"}
                     />
-                    { url &&
+                    { file.preview && url &&
                         <RefButtonWrapper>
                             <Button inverse={true} onClick={this.handleImgClick}>
                                 決定
@@ -411,15 +568,35 @@ class Reference extends Component {
                         </RefButtonWrapper>
                     }
                     <Space height="20px"/>
+                </Collapse> 
+                ])}
+                { (this.props.draft.type !== "Zero") &&
+                ([<Title
+                    key={"titleConfig"}
+                    title="設定一覧"
+                    icon={<IoIosSettings/>}
+                    isOpened={this.state.config.isOpened}
+                    changed={this.state.config.changed}
+                    handleClick={() => this.handleClick("config")}
+                />,
+                <Collapse key={"contentConfig"} isOpened={this.state.config.isOpened}>
+                    <Config
+                        handleClick={this.handleConfigClick}
+                        config={this.state.info.config}
+                    />
                 </Collapse>
-
-            </div>
+                ])}
+                <Space height={"220px"}/>
+            </Box>
         )
     }
 }
 
-
-const RefBox = styled.div``
+const Box = styled.div`
+    & > div {
+        margin: 6px 0px;
+    }
+`
 
 const RefButtonWrapper = styled.div`
     padding: 0px 10px;
@@ -430,37 +607,14 @@ const RefButtonWrapper = styled.div`
     justify-content: flex-end;
 `
 
-const RightInsideTitle = styled.div`
-    height:35px;
-    padding-left:42px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    color: white;
-    background-color: #636480;
-    position: relative;
-    cursor: pointer;
+const InfoIcon = styled(IoIosInformationCircleOutline)`
+    transform: scale(1.2)
 `
 
-const ArrowWrapper = styled.div`
-    position: absolute;
-    right: 14px;
-    top: 9px;
-`
+function mapStateToProps({auth}) {
+    return {
+        auth
+    }
+}
 
-const IconRefAdd = styled(FaGlobe)`
-    position: absolute;
-    left: 15px;
-`
-
-const IconRefList = styled(FaClipboardList)`
-    position: absolute;
-    left: 15px;
-`
-
-const IconImage = styled(FaImage)`
-    position: absolute;
-    left: 15px;
-`
-
-export default connect(null, actions)(withRouter(Reference))
+export default connect(mapStateToProps, actions)(withRouter(Reference))

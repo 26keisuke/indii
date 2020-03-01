@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import axios from "axios"
 
 import * as actions from "../../../../actions"
 
 import { Box, BoxTransition,
-         Section,
-         ButtonWrapper, ButtonLeft, ButtonRight,
          FinalCheck } from "../../Element/Element"
 import { Space } from "../../../Theme"
+
+import Section from "../../Element/Section"
+import TwoButtons from "../../Element/TwoButtons"
+
+import { sendMessage } from "../../../Util/util"
 
 class EditPreviewTopic extends Component {
 
@@ -21,19 +25,23 @@ class EditPreviewTopic extends Component {
         this.props.setBackward(false);
         this.props.isFetching();
         this.props.enableGray();
-        setTimeout(() => this.onExit(), 1500);
+
+        const url = "/api/post/" + this.props.selectedPost._id + "/edit"
+
+        axios.post(url)
+        .then(res => {
+            this.onExit()
+        })
     };
 
     onExit = () => {
-        this.props.history.push("/")
         this.props.endFetching();
         this.props.disableGray();
         this.props.resetCategory();
         localStorage.clear();
-        this.props.setCategory("home");
-        setTimeout(() => this.props.updateMessage("success", `ポスト「${this.props.selectedPost.title}」を下書きに追加しました。`),1000);
-        this.props.nudgeAdd("draft")
-        setTimeout(() => this.props.resetMessage(), 5000)
+        this.props.setCategory("draft");
+        sendMessage("success", `ポスト「${this.props.selectedPost.postName}」を下書きに追加しました。`, 3000, this.props)
+        this.props.history.push("/draft")
     }
 
     render(){
@@ -44,14 +52,15 @@ class EditPreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <Section title={"トピック名"} content={this.props.selectedTopic.name}/>
-                        <Section title={"ポスト名"} content={this.props.selectedPost.title}/>
+                        <Section title={"トピック名"} content={this.props.selectedTopic.topicName} width={440}/>
+                        <Section title={"ポスト名"} content={this.props.selectedPost.postName} width={440}/>
                         
                         <FinalCheck>このポストを編集しますか？<span></span></FinalCheck>
-                        <ButtonWrapper>
-                            <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                            <ButtonRight onClick={this.handleForward}>作成する</ButtonRight>
-                        </ButtonWrapper>
+                        <TwoButtons
+                            handleBack={this.handleBack}
+                            handleForward={this.handleForward}
+                            text={["戻る", "次へ進む"]}
+                        />
                         <Space height="220px"/>
                     </div>
                 </BoxTransition>

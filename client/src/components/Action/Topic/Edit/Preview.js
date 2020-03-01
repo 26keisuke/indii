@@ -9,12 +9,14 @@ import { FiColumns } from "react-icons/fi"
 import * as actions from "../../../../actions"
 
 import {Box, BoxTransition,
-        Title, Section,
-        ButtonWrapper, ButtonLeft, ButtonRight,
         FinalCheck,
         TagElement,
         PreviewList,
         PreviewIndex, IndexBox } from "../../Element/Element"
+
+import Section from "../../Element/Section"
+import Title from "../../Element/Title"
+import TwoButtons from "../../Element/TwoButtons"
 
 import { Space } from "../../../Theme"
 import Image from "../../Preview/Image"
@@ -57,7 +59,6 @@ class CreatePreviewTopic extends Component {
 
         axios.post(url, data)
         .then(() => {
-            console.log("DONE")
             this.onExit()
         })
         .catch(err => {
@@ -67,7 +68,7 @@ class CreatePreviewTopic extends Component {
     };
 
     onExit = () => {
-        this.props.history.push("/")
+        this.props.history.push(`/topic/${this.props.topicId}`)
         this.props.endFetching();
         this.props.disableGray();
         this.props.resetCategory();
@@ -194,7 +195,7 @@ class CreatePreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <Section title={"トピック名"} content={this.props.topicName}/>
+                        <Section title={"トピック名"} content={this.props.topicName} width={440}/>
 
                         <Title title={"トピックの画像"}/>
                         <Image
@@ -216,10 +217,11 @@ class CreatePreviewTopic extends Component {
                         {this.renderIndex()}
                         
                         <FinalCheck>この内容で編集を反映してよろしいですか？<span></span></FinalCheck>
-                        <ButtonWrapper>
-                            <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                            <ButtonRight onClick={this.handleForward}>作成する</ButtonRight>
-                        </ButtonWrapper>
+                        <TwoButtons
+                            handleBack={this.handleBack}
+                            handleForward={this.handleForward}
+                            text={["戻る", "作成する"]}
+                        />
                         <Space height="220px"/>
                     </div>
                 </BoxTransition>

@@ -28,32 +28,32 @@ const GridTitle = styled.p`
     z-index:2;
 `
 
-const GridLabel = styled.div`
+// const GridLabel = styled.div`
 
-    position: relative;
+//     position: relative;
 
-    & > div {
-        position: absolute;
-        opacity: 0.1;
-        left: -51px;
-        background-color: ${props => props.theme.themeColor.lightBlue};
-        z-index:1;
-        border-top-right-radius: 100px;
-        border-bottom-right-radius: 100px;
-    }
+//     & > div {
+//         position: absolute;
+//         opacity: 0.1;
+//         left: -51px;
+//         background-color: ${props => props.theme.themeColor.lightBlue};
+//         z-index:1;
+//         border-top-right-radius: 100px;
+//         border-bottom-right-radius: 100px;
+//     }
 
-    & > div:nth-child(1) {
-        width: 150px;
-        height: 38px;
-        top:  -7px;
-    }
+//     & > div:nth-child(1) {
+//         width: 150px;
+//         height: 38px;
+//         top:  -7px;
+//     }
 
-    & > div:nth-child(2) {
-        width: 125px;
-        height: 32px;
-        top: -22px;
-    }
-`
+//     & > div:nth-child(2) {
+//         width: 125px;
+//         height: 32px;
+//         top: -22px;
+//     }
+// `
 
 const GridTop = styled.div`
 
@@ -86,18 +86,12 @@ class Grid extends Component {
         return (
             <GridBox>
                     <GridTop>
-                        {/* <IconWrapper> */}
-                            <Icon/>
-                        {/* </IconWrapper> */}
+                        <Icon/>
                         <div>
                             <h1>{config.header}</h1>
                             <h2>{config.headerContent}</h2>
                         </div>
                     </GridTop>
-                    {/* <GridLabel>
-                        <div/>
-                        <div/>
-                    </GridLabel> */}
                     <GridTitle>{config.screenName[0]}</GridTitle>
                     <Card
                         category={config.category[0]}
@@ -107,10 +101,6 @@ class Grid extends Component {
                         img={config.img[0]}
                         color={config.color[0]}
                     />
-                    {/* <GridLabel>
-                        <div/>
-                        <div/>
-                    </GridLabel> */}
                     <GridTitle>{config.screenName[1]}</GridTitle>
                     <Card
                         category={config.category[1]}

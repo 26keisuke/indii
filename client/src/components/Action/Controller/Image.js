@@ -1,14 +1,19 @@
-//　将来的にはcrop使う時と使わない時で分岐させる（もしuncrop opが必要になるのだったらの場合）
 // Radio buttonのpropsが汚い
 
 import React, { useState, useEffect } from "react"
+import { connect } from "react-redux"
 import styled, { css } from "styled-components"
 
+import * as actions from "../../../actions"
+
 import Upload from "../../Util/Upload"
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight } from "../Element/Element"
+import { Box, BoxTransition } from "../Element/Element"
+import TwoButtons from "../Element/TwoButtons"
 import { Space } from "../../Theme"
 import Crop from "../../Util/Crop"
 import { Radio } from "../../Filter/Filter"
+
+import { sendMessage } from "../../Util/util"
 
 const baseStyle = {
     display: 'flex',
@@ -38,9 +43,6 @@ const rejectStyle = {
 
 function ActionImage(props) {
 
-    // fileは{preview: __}の形
-    // const [file, setFile] = useState({preview: localStorage.getItem(props.storage)} || {preview: null});
-
     const [file1, setFile1] = useState({preview: null})
     const [file2, setFile2] = useState({preview: null})
     const [file3, setFile3] = useState({preview: null})
@@ -48,10 +50,6 @@ function ActionImage(props) {
     const [url2, setUrl2] = useState(localStorage.getItem(props.storage2) || null)
     const [url3, setUrl3] = useState(localStorage.getItem(props.storage3) || null)
     const [toggle, setToggle] = useState("mobile")
-
-    // For uncrop op
-    // const flag = ((file.preview === null) || (file.preview === undefined))
-    // const display = flag ? props.initialVal : file.preview
 
     const flag1 = ((url1 === null) || (url1 === undefined))
     const display1 = flag1 ? props.initialVal1 : url1
@@ -61,6 +59,19 @@ function ActionImage(props) {
 
     const flag3 = ((url3 === null) || (url3 === undefined))
     const display3 = flag3 ? props.initialVal3 : url3
+
+    useEffect(() => {
+        if(props.image.revert){
+            setUrl1(null)
+            setFile1({preview: null})
+            setUrl2(null)
+            setFile2({preview: null})
+            setUrl3(null)
+            setFile3({preview: null})
+            props.revertImg(false)
+            sendMessage("success", "変更を元に戻しました。", 4000, props)
+        }
+    }, [props.image.revert])
 
     useEffect (() => {
         if(!flag1 && props.storage1){
@@ -86,71 +97,27 @@ function ActionImage(props) {
     };
 
     const handleRevert = () => {
-        // For uncrop op
-        // setFile({
-        //     ...file,
-        //     preview: null
-        // })
-
-        switch(toggle) {
-            case "mobile":
-                setUrl1(null)
-                setFile1({preview: null})
-                return 
-            case "topic":
-                setUrl2(null)
-                setFile2({preview: null})
-                return 
-            case "post":
-                setUrl3(null)
-                setFile3({preview: null})
-                return 
-            default:
-                return null
-        }
+        const id = "1"; // falseじゃなければなんでもいい
+        const action = "REVERT_IMG";
+        const title = "変更を元に戻す";
+        const message = "全ての画像を元に戻しますか？";
+        const caution = "";
+        const buttonMessage = "元に戻す";
+        props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        props.enableGray();
     }
 
     const handleForward = () => {
-        // if(!display) {
-        //     console.log("Illegal attempt to bypass sending a file");
-        // }
 
         if(!display1 || !display2 || !display3){
             console.log("Illegal attempt to bypass sending a file");
         }
-
-        // For uncrop op
-        // if(flag) {
-        //     props.setImage(props.initialVal) 
-        // } else  {
-        //     props.setImage(file.preview)
-        // }
 
         const mobile = flag1 ? props.initialVal1 : url1
         const square = flag2 ? props.initialVal2 : url2
         const rectangle = flag3 ? props.initialVal3 : url3
 
         props.setImage(mobile, square, rectangle)
-
-        // バグがなければ後で消すこと
-
-        // if(flag1) {
-        //     props.setImage(props.initialVal1, "mobile") 
-        // } else  {
-        //     props.setImage(url1, "mobile")
-        // }
-
-        // if(flag2) {
-        //     props.setImage(props.initialVal2, "square") 
-        // } else  {
-        //     props.setImage(url2, "square")
-        // }
-
-        // if(flag3) {
-        //     props.setImage(props.initialVal3, "rectangle") 
-        // } else  {
-        //     props.setImage(url3, "rectangle")
-        // }
 
         props.setBackward(false)
         props.setStep(2);
@@ -199,8 +166,6 @@ function ActionImage(props) {
                     message="このボックスに画像をドラッグするか、ボックスをクリックしてください"
                     caution="(*.jpegと*.pngのみ)"
                     file={toggle === "mobile" ? file1 : toggle === "topic" ? file2 : file3}
-                    // <upload/>でlocalstorageに保存しない
-                    // storage={toggle === "mobile" ? props.storage1 : toggle === "topic" ? props.storage2 : props.storage3}
                     setFile={toggle === "mobile" ? setFile1 : toggle === "topic" ? setFile2 : setFile3}
                     baseStyle={baseStyle}
                     activeStyle={activeStyle}
@@ -291,10 +256,12 @@ function ActionImage(props) {
                     crop={getConfig(toggle)}
                     config={toggle}
                 />
-                <ButtonWrapper>
-                    <ButtonLeft onClick={handleBack}>戻る</ButtonLeft>
-                    <ButtonRight disabled={ !display1 || !display2 || !display3 } onClick={handleForward}>次へ進む</ButtonRight>
-                </ButtonWrapper>
+                <TwoButtons
+                    handleBack={handleBack}
+                    handleForward={handleForward}
+                    text={["戻る", "次へ進む"]}
+                    disabled={ !display1 || !display2 || !display3 }
+                />
                 <Space height="220px"/>
             </BoxTransition>
         </Box>
@@ -466,4 +433,10 @@ export const PreviewElement = styled.div`
     }
 `
 
-export default ActionImage;
+function mapStateToProps({image}){
+    return {
+        image
+    }
+}
+
+export default connect(mapStateToProps, actions)(ActionImage);

@@ -1,30 +1,6 @@
-import React, { Component } from "react"
 import styled, { keyframes, css } from "styled-components"
 import { IoMdCheckmark, IoMdClose, IoIosClose } from "react-icons/io";
 import { FaUserCheck } from "react-icons/fa"
-
-export class Section extends Component {
-    render() {
-        return (
-            <div>   
-                <Title title={this.props.title}/>
-                <PreviewTitle>{this.props.content}</PreviewTitle>
-                <PreviewUnderline/>
-            </div>
-        )
-    }
-}
-
-export class Title extends Component {
-    render() {
-        return (
-            <PreviewSection>
-                <div/>
-                <p>{this.props.title}</p>
-            </PreviewSection>
-        )
-    }
-}
 
 const enter = keyframes`
     0%{opacity: 0; padding-left: 0%}
@@ -218,40 +194,6 @@ export const OwnerIcon = styled(FaUserCheck)`
     margin-right: 10px;
 `
 
-
-export const ButtonWrapper = styled.div`
-    width: 444px;
-    display: flex;
-    justify-content: space-between;
-    margin-top:30px;
-`
-
-export const ButtonLeft = styled.button`
-    width: 90px;
-    height:34px;
-    cursor: pointer;
-    background-color: #ffffff;
-    border: 0.5px solid #636480;
-    font-family: "Gennokaku Gothic";
-    outline:0;
-`
-
-export const ButtonRight = styled.button`
-    width: 90px;
-    height:34px;
-    cursor: pointer;
-    border: none;
-    background-color: #636480;
-    color: #ffffff;
-    font-family: "Gennokaku Gothic";
-    outline:0;
-
-    ${props => props.disabled && css`
-        opacity: 0.2;
-        pointer-events: none;
-    `}
-`
-
 export const PreviewSection = styled.div`
 
     position: relative;
@@ -279,11 +221,11 @@ export const PreviewTitle = styled.p`
     font-size: 14px;
 `
 
-export const PreviewUnderline = styled.div`
-    width: 440px;
+/* export const PreviewUnderline = styled.div`
+    width: ${props => String(props.width) + "px"};
     border-bottom: 1px solid #838383;
     margin-bottom: 30px;
-`
+` */
 
 export const FinalCheck = styled.p`
     font-size: 15px;
@@ -303,49 +245,6 @@ export const PreviewList = styled.div`
     margin-left:3px;
     width: 440px;
 `
-
-/* export const PreviewImgWrapper = styled.div`
-    margin-bottom:40px;
-`
-
-export const PreviewImg = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 444px;
-` */
-/* 
-export const ImgBox = styled.div`
-    position: relative;
-    margin: 0px 15px;
-    margin-top: 25px;
-
-    & > p {
-        margin-bottom:10px;
-        color: #585858;
-        font-size: 10px;
-        margin-left: 5px;
-    }
-
-    & > img {
-        ${props => props.type == "mobile" 
-        ? css`
-            width: 285px;
-            height: 150px;
-            border-bottom-right-radius: 35px;
-            border-bottom-left-radius: 35px;
-            object-fit: contain;
-            border: 1px solid #d2d2d2;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        `
-        : css`
-            width: 120px;
-            height: 120px;
-            border: 1px solid #d2d2d2;
-            object-fit: contain;
-        `}
-    }
-` */
 
 export const PreviewIndex = styled.div`
 
@@ -455,49 +354,49 @@ export const TagElement = styled.p`
     color: #646380;
 `
 
-export const PreviewConfig = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 433px;
-    align-items: center;
-    justify-content: space-between;
+// export const PreviewConfig = styled.div`
+//     display: flex;
+//     flex-direction: row;
+//     width: 433px;
+//     align-items: center;
+//     justify-content: space-between;
 
-    & > div {
-        position: relative;
+//     & > div {
+//         position: relative;
 
-        & > input {
-            position:absolute;
-            top: -10px;
-            width: 27px;
-            height: 27px;
-            margin-top: 12px;
-            cursor: pointer;
-            border: none;
-            border-radius: 100%;
-            box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
+//         & > input {
+//             position:absolute;
+//             top: -10px;
+//             width: 27px;
+//             height: 27px;
+//             margin-top: 12px;
+//             cursor: pointer;
+//             border: none;
+//             border-radius: 100%;
+//             box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
 
-            ${props => props.config
-            ? css`
-                right: 3px; 
-                background-color: #9EAEE6;
-            `
-            : css`
-                right: 20px; 
-                background-color: #d2d2d2;
-            `};
-        }
+//             ${props => props.config
+//             ? css`
+//                 right: 3px; 
+//                 background-color: #9EAEE6;
+//             `
+//             : css`
+//                 right: 20px; 
+//                 background-color: #d2d2d2;
+//             `};
+//         }
 
-        & > div {
-            border: 1px solid #d2d2d2;
-            width: 48px;
-            height: 30px;
-            cursor: pointer;
-            border-radius: 50px;
-        }
+//         & > div {
+//             border: 1px solid #d2d2d2;
+//             width: 48px;
+//             height: 30px;
+//             cursor: pointer;
+//             border-radius: 50px;
+//         }
 
-    }
+//     }
 
-`
+// `
 
 export const RevertBtn = styled.p`
     margin-left: 185px;
@@ -509,11 +408,11 @@ export const RevertBtn = styled.p`
     margin-bottom: 0px !important;
 `
 
-export const ConfigUnderline = styled.div`
-    width: 440px;
-    border-bottom: 1px solid #838383;
-    margin-bottom: 30px;
-`
+// export const ConfigUnderline = styled.div`
+//     width: 440px;
+//     border-bottom: 1px solid #838383;
+//     margin-bottom: 30px;
+// `
 
 export const AddBtn = styled.div`
     border: none;
@@ -558,3 +457,42 @@ export const TagIcon = styled(IoIosClose)`
     top: 4px;
     right: 13px;
 `
+const eclipse = keyframes`
+    0% { transform: rotate(0deg) }
+    50% { transform: rotate(180deg) }
+    100% { transform: rotate(360deg) }
+`
+
+export const EclipseWrapper = styled.div`
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+    overflow: hidden;
+    background: #ffffff;
+    position: absolute;
+    left: 398px;
+    top: 18px;
+`
+
+export const Eclipse = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0) scale(0.38);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+
+    & > div {
+        position: absolute;
+        animation: ${eclipse} 1s linear infinite;
+        width: 62px;
+        height: 62px;
+        top: 19px;
+        left: 19px;
+        border-radius: 50%;
+        box-shadow: 0 3.7px 0 0 #636480;
+        transform-origin: 31px 32.85px;
+        box-sizing: content-box;
+    }
+`
+

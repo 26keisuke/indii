@@ -68,7 +68,7 @@ passport.use(new LocalStrategy({
     passwordField: "password", 
     passReqToCallback : true,  
 }, (req, email, password, done) => {
-    User.findOne({email: email})
+    User.findOne({email: email, facebookId: { $exists: false }, googleId: { $exists: false }})
         .then(user => {
 
             if(user){
@@ -88,7 +88,13 @@ passport.use(new LocalStrategy({
                                 console.log("User is not verified yet")
                                 return done(null, false)
                             }
-                            return done(null, user)
+
+                            user.activity.push({timeStamp: Date.now(), type: "LOG_IN"})
+                            user.save()
+                            .then(() => {
+                                return done(null, user)
+                            })
+                            
                         }
                     })
 
@@ -155,7 +161,13 @@ passport.use(new FacebookStrategy({
     User.findOne({facebookId: profile.id})
         .then(user => {
             if(user){
-                done(null, user)
+
+                user.activity.push({timeStamp: Date.now(), type: "LOG_IN"})
+                user.save()
+                .then(() => {
+                    return done(null, user)
+                })
+
             } else {
 
                 const { id, displayName, familyName, givenName, emails, photos } = profile
@@ -170,6 +182,7 @@ passport.use(new FacebookStrategy({
                     email: emails[0].value,
                     photo: photos[0].value,
                     isVerified: true,
+                    verifiedDate: Date.now(),
                 }
 
                 new User(value)
@@ -195,7 +208,13 @@ passport.use(new GoogleStrategy({
     User.findOne({googleId: profile.id})
         .then(user => {
             if(user){
-                done(null, user)
+
+                user.activity.push({timeStamp: Date.now(), type: "LOG_IN"})
+                user.save()
+                .then(() => {
+                    return done(null, user)
+                })
+
             } else {
 
                 const {id, displayName, name, emails, photos} = profile
@@ -210,6 +229,7 @@ passport.use(new GoogleStrategy({
                     email: emails[0].value,
                     photo: photos[0].value || "",
                     isVerified: true,
+                    verifiedDate: Date.now(),
                 }
                 new User(value)
                     .save()

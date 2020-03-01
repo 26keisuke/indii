@@ -11,7 +11,7 @@ export const FeedBox = styled.div`
     /* height: 100%; */
     display: flex;
     flex-direction: row;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 `
 
 export const FeedLeft = styled.div`

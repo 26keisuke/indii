@@ -16,23 +16,28 @@ import Thumb from "../Profile/Info/Thumb/Thumb"
 
 import { IoMdClose } from "react-icons/io"
 
+import { arrObjLookUp } from "../Util/util"
+
 class Confirm extends Component {
 
     constructor(props) {
         super(props)
+
+        const { id, action, title, caution, message, buttonMessage, next, value } = this.props.update.confirmation
+
         this.state = {
             transparent: false,
 
-            id: null,
-            action: "",
-            title: "",
-            message: "",
-            caution: "",
-            buttonMessage: "",
-            next: "",
+            id,
+            action,
+            title,
+            message,
+            caution,
+            buttonMessage,
+            next,
 
             // postAction用にdispatchするvalue(自由に使っていい)
-            value: {},
+            value,
 
             // Selectされたdraftを保存: [{_: true}, {_: false}]の形
             draftId: [],
@@ -44,22 +49,6 @@ class Confirm extends Component {
             counter: 0,
                                 
         }
-    }
-
-    componentDidMount() {
-
-        const { id, action, title, caution, message, buttonMessage, next, value } = this.props.update.confirmation
-
-        this.setState({
-            id: id,
-            action: action,
-            title: title,
-            message: message,
-            caution: caution,
-            buttonMessage: buttonMessage,
-            next: next,
-            value: value,
-        })
     }
 
     // draftIdsの中からtrueのものだけを抜き取る
@@ -96,9 +85,43 @@ class Confirm extends Component {
                     next: "",
                 })
             case "UPLOAD_DRAFT":
-                var next = ""
+                var next = "";
 
-                if (this.state.counter === (this.state.currentStep + 1)) {
+                var obj = arrObjLookUp(this.props.draft.onEdit, "_id", cleanedIds[this.state.currentStep])
+
+                if(obj.type !== "New") {
+                    const newIdxObj = Object.assign({}, {
+                        [obj._id]: {
+                                    draftId: obj._id,
+                                }
+                        }, this.state.index)
+                    if (this.state.counter <= (this.state.currentStep + 2)) {
+                        this.setState({
+                            action: "DRAFT_UPLOAD_CHECK",
+                            title: "下書きをアップロード",
+                            message: "これらの下書きをアップロードしてもよろしいですか？",
+                            caution: "",
+                            buttonMessage: "完了する",
+                            next: "",
+                            value: newIdxObj,
+                        })
+                    } else {
+                        this.setState({
+                            id: cleanedIds,
+                            action: "DRAFT_UPLOAD_SELECT",
+                            title: "挿入位置の決定",
+                            message: "",
+                            caution: "",
+                            buttonMessage: "次の画面へ",
+                            next: next,
+                            currentStep: this.state.currentStep + 2,
+                            index: newIdxObj,
+                        })
+                    }
+                    return
+                }
+
+                if (this.state.counter === (this.state.currentStep + 1)) { // 1を var counterに
                     next = "UPLOAD_DRAFT_1"
                 } else {
                     next = "UPLOAD_DRAFT"
@@ -108,7 +131,7 @@ class Confirm extends Component {
                     id: cleanedIds,
                     action: "DRAFT_UPLOAD_SELECT",
                     title: "挿入位置の決定",
-                    message: "", // "　"から変えたのでバグ起きるかもしれない
+                    message: "",
                     caution: "",
                     buttonMessage: "次の画面へ",
                     next: next,
@@ -169,6 +192,7 @@ class Confirm extends Component {
             this.setState({
                 ...this.state,
                 index :{
+                    ...this.state.index,
                     [draftId]: {
                         ...this.state.index[draftId],
                         draftId: draftId,
@@ -425,10 +449,11 @@ const ConfirmIcon = styled(IoMdClose)`
     cursor: pointer;
 `
 
-function mapStateToProps({update, auth}) {
+function mapStateToProps({update, auth, draft}) {
     return {
         update,
-        auth
+        auth,
+        draft
     }
 }
 

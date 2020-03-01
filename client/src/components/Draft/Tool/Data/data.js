@@ -186,7 +186,6 @@ export const chapterList = [
     {
         name: "ページ",
         stateName: "page",
-        date: true,
         required: true,
     },
     {

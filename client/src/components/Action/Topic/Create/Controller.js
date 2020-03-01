@@ -4,18 +4,10 @@ import CreateFriendsTopic from "./Friend"
 import CreatePreviewTopic from "./Preview"
 
 import Select from "../../Controller/Select"
-// import topics from "../../../__Mock__/data/topic"
 
-import ActionProgress from "../../Progress/Progress"
 import Image from "../../Controller/Image"
 import Tag from "../../Tag/Tag"
-
-import "./CreateTopic.css";
-import Back from "../../../Util/Back";
-
-import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
-
-// import indii from "../../../../images/indii.png"
+import Form from "../../Form/Form"
 
 class CreateTopic extends Component {
 
@@ -125,17 +117,12 @@ class CreateTopic extends Component {
             topicName: name
         })
     }
-    // setImage = (img, type) => {
-    //     const name = String(type) + "Img"
-    //     this.setState({
-    //         [name]: img
-    //     })
-    // }
+
     setImage = (mobile, square, rectangle) => {
         this.setState({
             mobileImg: mobile,
             squareImg: square,
-            rectanlgeImg: rectangle,
+            rectangleImg: rectangle,
         })
     }
 
@@ -143,32 +130,45 @@ class CreateTopic extends Component {
     render() {
          
         return (
-            <FormWrapper>
-                <div>
-                    <BackWrapper>
-                        <Back
-                            url="/action"
-                            name="編集・作成一覧に戻る"
-                        />
-                    </BackWrapper>
-                    <p>新しいトピックを作成する</p>
-                    <FormMount/>
-                    <ActionProgress
-                        step={this.state.step}
-                        stepName={
-                            [
-                                "トピック名を決定",
-                                "写真を選択",
-                                "タグを追加",
-                                "友達を招待する",
-                                "プレビュー"
-                            ]
-                        }
-                    />
+            <Form
+                step={this.state.step}
+                stepNames={[
+                    "トピック名を決定",
+                    "写真を選択",
+                    "タグを追加",
+                    "友達を招待する",
+                    "プレビュー"
+                ]}
+                title="新しいトピックを作成する"
+            >
+                {this.renderStep()}
+            </Form>
+            // <FormWrapper>
+            //     <div>
+            //         <BackWrapper>
+            //             <Back
+            //                 url="/action"
+            //                 name="編集・作成一覧に戻る"
+            //             />
+            //         </BackWrapper>
+            //         <p>新しいトピックを作成する</p>
+            //         <FormMount/>
+            //         <ActionProgress
+            //             step={this.state.step}
+            //             stepName={
+            //                 [
+            //                     "トピック名を決定",
+            //                     "写真を選択",
+            //                     "タグを追加",
+            //                     "友達を招待する",
+            //                     "プレビュー"
+            //                 ]
+            //             }
+            //         />
                     
-                    {this.renderStep()}
-                </div>
-            </FormWrapper>
+            //         {this.renderStep()}
+            //     </div>
+            // </FormWrapper>
         )
     }
 }

@@ -84,7 +84,7 @@ class DraftNavigation extends Component {
     componentDidUpdate() {
         if(this.props.draft.isUpdated) {
             this.props.fetchDraft(this.state.id)
-            this.props.draftRead()
+            // this.props.draftRead()
         }
     }
 
@@ -134,7 +134,7 @@ class DraftNavigation extends Component {
  
         return (
             <div>
-                { counter > 0 ? <Border bottom={true}/> : "" }
+                <Border bottom={true}/>
                 { ((this.props.draft.nounce === this.state.id) || (counter > 0)) ? "" : <Draft draft={""}/>}
                 {
                     this.props.draft.onEdit

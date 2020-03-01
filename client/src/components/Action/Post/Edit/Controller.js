@@ -1,15 +1,8 @@
 import React, {Component} from "react"
-import axios from "axios"
-
-import ActionProgress from "../../Progress/Progress"
-import Back from "../../../Util/Back";
 import EditPreviewPost from "./Preview"
+import Form from "../../Form/Form"
 
 import Select from "../../Controller/Select"
-// import topics from "../../../__Mock__/data/topic"
-// import posts from "../../../__Mock__/data/post"
-
-import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
 class EditPost extends Component {
 
@@ -47,14 +40,6 @@ class EditPost extends Component {
                         setStep={this.setStep}
                         />
             case 1:
-                // return <ActionDecidePost
-                //         back={this.state.back} 
-                //         setBackward={this.setBackward} 
-                //         posts={this.state.posts}
-                //         storage="editPostPost"
-                //         setPost={this.setPost}
-                //         setStep={this.setStep}
-                //         />
                 return <Select
                         placeholder="ポスト名を入力..."
                         index="2"
@@ -63,9 +48,10 @@ class EditPost extends Component {
                         type="Match"
                         content="Post"
                         // data={posts}
+                        topicId={this.state.selectedTopic._id}
                         helper="owner"
                         transition={true}
-                        searchByVariable="title"
+                        searchByVariable="postName"
                         storage="editPostPost"
                         back={this.state.back} 
                         setBackward={this.setBackward} 
@@ -109,43 +95,44 @@ class EditPost extends Component {
         this.setState({
             selectedTopic: topic
         })
-        const url = "/api/post/" + topic.id
-        axios.get(url)
-        .then(res => {
-            this.setState({
-                posts: res.posts
-            })
-        })
-        .catch(err => {
-            console.log(err)
-        })
     }
 
     render () {
         return (
-            <FormWrapper>
-                <div>
-                    <BackWrapper>
-                        <Back
-                            url="/action"
-                            name="編集・作成一覧に戻る"
-                        />
-                    </BackWrapper>
-                    <p>既存のポストを編集する</p>
-                    <FormMount/>
-                    <ActionProgress
-                        step={this.state.step}
-                        stepName={
-                            [
-                                "トピックを選択",
-                                "ポストを選択",
-                                "プレビュー"
-                            ]
-                        }
-                    />
-                    {this.renderStep()}
-                </div>
-            </FormWrapper>
+            <Form
+                step={this.state.step}
+                stepNames={[
+                    "トピックを選択",
+                    "ポストを選択",
+                    "プレビュー"
+                ]}
+                title="既存のポストを編集する"
+            >
+                {this.renderStep()}
+            </Form>
+            // <FormWrapper>
+            //     <div>
+            //         <BackWrapper>
+            //             <Back
+            //                 url="/action"
+            //                 name="編集・作成一覧に戻る"
+            //             />
+            //         </BackWrapper>
+            //         <p>既存のポストを編集する</p>
+            //         <FormMount/>
+            //         <ActionProgress
+            //             step={this.state.step}
+            //             stepName={
+            //                 [
+            //                     "トピックを選択",
+            //                     "ポストを選択",
+            //                     "プレビュー"
+            //                 ]
+            //             }
+            //         />
+            //         {this.renderStep()}
+            //     </div>
+            // </FormWrapper>
         )
     }
 }

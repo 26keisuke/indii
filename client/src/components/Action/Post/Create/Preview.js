@@ -5,11 +5,11 @@ import axios from "axios"
 
 import * as actions from "../../../../actions"
 
-import {Box, BoxTransition,
-        Title, Section, PreviewTitle,
-        ButtonWrapper, ButtonLeft, ButtonRight,
-        FinalCheck,
-        PreviewConfig, ConfigUnderline } from "../../Element/Element"
+import {Box, BoxTransition, FinalCheck, } from "../../Element/Element"
+        
+import TwoButtons from "../../Element/TwoButtons"
+import Section from "../../Element/Section"
+import Config from "../../Preview/Config"
 
 import { Space } from "../../../Theme"
 
@@ -52,11 +52,10 @@ class CreatePreviewTopic extends Component {
         this.props.disableGray();
         this.props.resetCategory();
         localStorage.clear();
-        this.props.setCategory("home");
-        this.props.nudgeAdd("draft")        
+        this.props.setCategory("draft");       
         sendMessage("success", `トピック「${this.props.postName}」を下書きに追加しました。`, 5000, this.props)
         // 後でやらないと、メッセージが表示されない
-        this.props.history.push("/")
+        this.props.history.push("/draft")
     }
 
     render(){
@@ -68,26 +67,21 @@ class CreatePreviewTopic extends Component {
                         <p>プレビュー</p>
                     </div> 
                     <div>
-                        <Section title={"トピック名"} content={this.props.selectedTopic.topicName}/>
-                        <Section title={"ポスト名"} content={this.props.postName}/>
+                        <Section title={"トピック名"} content={this.props.selectedTopic.topicName} width={440}/>
+                        <Section title={"ポスト名"} content={this.props.postName} width={440}/>
                         
-                        <form>
-                            <Title title={"承認無しに変更を許可する"}/>
-                            <PreviewConfig config={this.props.config.allowEdit}>
-                                <PreviewTitle>{this.props.config.allowEdit ? "許可" : "許可しない"}</PreviewTitle>
-                                <div>
-                                    <input type="button"/>
-                                    <div/>
-                                </div>
-                            </PreviewConfig>
-                            <ConfigUnderline/>
-                        </form>
+                        <Config
+                            title={"承認無しに変更を許可する"}
+                            on={this.props.config.allowEdit}
+                            text={["許可","許可しない"]}
+                        />
 
                         <FinalCheck>この内容で下書きを作成してよろしいですか？<span></span></FinalCheck>
-                        <ButtonWrapper>
-                            <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                            <ButtonRight onClick={this.handleForward}>作成する</ButtonRight>
-                        </ButtonWrapper>
+                        <TwoButtons
+                            handleBack={this.handleBack}
+                            handleForward={this.handleForward}
+                            text={["戻る", "次へ進む"]}
+                        />
                         <Space height="220px"/>
                     </div>
                 </BoxTransition>

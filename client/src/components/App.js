@@ -159,8 +159,29 @@ class App extends Component {
                     return
                 }
 
+            case "CHANGE_DRAFTNAME":
+                if(id) {
+                    this.props.changeDraftName(id, "", true);
+                }
+                this.props.disableGray();
+                return
+
+            case "CHANGE_DRAFTCONFIG":
+                if(value) {
+                    this.props.changeDraftConfig(id, value);
+                }
+                this.props.disableGray();
+                return
+
+            case "REVERT_IMG":
+                if(id) {
+                    this.props.revertImg(true);
+                }
+                this.props.disableGray();
+                return
+
             case "ADD_COLUMN":
-                if (value){
+                if(value){
                     this.props.addColumn(value);
                 }
                 this.props.disableGray();
@@ -274,7 +295,6 @@ class App extends Component {
                             ref={this.authRef} 
                             show={this.state.logInFormShow}
                             postAction={this.postAction}
-                            // error={this.state.logInError}
                         /> 
                         }
                         { update.fetching && <Loading/>}

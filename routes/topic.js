@@ -54,21 +54,30 @@ router.post("/", isLoggedIn, (req, res) => {
                 title: "概要",
                 posts: [post.id]
             }
+            const now = Date.now()
             var topic = new Topic(Object.assign({_id: topicId}, newBody))
             topic.column.push(desc)
             topic.order.push(columnId)
             topic.posts.push(post.id)
             topic.postCount++
-            topic.save()
-                .then((topic) => {
-                    res.send("Success: POST /api/topic")
-                })
-                .catch(err => { console.log(err); res.send("Fail: POST /api/topic") })
+            topic.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_TOPIC"})
+            User.findById(req.user.id)
+            .then(user => {
+                user.createTopic.push({timeStamp: now, topic: topicId})
+                user.save()
+                .then(() => {   
+                    topic.save()
+                    .then(() => {
+                        res.send("Success: POST /api/topic")
+                    })
+                    .catch(err => { console.log(err) })
+                })  
+            })
         })
 })
 
 router.post("/:topicId/edit", isLoggedIn, (req, res) => {
-    Topic.findById(req.params.topicId)
+    Topic.findById(req.params.topicId).populate("posts") // populateした方がパフォーマンスが上がるのかは不明
     .then(topic => {
 
         const {
@@ -108,58 +117,114 @@ router.post("/:topicId/edit", isLoggedIn, (req, res) => {
         // check if tags are changed => if yes replace
         if(topic.tags !== tags) { topic.tags = tags }
 
-        // orders 
+        // convert strings to OBJIDS and check if orders are changed => if yes replace
         var orderList = []
-
-        console.log(topic.order)
-        console.log(order)
         
         for(var i=0; i < order.length; i++) {
             orderList.push(mongoose.Types.ObjectId(order[i]))
         }
 
-        console.log(typeof topic.order[0])
-        console.log(typeof orderList[0])
-
-        console.log(equal(topic.order[0], orderList[0]))
-
         if(!equal(topic.order, orderList)) {
-            console.log("HERE")
             topic.order = orderList
         }
         
+        // while converting _id string to OBJID, check if values are changed
+        const result = columnCheckModified(columns, topic.column)
 
-        // columns
-
-        console.log(topic.column)
-        console.log(columns)
-        
-        if(!equal(topic.column, columns)){
-            
+        if(result[0]){
+            topic.column = result[1]
         }
 
         // POST PHASE
 
-        // check if posts are changed => if yes replace
-        
-        // 
+        // check if posts are changed(if column is changed, post is always changed) => if yes replace
+        var promises = [];
+
+        if(result[0]) {
+            promises = modifyPostIndex(posts, topic.posts)
+        }
+
+        const now = Date.now() // 同じ Date.now()でuserとtopic schemaで揃える
 
         // activityに追加
-
-        // USER PHASE
-
-        // editTopicを追加する
-
-        // activityに追加
-
-        // SAVING PHASE
-
-        // topic.save()
+        Promise.all(promises)
+        .then(() => {
+            topic.activity.push({type: "EDIT_TOPIC", user: req.user.id, timeStamp: now})
+            User.findById(req.user.id)
+            .then(user => {
+                // editTopicを追加する
+                user.editTopic.push({timeStamp: now, topic: topic._id});
+                topic.save();
+                user.save();
+                res.send("Success")
+            });
+        });
     })
     .catch(err => {
         console.log(err)
     })
 })
+
+function arrObjLookUp(obj, field, attr){
+    for(var i=0; i < obj.length; i++){
+        if(equal(obj[i][field], attr)){
+            return obj[i]
+        }
+    }
+    return
+}
+
+function modifyPostIndex(newPosts, oldPosts) {
+
+    var promises = []
+
+    var id;
+    var lookUp;
+    var columnIdxChnaged;
+    var postIdxChanged;
+
+    for(var j=0; j < newPosts.length; j++){
+        id = mongoose.Types.ObjectId(newPosts[j]._id)
+        lookUp = arrObjLookUp(oldPosts, "_id", id)
+        if(!equal(newPosts[j].index, lookUp.index)) {
+            columnIdxChnaged = newPosts[j].index[0] - lookUp.index[0]
+            postIdxChanged = newPosts[j].index[1] - lookUp.index[1]
+            console.log("FROM => TO: ", lookUp.index, newPosts[j].index, newPosts[j].postName)
+            console.log("CHANGE IN VALUE :: (COLUMN, INDEX) => ", "(", columnIdxChnaged, ",", postIdxChanged, ")")
+            promises.push(
+                Post.updateOne({_id: id}, {$inc: {"index.0": columnIdxChnaged, "index.1": postIdxChanged}})
+            )
+        }
+    }
+
+    return promises
+}
+
+function columnCheckModified(newColumn, oldColumn) {
+
+    var flag = false;
+
+    for(var j=0; j < newColumn.length; j++){
+        newColumn[j]._id = mongoose.Types.ObjectId(newColumn[j]._id)
+        if(oldColumn[j]){
+            flag = !equal(newColumn[j]._id, oldColumn[j]._id)
+        } else {
+            flag = true
+        }
+        if(flag === true) { break }
+        for(var k=0; k < newColumn[j].posts.length; k++){
+            newColumn[j].posts[k] = mongoose.Types.ObjectId(newColumn[j].posts[k])
+            if(oldColumn[j].posts[k]){
+                flag = !equal(newColumn[j].posts[k]._id, oldColumn[j].posts[k]._id)
+            } else {
+                flag = true
+            }
+            if(flag === true) { break }
+        }
+    }
+
+    return [flag, newColumn]
+}
 
 router.post("/:topicId/post", isLoggedIn, (req, res) => {
     const data = Object.assign({user: req.user.id, type: "New", creationDate: Date.now()}, req.body)

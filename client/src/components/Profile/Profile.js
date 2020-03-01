@@ -4,10 +4,10 @@ import styled from "styled-components"
 
 import * as actions from "../../actions"
 
-import ProfileTop from "./Info/Info"
-import ProfileTopic from "./ProfileTopic"
-import ProfilePost from "./ProfilePost"
-import ProfileFollow from "./ProfileFollow"
+import Top from "./Info/Info"
+import Topic from "./Topic/Topic"
+import Post from "./Post/Post"
+import Follow from "./Follow/Follow"
 
 import "./Profile.css"
 
@@ -80,24 +80,24 @@ class Profile extends Component {
             <Wrapper>
                 { !!this.props.profile.user._id 
                 ?
-                <ProfileTop
+                <Top
                     skeleton={false}
                     isThisUser={isThisUser}
                     setElement={this.setElement}
                     toggle={toggle}
                 />
                 :
-                <ProfileTop 
+                <Top 
                     skeleton={true}
                     setElement={this.setElement}
                     toggle={toggle}
                 />
                 }
-                { toggle.owner ? <ProfilePost/> : "" }
-                { toggle.favoriteTopic ? <ProfileTopic/> : "" }
-                { toggle.favoritePost ? <ProfilePost/> : "" }
-                { toggle.follows ? <ProfileFollow/> : "" }
-                { toggle.followers ? <ProfileFollow/> : "" }
+                { toggle.owner ? <Post posts={this.props.profile.user.post}/> : "" }
+                { toggle.favoriteTopic ? <Topic topics={this.props.profile.user.likedTopic}/> : "" }
+                { toggle.favoritePost ? <Post posts={this.props.profile.user.likedPost}/> : "" }
+                { toggle.follows ? <Follow users={this.props.profile.user.follows}/> : "" }
+                { toggle.followers ? <Follow users={this.props.profile.user.followers}/> : "" }
             </Wrapper>
         )
     }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FETCH_USER,
-         ON_SEARCH, OFF_SEARCH, 
+         ON_SEARCH, OFF_SEARCH, SEARCH_FETCHING,
          SET_CATEGORY, 
          RESET_CATEGORY,
          NUDGE_ADD,
@@ -15,8 +15,9 @@ import { FETCH_USER,
          SHOW_CONFIRMATION,
          HIDE_CONFIRMATION,
          ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
+         REVERT_IMG,
          SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
-         SEARCH_POST, SEARCH_TOPIC,
+         SEARCH_POST, SEARCH_TOPIC, SEARCH_FOLLOWER,
          FETCH_DRAFT,
          DRAFT_UPDATED, DRAFT_READ, 
          FETCH_TOPIC, FETCH_POST,
@@ -28,13 +29,17 @@ export const fetchUser = () => async dispatch => {
     dispatch({type: FETCH_USER, payload: res.data});
 };
 
-export const onSearch = () => (dispatch) => {
-    dispatch({type: ON_SEARCH})
+export const searchFetching = (type, onSearch) => (dispatch) => {
+    dispatch({type: SEARCH_FETCHING, payload: {type, onSearch}})
 }
 
-export const offSearch = () => (dispatch) => {
-    dispatch({type: OFF_SEARCH})
-}
+// export const onSearch = () => (dispatch) => {
+//     dispatch({type: ON_SEARCH})
+// }
+
+// export const offSearch = () => (dispatch) => {
+//     dispatch({type: OFF_SEARCH})
+// }
 
 export const resetCategory = () => (dispatch) => {
     dispatch({type: RESET_CATEGORY})
@@ -98,6 +103,10 @@ export const hideConfirmation = () => (dispatch) => {
     dispatch({type: HIDE_CONFIRMATION})
 }
 
+export const revertImg = (revert) => (dispatch) => {
+    dispatch({type: REVERT_IMG, payload: {revert}})
+}
+
 export const revertColumn = (trigger) => (dispatch) => {
     dispatch({type: REVERT_COLUMN, payload: {trigger}})
 }
@@ -124,18 +133,31 @@ let token;
 export const searchTopic = (type, value) => async (dispatch) => {
     const url = "/api/topic/search/" + String(type) + "/" + String(value)
     const res = await cancelOnMultipleSearch(url)
-    dispatch({type: SEARCH_TOPIC, payload: {suggestions: res}})
+    if(!!res){
+        dispatch({type: SEARCH_FETCHING, payload: {type: "ACTION", onSearch: false}})
+        dispatch({type: SEARCH_TOPIC, payload: {suggestions: res}})
+    }
 } 
 
 export const searchPost = (type, value, topicId) => async (dispatch) => {
     var url = "/api/post/search/" + String(type) + "/" + String(value)
-
     if(topicId){
         url = url + "/" + String(topicId)
     }
-
     const res = await cancelOnMultipleSearch(url)
-    dispatch({type: SEARCH_POST, payload: {suggestions: res}})
+    if(!!res){
+        dispatch({type: SEARCH_FETCHING, payload: {type: "ACTION", onSearch: false}})
+        dispatch({type: SEARCH_POST, payload: {suggestions: res}})
+    }
+}
+
+export const searchFollower = (name) => async (dispatch) => {
+    var url = `/api/friend/${name}`
+    const res = await cancelOnMultipleSearch(url)
+    if(!!res){
+        dispatch({type: SEARCH_FETCHING, payload: {type: "ACTION", onSearch: false}})
+        dispatch({type: SEARCH_FOLLOWER, payload: {suggestions: res}})
+    }
 }
 
 export const draftUpdated = () => (dispatch) => {
@@ -176,13 +198,42 @@ export const sendFeedBack = (id, problems) => async (dispatch) => {
         })
 }
 
+export const changeDraftName = (draftId, value, revert) => async (dispatch) => {
+    const url = `/api/draft/${draftId}/name`
+    axios.post(url, {value, revert})
+    .then(res => {
+        dispatch(draftUpdated())
+        if(revert){
+            sendMessage("success", "ポスト名を元に戻しました。", 3000, dispatch)
+            return
+        }
+        sendMessage("success", "ポスト名を変更しました。", 3000, dispatch)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+export const changeDraftConfig = (draftId, value) => async (dispatch) => {
+    const url = `/api/draft/${draftId}/config`
+    axios.post(url, {config: value})
+    .then(res => {
+        dispatch(draftUpdated())
+        dispatch(disableGray())
+        sendMessage("success", "設定を変更しました。", 3000, dispatch)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
 export const deleteDraft = (id) => async (dispatch) => {
     const url = "/api/draft/delete"
     axios.post(url, {subject: id})
         .then(res => {
             dispatch(endFetching())
             dispatch(disableGray())
-            dispatch(fetchDraft()) // this certainly isnt the optimal because req is sent to server again
+            dispatch(fetchDraft(id)) // this certainly isnt the optimal because req is sent to server again
             sendMessage("success", "下書きを削除しました。", 3000, dispatch)
             return
         })
@@ -218,9 +269,11 @@ export const uploadDraft = (value) => async (dispatch) => {
 
 export const deleteRef = (id) => async (dispatch) => {
     const url = `/api/draft/${id.draftId}/ref/${id.refId}`
+    console.log(url)
     axios.delete(url)
         .then(res => {
             dispatch(disableGray())
+            dispatch(draftUpdated())
             sendMessage("success", "参照を削除しました。", 3000, dispatch)
             return
         })
@@ -277,7 +330,7 @@ export const updateImage = (id, value) => async (dispatch) => {
     const url = `/api/profile/${id}/photo`
     axios.post(url, {photo: value})
         .then(() => {
-            dispatch(dispatch(disableGray()))
+            dispatch(disableGray())
             dispatch(fetchProfile(id))
             dispatch(fetchUser())
             sendMessage("success", "プロフィール画像を変更しました。", 3000, dispatch)
@@ -334,6 +387,7 @@ export const fetchFeed = () =>  async (dispatch) => {
 export const fetchDraft = (id) => async (dispatch) => {
     const url = "/api/draft"
     const res = await axios.get(url)
+    if(res){ dispatch({ type: DRAFT_READ }) }
     dispatch({type: FETCH_DRAFT, payload: {data: res.data, nounce: id }})
 }
 
@@ -364,13 +418,12 @@ const cancelOnMultipleSearch = async (url, type, body) => {
         return result
 
     } catch(error) {
-        //　ここの二つは本来はキャンセルしたいところ。（今の状態では、reducerに送られているからその分無駄）
         if(axios.isCancel(error)) {
             console.log("Request has been cancelled.")
-            return []
+            return null
         } else {
             console.log("Something went wrong with searching.")
-            return []
+            return null
         }
     }
 }

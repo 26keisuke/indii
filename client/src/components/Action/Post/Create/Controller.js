@@ -1,16 +1,9 @@
 import React, {Component} from "react"
-import axios from "axios"
-
-import ActionProgress from "../../Progress/Progress"
 import CreateConfigurationPost from "./Configuration"
 import CreatePreviewPost from "./Preview"
-import Back from "../../../Util/Back";
+import Form from "../../Form/Form"
 
 import Select from "../../Controller/Select"
-import topics from "../../../__Mock__/data/topic"
-import posts from "../../../__Mock__/data/post"
-
-import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
 class CreatePost extends Component {
 
@@ -50,13 +43,6 @@ class CreatePost extends Component {
                         setStep={this.setStep}
                         />
             case 1:
-                // return <CreateDecidePost
-                //         back={this.state.back} 
-                //         setBackward={this.setBackward} 
-                //         storage="editPostPost"
-                //         setPost={this.setPost}
-                //         setStep={this.setStep}
-                //         />
                 return  <Select
                         placeholder="ポスト名を入力..."
                         index="2"
@@ -130,30 +116,42 @@ class CreatePost extends Component {
 
     render () {
         return (
-            <FormWrapper>
-                <div>
-                    <BackWrapper>
-                        <Back
-                            url="/action"
-                            name="編集・作成一覧に戻る"
-                        />
-                    </BackWrapper>
-                    <p>新しいポストを作成する</p>
-                    <FormMount/>
-                    <ActionProgress
-                        step={this.state.step}
-                        stepName={
-                            [
-                                "トピックを選択",
-                                "ポストを選択",
-                                "初期設定",
-                                "プレビュー"
-                            ]
-                        }
-                    />
-                    {this.renderStep()}
-                </div>
-            </FormWrapper>
+            <Form
+                step={this.state.step}
+                stepNames={[
+                    "トピックを選択",
+                    "ポストを選択",
+                    "初期設定",
+                    "プレビュー"
+                ]}
+                title="既存のポストを編集する"
+            >
+                {this.renderStep()}
+            </Form>
+            // <FormWrapper>
+            //     <div>
+            //         <BackWrapper>
+            //             <Back
+            //                 url="/action"
+            //                 name="編集・作成一覧に戻る"
+            //             />
+            //         </BackWrapper>
+            //         <p>新しいポストを作成する</p>
+            //         <FormMount/>
+            //         <ActionProgress
+            //             step={this.state.step}
+            //             stepName={
+            //                 [
+            //                     "トピックを選択",
+            //                     "ポストを選択",
+            //                     "初期設定",
+            //                     "プレビュー"
+            //                 ]
+            //             }
+            //         />
+            //         {this.renderStep()}
+            //     </div>
+            // </FormWrapper>
         )
     }
 }

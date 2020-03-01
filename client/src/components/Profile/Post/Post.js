@@ -2,9 +2,9 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 
-import sample from "../../images/sample1.png"
+import sample from "../../../images/sample1.png"
 
-import Post from "../Post/Element/Element"
+import Post from "../../Post/Element/Element"
 
 class ProfileHome extends Component {
 

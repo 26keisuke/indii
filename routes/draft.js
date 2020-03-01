@@ -12,7 +12,8 @@ const router = express.Router()
 router.get("/", (req, res) => {
     User.findById(req.user.id)
         .then(user => {
-            Draft.find({_id: {$in: user.draft}, isDeleted: false, isUploaded: false}).populate("topicSquareImg").populate("postImg").exec()
+            Draft.find({_id: {$in: user.draft}, isDeleted: false, isUploaded: false})
+            .populate("topicSquareImg").populate("postImg").populate("editCreator").populate("editLastEditedAuthor").exec()
             .then(draft => {
                 res.send(draft)
             })
@@ -25,9 +26,57 @@ router.get("/", (req, res) => {
 router.post("/upload", (req, res) => {
 
     const { draftId, index, addColumn } = req.body.value
-    
+
     Draft.findById(draftId)
         .then(draft => {
+
+            const now = Date.now()
+
+            if(draft.type !== "New") {
+                if(draft.config.allowEdit === false){
+                    User.findById(draft.editCreator)
+                    .then(user => {
+                        console.log("called", user)
+                        user.notif.push({timeStamp: now, type: "POST_EDIT", user: req.user.id, post: draft.editPostId, draft: draft._id})
+                        user.save()
+                        res.send("Success")
+                        return
+                    })
+                    return
+                }
+                Post.findById(draft.editPostId)
+                .then(post => {
+
+                    if(post.content !== draft.content){post.content = draft.content}
+                    if(post.ref !== draft.ref){post.ref = draft.ref}
+                    if(post.postName !== draft.postName){post.postName = draft.postName} //まだ何も変更できないが、将来的には変更できるようにしたい
+
+                    if(post.postImg !== draft.postImg) {
+                        const imgId = mongoose.Types.ObjectId()
+                        new Image({_id: imgId, image: draft.postImg}).save()
+                        post.postImg = imgId
+                    }
+
+                    post.contribution.push({user: req.user.id, timeStamp: now})
+
+                    draft.isUploaded = true
+
+                    Topic.findById(post.topic)
+                    .then(topicElem => {
+
+                        topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST"})
+
+                        topic.save()
+                        post.save()
+                        draft.save()
+
+                        res.send("Success")
+                        return
+                    })
+                })
+            
+                return
+            }
             
             const imgId = mongoose.Types.ObjectId();
 
@@ -62,15 +111,15 @@ router.post("/upload", (req, res) => {
                 content: content,
                 ref: ref,
                 creator: req.user.id,
-                creationDate: Date.now(),
-                lastEdited: Date.now(),
+                creationDate: now,
+                lastEdited: now,
                 config: config,
             }
 
             const post = new Post(data)
 
             post.contribution.push({
-                timeStamp: Date.now(),
+                timeStamp: now,
                 user: req.user.id
             })
 
@@ -132,6 +181,8 @@ router.post("/upload", (req, res) => {
 
                             topicElem.postCount++;
 
+                            topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST"})
+
                             topicElem.save() 
                         })
 
@@ -168,6 +219,8 @@ router.post("/upload", (req, res) => {
                             // postCountをアップデート
 
                             topicElem.postCount++;
+                            
+                            topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST"})
 
                             topicElem.save()
                         })
@@ -206,6 +259,43 @@ router.post("/:id", (req, res) => {
         .then((draft) => {
             res.send("Sucess: POST /api/draft/:id")
         })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+router.post("/:id/name", (req, res) => {
+    Draft.findById(req.params.id)
+    .then(draft => {
+        if(req.body.revert){
+            console.log(draft.editPostId)
+            if(draft.type === "Edit") {
+                Post.findById(draft.editPostId)
+                .then(post => {
+                    console.log(post.postName)
+                    draft.postName = post.postName
+                    draft.save()
+                    .then(res.send("Success"))
+                })
+            }
+        } else {
+            draft.postName = req.body.value
+            draft.save()
+            .then(res.send("Success"))
+        }
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+router.post("/:id/config", (req, res) => {
+    Draft.findById(req.params.id)
+    .then(draft => {
+        draft.config[req.body.config] = !draft.config[req.body.config]
+        draft.save()
+        .then(res.send("Success"))
     })
     .catch(err => {
         console.log(err)

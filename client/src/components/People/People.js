@@ -16,6 +16,7 @@ const PeopleElement = styled.div`
         font-size: 11px;
         margin: 0px 1px;
         cursor: default;
+        min-height: 51px;
     }
 
     & > div {
@@ -85,7 +86,7 @@ class People extends Component {
                         </div>
                         }
                     </div>
-                    {this.props.skeleton ? <p><Skeleton count={4} width={360} height={18}/></p> : <p>{this.props.intro}</p>}
+                    {this.props.skeleton ? <p><Skeleton count={4} width={330} height={18}/></p> : <p>{this.props.intro}</p>}
                 </PeopleElement>
             </Link>
         )

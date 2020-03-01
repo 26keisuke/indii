@@ -69,21 +69,47 @@ router.post("/:userId/intro", (req, res) => {
 })
 
 router.post("/:userId/follow", (req, res) => {
+
+    const now = Date.now()
+
+    // 対象者
     User.findById(req.params.userId)
     .then(target => {
         if(req.body.follow) {
-            target.followers.push({ timeStamp: Date.now(), user: req.user.id})
+
+            const res = target.followers.filter(user => String(user.user) === String(req.user.id))
+
+            if(!res[0]){
+                target.followers.push({ timeStamp: now, user: req.user.id})
+                // 対象者に通知を送る
+                target.notif.push({timeStamp: now, type: "FOLLOWED", user: req.user.id})
+            }
+            
         } else {
             target.followers.map((user, index) => {
                 if(String(user.user) === String(req.user.id)) {
                     target.followers.splice(index, 1)
                 }
             })
+            // 対象者の通知から削除
+            target.notif.map((user, index) => {
+                if(String(user.user) === String(req.user.id)) {
+                    target.notif.splice(index, 1)
+                }
+            })
         }
+
+        // 自分
         User.findById(req.user.id)
         .then(subject => {
             if(req.body.follow) {
-                subject.follows.push({ timeStamp: Date.now(), user: target.id })
+
+                const res = subject.follows.filter(user => String(user.user) === String(target._id))
+
+                if(!res[0]){
+                    subject.follows.push({ timeStamp: now, user: target.id })
+                }
+
             } else {
                 subject.follows.map((user, index) => {
                     if(String(user.user) === String(target.id)) {

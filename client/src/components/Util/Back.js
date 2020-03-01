@@ -22,7 +22,7 @@ const BackNormalElement = styled(Link)`
         & > p {
             position: absolute;
             right: 1px;
-            top: -9px;
+            top: -8px;
             width: 30px;
             height: 30px;
             display: block;
@@ -63,11 +63,12 @@ const BackGivenElement = styled.div`
     & > div {
 
         position:relative;
+        display: flex;
 
         & > p {
             position: absolute;
-            right: 1px;
-            top: -9px;
+            right: 2px;
+            top: -7px;
             width: 30px;
             height: 30px;
             display: block;
@@ -96,10 +97,17 @@ const BackGivenElement = styled.div`
     }
 `
 
-const BackIcon = styled(IoIosArrowRoundBack)`
-    transform: scale(2.8, 1.7);
+// const BackIcon = styled(IoIosArrowRoundBack)`
+//     transform: scale(2.8, 1.7);
+//     margin-right: 10px;
+//     pointer-events: none;
+// `
+
+const BackIcon = styled.img`
     margin-right: 10px;
     pointer-events: none;
+    width: 15px;
+    height: 15px;
 `
 
 class Back extends Component {
@@ -109,7 +117,7 @@ class Back extends Component {
             <BackNormalElement to={this.props.url}>
                 <div>
                     <p></p>
-                    <BackIcon alt={"矢印戻るボタン"}/>
+                    <BackIcon src={back} alt={"矢印戻るボタン"}/>
                 </div>
                 <p>{this.props.name}</p>
             </BackNormalElement>
@@ -121,7 +129,7 @@ class Back extends Component {
             <BackGivenElement onClick={this.props.back}>
                 <div>
                     <p></p>
-                    <BackIcon alt={"矢印戻るボタン"}/>
+                    <BackIcon src={back} alt={"矢印戻るボタン"}/>
                 </div>
                 <p>{this.props.name}</p>
             </BackGivenElement>

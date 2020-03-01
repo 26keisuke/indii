@@ -1,4 +1,4 @@
-.topic-action-search-wrapper{
+/* .topic-action-search-wrapper{
     display: flex;
     flex-direction: row;
     padding: 10px;
@@ -49,7 +49,7 @@
 .topic-action-search-stats{
     font-size:10px;
     margin-left: 10px;
-}
+} */
 
 /* .topic-action-add-button{
     border: none;
@@ -63,10 +63,10 @@
     background-color: #ffffff;
 } */
 
-.topic-action-add-button:focus{
+/* .topic-action-add-button:focus{
     outline:none;
-}
-
+} */
+/* 
 .topic-form-index{
     width: 444px;
 }
@@ -87,14 +87,14 @@
     color: #585858;
     font-size: 10px;
     margin-left: 50px;
-}
+} */
 
-.topic-form-preview-hr{
+/* .topic-form-preview-hr{
     height:1px;
     border: none;
     border-bottom: 1px solid #d2d2d2;
-}
-
+} */
+/* 
 .topic-form-index-box{
     display: flex;
     flex-direction: row;
@@ -144,4 +144,4 @@
 
 .topic-form-index-right-content{
     margin-right: 10px;
-}
+} */

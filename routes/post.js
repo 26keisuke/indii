@@ -3,6 +3,7 @@ import express from "express"
 import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
+import Draft from "../models/Draft"
 
 import { isLoggedIn } from "./util/util"
 
@@ -19,10 +20,63 @@ router.get("/:postId", (req, res) => {
     })
 })
 
-router.post("/:postId/star", isLoggedIn, (req, res) => {
+router.post("/:postId/edit", isLoggedIn, (req, res) => {
     Post.findById(req.params.postId)
     .then(post => {
 
+        const type = post.index[0] === 0 ? "Zero" : "Edit"
+        const lastContribution = post.contribution[post.contribution.length-1]
+
+        const data = {
+            user: req.user.id,
+            type,
+            creationDate: Date.now(),
+            topic: post.topic,
+            topicName: post.topicName,
+            topicSquareImg: post.topicSquareImg,
+            postName: post.postName,
+            postImg: post.postImg,
+            content: post.content,
+            editPostId: post._id,
+            editCreator: post.creator,
+            editCreationDate: post.creationDate,
+            editLastEdited: (type !== "New") && lastContribution && lastContribution.timeStamp,
+            editLastEditedAuthor: (type !== "New") && lastContribution && lastContribution.user,
+            // editContribution: post.editContribution,
+            editIndex: post.index,
+            ref: post.ref,
+            config: {
+                allowEdit: post.config.allowEdit,
+            }
+        }
+
+        new Draft(data)
+        .save()
+        .then(draft => {
+            User.findById(req.user.id)
+                .then(user => {
+                    user.draft.push(draft)
+                    user.save()
+                    .then(res.send("Success"))
+                })
+        })
+        .catch(err => {
+            console.log(err)
+            res.send("Fail")
+        })
+    })
+})
+
+
+//　通知
+router.post("/:postId/star", isLoggedIn, (req, res) => {
+
+    const now = Date.now()
+
+    Post.findById(req.params.postId)
+    .then(post => {
+
+        // postの変更
         if(!req.body.like){
             post.star.action.map((elem, index) => {
                 if(String(elem.user) === String(req.user.id)) {
@@ -31,17 +85,29 @@ router.post("/:postId/star", isLoggedIn, (req, res) => {
                 }
             })
         } else {
-            const res = post.star.action.map(elem => {
-                if(String(elem.user) === String(req.user.id)) {
-                    return true
-                }
-            })
+            const res = post.star.action.filter(elem => String(elem.user) === String(req.user.id))
+
             if(!res[0]){
                 post.star.counter++
-                post.star.action.push({timeStamp: Date.now(), user: req.user.id})
+                post.star.action.push({timeStamp: now, user: req.user.id})
             }
         }
 
+        // post ownerの変更
+        User.findById(post.creator)
+        .then(user => {
+            if(!req.body.like){
+                user.notif.push({timeStamp: now, type: "POST_LIKE", user: req.user.id, post: post._id})
+            } else {
+                user.notif.map((elem, index) => {
+                    if((elem.type === "POST_LIKE") && (elem.post === post._id)){
+                        user.notif.splice(index, 1)
+                    }
+                })
+            }
+        })
+
+        // req.userの変更
         User.findById(req.user.id)
         .then(user => {
             if(!req.body.like){
@@ -51,13 +117,10 @@ router.post("/:postId/star", isLoggedIn, (req, res) => {
                     }
                 })
             } else {
-                const res = user.likedPost.map(elem => {
-                    if(String(elem.post) === String(post.id)) {
-                        return true
-                    }
-                })
+                const res = user.likedPost.filter(elem => String(elem.post) === String(post.id))
+
                 if(!res[0]){
-                    user.likedPost.push({timeStamp: Date.now(), post: post.id})
+                    user.likedPost.push({timeStamp: now, post: post.id})
                 }
             }
             post.save()
@@ -71,10 +134,15 @@ router.post("/:postId/star", isLoggedIn, (req, res) => {
     })
 })
 
+//　通知
 router.post("/:postId/emoji", isLoggedIn, (req, res) => {
+
+    const now = Date.now()
+
     Post.findById(req.params.postId)
     .then(post => {
 
+        // postの変更
         if(!req.body.emoji){
             post.rating.map((elem, index) => {
                 if(String(elem.user) === String(req.user.id)) {
@@ -85,15 +153,30 @@ router.post("/:postId/emoji", isLoggedIn, (req, res) => {
             const res = post.rating.map(elem => {
                 if(String(elem.user) === String(req.user.id)) {
                     elem.rate = req.body.emoji
-                    elem.timeStamp = Date.now()
+                    elem.timeStamp = now
                     return true
                 }
             })
             if(!res[0]){ 
-                post.rating.push({timeStamp: Date.now(), user: req.user.id, rate: req.body.emoji})
+                post.rating.push({timeStamp: now, user: req.user.id, rate: req.body.emoji})
             }
         }
 
+        // post ownerの変更
+        User.findById(post.creator)
+        .then(user => {
+            if(!req.body.emoji){
+                user.notif.push({timeStamp: now, type: "POST_EMOJI", user: req.user.id, post: post._id})
+            } else {
+                user.notif.map((elem, index) => {
+                    if((elem.type === "POST_EMOJI") && (elem.post === post._id)){
+                        user.notif.splice(index, 1)
+                    }
+                })
+            }
+        })
+
+        // req.userの変更
         User.findById(req.user.id)
         .then(user => {
             if(!req.body.emoji){
@@ -106,12 +189,12 @@ router.post("/:postId/emoji", isLoggedIn, (req, res) => {
                 const res = user.postRating.map(elem => {
                     if(String(elem.post) === String(post.id)) {
                         elem.rate = req.body.emoji
-                        elem.timeStamp = Date.now()
+                        elem.timeStamp = now
                         return true
                     }
                 })
                 if(!res[0]){
-                    user.postRating.push({timeStamp: Date.now(), post: post.id, rate: req.body.emoji})
+                    user.postRating.push({timeStamp: now, post: post.id, rate: req.body.emoji})
                 }
             }
             post.save()

@@ -2,9 +2,10 @@ import React, { Component } from "react"
 
 import Autosuggest from "react-autosuggest";
 
-import { Box, BoxTransition, BoxTitle, TagList, TagBox, TagIcon, ButtonWrapper, ButtonLeft, ButtonRight, RevertBtn } from "../Element/Element"
+import { Box, BoxTransition, BoxTitle, TagList, TagBox, TagIcon, RevertBtn } from "../Element/Element"
 import { Space } from "../../Theme"
 import Warning from "../../Search/Warning/Warning"
+import TwoButtons from "../Element/TwoButtons"
 
 class ActionTag extends Component {
 
@@ -30,13 +31,9 @@ class ActionTag extends Component {
     }
 
     getSuggestionValue = suggestion => {};
-
     renderSuggestion = suggestion => {};
-
     onSuggestionsFetchRequested = ({ value }) => {};
-
     onSuggestionsClearRequested = () => {};
-
     onSuggestionSelected = (event, { suggestion, suggestionValue, index, method }) => {};
 
     onChange = (event, { newValue }) => {
@@ -73,12 +70,14 @@ class ActionTag extends Component {
     }
 
     deleteTag = (e) => {
-        const res = this.state.tags.filter((tag) => 
-            tag.toLowerCase() !== e
-        );
-        this.setState({
-            tags: res,
-            limit: false
+        this.setState(state => {
+            const tags = state.tags.filter(tag => 
+                tag.toLowerCase() !== e
+            )
+            return {
+                tags,
+                limit: false
+            }
         });
     };
 
@@ -193,10 +192,12 @@ class ActionTag extends Component {
                             inputProps={inputProps} 
                         />
                     </form>
-                    <ButtonWrapper>
-                        <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                        <ButtonRight onClick={this.handleForward}>次へ進む</ButtonRight>
-                    </ButtonWrapper>
+                    <TwoButtons
+                        handleBack={this.handleBack}
+                        handleForward={this.handleForward}
+                        text={["戻る", "次へ進む"]}
+                        disabled={this.state.tags.length === 0}
+                    />
                 </BoxTransition>
             </Box>
         )

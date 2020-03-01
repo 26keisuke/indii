@@ -67,10 +67,10 @@ class Auth extends PureComponent {
     handleSignUpChange = async (e, type) => {
 
         var res = false;
-        var check = ""
+        var check = "";
         var res2 = false;
-        var check2 = ""
-        var value = e.target.value
+        var check2 = "";
+        var value = e.target.value;
 
         if (type === "email") {
             check = "validEmail"
@@ -332,10 +332,12 @@ const ThirdPartyButton = styled.div`
     margin: 18px 0px;
     
     & > a {
-
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
         position: relative;
 
         & > button {
+            background-color: rgba(0,0,0,0);
+            border: 1px solid #d2d2d2;
             width: 155px;
             height: 36px;
             border-radius: 5px;
@@ -343,7 +345,6 @@ const ThirdPartyButton = styled.div`
             font-family: ${props => props.theme.font};
             color: #252525;
             cursor: pointer;
-            border-color: #d2d2d2;
             outline: 0;
         }
 

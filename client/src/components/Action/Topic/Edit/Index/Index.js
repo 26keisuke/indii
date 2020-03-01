@@ -5,8 +5,9 @@ import styled from "styled-components"
 import { DragDropContext, Droppable } from "react-beautiful-dnd"
 import { GoPlusSmall } from "react-icons/go"
 
-import { Box, BoxTransition, ButtonWrapper, ButtonLeft, ButtonRight, RevertBtn, AddBtn } from "../../../Element/Element"
+import { Box, BoxTransition, RevertBtn, AddBtn } from "../../../Element/Element"
 import { Space } from "../../../../Theme"
+import TwoButtons from "../../../Element/TwoButtons"
 
 import { sendMessage, arrObjLookUp, deepCopyArrOfObj } from "../../../../Util/util"
 
@@ -54,7 +55,7 @@ class EditIndexTopic extends Component {
         if((prevProps.index.columnName !== this.props.index.columnName) && (this.props.index.columnName)){
             this.addNewIndex()
             this.props.addColumn(""); // リセット
-            sendMessage("succes", "コラムを削除しました。", 3000, this.props)
+            sendMessage("success", "コラムを削除しました。", 3000, this.props)
         }
 
         if((prevProps.index.revert === false) && (this.props.index.revert === true)){
@@ -64,7 +65,7 @@ class EditIndexTopic extends Component {
                 order: this.props.initialVal3,
             })
             this.props.revertColumn(false)
-            sendMessage("succes", "変更を元に戻しました。", 3000, this.props)
+            sendMessage("success", "変更を元に戻しました。", 3000, this.props)
         }
 
         if(prevProps.index.deleteId !== this.props.index.deleteId) {
@@ -516,10 +517,11 @@ class EditIndexTopic extends Component {
 
                     <Space height={"360px"}/>
 
-                    <ButtonWrapper>
-                        <ButtonLeft onClick={this.handleBack}>戻る</ButtonLeft>
-                        <ButtonRight onClick={this.handleForward}>次へ進む</ButtonRight>
-                    </ButtonWrapper>
+                    <TwoButtons
+                        handleBack={this.handleBack}
+                        handleForward={this.handleForward}
+                        text={["戻る", "次へ進む"]}
+                    />
                     
                     <Space height={"220px"}/>
 

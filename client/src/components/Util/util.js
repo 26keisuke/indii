@@ -10,27 +10,45 @@ export function fmtDate(time) {
     const date = new Date(time)
     const now = new Date()
 
+    const daysInMonth = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+
     const y = now.getFullYear() - date.getFullYear()
     const m = now.getMonth() - date.getMonth()
+    const overM = now.getMonth() + 12 - date.getMonth()
     const d = now.getDate() - date.getDate()
+    const overD = now.getDate() + daysInMonth - date.getDate()
     const h = now.getHours() - date.getHours()
+    const overH = now.getHours() + 24 - date.getHours()
     const mi = now.getMinutes() - date.getMinutes()
-
+    const overMi = now.getMinutes() + 60 - date.getMinutes()
+    
     const yearDiff = y === 0
+    const yearOverDiff = y === 1
     const monthDiff = m === 0
+    const monthOverDiff = m === 1
     const dateDiff = d === 0
+    const dateOverDiff = d === 1
     const hourDiff = h === 0
+    const hourOverDiff = h === 1
 
     if (yearDiff && monthDiff && dateDiff && hourDiff && (mi <= 3)) {
         return "たった今"
     } else if(yearDiff && monthDiff && dateDiff && hourDiff) {
         return String(mi) + "分前"
+    } else if(yearDiff && monthDiff && dateDiff && hourOverDiff && (overMi < 60)) {
+        return String(overMi) + "分前"
     } else if (yearDiff && monthDiff && dateDiff) {
         return String(h) + "時間前"
+    } else if (yearDiff && monthDiff && dateOverDiff && (overH < 24)){
+        return String(overH) + "時間前"
     } else if (yearDiff && monthDiff) {
         return String(d) + "日前"
+    } else if (yearDiff && monthOverDiff && (overD < daysInMonth)) {
+        return String(overD) + "日前"
     } else if (yearDiff) {
         return String(m) + "ヶ月前"
+    } else if (yearOverDiff && (overM < 12)) {
+        return String(overM) + "ヶ月前"
     } else {
         const fmtDate = String(date.getFullYear()) + "年" + String(date.getMonth() + 1) + "月" + String(date.getDate()) + "日"
         return fmtDate
@@ -65,4 +83,15 @@ export function arrObjLookUp(obj, field, attr){
 export function deepCopyArrOfObj(obj){
     const newObj = JSON.parse(JSON.stringify(obj))
     return newObj
+}
+
+export function renderType(type){
+    switch(type){
+        case "Edit":
+            return "編集"
+        case "Zero":
+            return "編集"
+        case "New":
+            return "新規作成"
+    }
 }

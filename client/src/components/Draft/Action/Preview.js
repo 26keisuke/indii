@@ -6,6 +6,9 @@ import { Separator, DraftElement } from "./Action"
 import { IndexPreview } from "./Index"
 
 import { IoMdCheckmark } from "react-icons/io"
+import { FaUserCheck } from "react-icons/fa"
+
+import { renderType, fmtDate } from "../../Util/util"
 
 const DraftElementWrapper = styled.div`
     margin-bottom: 20px;
@@ -17,7 +20,7 @@ const DraftElementWrapper = styled.div`
     }
 `
 
-const AddColumn = styled.div`
+const Addition = styled.div`
     position: absolute;
     display: flex;
     align-items: center;
@@ -31,6 +34,11 @@ const ColumnCheck = styled(IoMdCheckmark)`
     color: #4CD964;
 `
 
+const EditCheck = styled(FaUserCheck)`
+    margin-right: 8px;
+    color: #9EAEE5;
+`
+
 class Preview extends Component {
 
     findDraftById = (isUpload) => {
@@ -41,9 +49,15 @@ class Preview extends Component {
                         <img src={elem.postImg ? elem.postImg.image : elem.topicSquareImg.image} alt={"ドラフトが傘下となっているトピックの写真"}/>
                         <div>
                             <p>{elem.postName}</p>
-                            <div>前回の編集日： {elem.editDate[elem.editDate.length-1] === undefined ? <span/> : elem.editDate[elem.editDate.length-1]}</div>
+                            <div>
+                                <p>{elem.topicName}</p>
+                                <p>・</p>
+                                <p>{renderType(elem.type)}</p>
+                                <p>・</p>
+                                <p>前回の編集日： {elem.editDate[elem.editDate.length-1] === undefined ? <span/> : fmtDate(elem.editDate[elem.editDate.length-1])}</p>
+                            </div>
                         </div>
-                        { isUpload &&
+                        { isUpload && (elem.type === "New") &&
                         <IndexPreview top="10px" left="7px">
                             <div/>
                             <p>{this.props.index && this.props.index[elem._id].index.join(".")}</p>
@@ -51,11 +65,24 @@ class Preview extends Component {
                             <p>の後</p>
                         </IndexPreview>
                         }
-                        { this.props.index && this.props.index[elem._id].addColumn &&
-                        <AddColumn>
+                        { isUpload && elem.type !== "New" &&
+                        <IndexPreview edit={"1"} top="10px" left="7px">
+                            <div/>
+                            <p>{elem.editIndex.join(".")}</p>
+                            <p>{elem.postName}</p>
+                        </IndexPreview>
+                        }
+                        { this.props.index && (elem.type === "New") && this.props.index[elem._id].addColumn &&
+                        <Addition>
                             <ColumnCheck/>
                             <p>新しいコラムを追加</p>
-                        </AddColumn>
+                        </Addition>
+                        }
+                        { isUpload && elem.type !== "New" && (!elem.config.allowEdit) && 
+                        <Addition>
+                            <EditCheck/>
+                            <p>最終確認有り</p>
+                        </Addition>
                         }
                     </DraftElement>
                 )

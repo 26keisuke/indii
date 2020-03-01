@@ -27,9 +27,7 @@ const postSchema = new Schema({
     },
     feedback: [{ // report 
         timeStamp: Date,
-        feedback: {
-            // ここを付け加える
-        },
+        type: { type: String, enum: [""]},
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     }],
     rating: [{ // emoji
@@ -39,20 +37,17 @@ const postSchema = new Schema({
     }],
     star: {
         counter: {type: Number, default: 0},
-        // lookUp: [{
-        //     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        // }],
         action: [{ // userは全てuniqueじゃなきゃいけない
             timeStamp: Date,
             user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-            // like: Boolean,
         }],
     },
-    reader: [{
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        startTimeStamp: Date,
-        endTimeStamp: Date,
-    }],
+    // まだいい
+    // reader: [{
+    //     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    //     startTimeStamp: Date,
+    //     endTimeStamp: Date,
+    // }],
     config: {
         allowEdit: {type: Boolean, default: true}
     },

@@ -28,8 +28,8 @@ class Index extends Component {
         this.props.unVisible()
         const draftList = this.props.draft.onEdit
 
-        for (var key in  draftList) {
-            if( draftList[key]._id === this.props.id) {
+        for (var key in draftList) {
+            if(draftList[key]._id === this.props.id) {
                 this.props.fetchTopic(draftList[key].topic, "INDEX")
                 this.setState({
                     draft: draftList[key]
@@ -246,7 +246,7 @@ export const IndexPreview = styled.div`
         height: 7px;
         margin-right: 8px;
         border-radius: 100%;
-        background-color: #9EAEE5;
+        background-color: ${props => props.edit ? "#4CD964" : "#9EAEE5"};
     }
 
     & p:nth-child(2) {   

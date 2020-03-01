@@ -3,6 +3,9 @@ import styled, { css } from "styled-components"
 import { connect } from "react-redux"
 
 import { IoMdCheckmark, IoMdClose } from "react-icons/io"
+import { FaUserCheck } from "react-icons/fa"
+
+import { renderType, fmtDate } from "../../Util/util"
 
 class DraftAction extends Component {
 
@@ -25,17 +28,36 @@ class DraftAction extends Component {
     }
 
     renderDraft = () => {
-
         const mapped = this.props.draft.onEdit
             .filter(elem => (!elem.isDeleted) && (!elem.isUploaded))
             .map((elem) => {
+
+                var date;
+
+                console.log(elem.editDate)
+
+                if(!elem.editDate || elem.editDate.length === 0){
+                    date = <span/>
+                } else {
+                    date = fmtDate(elem.editDate[elem.editDate.length-1])
+                }
+
                 return (
                     <DraftElement key={elem._id} onClick={() => this.selectDraft(elem._id, elem.topic)}>
                         <img src={elem.postImg ? elem.postImg.image : elem.topicSquareImg.image} alt={"ドラフトが傘下となっているトピックの写真"}/>
                         <div>
                             <p>{elem.postName}</p>
-                            <div>前回の編集日： {elem.editDate[elem.editDate.length-1] === undefined ? <span/> : elem.editDate[elem.editDate.length-1]}</div>
+                            <div>
+                                <p>{elem.topicName}</p>
+                                <p>・</p>
+                                <p>{renderType(elem.type)}</p>
+                                <p>・</p>
+                                <p>前回の編集日： {date}</p>
+                            </div>
                         </div>
+                        { elem.editCreator && (elem.config.allowEdit === false) && (elem.editCreator !== this.props.auth.info._id) &&
+                        <PermissionImg/>
+                        }
                         <DraftSelect type={this.props.type} selected={this.state.selected[elem._id]}/>
                         { 
                         this.state.selected[elem._id] ? 
@@ -73,9 +95,11 @@ class DraftAction extends Component {
     selectDraft = (idx, topicId) => {
         var counter = 0
 
-        const res = this.topicLookup(idx, topicId)
-        if(res[0]) { return }
-
+        if(this.props.type === "upload") {
+            const res = this.topicLookup(idx, topicId)
+            if(res[0]) { return }
+        }
+        
         if ((this.state.selected[idx] === false) || (this.state.selected[idx] === undefined)) {
             counter = this.state.counter + 1
         } else {
@@ -92,6 +116,7 @@ class DraftAction extends Component {
         }, () => {
             this.props.setCounter(counter);
             this.props.setId(this.state.selected)
+            
         })
     }
 
@@ -107,6 +132,13 @@ class DraftAction extends Component {
         )
     }
 }
+
+const PermissionImg = styled(FaUserCheck)`
+    position: absolute;
+    transform: scale(1.1);
+    color: #9EAEE5;
+    right: 60px;
+`
 
 
 export const Separator = styled.div`
@@ -172,10 +204,15 @@ export const DraftElement = styled.div`
 
         & > div {
             font-size: 10px;
+            display: flex;
             color: #8B8B8B;
             position: relative;
 
-            & > span {
+            & p {
+                margin-right: 6px;
+            }
+
+            & span {
                 width: 30px;
                 border-bottom: 1px solid #d2d2d2;
                 position: absolute;
@@ -211,9 +248,10 @@ const DraftSelect = styled.div`
     right: 15px;
 `
 
-function mapStateToProps(state) {
+function mapStateToProps({draft, auth}) {
     return {
-        draft: state.draft
+        draft,
+        auth
     }
 }
 

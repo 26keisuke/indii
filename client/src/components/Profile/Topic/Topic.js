@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 
-import TopicElement from "../Topic/Element/Element"
+import TopicElement from "../../Topic/Element/Element"
 
 class ProfileTopic extends Component {
 

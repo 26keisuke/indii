@@ -96,7 +96,7 @@ Topic.propTypes = {
     url: PropTypes.string,
     handleClick: PropTypes.func,
     suggestion: PropTypes.object,
-    target: PropTypes.string
+    // target: PropTypes.string
 }
 
 export default Topic

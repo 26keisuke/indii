@@ -11,7 +11,7 @@ import ShowMore from "../../../Util/ShowMore"
 const ListBox = styled.div`
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
+    padding-top: 10px;
 
     & > div:nth-child(1) {
 
@@ -106,9 +106,7 @@ class List extends Component {
     }
 
     deleteRef = (refId) => {
-        const url = this.props.location.pathname
-        const draftId = url.substring(url.lastIndexOf('/') + 1)
-        const id = {draftId, refId}
+        const id = {draftId: this.props.id, refId}
         this.setState({isOpened: ""})
         const action = "DELETE_REF"
         const title = "この参照を削除";

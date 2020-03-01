@@ -1,4 +1,3 @@
-
 //将来的には、要請とか要望が強いものとかも載せられるようにする
 
 import React, {Component} from "react"
@@ -30,15 +29,12 @@ const config = {
 }
 
 class Create extends Component {
-
-
     render () {
         return (
             <GridWrapper>
                 <Grid config={config}/>
                 <Space height="10px"/>
             </GridWrapper>
-            
         )
     }
 }

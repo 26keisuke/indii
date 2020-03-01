@@ -18,7 +18,7 @@ class Image extends Component {
                         <Tag>
                             {
                                 tags.map(tag => 
-                                    <div>
+                                    <div key={tag}>
                                         <p># {tag}</p>
                                     </div>
                                 )
@@ -79,7 +79,7 @@ const Overlay = styled.div`
     content: "";
     background-color: #000000;
     opacity: 0.6;
-    width: 378px;
+    width: 380px;
     height: 65px;
     left: 0px;
     transition: 250ms;

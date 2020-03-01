@@ -36,7 +36,7 @@ class Post extends PureComponent {
 
         if(this.props.content) {
 
-            // このように個別でやるか、heightで今日席的に区切り、残りはopacityとかでぼやかすか
+            // このように個別でやるか、heightで強制的に区切り、残りはopacityとかでぼやかすか
 
             // filter out images
             var images = document.getElementsByClassName("bf-image")

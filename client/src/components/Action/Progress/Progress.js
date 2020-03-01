@@ -1,5 +1,107 @@
 import React, { Component } from "react"
+import styled from "styled-components"
 
+const ProgressBox = styled.div`
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    top: 30px;
+`
+
+const StepName = styled.p`
+    position: absolute;
+    font-size: 10px;
+    color: #585858;
+    width: 100px;
+    z-index: 5;
+    bottom: -20px;
+    left: -27px;
+    text-align: center;
+`
+
+const Circle = styled.div`
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 5;
+    opacity: 1;
+    background-color: #c4c4c4;
+
+    & > p {
+        position: absolute;
+        color: #ffffff;
+        top:10px;
+        left:17px;
+        font-size: 17px;
+    }
+`
+
+const CircleDone = styled.div`
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 2;
+    opacity: 0;
+    background-color: #c4c4c4;
+`
+
+const CircleFake = styled.div`
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 4;
+    background-color: #455964;
+
+    & > p {
+        position: absolute;
+        color: #ffffff;
+        top:10px;
+        left:17px;
+        font-size: 17px;
+    }
+`
+
+
+const CircleFakeWrapper = styled.div`
+    position: relative;
+    z-index: 5;
+`
+
+const BarFakeWrapper = styled.div`
+    position: relative;
+    z-index: 3;
+`
+
+const Bar = styled.div`
+    z-index: 2;
+    width: 55px;
+    height: 8px;
+    margin-left: -2px;
+    margin-right: -2px;
+    background-color: #c4c4c4;
+`
+
+const BarFake = styled.div`
+    position: absolute;
+    z-index: 3;
+    height: 8px;
+    background-color: #455964;
+    left: -2px;
+    top: 0px;
+`
+
+const BarDone = styled.div`
+    position: absolute;
+    width:55px;
+    height: 8px;
+    background-color: #455964;
+    left: -2px;
+    top: 0px;
+`
 
 // input => currentStep: Int, stepName: []
 class Progress extends Component {
@@ -8,21 +110,21 @@ class Progress extends Component {
         const now = this.props.step
         if(now === idx){
             return (
-                <div className="topic-form-progress-circle topic-form-progress-circle-animation">
+                <Circle className="topic-form-progress-circle-animation">
                     <p>{idx+1}</p>
-                </div>
+                </Circle>
             )
         } else if (now > idx) {
             return (
-                <div className="topic-form-progress-circle-done">
+                <CircleDone>
                     <p>{idx+1}</p>
-                </div>
+                </CircleDone>
             )
         } else if (now < idx) {
             return (
-                <div className="topic-form-progress-circle">
+                <Circle>
                     <p>{idx+1}</p>
-                </div>
+                </Circle>
             )
         }
     }
@@ -32,15 +134,15 @@ class Progress extends Component {
         const target = idx + 1
         if(now === target){
             return (
-                <div className="topic-form-progress-bar-fake topic-form-progress-bar-fake-animation"/>
+                <BarFake className="topic-form-progress-bar-fake-animation"/>
             )
         } else if (now > target) {
             return (
-                <div className="topic-form-progress-bar-fake-done"/>
+                <BarDone/>
             )
         } else if (now < target) {
             return (
-                <div className="topic-form-progress-bar-fake"/>
+                <BarFake/>
             )
         }
     }
@@ -50,17 +152,17 @@ class Progress extends Component {
         const lastStep = this.props.stepName[len-1]
         const html = this.props.stepName.map((step,idx) => {
             return ([
-            <div className="topic-form-progress-fake-for-circle">
-                <div className="topic-form-progress-circle-fake">
+            <CircleFakeWrapper key={"c" + step + String(idx)}>
+                <CircleFake>
                     <p>{idx+1}</p>
-                </div>
+                </CircleFake>
                 {this.setCircle(idx)}
-                <p className="topic-form-progress-name">{step}</p>
-            </div>,
-            <div className="topic-form-progress-fake-for-bar">
-                {step !== lastStep ? <div className="topic-form-progress-bar"/> : ""}
+                <StepName>{step}</StepName>
+            </CircleFakeWrapper>,
+            <BarFakeWrapper key={"b" + step + String(idx)}>
+                {step !== lastStep ? <Bar/> : ""}
                 {step !== lastStep ? this.setBar(idx) : ""}
-            </div>
+            </BarFakeWrapper>
             ])
         })
         return html;
@@ -69,9 +171,9 @@ class Progress extends Component {
 
     render() {
         return (
-            <div className="topic-form-progress">
+            <ProgressBox>
                 {this.renderOneStep()}
-            </div>
+            </ProgressBox>
         )
     }
 

@@ -100,8 +100,7 @@ class Post extends Component {
 
     render () {
 
-        const { index, postName, star, config, contribution, postImg, topicSquareImg, } = this.props.suggestion
-        const lastEdited = contribution[contribution.length-1]
+        const { index, postName, star, config, postImg, topicSquareImg, lastEdited } = this.props.suggestion
 
         return (
             <div>
@@ -116,9 +115,9 @@ class Post extends Component {
                             <p>{postName}</p>
                             <div>
                                 <StarImg/>
-                                <p>{star.count}</p>
+                                <p>{star.counter}</p>
                                 <p>最後の編集日:</p>
-                                <p>{lastEdited ? fmtDate(lastEdited.timeStamp) : "-------"}</p>
+                                <p>{lastEdited ? fmtDate(lastEdited.timeStamp) : "-"}</p>
                             </div>
                         </PostMiddle>
                         {/* <div>

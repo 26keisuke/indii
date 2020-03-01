@@ -4,18 +4,11 @@ import axios from "axios"
 import Index from "./Index/Index"
 import EditPreviewTopic from "./Preview"
 
-import ActionProgress from "../../Progress/Progress"
 import Image from "../../Controller/Image"
 import Tag from "../../Tag/Tag"
+import Form from "../../Form/Form"
 
 import Select from "../../Controller/Select"
-// import topics from "../../../__Mock__/data/topic"
-
-import "./EditTopic.css"
-
-import Back from "../../../Util/Back";
-
-import { FormWrapper, FormMount, BackWrapper } from "../../Form/Form"
 
 class CreatePost extends Component {
 
@@ -153,17 +146,6 @@ class CreatePost extends Component {
         })
     }
 
-    // setImage = (img, type) => {
-    //     const name = String(type) + "Img"
-    //     this.setState({
-    //         ...this.state,
-    //         edited: {
-    //             ...this.state.edited,
-    //             [name]: img
-    //         }
-    //     })
-    // }
-
     setTags = (tags) => {
         this.setState({
             ...this.state,
@@ -225,31 +207,44 @@ class CreatePost extends Component {
 
     render () {
         return (
-            <FormWrapper>
-                <div>
-                    <BackWrapper>
-                        <Back
-                            url="/action"
-                            name="編集・作成一覧に戻る"
-                        />
-                    </BackWrapper>
-                    <p>既存のトピックを編集する</p>
-                    <FormMount/>
-                    <ActionProgress
-                        step={this.state.step}
-                        stepName={
-                            [
-                                "トピックを選択",
-                                "写真を変更",
-                                "タグを編集",
-                                "目次を編集",
-                                "プレビュー"
-                            ]
-                        }
-                    />
-                    {this.renderStep()}
-                </div>
-            </FormWrapper>
+            <Form
+                step={this.state.step}
+                stepNames={[
+                    "トピックを選択",
+                    "写真を変更",
+                    "タグを編集",
+                    "目次を編集",
+                    "プレビュー"
+                ]}
+                title="既存のトピックを編集する"
+            >
+                {this.renderStep()}
+            </Form>
+            // <FormWrapper>
+            //     <div>
+            //         <BackWrapper>
+            //             <Back
+            //                 url="/action"
+            //                 name="編集・作成一覧に戻る"
+            //             />
+            //         </BackWrapper>
+            //         <p>既存のトピックを編集する</p>
+            //         <FormMount/>
+            //         <ActionProgress
+            //             step={this.state.step}
+            //             stepName={
+            //                 [
+            //                     "トピックを選択",
+            //                     "写真を変更",
+            //                     "タグを編集",
+            //                     "目次を編集",
+            //                     "プレビュー"
+            //                 ]
+            //             }
+            //         />
+            //         {this.renderStep()}
+            //     </div>
+            // </FormWrapper>
         )
     }
 }

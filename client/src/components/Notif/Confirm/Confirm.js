@@ -10,10 +10,10 @@ import tick_gray from "../../../images/tick-gray.png"
 import close from "../../../images/close-red.png"
 import tick from "../../../images/tick.png"
 
-import PeopleFollow from "../../PeopleFollow"
 import Back from "../../Util/Back"
 import Feedback from "../Feedback/Feedback"
 import ArrowSpin from "../../Util/ArrowSpin"
+import Edit from "./Edit/Edit"
 
 import { Space } from "../../Theme"
 
@@ -105,7 +105,7 @@ class Confirm extends Component {
                     </ConfirmTitle>
                     <ConfirmLeft hide={this.state.isClosed} changed={this.state.collapsed}>
                         <p>基本情報</p>
-                        <p>編集者</p>
+                        {/* <p>編集者</p>
                         <Editor followBtn={true}>
                             <img src={sample} alt={"編集者のアイコン"}/>
                             <div>
@@ -115,7 +115,15 @@ class Confirm extends Component {
                             <FollowWrapper>
                                 <PeopleFollow/>
                             </FollowWrapper>
-                        </Editor>
+                        </Editor> */}
+                        <Edit
+                            title={"編集者"}
+                            date={"January 1, 2014 9:59 PM"}
+                            photo={sample}
+                            userName={"沖田 政勝"}
+                            comment={"Chief株式会社 CTO"}
+                            followBtn={true}
+                        />
                         <Section>
                             <Title>トピック名</Title>
                             <Content>Apache Kafka</Content>
@@ -134,16 +142,13 @@ class Confirm extends Component {
                             <Mark left="125px" top="6px"/>
                         </Section>
                         <Section>
-                            <Title>前回の編集</Title>
-                            <p>January 1, 2014 9:59 PM</p>
-                            <Editor>
-                                <img src={sample} alt={"前回の編集者の写真"}/>
-                                <div>
-                                    <p>沖田 政勝</p>
-                                    <p>Chief株式会社 CTO</p>
-                                </div>
-                            </Editor>
-                            <Underline/>
+                            <Edit
+                                title={"前回の編集"}
+                                date={"January 1, 2014 9:59 PM"}
+                                photo={sample}
+                                userName={"沖田 政勝"}
+                                comment={"Chief株式会社 CTO"}
+                            />
                         </Section>
                         <Section>
                             <Title>フィードバック</Title>
@@ -361,7 +366,7 @@ const Section = styled.div`
     position: relative;
 `
 
-const Title = styled.p`
+export const Title = styled.p`
     color: #4B4B4B;
     font-size: 13px;
     margin-bottom: 12px;
@@ -379,20 +384,21 @@ const Content = styled.p`
     margin-bottom: 5px;
 `
 
-const Underline = styled.div`
+export const Underline = styled.div`
     border: 0.5px solid #838383;
 `
 
-const Editor = styled.div`
+export const Editor = styled.div`
     display: flex;
     flex-direction: row;
     padding: 10px 0px;
     background-color: #ffffff;
     position: relative;
+    height: 40px;
 
-    ${props => props.followBtn && css`
+    /* ${props => props.followBtn && css`
         height: 100px;
-    `}
+    `} */
 
     & > img {
         width: 37px;
@@ -414,12 +420,6 @@ const Editor = styled.div`
             margin-bottom: 5px;
         }
     }
-`
-
-const FollowWrapper = styled.div`
-    position: absolute;
-    top: 63px;
-    left: -40px;
 `
 
 const Mark = styled.div`
@@ -459,49 +459,6 @@ const ConfirmText = styled.div`
         }
     }
 `
-
-// const spin_1 = keyframes`
-//     from {
-//         transform: rotate(270deg)
-//     }
-//     to {
-//         transform: rotate(90deg)
-//     }
-// `
-
-// const spin_2 = keyframes`
-//     from {
-//         transform: rotate(90deg)
-//     }
-//     to {
-//         transform: rotate(270deg)
-//     }
-// `
-
-// const CollapseBtn = styled.img`
-//     width: 13px;
-//     height: 13px;
-//     margin-right: 6px;
-//     transform: rotate(90deg);
-//     pointer-events: none;
-//     top:0px;
-//     right:0px;
-
-//     ${props => props.changed
-//     ? !props.isClosed
-//     ? css`
-//     animation-name: ${spin_1};
-//     animation-duration: 400ms;
-//     animation-fill-mode: forwards;
-//     `
-//     : css`
-//     animation-name: ${spin_2};
-//     animation-duration: 400ms;
-//     animation-fill-mode: forwards;
-//     `
-//     : css`
-//     `}
-// `
 
 const SubmitBtn = styled.div`
     display: flex;

@@ -136,6 +136,8 @@ class ProfileTop extends Component {
         const { skeleton, profile, setElement, isThisUser } = this.props
         const { editName, editComment } = this.state
 
+        console.log(profile.user._id)
+
         return (
             <Wrapper>
                 <Top>
@@ -239,7 +241,7 @@ class ProfileTop extends Component {
                                 <p>ポスト数</p>
                             </Stats>
                             <Stats> 
-                                <p>{ skeleton ? <Skeleton width={28} height={28}/> : profile.user.edit.length}</p>
+                                <p>{ skeleton ? <Skeleton width={28} height={28}/> : profile.user.editPost.length}</p>
                                 <p>編集回数</p>
                             </Stats>
                             <Stats> 
@@ -254,7 +256,7 @@ class ProfileTop extends Component {
                     </BottomLeft>
                     <BottomRight>
                         <BtnWrapper>
-                            <PeopleFollow show={!skeleton && !isThisUser}/>
+                            <PeopleFollow id={profile.user._id} show={!skeleton && !isThisUser}/>
                         </BtnWrapper>
                     </BottomRight>
                     <ToggleBox>
@@ -447,6 +449,7 @@ const Stats = styled.div`
     & > p:nth-child(2) {
         color: #444444;
         font-size: 10px;
+        white-space: nowrap;
     }
 `
 
