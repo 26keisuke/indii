@@ -26,7 +26,7 @@ import {
 import Info from "./Info/Info"
 import Title from "./Title/Title"
 import Button from "../../Util/Button"
-import Config from "./Config/Config"
+import Config from "./ConfigBox/ConfigBox"
 import Form from "./Form/Form"
 import List from "./List/List"
 import Carousel from "./Carousel/Carousel"
