@@ -1,17 +1,20 @@
 import React, { Component } from "react"
 import styled, { keyframes } from "styled-components"
-
+import { connect } from "react-redux"
+import { Transition } from 'react-transition-group';
 import { MdCheck, MdClose } from "react-icons/md"
 
-const dangle = keyframes`
-    0% {opacity: 0; margin-top: -30px;}
-    10% {opacity: 1; margin-top: 0px;}
-    90% {opacity: 1; margin-top: 0px;}
-    100% {opacity: 0; margin-top: -30px;}
-`
+import * as actions from "../../actions"
+
+// const dangle = keyframes`
+//     0% {opacity: 0; margin-top: -30px;}
+//     10% {opacity: 1; margin-top: 0px;}
+//     90% {opacity: 1; margin-top: 0px;}
+//     100% {opacity: 0; margin-top: -30px;}
+// `
 
 const MessageElement = styled.div`
-    background: ${props => props.type === "SUCCESS" 
+    background: ${props => props.type === "success" 
                 ? 
                 "linear-gradient(-90deg, #fff 0%, #fff 98%, #4CD964 98%, #4CD964 100%)" 
                 :
@@ -20,22 +23,20 @@ const MessageElement = styled.div`
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     height: 60px;
     width: 330px;
-    opacity: 0;
     padding: 10px;
     border-radius: 3px;
-    animation: ${dangle} 3s linear;
+
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
     top: 13%;
-    margin: auto 0;
     z-index: 100;
     padding-left: 30px;
 
     & > div {
         width:20px;
         height: 20px;
-        background-color: ${props => props.type === "SUCCESS" ? "#4CD964" : "#FF5F5F"};
+        background-color: ${props => props.type === "success" ? "#4CD964" : "#FF5F5F"};
         left: 18px;
         border-radius: 100%;
         position: absolute;
@@ -68,12 +69,29 @@ const FailIcon = styled(MdClose)`
     margin-top: 4px;
 `
 
+const defaultStyle = {
+    transition: "all 200ms linear",
+    marginTop: "-30px",
+    opacity: 0,
+}
+
+const transitionStyle = {
+    entering: {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
+    entered:  {opacity: 1, marginTop: "0px",},
+    exiting:  {opacity: 1, marginTop: "0px",},
+    exited:  {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
+}
+
 class Message extends Component {
+
     render () {
+
+        const { update, resetMessage } = this.props
+
         return (
-            <MessageElement type={this.props.type}>
+            <Fade in={update ? update.updateMessage.on : false} type={update.updateMessage.type} onExited={resetMessage}>
                 <div>
-                    {this.props.type === "SUCCESS"
+                { update && (update.updateMessage.type === "success")
                     ?
                     <SuccessIcon/>
                     :
@@ -81,17 +99,42 @@ class Message extends Component {
                     }
                 </div>
                 <p>
-                    {this.props.type === "SUCCESS"
+                    { update && (update.updateMessage.type === "success")
                     ?
                     "完了しました！"
                     :
                     "失敗しました。"
                     }
                 </p>
-                <p>{this.props.message}</p>
-            </MessageElement>
+                <p>{update && update.updateMessage.message}</p>
+            </Fade>
         )
     }
 }
 
-export default Message
+
+const Fade = ({in: inProps, children, type, onExited, ...otherProps}) => {
+    return (
+        <Transition in={inProps} timeout={100} { ...otherProps } onExited={onExited}>
+            {(state) => (
+                <MessageElement 
+                    type={type}
+                    style={{
+                        ...defaultStyle,
+                        ...transitionStyle[state]
+                    }}
+                >
+                    { children }
+                </MessageElement>
+            )}
+        </Transition>
+    )
+}
+
+function mapStateToProps({ update }){
+    return {
+        update,
+    }
+}
+
+export default connect(mapStateToProps, actions)(Message)

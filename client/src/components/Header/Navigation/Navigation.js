@@ -8,7 +8,6 @@ import List from "../../Navigation/List/List"
 class Navigation extends Component {
 
     handleClick = (id) => {
-        this.props.resetCategory()
         this.props.setCategory(id)
         this.props.nudgeCheck(id)
     }

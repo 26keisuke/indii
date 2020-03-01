@@ -12,8 +12,6 @@ import { Space } from "../../../Theme"
 import Section from "../../Element/Section"
 import TwoButtons from "../../Element/TwoButtons"
 
-import { sendMessage } from "../../../Util/util"
-
 class EditPreviewTopic extends Component {
 
     handleBack = () => {
@@ -37,10 +35,9 @@ class EditPreviewTopic extends Component {
     onExit = () => {
         this.props.endFetching();
         this.props.disableGray();
-        this.props.resetCategory();
         localStorage.clear();
         this.props.setCategory("draft");
-        sendMessage("success", `ポスト「${this.props.selectedPost.postName}」を下書きに追加しました。`, 3000, this.props)
+        this.props.updateMessage("success", `ポスト「${this.props.selectedPost.postName}」を下書きに追加しました。`)       
         this.props.history.push("/draft")
     }
 

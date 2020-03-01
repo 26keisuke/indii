@@ -13,6 +13,7 @@
     "date-fns": "^2.9.0",
     "deep-equal": "^2.0.1",
     "http-proxy-middleware": "^0.20.0",
+    "immutability-helper": "^3.0.1",
     "lodash": "^4.17.15",
     "passport-google-oauth20": "^2.0.0",
     "prop-types": "^15.7.2",

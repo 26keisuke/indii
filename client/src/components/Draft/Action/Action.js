@@ -33,9 +33,7 @@ class DraftAction extends Component {
             .map((elem) => {
 
                 var date;
-
-                console.log(elem.editDate)
-
+                
                 if(!elem.editDate || elem.editDate.length === 0){
                     date = <span/>
                 } else {

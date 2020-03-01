@@ -13,8 +13,6 @@ import { Space } from "../../Theme"
 import Crop from "../../Util/Crop"
 import { Radio } from "../../Filter/Filter"
 
-import { sendMessage } from "../../Util/util"
-
 const baseStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -69,7 +67,7 @@ function ActionImage(props) {
             setUrl3(null)
             setFile3({preview: null})
             props.revertImg(false)
-            sendMessage("success", "変更を元に戻しました。", 4000, props)
+            props.updateMessage("success", "変更を元に戻しました。")
         }
     }, [props.image.revert])
 

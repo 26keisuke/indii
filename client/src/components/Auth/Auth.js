@@ -3,8 +3,9 @@ import React, { PureComponent } from "react";
 import styled, { css, keyframes } from "styled-components"
 import axios from "axios"
 import { connect } from "react-redux"
+import { Transition } from 'react-transition-group';
 
-import { validateEmail, sendMessage } from "../Util/util"
+import { validateEmail } from "../Util/util"
 
 import * as actions from "../../actions"
 
@@ -13,6 +14,19 @@ import LogIn from "./LogIn/LogIn"
 
 import google from "../../images/google-logo.png"
 import facebook from "../../images/facebook-logo.png"
+
+const defaultStyle = {
+    transition: "all 100ms ease-in-out",
+    top: "370px",
+    opacity: 0,
+}
+
+const transitionStyle = {
+    entering: { top: "370px", opacity: 0, pointerEvents: "none" },
+    entered:  { top: "320px", opacity: 1 },
+    exiting:  { top: "320px", opacity: 1 },
+    exited:  { top: "370px", opacity: 0, pointerEvents: "none" },
+}
 
 class Auth extends PureComponent {
 
@@ -160,7 +174,7 @@ class Auth extends PureComponent {
         if(type === "signUp") {
 
             if(this.state.signUp.userName.length > 25) {
-                sendMessage("fail", "ユーザー名の長さが上限を超えています。")
+                this.props.updateMessage("fail", "ユーザー名の長さが上限を超えています。")
                 return
             }
 
@@ -218,18 +232,56 @@ class Auth extends PureComponent {
 
     render () {
 
+        const {logBtn, signBtn} = this.state
+        const {innerRef, auth} = this.props
+
         return (
-            <LogInCard ref={this.props.innerRef} show={this.props.show}>
-                <div>
+            // <LogInCard ref={innerRef} show={show}>
+            //     <div>
+            //         <Toggle>
+            //             <ToggleBtn 
+            //                 toggleOn={logBtn} 
+            //                 borderRight={true}
+            //                 onClick={() => this.handleClick("log")}>
+            //                 ログイン
+            //             </ToggleBtn>
+            //             <ToggleBtn 
+            //                 toggleOn={signBtn} 
+            //                 onClick={() => this.handleClick("sign")}>
+            //                 新規登録
+            //             </ToggleBtn>
+            //         </Toggle>
+            //         <ThirdPartyButton>
+            //             <a href="/auth/google">
+            //                 <img src={google} alt={"Googleでサインする画像"}/>
+            //                 <button>
+            //                     {logBtn ? "Googleでログイン" : "Googleで登録"}
+            //                 </button>
+            //             </a>
+            //             <a href="/auth/facebook">
+            //                 <img src={facebook} alt={"Facebookでサインする画像"}/>
+            //                 <button>
+            //                     {logBtn ? "Facebookでログイン" : "Facebookで登録"}    
+            //                 </button>
+            //             </a>
+            //         </ThirdPartyButton>
+                    
+            //         { logBtn ? this.renderLogIn() : this.renderSignUp() }
+
+            //     </div>
+            // </LogInCard>
+
+            <Fade in={auth.showForm}>
+                <div ref={innerRef}>
                     <Toggle>
                         <ToggleBtn 
-                            toggleOn={this.state.logBtn} 
+                            toggleOn={logBtn} 
                             borderRight={true}
                             onClick={() => this.handleClick("log")}>
                             ログイン
                         </ToggleBtn>
                         <ToggleBtn 
-                            toggleOn={this.state.signBtn} 
+                            toggleOn={signBtn} 
                             onClick={() => this.handleClick("sign")}>
                             新規登録
                         </ToggleBtn>
@@ -238,25 +290,38 @@ class Auth extends PureComponent {
                         <a href="/auth/google">
                             <img src={google} alt={"Googleでサインする画像"}/>
                             <button>
-                                {this.state.logBtn ? "Googleでログイン" : "Googleで登録"}
+                                {logBtn ? "Googleでログイン" : "Googleで登録"}
                             </button>
                         </a>
                         <a href="/auth/facebook">
                             <img src={facebook} alt={"Facebookでサインする画像"}/>
                             <button>
-                                {this.state.logBtn ? "Facebookでログイン" : "Facebookで登録"}    
+                                {logBtn ? "Facebookでログイン" : "Facebookで登録"}    
                             </button>
                         </a>
                     </ThirdPartyButton>
-                    
-                    {
-                        this.state.logBtn ? this.renderLogIn() : this.renderSignUp()
-                    }
-
+                    { logBtn ? this.renderLogIn() : this.renderSignUp() }
                 </div>
-            </LogInCard>
+            </Fade>
         )
     }
+}
+
+const Fade = ({in: inProps, children, ...otherProps}) => {
+    return (
+        <Transition in={inProps} timeout={100} { ...otherProps }>
+            {(state) => (
+                <LogInCard
+                    style={{
+                        ...defaultStyle,
+                        ...transitionStyle[state]
+                    }}
+                >
+                    { children }
+                </LogInCard>
+            )}
+        </Transition>
+    )
 }
 
 
@@ -268,33 +333,14 @@ const LogInCard = styled.div`
     background-color: #ffffff;
     z-index: 20;
     position: absolute;
-    top: 320px;
     left: 50%;
     transform: translate(-50%, -50%);
     box-sizing: border-box;
-
-    ${props => props.show 
-    ? css`
-        animation: ${onEnter} 250ms ease-out forwards;
-    `
-    : css`
-        animation: ${onLeave} 250ms ease-out forwards;
-    `}
 
     & > div {
         display: flex;
         flex-direction: column;
     }
-`
-
-const onLeave = keyframes`
-    from {top: 320px; opacity: 1;}
-    to {top: 370px; opacity: 0;}
-`
-
-const onEnter = keyframes`
-    from {top: 370px; opacity: 0;}
-    to {top: 320px; opacity: 1;}
 `
 
 const Toggle = styled.div`
@@ -357,4 +403,10 @@ const ThirdPartyButton = styled.div`
     }   
 `
 
-export default connect(null, actions)(Auth)
+function mapStateToProps({auth}){
+    return {
+        auth
+    }
+}
+
+export default connect(mapStateToProps, actions)(Auth)

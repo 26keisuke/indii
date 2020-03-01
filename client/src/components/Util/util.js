@@ -66,11 +66,6 @@ export function checkAuth(e, context) {
     return true
 }
 
-export function sendMessage(type, message, duration, context) {
-    context.updateMessage(type, message);
-    setTimeout(() => context.resetMessage(), duration)
-}
-
 export function arrObjLookUp(obj, field, attr){
     for(var i=0; i < obj.length; i++){
         if(obj[i][field] === attr){

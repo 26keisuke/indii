@@ -9,7 +9,6 @@ import { FaGlobe, FaClipboardList, FaImage } from "react-icons/fa"
 import { IoIosInformationCircleOutline, IoIosSettings } from "react-icons/io"
 
 import * as actions from "../../../actions"
-import { sendMessage } from "../../Util/util"
 
 import {
         nameList,
@@ -303,7 +302,7 @@ class Reference extends Component {
 
         axios.post(`/api/draft/${this.props.draft._id}/image`, {img: this.state.url})
         .then(
-            sendMessage("success", "メイン画像を保存しました。", 3000, this.props)
+            this.props.updateMessage("success", "メイン画像を保存しました。")
         )
         .catch(err => {
             console.log(err)
@@ -359,7 +358,7 @@ class Reference extends Component {
             tempReference: merged,
             [this.state.toggle]: data,
         }, () => {
-            sendMessage("success", "参照を追加しました。", 3000, this.props)
+            this.props.updateMessage("success", "参照を追加しました。")
         })
     }
 
@@ -378,7 +377,7 @@ class Reference extends Component {
 
         if(this.props.draft.type === "Edit") {
             if(this.props.draft.editCreator._id !== this.props.auth.info._id){
-                sendMessage("fail", "このポストのオーナーしか設定を変更できません。", 3000, this.props)
+                this.props.updateMessage("fail", "このポストのオーナーしか設定を変更できません。")
                 return
             }
         }
@@ -396,7 +395,7 @@ class Reference extends Component {
     handleNameSubmit = (e) => {
         e.preventDefault()
         if(!this.state.info.postName){
-            sendMessage("fail", "ポスト名が入力されていません。", 3000, this.props)
+            this.props.updateMessage("fail", "ポスト名が入力されていません。")
             return
         }
         this.props.changeDraftName(this.props.draft._id, this.state.info.postName, false);

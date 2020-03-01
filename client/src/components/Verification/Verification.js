@@ -12,7 +12,7 @@ import * as actions from "../../actions"
 
 import indii from "../../images/indii.png"
 
-import { validateEmail, sendMessage } from "../Util/util"
+import { validateEmail } from "../Util/util"
 
 import Reset from "./Reset/Reset"
 import Change from "./Change/Change"
@@ -62,13 +62,13 @@ class Verification extends Component {
             .then(res => {
                 switch(res.data) {
                     case "SUCCESS":
-                        sendMessage("success", `"${this.state.sendEmail}"に確認メールを送信しました。`, 7000, this.props)
+                        this.props.updateMessage("success", `"${this.state.sendEmail}"に確認メールを送信しました。`, 7000)
                         return
                     case "FAIL":
-                        sendMessage("fail", `"${this.state.sendEmail}"はまだ登録されていません。`, 7000, this.props)
+                        this.props.updateMessage("success", `"${this.state.sendEmail}"はまだ登録されていません。`, 7000)
                         return
                     case "ALREADY":
-                        sendMessage("fail", `"${this.state.sendEmail}"は既に認証済みです。`, 7000, this.props)
+                        this.props.updateMessage("success", `"${this.state.sendEmail}"は既に認証済みです。`, 7000)
                         return
                     default:
                         return
@@ -82,10 +82,10 @@ class Verification extends Component {
             .then(res => {
                 switch(res.data) {
                     case "SUCCESS":
-                        sendMessage("success", `"${this.state.sendEmail}"にメールを送信しました。`, 7000, this.props)
+                        this.props.updateMessage("success", `"${this.state.sendEmail}"にメールを送信しました。`, 7000)
                         return
                     case "FAIL":
-                        sendMessage("fail", `"${this.state.sendEmail}"はまだ登録されていません。`, 7000, this.props)
+                        this.props.updateMessage("fail", `"${this.state.sendEmail}"はまだ登録されていません。`, 7000)
                         return
                     default:
                         return
@@ -104,10 +104,10 @@ class Verification extends Component {
                 switch(res.data) {
                     case "SUCCESS":
                         this.props.history.push("/")
-                        sendMessage("success", "パスワードを変更しました。", 7000, this.props)
+                        this.props.updateMessage("success", "パスワードを変更しました。", 7000)
                         return
                     case "FAIL":
-                        sendMessage("fail", "変更に失敗しました。", 7000, this.props)
+                        this.props.updateMessage("fail", "変更に失敗しました。", 7000)
                         return
                     default:
                         return

@@ -13,8 +13,6 @@ import Config from "../../Preview/Config"
 
 import { Space } from "../../../Theme"
 
-import { sendMessage } from "../../../Util/util"
-
 class CreatePreviewTopic extends Component {
 
     handleBack = () => {
@@ -50,10 +48,9 @@ class CreatePreviewTopic extends Component {
     onExit = () => {
         this.props.endFetching();
         this.props.disableGray();
-        this.props.resetCategory();
         localStorage.clear();
-        this.props.setCategory("draft");       
-        sendMessage("success", `トピック「${this.props.postName}」を下書きに追加しました。`, 5000, this.props)
+        this.props.setCategory("draft");
+        this.props.updateMessage("success", `トピック「${this.props.postName}」を下書きに追加しました。`, 5000)       
         // 後でやらないと、メッセージが表示されない
         this.props.history.push("/draft")
     }

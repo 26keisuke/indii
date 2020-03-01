@@ -1,60 +1,31 @@
 import { combineReducers } from "redux";
 
-import { FETCH_USER,
-         ON_SEARCH, OFF_SEARCH, SEARCH_FETCHING,
-         RESET_CATEGORY, SET_CATEGORY,
-         NUDGE_ADD, NUDGE_CHECK,
-         SEARCH_TERM,
-         IS_FETCHING, END_FETCHING,
-         ENABLE_GRAY, DISABLE_GRAY, 
-         UPDATE_MESSAGE, RESET_MESSAGE,
-         SHOW_CONFIRMATION, HIDE_CONFIRMATION,
-         ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
-         REVERT_IMG,
-         SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
-         SEARCH_TOPIC, SEARCH_POST, SEARCH_FOLLOWER,
-         FETCH_TOPIC,
-         FETCH_DRAFT, 
-         FETCH_POST,
-         DRAFT_UPDATED, DRAFT_READ,
-         FETCH_FEED,
-         FETCH_PROFILE
-         } from "../actions/types"
+import updateReducer from "./updateReducer"
+import authReducer from "./authReducer"
+import categoryReducer from "./categoryReducer"
+import draftReducer from "./draftReducer"
+import postReducer from "./postReducer"
+
+import { 
+    SEARCH_FETCHING,
+    SEARCH_TERM,
+    ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
+    REVERT_IMG,
+    SEARCH_TOPIC, SEARCH_FOLLOWER,
+    FETCH_TOPIC,
+    FETCH_PROFILE
+} from "../actions/types/types"
 
 const initialState = {
-    category: {
-        home: true,
-        draft: false,
-        action: false,
-        notification: false,
-        setting: false
-    },
     search: {
         actionFetching: false, // action内のsearchBoxから検索中（axiosでfetchingしている最中）
         barFetching: false,　// header内のsearchBoxから検索中
-        onSearch: false,
         searchResult: {
             topic: [],
             post: [],
             talk: [],
             people: []
         }
-    },
-    nudge: {
-        home: true,
-        draft: false,
-        action: true,
-        notification: false,
-        setting: false
-    },
-    form: {
-
-    },
-    auth: {
-        showForm: false,
-        loggedIn: false,
-        logInError: null,
-        info: {}
     },
     notif: {
 
@@ -67,37 +38,9 @@ const initialState = {
     image: {
         revert: false,
     },
-    update: {
-        fetching: false,
-        grayBackground: false,
-        updateMessage: {
-            on: false,
-            type: "",
-            message: "",
-        },
-        confirmation: {
-            on: false,
-            id: 0,
-            action: "",
-            title: "",
-            message: "",
-            buttonMessage: "",
-            next: "",
-        },
-    },
-    post: {
-        search: [],
-        fetched: {},
-        feed: {},
-    },
     topic: {
         search: [],
         fetched: {},
-    },
-    draft: {
-        onEdit: [],
-        isUpdated: false,
-        nounce: "",
     },
     profile: {
         user: {},
@@ -128,61 +71,9 @@ function profileReducer(state=initialState.profile, action) {
     }
 }
 
-function draftReducer(state=initialState.draft, action) {
-
-    if(action.payload && action.payload.length === 0) {
-        return state
-    }
-
-    switch(action.type) {
-        case FETCH_DRAFT:
-            return {
-                ...state,
-                onEdit: action.payload.data,
-                nounce: action.payload.nounce
-            }
-        case DRAFT_UPDATED:　// これnounceがあるからいらないのではないか？
-            return {
-                ...state,
-                isUpdated: true,
-            }
-        case DRAFT_READ:
-            return {
-                ...state,
-                isUpdated: false,
-            }
-        default:
-            return state
-    }
-}
-
-function postReducer(state=initialState.post, action) {
-    switch(action.type) {
-        case SEARCH_POST:
-            console.log("search終了")
-            return {
-                ...state,
-                search: action.payload.suggestions
-            }
-        case FETCH_POST:
-            return {
-                ...state,
-                fetched: action.payload
-            }
-        case FETCH_FEED:
-            return {
-                ...state,
-                feed: action.payload
-            }
-        default:
-            return state
-    }
-}
-
 function topicReducer(state=initialState.topic, action) {
     switch(action.type) {
         case SEARCH_TOPIC:
-            console.log("search終了")
             return {
                 ...state,
                 search: action.payload.suggestions
@@ -219,134 +110,8 @@ function indexReducer(state=initialState.index, action) {
     }
 }
 
-function updateReducer(state=initialState.update, action){
-    switch(action.type){
-        case IS_FETCHING:
-            return {
-                ...state,
-                fetching: true,
-            }
-        case END_FETCHING:
-            return {
-                ...state,
-                fetching: false,
-            }
-        case ENABLE_GRAY:
-            return {
-                ...state,
-                grayBackground: true,
-            }
-        case DISABLE_GRAY:
-            return {
-                ...state,
-                grayBackground: false
-            }
-        case UPDATE_MESSAGE:
-            return {
-                ...state,
-                updateMessage: {
-                    on: true,
-                    type: action.payload.type,
-                    message: action.payload.message
-                }
-            }
-        case RESET_MESSAGE:
-            return {
-                ...state,
-                updateMessage: {
-                    on: false,
-                    type: "",
-                    message: ""
-                }
-            }
-        case SHOW_CONFIRMATION:
-            return {
-                ...state,
-                confirmation: {
-                    on: true,
-                    id: action.payload.id,
-                    action: action.payload.action,
-                    title: action.payload.title,
-                    caution: action.payload.caution,
-                    message: action.payload.message,
-                    buttonMessage: action.payload.buttonMessage,
-                    next: action.payload.next,
-                    value: action.payload.value,
-                }
-            }
-        case HIDE_CONFIRMATION:
-            return {
-                ...state,
-                confirmation: {
-                    on: false,
-                    id: "", // 0から""に変えたバグ起きる可能性あり
-                    action: "",
-                    title: "",
-                    caution: "",
-                    message: "",
-                    buttonMessage: "",
-                    next: "",
-                    value: "",
-                }
-            }
-        default:
-            return state
-    }
-}
-
-function nudgeReducer(state=initialState.nudge, action) {
-    switch(action.type){
-        case NUDGE_ADD:
-            return {
-                ...state,
-                [action.payload]: true
-            }
-        case NUDGE_CHECK:
-            return {
-                ...state,
-                [action.payload]: false
-            }
-        default:
-            return state
-    }
-}
-
-function categoryReducer(state=initialState.category, action) {
-    switch(action.type) {
-        case RESET_CATEGORY:
-            console.log("CATEGORY RESET")
-            return{
-                ...state,
-                home: false,
-                draft: false,
-                action: false,
-                notification: false,
-                setting: false
-            }
-        case SET_CATEGORY:
-            console.log("CATEGORY SET")
-            return {
-                [action.payload]: true
-            }
-        default:
-            return state
-    }
-}
-
 function searchReducer(state=initialState.search, action) {
     switch(action.type) {
-        // case ON_SEARCH:
-        //     console.log("SEARCHING")
-        //     return {
-        //         ...state,
-        //         onSearch: true
-        //     }
-        // case OFF_SEARCH:
-        //     console.log("SEARCH ENDED")
-        //     return {
-        //         ...state,
-        //         onSearch: false
-        //     }
         case SEARCH_FETCHING:
             if(action.payload.type === "ACTION"){
                 return {
@@ -382,43 +147,11 @@ function searchReducer(state=initialState.search, action) {
     }
 }
 
-function authReducer(state=initialState.auth, action) {
-    switch(action.type) {
-        case FETCH_USER:
-            if(action.payload) {
-                return {
-                    ...state,
-                    loggedIn: true,
-                    info: action.payload,
-                }
-            }
-            return state;
-        case SHOW_LOGIN:
-            return {
-                ...state,
-                showForm: true,
-            }
-        case HIDE_LOGIN:
-            return {
-                ...state,
-                showForm: false,
-            }
-        case LOG_IN_ERROR:
-            return {
-                ...state,
-                logInError: action.payload.error,
-            }
-        default:
-            return state;
-    }
-}
-
 export default combineReducers({
     auth: authReducer,
     profile: profileReducer,
     search: searchReducer,
     category: categoryReducer,
-    nudge: nudgeReducer,
     update: updateReducer,
     index: indexReducer,
     topic: topicReducer,

@@ -9,8 +9,6 @@ import axios from "axios";
 
 import * as actions from "../actions";
 
-import { sendMessage } from "./Util/util"
-
 import Header from "./Header/Header";
 import Navigation from "./Navigation/Navigation";
 import Feed from "./Feed/Feed";
@@ -144,18 +142,15 @@ class App extends Component {
                     this.props.isFetching()
                     axios.post("/api/post/delete", {id})
                     .then(()=> {
-                        // 本来はsettimeoutはいらん
-                        setTimeout(() => {
                         this.props.endFetching(); 
                         this.props.disableGray();
-                        sendMessage("success", "ポストを削除しました。", 3000, this.props)
-                        }, 500)
+                        this.props.updateMessage("success", "ポストを削除しました。")
                     })
                     .catch((err)=> console.error(err))
                 } else {
                     this.props.disableGray();
                 }
-                return null;
+                return;
 
             case "GIVE_FEEDBACK":
                 this.startAction("confirm")
@@ -163,18 +158,15 @@ class App extends Component {
                     this.props.isFetching()
                     axios.post("/api/feeback", {id: id, problems: this.state.problems})
                     .then(()=> {
-                        // 本来はsettimeoutはいらん
-                        setTimeout(() => {
                         this.props.endFetching(); 
                         this.props.disableGray();
-                        sendMessage("success", "フィードバックを受け取りました。", 3000, this.props)
-                        }, 500);
+                        this.props.updateMessage("success", "フィードバックを受け取りました。")
                     })
                     .catch((err) => console.error(err))
                 } else {
                     this.props.disableGray();
                 }
-                return null;
+                return;
 
             case "ADD_COLUMN":
                 this.startAction("confirm")
@@ -182,7 +174,7 @@ class App extends Component {
                     this.props.addColumn(id, this.state.addColumn);
                 }
                 this.props.disableGray();
-                return null;
+                return;
             
             case "DRAFT_DELETE_CHECK":
                 this.startAction("confirm")
@@ -193,18 +185,18 @@ class App extends Component {
                         this.props.endFetching();
                         this.props.disableGray();
                         this.props.fetchDraft() // this certainly isnt the optimal because req is sent to server again
-                        sendMessage("success", "下書きを削除しました。", 3000, this.props)
-                        return null
+                        this.props.updateMessage("success", "下書きを削除しました。")
+                        return
                     })
                     .catch(err => {
                         console.log(err)
                         this.props.endFetching()
                         this.props.disableGray();
-                        return null
+                        return;
                     })
                 } else {
                     this.props.disableGray();
-                    return null;
+                    return;
                 }
 
             case "DRAFT_UPLOAD_CHECK":
@@ -223,7 +215,7 @@ class App extends Component {
                         this.props.disableGray();
                         this.props.endFetching();
                         this.props.draftUpdated();
-                        sendMessage("success", "ポストをアップロードしました。", 4000, this.props)
+                        this.props.updateMessage("success", "ポストをアップロードしました。")
                     })
 
                 } else {
@@ -238,13 +230,11 @@ class App extends Component {
             
                 axios.post("/api/login", value)
                 .then(user => {
-                    setTimeout(() => {
-                        this.props.disableGray()
-                        this.props.endFetching()
-                        this.startAction("logIn")
-                        sendMessage("success", `"${user.data.email}"に確認メールを送信しました。`, 7000, this.props)
-                        this.props.fetchUser();
-                    }, 2500)
+                    this.props.disableGray()
+                    this.props.endFetching()
+                    this.startAction("logIn")
+                    this.props.updateMessage("success", `"${user.data.email}"に確認メールを送信しました。`, 7000)
+                    this.props.fetchUser();
                 })
                 .catch(err => {
                     console.log(err)
@@ -265,7 +255,8 @@ class App extends Component {
                     this.props.disableGray()
                     this.props.endFetching()
                     this.startAction("logIn")
-                    sendMessage("success", `${user.data.userName}さん、お帰りなさい。`, 3000, this.props)
+                    this.props.updateMessage("success", `${user.data.userName}さん、お帰りなさい。`, 7000)
+                    sendMessage("success", , 3000, this.props)
                     this.props.fetchUser();
                 })
                 .catch(err => {

@@ -11,8 +11,6 @@ import account from "../../../images/account.png"
 
 import InputText from "../../Util/InputText"
 import PeopleFollow from "../../PeopleFollow"
-import { sendMessage } from "../../Util/util"
-
 
 class ProfileTop extends Component {
 
@@ -95,7 +93,7 @@ class ProfileTop extends Component {
         e.preventDefault()
 
         if(this.state.userName.length > 25) {
-            sendMessage("fail", "入力可能な文字数を超えています", 3000, this.props)
+            this.props.updateMessage("fail", "入力可能な文字数を超えています")
             return
         }
 
@@ -104,7 +102,7 @@ class ProfileTop extends Component {
             .then(() => {
                 this.props.fetchUser();
                 this.props.fetchProfile(this.props.auth.info._id);
-                sendMessage("success", "ユーザー名を変更しました。", 3000, this.props)
+                this.props.updateMessage("success", "ユーザー名を変更しました。")
             })
             .catch(err => {
                 console.log(err)
@@ -115,7 +113,7 @@ class ProfileTop extends Component {
         e.preventDefault()
 
         if(this.state.comment.length > 30) {
-            sendMessage("fail", "入力可能な文字数を超えています", 3000, this.props)
+            this.props.updateMessage("success", "入力可能な文字数を超えています")
             return
         }
 
@@ -124,7 +122,7 @@ class ProfileTop extends Component {
             .then(() => {
                 this.props.fetchUser();
                 this.props.fetchProfile(this.props.auth.info._id);
-                sendMessage("success", "一言コメントを変更しました。", 3000, this.props)
+                this.props.updateMessage("success", "一言コメントを変更しました。")
             })
             .catch(err => {
                 console.log(err)

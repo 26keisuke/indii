@@ -3,6 +3,8 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
+import equal from "deep-equal"
+import { Transition } from 'react-transition-group';
 
 import * as actions from "../../actions"
 
@@ -18,26 +20,28 @@ import { IoMdClose } from "react-icons/io"
 
 import { arrObjLookUp } from "../Util/util"
 
+const defaultStyle = {
+    transition: "all 100ms ease-in-out",
+    top: "50%",
+    opacity: 0,
+}
+
+const transitionStyle = {
+    entering: { top: "60%", opacity: 0, pointerEvents: "none" },
+    entered:  { top: "50%", opacity: 1 },
+    exiting:  { top: "50%", opacity: 1 },
+    exited:  { top: "60%", opacity: 0, pointerEvents: "none" },
+}
+
 class Confirm extends Component {
 
     constructor(props) {
         super(props)
 
-        const { id, action, title, caution, message, buttonMessage, next, value } = this.props.update.confirmation
+        // こいつらは本来APP全体のstateだからreduxで管理すべき
 
         this.state = {
             transparent: false,
-
-            id,
-            action,
-            title,
-            message,
-            caution,
-            buttonMessage,
-            next,
-
-            // postAction用にdispatchするvalue(自由に使っていい)
-            value,
 
             // Selectされたdraftを保存: [{_: true}, {_: false}]の形
             draftId: [],
@@ -50,6 +54,17 @@ class Confirm extends Component {
                                 
         }
     }
+
+    componentDidUpdate(prevProps) {
+
+        const { id, action, title, caution, message, buttonMessage, next, value } = this.props.update.confirmation
+
+        if(this.props.update.confirmation.on && (!equal(prevProps.update.confirmation, this.props.update.confirmation))){
+            this.setState({
+                id, action, title, caution, message, buttonMessage, next, value
+            })
+        }
+    } 
 
     // draftIdsの中からtrueのものだけを抜き取る
     extractTrueValues = () => {
@@ -331,11 +346,10 @@ class Confirm extends Component {
     render () {
 
         const { id, action, title, caution, message, buttonMessage, next, transparent, value } = this.state
-        const { innerRef, postAction, cancel } = this.props
-
+        const { innerRef, postAction, update } = this.props
         return (
-            <ConfirmBox ref={innerRef} cancel={cancel}>
-                <div>
+            <Fade in={update ? update.confirmation.on : false} onExit={this.props.resetConfirmation}>
+                <div ref={innerRef}>
                     <ConfirmIcon onClick={() => postAction(action)}/>
                     <p>{title}</p>
                     <p>{message}</p>
@@ -354,9 +368,27 @@ class Confirm extends Component {
                         <button onClick={() => postAction(action)}>キャンセル</button>
                     </ConfirmButton>
                 </div>
-            </ConfirmBox>
+            </Fade>
+            
         )
     }
+}
+
+const Fade = ({in: inProps, children, onExit, ...otherProps}) => {
+    return (
+        <Transition in={inProps} timeout={100} { ...otherProps } onExit={onExit}>
+            {(state) => (
+                <ConfirmBox 
+                    style={{
+                        ...defaultStyle,
+                        ...transitionStyle[state]
+                    }}
+                >
+                    { children }
+                </ConfirmBox>
+            )}
+        </Transition>
+    )
 }
 
 const ConfirmButton = styled.div`
@@ -403,18 +435,10 @@ const ConfirmBox = styled.div`
     padding: 20px 30px;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     background-color: #ffffff;
-    border-radius: 3px;;
-    top: 50%;
+    border-radius: 3px;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
-    ${props => props.cancel
-    ? css`
-        animation: onLeave 200ms ease-out forwards;
-    `
-    : css `
-        animation: onEnter 200ms ease-out;
-    `}
 
     & > div {
         position: relative;
@@ -453,7 +477,7 @@ function mapStateToProps({update, auth, draft}) {
     return {
         update,
         auth,
-        draft
+        draft,
     }
 }
 

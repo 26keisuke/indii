@@ -1,4 +1,5 @@
 import React, {Component} from "react"
+import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import styled, {css} from "styled-components"
 
@@ -43,14 +44,13 @@ class List extends Component {
     renderList = () => {
 
         const cate = this.props.category;
-        const nudgeProps = this.props.nudge
 
         const nudge = {
-            home: nudgeProps.home === true,
-            draft: nudgeProps.draft === true,
-            action: nudgeProps.action === true,
-            notification: nudgeProps.notification === true,
-            setting: nudgeProps.setting === true,
+            home: cate.home.nudge === true,
+            draft: cate.draft.nudge === true,
+            action: cate.action.nudge === true,
+            notification: cate.notification.nudge === true,
+            setting: cate.setting.nudge === true,
         };
 
         const subject = variableName.map((name, index) => {
@@ -60,13 +60,13 @@ class List extends Component {
 
             return (
                 <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name)}>
-                    <SelectBar selected={cate[name]}/>
+                    <SelectBar selected={cate[name].selected}/>
                     <NudgeMark key={name} nudge={nudge[name]}/>
                     <ListImg 
-                        selected={cate[name]}
-                        src={cate[name] ? images.pressed[name] : images.unpressed[name]} 
+                        selected={cate[name].selected}
+                        src={cate[name].selected ? images.pressed[name] : images.unpressed[name]} 
                     />
-                    {this.renderText(index, cate[name])}
+                    {this.renderText(index, cate[name].selected)}
                 </ListElement>
             )
         })
@@ -193,4 +193,11 @@ const TextSelected = styled.p`
     }
 `
 
-export default List
+function mapStateToProps({ category }) {
+    return{
+        category,
+    }
+}
+
+
+export default connect(mapStateToProps)(List)

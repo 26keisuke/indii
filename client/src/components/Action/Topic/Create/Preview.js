@@ -50,11 +50,9 @@ class CreatePreviewTopic extends Component {
         this.props.history.push("/")
         this.props.endFetching();
         this.props.disableGray();
-        this.props.resetCategory();
         localStorage.clear();
         this.props.setCategory("home");
-        setTimeout(() => this.props.updateMessage("success", `新しいトピック「${this.props.topicName}」を作成しました。`), 1000);
-        setTimeout(() => this.props.resetMessage(), 5000)
+        this.props.updateMessage("success", `新しいトピック「${this.props.topicName}」を作成しました。`);
     }
 
     renderTags = () => {

@@ -14,10 +14,7 @@ class Navigation extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.location.pathname !== this.props.location.pathname) {
-            this.props.resetCategory()
-            this.setIcon()
-        }
+        if(prevProps.location.pathname !== this.props.location.pathname) { this.setIcon() }
     } 
 
     setIcon = () => {
@@ -42,7 +39,6 @@ class Navigation extends Component {
     }
 
     toggleIcon = (id) => {
-        this.props.resetCategory()
         this.props.setCategory(id)
         this.props.nudgeCheck(id)
     }
@@ -63,17 +59,14 @@ class Navigation extends Component {
             <List
                 handleClick={this.handleClick}
                 category={this.props.category}
-                nudge={this.props.nudge}
             />
         );
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({auth}) {
     return{
-        category: state.category,
-        nudge: state.nudge,
-        auth: state.auth,
+        auth,
     }
 }
 

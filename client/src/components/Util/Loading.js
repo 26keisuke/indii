@@ -10,8 +10,8 @@ const rotate = keyframes`
 const LoadingElement = styled.div`
     height: 0;
     width: 0;
-    padding: 15px;
-    border: 3px solid #c4c4c4;
+    padding: 16px;
+    border: 1px solid #c4c4c4;
     border-right-color: #646380;
     border-radius: 22px;
     animation: ${rotate} 1s infinite linear;

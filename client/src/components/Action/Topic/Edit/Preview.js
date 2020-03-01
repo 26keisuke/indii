@@ -21,7 +21,7 @@ import TwoButtons from "../../Element/TwoButtons"
 import { Space } from "../../../Theme"
 import Image from "../../Preview/Image"
 
-import { arrObjLookUp, sendMessage } from "../../../Util/util"
+import { arrObjLookUp } from "../../../Util/util"
 
 class CreatePreviewTopic extends Component {
 
@@ -71,10 +71,9 @@ class CreatePreviewTopic extends Component {
         this.props.history.push(`/topic/${this.props.topicId}`)
         this.props.endFetching();
         this.props.disableGray();
-        this.props.resetCategory();
         localStorage.clear();
         this.props.setCategory("home");
-        sendMessage("success", `トピック「${this.props.topicName}」を編集しました。`, 5000, this.props)
+        this.props.updateMessage("success", `トピック「${this.props.topicName}」を編集しました。`)
     }
 
     renderTags = () => {
