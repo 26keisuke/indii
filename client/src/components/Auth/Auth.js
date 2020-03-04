@@ -236,41 +236,6 @@ class Auth extends PureComponent {
         const {innerRef, auth} = this.props
 
         return (
-            // <LogInCard ref={innerRef} show={show}>
-            //     <div>
-            //         <Toggle>
-            //             <ToggleBtn 
-            //                 toggleOn={logBtn} 
-            //                 borderRight={true}
-            //                 onClick={() => this.handleClick("log")}>
-            //                 ログイン
-            //             </ToggleBtn>
-            //             <ToggleBtn 
-            //                 toggleOn={signBtn} 
-            //                 onClick={() => this.handleClick("sign")}>
-            //                 新規登録
-            //             </ToggleBtn>
-            //         </Toggle>
-            //         <ThirdPartyButton>
-            //             <a href="/auth/google">
-            //                 <img src={google} alt={"Googleでサインする画像"}/>
-            //                 <button>
-            //                     {logBtn ? "Googleでログイン" : "Googleで登録"}
-            //                 </button>
-            //             </a>
-            //             <a href="/auth/facebook">
-            //                 <img src={facebook} alt={"Facebookでサインする画像"}/>
-            //                 <button>
-            //                     {logBtn ? "Facebookでログイン" : "Facebookで登録"}    
-            //                 </button>
-            //             </a>
-            //         </ThirdPartyButton>
-                    
-            //         { logBtn ? this.renderLogIn() : this.renderSignUp() }
-
-            //     </div>
-            // </LogInCard>
-
             <Fade in={auth.showForm}>
                 <div ref={innerRef}>
                     <Toggle>
@@ -287,13 +252,13 @@ class Auth extends PureComponent {
                         </ToggleBtn>
                     </Toggle>
                     <ThirdPartyButton>
-                        <a href="/auth/google">
+                        <a href="/auth/google" onClick={this.props.isFetching}>
                             <img src={google} alt={"Googleでサインする画像"}/>
                             <button>
                                 {logBtn ? "Googleでログイン" : "Googleで登録"}
                             </button>
                         </a>
-                        <a href="/auth/facebook">
+                        <a href="/auth/facebook" onClick={this.props.isFetching}>
                             <img src={facebook} alt={"Facebookでサインする画像"}/>
                             <button>
                                 {logBtn ? "Facebookでログイン" : "Facebookで登録"}    

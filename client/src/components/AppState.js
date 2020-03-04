@@ -1,9 +1,11 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Message from "./Util/Message"
-import Loading from "./Util/Loading"
+// import Loading from "./Util/Loading"
 import Filter from "./Util/Filter"
 import Header from "./Header/Header";
 import Navigation from "./Navigation/Navigation";
@@ -70,7 +72,16 @@ class AppState extends Component {
 
 
     // こいつを分離しようと思えばできるが、こっちの方がlookupしやすい（人間的に）
-    postAction = (action, id, value) => {
+    postAction = (shouldProceed) => {
+
+        const {
+            id,
+            action,
+            problem1, problem2, problem3, problem4, problem5,
+            value,
+            draftId,
+            index,
+        } = this.props.update.confirmation
 
         // 初期に共通して行うこと
         if(authList.includes(action)){
@@ -79,7 +90,7 @@ class AppState extends Component {
             this.props.hideConfirmation();
         }
 
-        if (id || value) {
+        if (shouldProceed) {
             switch(action){
 
                 // ======== Confirm(PopUp)関係 ==========
@@ -88,10 +99,10 @@ class AppState extends Component {
                     this.props.deletePost(id); break
     
                 case "GIVE_FEEDBACK":
-                    this.props.sendFeedBack(id, value); break
+                    this.props.sendFeedBack(id, {problem1, problem2, problem3, problem4, problem5}); break
     
                 case "CHANGE_DRAFTNAME":
-                    this.props.changeDraftName(id, "", true); break
+                    this.props.changeDraftName(id, "", true); break 
     
                 case "CHANGE_DRAFTCONFIG":
                     this.props.changeDraftConfig(id, value); break
@@ -109,10 +120,10 @@ class AppState extends Component {
                     this.props.deleteColumn(id); break
     
                 case "DRAFT_DELETE_CHECK":
-                    this.props.deleteDraft(id); break
+                    this.props.deleteDraft(draftId); break
     
                 case "DRAFT_UPLOAD_CHECK":
-                    this.props.uploadDraft(value); break
+                    this.props.uploadDraft(index); break
     
                 case "DELETE_REF":
                     this.props.deleteRef(id); break
@@ -126,7 +137,7 @@ class AppState extends Component {
                 // ======== logIn系 ==========
     
                 case "SIGN_UP":
-                    this.props.signUp(value); return
+                    this.props.signUp(value); return 
     
                 case "LOG_IN":
                     this.props.logIn(value); return
@@ -187,6 +198,25 @@ class AppState extends Component {
             </Box>
         )
     }
+}
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    position: "absolute",
+    left: "50%",
+    top: "40%",
+    zIndex: 100,
+  },
+}));
+
+
+function Loading() {
+    const classes = useStyles();
+    return (
+        <div className={classes.root}>
+            <CircularProgress color="primary"/>
+        </div>
+    )
 }
 
 const Box = styled.div`

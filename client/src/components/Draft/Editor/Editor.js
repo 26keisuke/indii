@@ -3,6 +3,9 @@ import styled, { keyframes } from "styled-components"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import { MdCheck } from "react-icons/md"
+import { Link } from "react-router-dom"
+
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 import * as actions from "../../../actions"
 
@@ -90,6 +93,18 @@ const Check = styled(MdCheck)`
     margin-right: 7px;
 `
 
+const Hopper = ( props ) => {
+    return (
+        <div>
+            <Breadcrumbs>
+                <p>ポスト</p>
+                <p>{props.type}</p>
+                <Link to={props.link}>{props.name}</Link>
+            </Breadcrumbs>
+        </div>
+    )
+}
+
 class Editor extends Component {
 
     constructor(props) {
@@ -152,9 +167,7 @@ class Editor extends Component {
         return (
             <div>
                 <EditorNavi>
-                    <p>ポスト ></p>
-                    <p>{renderType(this.state.draft.type)} ></p>
-                    <p>{this.state.draft.topicName}</p>
+                    <Hopper type={renderType(this.state.draft.type)} name={this.state.draft.topicName} link={`/topic/${this.state.draft.topic}`}/>
                 </EditorNavi>
             </div>
         )

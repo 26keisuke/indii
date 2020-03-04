@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components"
+import { connect } from "react-redux"
+
+import * as actions from "../../actions"
 
 import Element from "./Element/Element"
 import Filter from "./Filter/Filter";
@@ -22,6 +25,10 @@ const RightInsideTitle = styled.div`
 `
 
 class Notif extends Component {
+    
+    componentDidMount(){
+        this.props.fetchNotif()
+    }
 
     renderTopContent() {
         return(
@@ -33,12 +40,12 @@ class Notif extends Component {
         return(
             <div>
                 <Border bottom={true}/>
-                <Element 
-                    id={"123123"}
-                    name={"飯塚啓介"}
-                    date={"May 25, 2018 6:34 PM"}
-                    action={"EDIT_REQUEST"}
-                />
+                { this.props.auth.info.notif.map(notif => (
+                    <Element 
+                        notif={notif}
+                    />
+                ))
+                }
             </div>
         )
     }
@@ -65,4 +72,11 @@ class Notif extends Component {
     }
 }
 
-export default Notif;
+function mapStateToProps({ update, auth }){
+    return {
+        update,
+        auth
+    }
+}
+
+export default connect(mapStateToProps, actions)(Notif);

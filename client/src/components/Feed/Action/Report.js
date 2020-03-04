@@ -1,5 +1,9 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { connect } from "react-redux"
+import update from "immutability-helper"
+
+import * as actions from "../../../actions"
 
 const ReportBox = styled.form`
 
@@ -68,45 +72,46 @@ const ReportBox = styled.form`
 
 class Report extends Component {
 
-    constructor(props) {
-        super(props)
-        this.props.setValue({
-            problem0: false,
-            problem1: false,
-            problem2: false,
-            problem3: false,
-            problem4: false,
-        })
-    }
+    toggleChange = (subject) => {
 
-    toggleChange = (e, subject) => {
-        this.props.setValue(e.target.checked, subject)
+        var flag = true;
+        var newObj = update(this.props.update, {confirmation: {$toggle:[subject]}})
+
+        for(var elem in newObj.confirmation){
+            if(elem.includes("problem") && newObj.confirmation[elem] === true){
+                flag = false;
+            }
+        }
+
+        newObj = update(newObj, {confirmation: {transparent: {$set: flag}}})
+        this.props.updateConfirmation(newObj)
+        
     }
 
     render () {
 
-        const { value } = this.props
+        const { problem0, problem1, problem2, problem3, problem4 } = this.props.update.confirmation
 
         return (
             <ReportBox>
                 <div>
-                    <input onChange={(e) => this.toggleChange(e, "problem0")}  checked={value ? value["problem0"] : false} type="checkbox" id="0" name="p0"/>
+                    <input onChange={(e) => this.toggleChange("problem0")}  checked={problem0} type="checkbox" id="0" name="p0"/>
                     <label htmlFor="0">理解するのが難しいです。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.toggleChange(e, "problem1")}  checked={value ? value["problem1"] : false} type="checkbox" id="1" name="p1"/>
+                    <input onChange={(e) => this.toggleChange("problem1")}  checked={problem1} type="checkbox" id="1" name="p1"/>
                     <label htmlFor="1">書かれている内容が不適切です。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.toggleChange(e, "problem2")}  checked={value ? value["problem2"] : false} type="checkbox" id="2" name="p2"/>
+                    <input onChange={(e) => this.toggleChange("problem2")}  checked={problem2} type="checkbox" id="2" name="p2"/>
                     <label htmlFor="2">書かれている内容が間違っています。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.toggleChange(e, "problem3")}  checked={value ? value["problem3"] : false} type="checkbox" id="3" name="p3"/>
+                    <input onChange={(e) => this.toggleChange("problem3")}  checked={problem3} type="checkbox" id="3" name="p3"/>
                     <label htmlFor="3">タイトルを変えるべきです。</label>
                 </div>
                 <div>
-                    <input onChange={(e) => this.toggleChange(e, "problem4")} checked={value ? value["problem4"] : false} type="checkbox" id="4" name="p4"/>
+                    <input onChange={(e) => this.toggleChange("problem4")} checked={problem4} type="checkbox" id="4" name="p4"/>
                     <label htmlFor="4">同じようなポストが既にあります。</label>
                 </div>
             </ReportBox>
@@ -114,4 +119,10 @@ class Report extends Component {
     }
 }
 
-export default Report
+function mapStateToProps({ update }){
+    return {
+        update
+    }
+}
+
+export default connect(mapStateToProps, actions)(Report)

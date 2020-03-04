@@ -1,9 +1,12 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
+import update from "immutability-helper"
 
 import { IoMdCheckmark, IoMdClose } from "react-icons/io"
 import { FaUserCheck } from "react-icons/fa"
+
+import * as actions from "../../../actions"
 
 import { renderType, fmtDate } from "../../Util/util"
 
@@ -12,19 +15,13 @@ class DraftAction extends Component {
     constructor(props) {
         super(props) 
         this.state = {
-            selected: {},
             counter: 0,
         }
     }
 
-    componentDidUpdate(prepProps, prevState) {
-        if(prevState.counter !== this.state.counter) {
-            return this.state.counter === 0 ? this.props.unVisible() : this.props.visible()
-        }
-    }
-
     componentDidMount() {
-        this.props.unVisible()
+        const newObj = update(this.props.update, {confirmation: {transparent: {$set: true}}})
+        return  this.props.updateConfirmation(newObj)
     }
 
     renderDraft = () => {
@@ -39,6 +36,8 @@ class DraftAction extends Component {
                 } else {
                     date = fmtDate(elem.editDate[elem.editDate.length-1])
                 }
+
+                const selected = this.props.update.confirmation.selected[elem._id]
 
                 return (
                     <DraftElement key={elem._id} onClick={() => this.selectDraft(elem._id, elem.topic)}>
@@ -56,9 +55,9 @@ class DraftAction extends Component {
                         { elem.editCreator && (elem.config.allowEdit === false) && (elem.editCreator !== this.props.auth.info._id) &&
                         <PermissionImg/>
                         }
-                        <DraftSelect type={this.props.type} selected={this.state.selected[elem._id]}/>
+                        <DraftSelect type={this.props.type} selected={selected}/>
                         { 
-                        this.state.selected[elem._id] ? 
+                        selected ?
                         (this.props.type === "delete")
                         ? <Close/> : <Check/> : ""
                         }
@@ -72,49 +71,55 @@ class DraftAction extends Component {
     // 同じトピックのものは投稿できない
     topicLookup = (idx, topicId) => {
 
-        // 同じ下書きのtoggleはすぐに許可する
-        if(this.state.selected[idx] === true) { return [] }
+        var flag = false;
+        const target = this.props.update.confirmation.selected
 
-        const res = Object.keys(this.state.selected)
-            .filter(key => this.state.selected[key] === true)
+        if(target[idx] === true) { return false; }
+
+        const res = Object.keys(target)
+            .filter(key => target[key] === true)
             .map(key => {
+                // console.log(key)
                 for(var l=0; l < this.props.draft.onEdit.length; l++){
+                    // console.log(this.props.draft.onEdit[l]._id, key, this.props.draft.onEdit[l].topic, topicId)
                     if(this.props.draft.onEdit[l]._id === key){
                         if(this.props.draft.onEdit[l].topic === topicId){
-                            return 1
+                            flag = true
+                            return;
                         }
                     }
                 }
             })
 
-        return res
+        return flag;
     }
 
     selectDraft = (idx, topicId) => {
         var counter = 0
 
+        var target = this.props.update.confirmation.selected
+
         if(this.props.type === "upload") {
             const res = this.topicLookup(idx, topicId)
-            if(res[0]) { return }
+            if(res) { return }
         }
-        
-        if ((this.state.selected[idx] === false) || (this.state.selected[idx] === undefined)) {
+
+        if (!target[idx]) {
             counter = this.state.counter + 1
         } else {
             counter = this.state.counter - 1
         }
 
-        this.setState({
-            ...this.state,
-            selected: {
-                ...this.state.selected,
-                [idx]: !this.state.selected[idx],
-            },
-            counter: counter
-        }, () => {
-            this.props.setCounter(counter);
-            this.props.setId(this.state.selected)
-            
+        const data = update(target, {$merge: {[idx]: !target[idx]}})
+
+        this.props.setCounter(counter)
+        this.setState({ counter }, () => {
+            const flag = this.state.counter === 0
+
+            var newObj = update(this.props.update, {confirmation: {selected: {$merge: data}}})
+            newObj = update(newObj, {confirmation: {transparent: {$set: flag}}})
+
+            this.props.updateConfirmation(newObj)
         })
     }
 
@@ -123,7 +128,7 @@ class DraftAction extends Component {
         return (
 
             <DraftBox>
-                <Separator top="84px"/>
+                <Separator top="150px"/>
                 {this.renderDraft()}
                 <Separator bottom="48px"/>
             </DraftBox>
@@ -246,11 +251,12 @@ const DraftSelect = styled.div`
     right: 15px;
 `
 
-function mapStateToProps({draft, auth}) {
+function mapStateToProps({draft, auth, update}) {
     return {
         draft,
-        auth
+        auth,
+        update
     }
 }
 
-export default connect(mapStateToProps, null)(DraftAction)
+export default connect(mapStateToProps, actions)(DraftAction)

@@ -135,7 +135,15 @@ class DraftNavigation extends Component {
         return (
             <div>
                 <Border bottom={true}/>
-                { ((this.props.draft.nounce === this.state.id) || (counter > 0)) ? "" : <Draft draft={""}/>}
+                { ((this.props.draft.nounce === this.state.id) || (counter > 0)) 
+                ? "" 
+                : 
+                <div>
+                    <Draft draft={""}/>
+                    <Draft draft={""}/>
+                    <Draft draft={""}/>
+                </div>
+                }
                 {
                     this.props.draft.onEdit
                         .map(elem => {

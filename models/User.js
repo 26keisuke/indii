@@ -67,9 +67,12 @@ const userSchema = new Schema({
         type: {type: String, enum: ["POST_EMOJI", "POST_LIKE", "FOLLOWED", "POST_EDIT", "POST_EDIT_FEEDBACK"]},
         user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
         checked: {type: Boolean, default: false},
+
         post: { type: mongoose.Schema.Types.ObjectId, ref: "Post" }, // これはPOSTの場合に必要
+        emoji: String, // これはPOSTの場合に必要
         draft: { type: mongoose.Schema.Types.ObjectId, ref: "Draft" }, // これはallowEditがfalseの場合に必要
         comment: String, // これはPOST_EDIT_FEEDBACKの時のみ必要
+        isApproved: Boolean, // これはPOST_EDIT_FEEDBACKの時のみ必要
     }],
 
     // confirm: [{

@@ -24,6 +24,7 @@ const NavBar = styled.nav`
     top: 0px;
     width: 100%;
     z-index: 5;
+    box-shadow: 1px 1px 4px #e2e2e2;
 `
 
 const Logo = styled(Link)`
@@ -37,6 +38,7 @@ const Logo = styled(Link)`
 
     & > p {
         font-family: 'Libre Baskerville', serif;
+        text-shadow: 1px 2px 4px #d2d2d2;
         font-size:24px;
         color: #222222;
         margin-right:20px;

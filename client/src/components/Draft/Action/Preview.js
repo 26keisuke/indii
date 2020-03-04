@@ -1,12 +1,13 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
+import { IoMdCheckmark } from "react-icons/io"
+import { FaUserCheck } from "react-icons/fa"
+
+import * as actions from "../../../actions"
 
 import { Separator, DraftElement } from "./Action"
 import { IndexPreview } from "./Index"
-
-import { IoMdCheckmark } from "react-icons/io"
-import { FaUserCheck } from "react-icons/fa"
 
 import { renderType, fmtDate } from "../../Util/util"
 
@@ -42,8 +43,11 @@ const EditCheck = styled(FaUserCheck)`
 class Preview extends Component {
 
     findDraftById = (isUpload) => {
+
+        const { draftId, index } = this.props.update.confirmation
+
         const res = this.props.draft.onEdit.map(elem => {
-            if(this.props.ids.includes(elem._id)){
+            if(draftId.includes(elem._id)){
                 return (
                     <DraftElement key={elem._id} indexPreview={isUpload ? true : false} preview={isUpload ? false : true}>
                         <img src={elem.postImg ? elem.postImg.image : elem.topicSquareImg.image} alt={"ドラフトが傘下となっているトピックの写真"}/>
@@ -60,28 +64,28 @@ class Preview extends Component {
                         { isUpload && (elem.type === "New") &&
                         <IndexPreview top="10px" left="7px">
                             <div/>
-                            <p>{this.props.index && this.props.index[elem._id].index.join(".")}</p>
-                            <p>{this.props.index && this.props.index[elem._id].title}</p>
+                            <p>{index && index[elem._id].index.join(".")}</p>
+                            <p>{index && index[elem._id].title}</p>
                             <p>の後</p>
                         </IndexPreview>
                         }
-                        { isUpload && elem.type !== "New" &&
+                        { isUpload && (elem.type !== "New") &&
                         <IndexPreview edit={"1"} top="10px" left="7px">
                             <div/>
                             <p>{elem.editIndex.join(".")}</p>
                             <p>{elem.postName}</p>
                         </IndexPreview>
                         }
-                        { this.props.index && (elem.type === "New") && this.props.index[elem._id].addColumn &&
+                        { isUpload && (elem.type === "New") && index[elem._id].addColumn &&
                         <Addition>
                             <ColumnCheck/>
                             <p>新しいコラムを追加</p>
                         </Addition>
                         }
-                        { isUpload && elem.type !== "New" && (!elem.config.allowEdit) && 
+                        { isUpload && (elem.type !== "New") && (!elem.config.allowEdit) && 
                         <Addition>
                             <EditCheck/>
-                            <p>最終確認有り</p>
+                            <p>ポストのオーナーによる最終確認有り</p>
                         </Addition>
                         }
                     </DraftElement>
@@ -112,10 +116,11 @@ class Preview extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({draft, update}) {
     return {
-        draft: state.draft
+        draft,
+        update,
     }
 }
 
-export default connect(mapStateToProps,null)(Preview)
+export default connect(mapStateToProps, actions)(Preview)

@@ -124,24 +124,16 @@ class Draft extends Component {
                         ? <p>{topicName}</p>
                         : (
                             <div style={{marginRight: "5px"}}>
-                                <Skeleton width={80} height={12}/>
+                                <Skeleton width={150} height={12}/>
                             </div>
                         )
                         }
-                        <p>・</p>
-                        { flag
-                        ? <p>{renderType(type)}</p>
-                        : (
-                            <div style={{marginRight: "5px"}}>
-                                <Skeleton width={55} height={12}/>
-                            </div>
-                        )
-                        }
+                        { flag && <p>・</p> }
+                        { flag && <p>{renderType(type)}</p> }
                         <Date>
-                            前回の編集日: 
                             { flag 
-                            ? <div>{ date }</div> 
-                            : <div><Skeleton width={60} height={12}/></div>
+                            ? ([<p key={"text"}>前回の編集日: </p>, <div key={"date"}>{ date }</div> ])
+                            : <div><Skeleton width={80} height={12}/></div>
                             }
                         </Date>
                     </div>

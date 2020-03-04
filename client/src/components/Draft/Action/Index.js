@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
+import update from "immutability-helper"
+import equal from "deep-equal"
 
 import * as actions from "../../../actions"
 
@@ -8,97 +10,110 @@ import indent from "../../../images/indent.png"
 
 class Index extends Component {
 
-    constructor(props) {
+    constructor(props){
         super(props)
-        this.state = {
-            selectedId: "",
-            selectedTitle: "",
-            selectedIndex: "",
-            showBtn: false,
-            forcedOn: false,
-            addColumn: false,
 
-            draft: {},
-            topic: {},
-        }
+        // idが一致する下書きをとってくる
+        this.fetch();
     }
 
-    fetchDraft = () => {
+    fetch = () => {
         this.props.isFetching()
-        this.props.unVisible()
-        const draftList = this.props.draft.onEdit
 
-        for (var key in draftList) {
-            if(draftList[key]._id === this.props.id) {
-                this.props.fetchTopic(draftList[key].topic, "INDEX")
-                this.setState({
-                    draft: draftList[key]
-                })
-            }
-        }
+        const newObj = update(this.props.update, {confirmation: {transparent: {$set: true}}})
+        this.props.updateConfirmation(newObj)
+        this.props.fetchOneDraft(this.props.update.confirmation.draftId[this.props.counter])
     }
 
-    // idが一致する下書きをとってくる
-    componentDidMount() {
-        this.fetchDraft();
-    }
-
-    // ↑の後に↓が呼ばれる
-    
-    
+    // fetch()の後に呼ばれる
     componentDidUpdate(prevProps) {
         // draftの対象となるトピックをとってくる
-        if (prevProps.topic.fetched !== this.props.topic.fetched) {
+
+        var flag = false;
+        var newObj = this.props.update
+
+        if (!equal(prevProps.draft.fetched, this.props.draft.fetched)){
+            this.props.fetchTopic(this.props.draft.fetched.topic, "INDEX")
+        }
+
+        if (!equal(prevProps.topic.fetched, this.props.topic.fetched)) {
+            flag = true;
+
             this.props.endFetching()
-            this.setState({
-                topic: this.props.topic.fetched
-            })
-            this.props.setMessage(`「${this.state.draft.postName}」をトピック「${this.props.topic.fetched.topicName}」のどこに挿入しますか？`)
-        } else if (prevProps.id !== this.props.id) {
+            newObj = update(newObj, {confirmation: {message: {$set: `「${this.props.draft.fetched.postName}」をトピック「${this.props.topic.fetched.topicName}」のどこに挿入しますか？`}}})
+        }
+        
+        if (prevProps.counter !== this.props.counter) {
             // ２回以上連続でrenderされた場合はcomponentDidMountが呼ばれない
-            this.setState({
+
+            flag = true;
+
+            const data = {
                 selectedId: "",
                 selectedTitle: "",
                 selectedIndex: "",
                 showBtn: false,
                 forcedOn: false,
                 addColumn: false,
-            }, () => {
-                this.fetchDraft();
-            })
+            }
+
+            const id = this.props.update.confirmation.draftId[this.props.counter]
+            newObj = update(newObj, {confirmation: {$merge: data}})
+            this.props.fetchOneDraft(id)
         }
+
+        if(flag){this.props.updateConfirmation(newObj)}
     }
 
     handleClick = (id, idx, title, isLastIdx, forcedOn) => {
-        this.setState({
-            ...this.state,
+        const draftId = this.props.update.confirmation.draftId[this.props.counter]
+        const thisIdx = this.props.update.confirmation.index[draftId]
+
+        const idxData = {
+            draftId: draftId,
+            index: idx,
+            title: title,
+            topicId: this.props.topic.fetched._id,
+            addColumn: forcedOn ? true : thisIdx ? idx.addColumn : false
+        }
+
+        const idxObj = update(this.props.update.confirmation.index, {$merge: {[draftId]: idxData}})
+
+        const data = {
             selectedId: id, // to ensure everything is unique
             selectedTitle: title,
             selectedIndex: idx,
             showBtn: forcedOn ? false : isLastIdx,
             forcedOn: forcedOn,
-            addColumn: forcedOn ? true : !isLastIdx && false
-        }, () => {
-            if(forcedOn) {
-                this.props.setIndex(this.props.topic.fetched._id, this.props.id, idx, title, true)
-            } else {
-                this.props.setIndex(this.props.topic.fetched._id, this.props.id, idx, title)
-            }
-        })
-        this.props.visible();
+            addColumn: forcedOn ? true : !isLastIdx && false,
+            
+            transparent: false,
+            index: idxObj,
+        }
+
+        const newObj = update(this.props.update, {confirmation: {$merge: data}})
+        
+        this.props.updateConfirmation(newObj)
     }
 
     handleToggle = () => {
-        this.setState({
-            addColumn: !this.state.addColumn,
-        }, () => {
-            this.props.setColumn(this.props.id, this.state.addColumn)
-        })
+
+        var newObj;
+
+        const { addColumn, draftId } = this.props.update.confirmation
+        const id = draftId[this.props.counter]
+
+        const newIdx = {addColumn: !addColumn}
+        newObj = update(this.props.update, {confirmation: {addColumn: {$set: !addColumn}}})
+        newObj = update(newObj, {confirmation: {index: {[id]: {$merge: newIdx}}}})
+
+        this.props.updateConfirmation(newObj)
     }
     
     renderIndex = () => {
         var result = []
-        const { topic } = this.state
+        const topic = this.props.topic.fetched
+        const { selectedId } = this.props.update.confirmation
 
         if(topic.posts) {
             for (const k in topic.order) {
@@ -110,7 +125,7 @@ class Index extends Component {
                     <IndexElement 
                         key={id}
                         indent={false} 
-                        selected={this.state.selectedId === id} 
+                        selected={selectedId === id} 
                         onClick={() => this.handleClick(id, [parseInt(k)], title, isFirst, isFirst)}
                     >
                         <p>{k}</p>
@@ -131,7 +146,7 @@ class Index extends Component {
                         <IndexElement 
                             key={id}
                             indent={true}
-                            selected={this.state.selectedId === id} 
+                            selected={selectedId === id} 
                             onClick={() => this.handleClick(id, post.index, postName, isLastIdx)}
                         >
                             <p>{idx}</p>
@@ -148,27 +163,29 @@ class Index extends Component {
 
     render () {
 
+        const { selectedId, selectedIndex, selectedTitle, showBtn, forcedOn, addColumn } = this.props.update.confirmation
+
         return (
             <IndexBox>
-                {!!this.state.selectedId &&
-                <IndexPreview top="2px" right="20px">
+                {!!selectedId &&
+                <IndexPreview top="66px" right="40px">
                     <div/>
-                    <p>{this.state.selectedIndex.join(".")}</p>
-                    <p>{this.state.selectedTitle}</p>
+                    <p>{selectedIndex.join(".")}</p>
+                    <p>{selectedTitle}</p>
                     <p>の後</p>
                 </IndexPreview>
                 }
                 <IndexElementWrapper>
                     {this.renderIndex()}
                 </IndexElementWrapper>
-                <AddColumn show={this.state.showBtn}>
-                    { this.state.forcedOn
+                <AddColumn show={showBtn}>
+                    { forcedOn
                     ?
                         <input checked={true} type="checkbox" id="0" name="addColumn"/>
                     :
-                        this.state.showBtn
+                        showBtn
                         ?
-                        <input onChange={this.handleToggle} checked={this.state.addColumn} type="checkbox" id="0" name="addColumn"/>
+                        <input onChange={this.handleToggle} checked={addColumn} type="checkbox" id="0" name="addColumn"/>
                         :
                         <input checked={false} type="checkbox" id="0" name="addColumn"/>
                     }
@@ -282,10 +299,11 @@ const AddColumn = styled.div`
     }
 `
 
-function mapStateToProps(state) {
+function mapStateToProps({draft, topic, update}) {
     return {
-        draft: state.draft,
-        topic: state.topic,
+        draft,
+        topic,
+        update,
     }
 }
 

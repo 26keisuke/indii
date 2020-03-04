@@ -1,3 +1,12 @@
+import React from "react"
+
+import response from "../../images/response.png";
+import dissapointed from "../../images/dissapointed.png";
+import love from "../../images/love.png";
+import good from "../../images/good.png";
+import nerd from "../../images/nerd.png";
+import hmm from "../../images/hmm.png";
+
 export function validateEmail(value){
     // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)){ <- これだと、長いinputだと死ぬ
     if(/(.+)@(.+){2,}\.(.+){2,}/.test(value)){
@@ -88,5 +97,22 @@ export function renderType(type){
             return "編集"
         case "New":
             return "新規作成"
+    }
+}
+
+export function getEmoji(emojiNum){
+    switch(emojiNum){
+        case 5:
+            return <img className="post-feed-response"　alt={"ものすごく良い"} src={love}/>
+        case 4:
+            return <img className="post-feed-response"　alt={"とても良い"}src={good}/>
+        case 3:
+            return <img className="post-feed-response"　alt={"かなり良い"} src={nerd}/>
+        case 2:
+            return <img className="post-feed-response"　alt={"まぁまぁ"} src={hmm}/>
+        case 1:
+            return <img className="post-feed-response"　alt={"残念"} src={dissapointed}/>
+        default:
+            return <img className="post-feed-response"　alt={"フィードバックのアイコンを表示する"} src={response}/>
     }
 }

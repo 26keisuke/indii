@@ -1,17 +1,17 @@
-.notif{
+/* .notif{
     height: 50px;
     position: relative;
     padding: 15px 70px;
     border-bottom: 1px solid #d2d2d2;
     background-color: #ffffff;
     cursor: pointer;
-}
+} */
 
-.notif:hover{
+/* .notif:hover{
     background-color: rgba(233, 233, 238, 0.25);
-}
+} */
 
-.notif-people-img{
+/* .notif-people-img{
     width: 48px;
     height: 48px;
     border-radius: 5px;
@@ -19,29 +19,30 @@
     flex-shrink: 0;
     margin-right: 10px;
     cursor: pointer;
-}
+} */
 
-.notif-people-name{
+/* .notif-people-name{
     margin-bottom: 5px;
+    display: flex;
     cursor: pointer;
-}
+} */
 
-.notif-people-name span{
+/* .notif-people-name span{
     font-weight: bold;
-}
+} */
 
-.notif-people-date{
+/* .notif-people-date{
     color: #747474;
     font-size: 12px;
-}
+} */
 
-.notif-profile{
+/* .notif-profile{
     display: flex;
     flex-direction: row;
     align-items: center;
-}
+} */
 
-.notif-unread{
+/* .notif-unread{
     position: absolute;
     width:10px;
     height:10px;
@@ -49,7 +50,7 @@
     border-radius: 100%;
     left:30px;
     top:35px;
-}
+} */
 
 .notif-people-check{
     width: 20px;
@@ -57,7 +58,7 @@
 }
 
 /* == icon hover ==*/
-
+/* 
 .notif-fake{
     position: absolute;
     right:30px;
@@ -91,4 +92,4 @@
     display: block;
     cursor: pointer;
 }
-
+ */

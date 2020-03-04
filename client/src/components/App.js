@@ -35,7 +35,7 @@ class App extends Component {
                             <Route path="/draft/edit/:id" component={DraftEditor} />
                             <Route path="/search" component={SearchResult} />
                             <Route exact path="/notification" render={() => (auth.loggedIn ? <Notification/> : <Redirect to="/"/>)} />
-                            <Route path="/notification/check/:id" component={EditConfirm} />
+                            <Route path="/notification/check/:id" render={() => (auth.loggedIn ? <EditConfirm/> : <Redirect to="/"/>)} />
                             <Route path="/action/post/create" render={() => (auth.loggedIn ? <CreatePost/> : <Redirect to="/"/>)} />
                             <Route path="/action/topic/create" render={() => (auth.loggedIn ? <CreateTopic/> : <Redirect to="/"/>)} />
                             <Route path="/action/post/edit" render={() => (auth.loggedIn ? <EditPost/> : <Redirect to="/"/>)} />

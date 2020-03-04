@@ -1,12 +1,14 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 
-import response from "../../images/response.png";
+// import response from "../../images/response.png";
 import dissapointed from "../../images/dissapointed.png";
 import love from "../../images/love.png";
 import good from "../../images/good.png";
 import nerd from "../../images/nerd.png";
 import hmm from "../../images/hmm.png";
+
+import { getEmoji } from "./util"
 
 import HoverIcon from "./HoverIcon"
 
@@ -15,24 +17,6 @@ const Emoji = React.forwardRef((props, ref) => (
 ))
 
 class EmojiWrapped extends Component {
-
-    renderIcon = () => {
-        switch(this.props.chosenEmoji){
-            case 5:
-                return <img className="post-feed-response"　alt={"ものすごく良い"} src={love}/>
-            case 4:
-                return <img className="post-feed-response"　alt={"とても良い"}src={good}/>
-            case 3:
-                return <img className="post-feed-response"　alt={"かなり良い"} src={nerd}/>
-            case 2:
-                return <img className="post-feed-response"　alt={"まぁまぁ"} src={hmm}/>
-            case 1:
-                return <img className="post-feed-response"　alt={"残念"} src={dissapointed}/>
-            default:
-                return <img className="post-feed-response"　alt={"フィードバックのアイコンを表示する"} src={response}/>
-        }
-    }
-
     render () {
 
         const { innerRef, handleResponseClick, handleEmojiClick, showEmoji, shadow } = this.props
@@ -47,7 +31,7 @@ class EmojiWrapped extends Component {
                     <img alt={"まぁまぁ"} src={hmm} onClick={(e) => handleEmojiClick(e,2)}/>
                     <img alt={"残念"} src={dissapointed} onClick={(e) => handleEmojiClick(e,1)}/>
                 </EmojiRow>
-                {this.renderIcon()}
+                {getEmoji(this.props.chosenEmoji)}
             </EmojiHover>
         )
     }

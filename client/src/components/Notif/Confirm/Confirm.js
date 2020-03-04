@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import styled, { css, keyframes } from "styled-components"
-
+import { withRouter } from "react-router";
+import { connect } from "react-redux"
 import { FaPencilAlt } from 'react-icons/fa';
+
+import * as actions from "../../../actions"
 
 import sample from "../../../images/sample0.jpg"
 import close_gray from "../../../images/close-gray.png"
@@ -31,7 +34,14 @@ class Confirm extends Component {
             collapsed: false,
             btnChanged: false,
             isClosed: false,
+
+            id: Math.random().toString(36).substring(2, 15)
         }
+    }
+
+    componentDidMount(){
+        const id = this.props.match.params.id;
+        this.props.fetchConfirm(id, this.state.id) // notifiId (DraftIdではない)
     }
     
     handleFeedback = (id) => {
@@ -76,6 +86,17 @@ class Confirm extends Component {
     }
 
     render() {
+
+        // const { user, draft, post } = this.props.auth.info.notif
+        // const { photo, userName, comment } = user
+        // const { topicName, topic, editLastEdited, editLastEditedAuthor, editUploadedDate, content } = draft
+
+        // const beforePostName = post.postName
+        // const afterPostName = draft.postName
+
+        // const beforeContent = post.content
+        // const afterContent = draft.content
+
         return (
             <ConfirmWrapper>
                 <ConfirmHeader>
@@ -105,17 +126,6 @@ class Confirm extends Component {
                     </ConfirmTitle>
                     <ConfirmLeft hide={this.state.isClosed} changed={this.state.collapsed}>
                         <p>基本情報</p>
-                        {/* <p>編集者</p>
-                        <Editor followBtn={true}>
-                            <img src={sample} alt={"編集者のアイコン"}/>
-                            <div>
-                                <p>飯塚　啓介</p>
-                                <p>Chief株式会社 CEO</p>
-                            </div>
-                            <FollowWrapper>
-                                <PeopleFollow/>
-                            </FollowWrapper>
-                        </Editor> */}
                         <Edit
                             title={"編集者"}
                             date={"January 1, 2014 9:59 PM"}
@@ -177,7 +187,7 @@ class Confirm extends Component {
                                 <Btn 
                                     color="green"
                                     pressed={this.state.feedbackPressed}
-                                    onClick={this.state.feedbackPressed ? () => this.handleSubmit(true) : ""}
+                                    onClick={this.state.feedbackPressed ? () => this.handleSubmit(true) : () => {}}
                                 >
                                     <Yes 
                                         src={this.state.feedbackPressed ? tick : tick_gray}
@@ -186,7 +196,7 @@ class Confirm extends Component {
                                 <Btn 
                                     color="red"
                                     pressed={this.state.feedbackPressed}
-                                    onClick={this.state.feedbackPressed ? () => this.handleSubmit(false) : ""}
+                                    onClick={this.state.feedbackPressed ? () => this.handleSubmit(false) : () => {}}
                                 >
                                     <No
                                         src={this.state.feedbackPressed ? close : close_gray}
@@ -396,10 +406,6 @@ export const Editor = styled.div`
     position: relative;
     height: 40px;
 
-    /* ${props => props.followBtn && css`
-        height: 100px;
-    `} */
-
     & > img {
         width: 37px;
         height: 37px;
@@ -562,4 +568,10 @@ const FinalConfirm = styled.div`
     }
 `
 
-export default Confirm
+function mapStateToProps({ auth }){
+    return {
+        auth
+    }
+}
+
+export default connect(mapStateToProps, actions)(withRouter(Confirm))

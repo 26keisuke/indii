@@ -8,15 +8,24 @@ import {
 } from "./update"
 
 import { 
-    FETCH_DRAFT,
+    FETCH_DRAFT, FETCH_ONE_DRAFT,
     DRAFT_UPDATED, DRAFT_READ, 
 } from "../types/types";
 
-export const fetchDraft = (id) => async (dispatch) => {
+export const fetchDraft = (nounce) => async (dispatch) => {
     const url = "/api/draft"
     const res = await axios.get(url)
     if(res){ dispatch({ type: DRAFT_READ }) }
-    dispatch({type: FETCH_DRAFT, payload: {data: res.data, nounce: id }})
+    dispatch({type: FETCH_DRAFT, payload: {data: res.data, nounce }})
+}
+
+export const fetchOneDraft = (id) => async (dispatch) => {
+    dispatch(isFetching())
+    const url = `/api/draft/${id}`
+    const res = await axios.get(url)
+    if(res){ dispatch({ type: DRAFT_READ }) }
+    dispatch({type: FETCH_ONE_DRAFT, payload: res.data})
+    dispatch(endFetching())
 }
 
 export const draftUpdated = () => (dispatch) => {

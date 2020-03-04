@@ -35,6 +35,7 @@ const draftSchema = new Schema({
     editLastEdited: Date,
     editLastEditedAuthor: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     editIsConfirmed: {type: Boolean, default: false}, // こいつはallowEditの時に必要。後処理としてのログ。
+    editUploadedDate: Date,
     // editContribution: [{
     //     timeStamp: Date,
     //     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

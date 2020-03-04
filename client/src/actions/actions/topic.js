@@ -3,7 +3,7 @@ import axios from "axios"
 import { 
     SEARCH_FETCHING,
     SEARCH_TOPIC,
-    FETCH_TOPIC,
+    FETCH_TOPIC, CLEAR_TOPIC,
     ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
     REVERT_IMG,
 } from "../types/types";
@@ -14,6 +14,10 @@ export const fetchTopic = (id, type) => async (dispatch) => {
     const url = "/api/topic/" + String(id) + "/" + String(type)
     const res = await axios.get(url)
     dispatch({type: FETCH_TOPIC, payload: res.data})
+}
+
+export const clearTopic = () => (dispatch) => {
+    dispatch({type: CLEAR_TOPIC})
 }
 
 export const searchTopic = (type, value) => async (dispatch) => {

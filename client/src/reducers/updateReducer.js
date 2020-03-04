@@ -1,10 +1,8 @@
-import update from 'immutability-helper';
-
 import {
     IS_FETCHING, END_FETCHING,
     ENABLE_GRAY, DISABLE_GRAY, 
     UPDATE_MESSAGE, RESET_MESSAGE, HIDE_MESSAGE,
-    SHOW_CONFIRMATION, HIDE_CONFIRMATION, RESET_CONFIRMATION
+    SHOW_CONFIRMATION, HIDE_CONFIRMATION, RESET_CONFIRMATION, CHANGE_CONFIRMATION
 } from "../actions/types/types"
 
 export default function updateReducer(state={
@@ -26,11 +24,27 @@ export default function updateReducer(state={
         message: "",
         buttonMessage: "",
         next: "",
+        value: {},
 
-        // Edit時に派生するState
-        tranparent: false,
-        draftId: {},
+        // Edit時に派生するState（一つにまとめてもいいが、名前があった方がわかりやすい）
+        tranparent: false, 
+        draftId: [],
         index: {},
+        selected: {},
+
+        // index専用のstate
+        selectedId: "",
+        selectedTitle: "",
+        selectedIndex: "",
+        showBtn: false,
+        forcedOn: false,
+        addColumn: false,
+
+        problem1: false,
+        problem2: false,
+        problem3: false,
+        problem4: false,
+        problem5: false,
     },
 
 }, action){
@@ -120,11 +134,21 @@ export default function updateReducer(state={
                     buttonMessage: "",
                     next: "",
                     value: "",
+
+                    tranparent: false, 
+                    draftId: [],
+                    index: {},
+                    selected: {},
+
+                    problem1: false,
+                    problem2: false,
+                    problem3: false,
+                    problem4: false,
+                    problem5: false,
                 }
             }
         case CHANGE_CONFIRMATION: // action.payload => {name: value, name: value,...}
-            const newObj = update(state, {$merge: action.payload})
-            return newObj
+            return action.payload
         default:
             return state
     }

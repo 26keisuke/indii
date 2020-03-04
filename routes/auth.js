@@ -209,7 +209,51 @@ router.get("/friend/:name", (req, res) => {
         }
         res.send(result)
     })
+    .catch(err => {
+        console.log(err)
+    })
+})
 
+router.get("/notif", (req, res) => {
+    User.findById(req.user.id).sort({timeStamp: 1}).populate("notif.user")
+    .then(user => {
+        res.send(user.notif)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+router.get("/notif/:notifId", (req, res) => {
+    User.findById(req.user.id).populate("notif.user").populate("notif.post").populate({path: "notif.draft", populate: {path: "editLastEditedAuthor"}})
+    .then(user => {
+        for(var i=0; i < user.notif.length; i++){
+            if(String(user.notif[i]._id) === String(req.params.notifId)){
+                res.send(user.notif[i])
+                return
+            }
+        }
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+router.post("/notif/:notifId", (req, res) => {
+    User.findById(req.user.id).populate("notif.user")
+    .then(user => {
+        for(var i=0; i < user.notif.length; i++){
+            if(String(user.notif[i]._id) === String(req.params.notifId)){
+                user.notif[i].checked = true
+                return
+            }
+        }
+        user.save()
+        res.send("Done")
+    })
+    .catch(err => {
+        console.log(err)
+    })
 })
 
 export default router

@@ -3,13 +3,8 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
-// import equal from "deep-equal"
-import update from "immutability-helper"
+import equal from "deep-equal"
 import { Transition } from 'react-transition-group';
-
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Stepper from '@material-ui/core/Stepper';
 
 import * as actions from "../../actions"
 
@@ -43,113 +38,100 @@ class Confirm extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {                                
+        // こいつらは本来APP全体のstateだからreduxで管理すべき
+
+        this.state = {
+            // transparent: false,
+
+            // Selectされたdraftを保存: [{_: true}, {_: false}]の形
+            draftId: [],
+
+            //Index用のstate
+            index: {},
+                                
             currentStep: 0, // 全体のステップ数を把握する。これらは、仮にdynamicにformをつなげる必要がある場合に役立つ。 
             counter: 0,
-            skipped: 0,
+                                
         }
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.update.confirmation.on === true && this.props.update.confirmation.on === false){
-            
-            setTimeout(() => {
-                this.props.resetConfirmation()
-                this.setState({
-                    currentStep: 0,
-                    counter: 0,
-                    skipped: 0,
-                })
-            }, 200)
+
+        const { id, action, title, caution, message, buttonMessage, next, value } = this.props.update.confirmation
+
+        if(this.props.update.confirmation.on && (!equal(prevProps.update.confirmation, this.props.update.confirmation))){
+            this.setState({
+                id, action, title, caution, message, buttonMessage, next, value
+            })
         }
     } 
 
+    // draftIdsの中からtrueのものだけを抜き取る
     extractTrueValues = () => {
         var cleanedIds = []
-        var newObj = this.props.update
 
-        const { draftId, selected } = this.props.update.confirmation
-
-        if(!draftId || draftId.length === 0){
-            for (const [key, val] of Object.entries(selected)) {
-                if(val === true){
+        if((this.state.id === null) || (this.state.id.length === 0)) {
+            for (const [key, value] of Object.entries(this.state.draftId)) {
+                if (value === true) {
                     cleanedIds.push(key)
                 }
             }
-
-            newObj = update(this.props.update, {confirmation: {draftId: {$set: cleanedIds}}})
+            this.setState({ id: cleanedIds })
+        } else {
+            cleanedIds = this.state.id
         }
-        return newObj;
+
+        return cleanedIds
     }
 
-    // reduxは一回で全てまとめておくらないといけない。別々に送ったら、sequentialにprocessされるからthis.propsの値がstaleになる
     parseNext = () => {
 
-        var data;
-        var newObj;
+        const cleanedIds = this.extractTrueValues()
 
-        newObj = this.extractTrueValues();
-
-        switch(this.props.update.confirmation.next) {
+        switch(this.state.next) {
             case "DELETE_DRAFT":
-
-                data = {
+                return this.setState({
+                    id: cleanedIds,
                     action: "DRAFT_DELETE_CHECK",
                     title: "確認",
                     message: "これらの下書きを削除してもよろしいですか？",
                     caution: "*一度削除された下書きを元に戻すことはできません。",
                     buttonMessage: "削除する",
                     next: "",
-                }
-
-                newObj = update(newObj, {confirmation: {$merge: data}})
-                return this.props.updateConfirmation(newObj)
-
+                })
             case "UPLOAD_DRAFT":
-
-                this.props.clearTopic()
-
                 var next = "";
-                var obj = arrObjLookUp(this.props.draft.onEdit, "_id", newObj.confirmation.draftId[this.state.currentStep])
+
+                var obj = arrObjLookUp(this.props.draft.onEdit, "_id", cleanedIds[this.state.currentStep])
 
                 if(obj.type !== "New") {
-
-                    const newIdx = { [obj._id]: { draftId: obj._id }}
-                    const newIdxObj = update(newObj.confirmation.index, {$merge: newIdx})
-
+                    const newIdxObj = Object.assign({}, {
+                        [obj._id]: {
+                                    draftId: obj._id,
+                                }
+                        }, this.state.index)
                     if (this.state.counter <= (this.state.currentStep + 2)) {
-                        this.setState({ currentStep: this.state.counter+1, counter: this.state.counter+1, skipped: this.state.skipped + 1 })
-
-                        data = {
+                        this.setState({
                             action: "DRAFT_UPLOAD_CHECK",
                             title: "下書きをアップロード",
                             message: "これらの下書きをアップロードしてもよろしいですか？",
                             caution: "",
                             buttonMessage: "完了する",
                             next: "",
-                            index: newIdxObj,
-                        }
-
-                        newObj = update(newObj, {confirmation: {$merge: data}})
-
-                        this.props.updateConfirmation(newObj)
-
+                            value: newIdxObj,
+                        })
                     } else {
-                        this.setState({ currentStep: this.state.currentStep + 2, skipped: this.state.skipped + 1  })
-
-                        data = {
+                        this.setState({
+                            id: cleanedIds,
                             action: "DRAFT_UPLOAD_SELECT",
                             title: "挿入位置の決定",
                             message: "",
                             caution: "",
                             buttonMessage: "次の画面へ",
                             next: next,
+                            currentStep: this.state.currentStep + 2,
                             index: newIdxObj,
-                        }
-
-                        newObj = update(newObj, {confirmation: {$merge: data}})
-
-                        this.props.updateConfirmation(newObj)
+                        })
                     }
                     return
                 }
@@ -160,39 +142,27 @@ class Confirm extends Component {
                     next = "UPLOAD_DRAFT"
                 }
 
-                this.setState({ currentStep: this.state.currentStep + 1, })
-
-                data = {
+                return this.setState({
+                    id: cleanedIds,
                     action: "DRAFT_UPLOAD_SELECT",
                     title: "挿入位置の決定",
                     message: "",
                     caution: "",
                     buttonMessage: "次の画面へ",
                     next: next,
-                }
-
-                newObj = update(newObj, {confirmation: {$merge: data}})
-
-                return this.props.updateConfirmation(newObj)
+                    currentStep: this.state.currentStep + 1,
+                })
 
             case "UPLOAD_DRAFT_1":
-
-                this.setState({ currentStep: this.state.currentStep + 1 })
-
-                data = {
+                return this.setState({
                     action: "DRAFT_UPLOAD_CHECK",
                     title: "下書きをアップロード",
                     message: "これらの下書きをアップロードしてもよろしいですか？",
                     caution: "",
                     buttonMessage: "完了する",
                     next: "",
-                }
-
-
-                newObj = update(newObj, {confirmation: {$merge: data}})
-
-                return this.props.updateConfirmation(newObj)
-
+                    value: this.state.index
+                })
             default:
                 return;
         }
@@ -212,12 +182,77 @@ class Confirm extends Component {
         }
     }
 
+    // setTransparent = () => {
+    //     this.setState({ transparent: true })
+    // }
+
+    // setVisible = () => {
+    //     this.setState({ transparent: false })
+    // }
+
     setCounter = (number) => {
         this.setState({ counter: number })
     }
 
+    setId = (ids) => {
+        this.setState({ draftId: ids })
+    }
+
     setMessage = (name) => {
         this.setState({ message: name })
+    }
+
+    setIndex = (topicId, draftId, idx, title, forcedOn) => {
+        if(this.state.index[draftId] !== undefined) { // toggle
+            this.setState({
+                ...this.state,
+                index :{
+                    ...this.state.index,
+                    [draftId]: {
+                        ...this.state.index[draftId],
+                        draftId: draftId,
+                        index: idx,
+                        title: title,
+                        topicId: topicId,
+                        addColumn: forcedOn ? true : this.state.index[draftId].addColumn
+                    }
+                }
+            })
+        } else { // adding new draft 
+            const newIdxObj =
+                Object.assign({}, 
+                    {   [draftId]: {
+                            index: idx,
+                            title: title, 
+                            topicId: topicId, 
+                            draftId: draftId,
+                            addColumn: forcedOn,
+                        }
+                    }, this.state.index)
+            this.setState({
+                index: newIdxObj
+            })
+        }
+    }
+
+    setColumn = (draftId, addColumn) => {
+        if(this.state.index[draftId] !== undefined) {
+            this.setState({
+                ...this.state,
+                index: {
+                    ...this.state.index,
+                    [draftId]: {
+                        ...this.state.index[draftId],
+                        addColumn: addColumn
+                    }
+                }
+            })
+        } else {
+            const newIdxObj = Object.assign({}, {[draftId]: { addColumn: addColumn }}, this.state.index)
+            this.setState({
+                index: newIdxObj
+            })
+        }
     }
 
     renderContent = (id, action) => {
@@ -238,7 +273,10 @@ class Confirm extends Component {
                 )
             case "GIVE_FEEDBACK":
                 return (
-                    <Report/>
+                    <Report
+                        setValue={this.setValue}
+                        value={this.state.value}
+                    />
                 )
             case "ADD_COLUMN":
                 return (
@@ -254,33 +292,50 @@ class Confirm extends Component {
                 return (
                     <Action
                         type="delete"
+                        // unVisible={this.setTransparent}
+                        // visible={this.setVisible}
                         setCounter={this.setCounter}
+                        setId={this.setId}
                     />
                 )
             case "UPLOAD_DRAFT":
                 return (
                     <Action
                         type="upload"
+                        // unVisible={this.setTransparent}
+                        // visible={this.setVisible}
                         setCounter={this.setCounter}
+                        setId={this.setId}
                     />
                 )
             case "DRAFT_DELETE_CHECK":
                 return (
                     <Preview
+                        ids={this.state.id}
                         action={action}
+                        // unVisible={this.setTransparent}
+                        // visible={this.setVisible}
                     />
                     )
             case "DRAFT_UPLOAD_CHECK":
                 return (
                     <Preview
+                        ids={this.state.id}
                         action={action}
+                        // unVisible={this.setTransparent}
+                        // visible={this.setVisible}
+                        index={this.state.index}
                     />
                 )
             case "DRAFT_UPLOAD_SELECT":
                 return (
                     <Index
-                        counter={this.state.currentStep-1}
+                        id={this.state.id[this.state.currentStep-1]}
+                        // unVisible={this.setTransparent}
+                        // visible={this.setVisible}
                         setMessage={this.setMessage}
+                        setIndex={this.setIndex}
+                        setColumn={this.setColumn}
                     />
                 )
             default:
@@ -289,40 +344,16 @@ class Confirm extends Component {
     }
 
     render () {
-
-        console.log(this.state.counter, this.state.currentStep, this.state.skipped)
-
-        const { confirmation } = this.props.update
-        const { id, action, title, caution, message, buttonMessage, next, transparent } = this.props.update.confirmation
+        const { transparent } = this.props.update
+        const { id, action, title, caution, message, buttonMessage, next, value } = this.state
         const { innerRef, postAction, update } = this.props
-        
-        const steps = getContent(action, this.state.counter, this.state.currentStep, this.state.skipped)
-
-        //
-        //  postActionもtrueかfalseだけかにして、valueは全部reduxでとってくればいい（後でやる優先順位的には後）
-        //  reduxで全部管理するようになったからbackボタンも将来的に追加できる
-        //
-
         return (
-            //本来はonExitedでresetConfirmationをしたいところだが、なぜかexitingの時に呼ばれてしまう
-            <Fade in={update ? confirmation.on : false} onExited={this.props.resetConfirmation}> 
+            <Fade in={update ? update.confirmation.on : false} onExited={this.props.resetConfirmation}>
                 <div ref={innerRef}>
-
-                    { steps.length > 0 &&
-                    <Stepper nonLinear activeStep={this.state.currentStep} completed={this.state.counter === this.state.currentStep}>
-                        {steps.map(label => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                    }
-
-                    {/* <ConfirmIcon onClick={() => postAction(action)}/> */}
-                    <ConfirmIcon onClick={() => postAction(false)}/>
-                    <Title>{title}</Title>
-                    <Message>{message}</Message>
-                    <Caution>{caution}</Caution>
+                    <ConfirmIcon onClick={() => postAction(action)}/>
+                    <p>{title}</p>
+                    <p>{message}</p>
+                    <p>{caution}</p>
                     {this.renderContent(id, action)}
                     <ConfirmButton transparent={transparent}>
                         {!transparent
@@ -330,13 +361,11 @@ class Confirm extends Component {
                             ?
                                 <button onClick={() => this.parseNext()}>{buttonMessage}</button>
                             :
-                                // <button onClick={() => postAction(action, id, value)}>{buttonMessage}</button>
-                                <button onClick={() => postAction(true)}>{buttonMessage}</button>
+                                <button onClick={() => postAction(action, id, value)}>{buttonMessage}</button>
                         :
                         <button>{buttonMessage}</button>
                         }
-                        {/* <button onClick={() => postAction(action)}>キャンセル</button> */}
-                        <button onClick={() => postAction(false)}>キャンセル</button>
+                        <button onClick={() => postAction(action)}>キャンセル</button>
                     </ConfirmButton>
                 </div>
             </Fade>
@@ -345,24 +374,9 @@ class Confirm extends Component {
     }
 }
 
-const getContent = (action, step, currentStep, skipped) => {
-    switch(action){
-        case "UPLOAD_DRAFT":
-        case "DRAFT_UPLOAD_CHECK":
-        case "DRAFT_UPLOAD_SELECT":
-            const showStep = (currentStep > step) ? `${(step - skipped) + "/" + (step - skipped) }` : `${(currentStep - skipped) + "/" + (step - skipped)}`
-            return ["下書きを選択", `挿入位置の選択　${showStep}`, "プレビュー"]
-        case "DELETE_DRAFT":
-        case"DRAFT_DELETE_CHECK":
-            return ["下書きを選択", "プレビュー"]
-        default:
-            return []
-    }
-}
-
 const Fade = ({in: inProps, children, onExited, ...otherProps}) => {
     return (
-        <Transition in={inProps} timeout={100} { ...otherProps }>
+        <Transition in={inProps} timeout={100} { ...otherProps } onExited={onExited}>
             {(state) => (
                 <ConfirmBox 
                     style={{
@@ -430,24 +444,24 @@ const ConfirmBox = styled.div`
         position: relative;
         display: flex;
         flex-direction: column;
+
+        & > p:nth-child(2){
+            font-size: 15px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        & > p:nth-child(3){
+            margin-bottom: 15px;
+        }
+
+        & > p:nth-child(4){
+            margin-top: -10px;
+            margin-bottom: 5px;
+            font-size: 10px;
+            color: #838383
+        }
     }
-`
-
-const Title = styled.h2`
-    font-size: 15px;
-    margin-bottom: 15px;
-    font-weight: bold;
-`
-
-const Message = styled.h4`
-    margin-bottom: 15px;
-`
-
-const Caution = styled.p`
-    margin-top: -10px;
-    margin-bottom: 5px;
-    font-size: 10px;
-    color: #838383
 `
 
 const ConfirmIcon = styled(IoMdClose)`

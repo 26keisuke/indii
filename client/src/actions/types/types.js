@@ -1,7 +1,5 @@
 // STAR_ONとSTAR_OFFのようにペアになっているやつはSTAR_TOGGLEで一つにまとめて、argumentでon offさせた方が楽だしわかりやすい
 
-export const FETCH_USER = "FETCH_USER"
-
 export const FEEDBACK_SENT = "FEEDBACK_SENT"
 
 export const ON_SEARCH = "ON_SEARCH"
@@ -33,6 +31,7 @@ export const HIDE_MESSAGE = "HIDE_MESSAGE"
 export const SHOW_CONFIRMATION = "SHOW_CONFIRMATION"
 export const HIDE_CONFIRMATION = "HIDE_CONFIRMATION"
 export const RESET_CONFIRMATION = "RESET_CONFIRMATION"
+export const CHANGE_CONFIRMATION = "CHANGE_CONFIRMATION"
 
 // INDEX
 export const ADD_COLUMN = "ADD_COLUMN"
@@ -40,6 +39,9 @@ export const REVERT_COLUMN = "REVERT_COLUMN"
 export const DELETE_COLUMN = "DELETE_COLUMN"
 
 // AUTH
+export const FETCH_USER = "FETCH_USER"
+export const FETCH_NOTIF = "FETCH_NOTIF"
+export const FETCH_CONFIRM = "FETCH_CONFIRM"
 export const SHOW_LOGIN = "SHOW_LOGIN"
 export const HIDE_LOGIN = "HIDE_LOGIN"
 export const LOG_IN_ERROR = "LOG_IN_ERROR"
@@ -53,10 +55,12 @@ export const DRAFT_UPDATED = "DRAFT_UPDATED"
 export const DRAFT_READ = "DRAFT_READ"
 export const CHANGE_DRAFTNAME = "CHANGE_DRAFTNAME"
 export const CHANGE_DRAFTCONFIG = "CHANGE_DRAFTCONFIG"
+export const FETCH_ONE_DRAFT = "FETCH_ONE_DRAFT"
 
 // TOPIC
 export const SEARCH_TOPIC = "SEARCH_TOPIC"
 export const FETCH_TOPIC = "FETCH_TOPIC"
+export const CLEAR_TOPIC = "CLEAR_TOPIC"
 
 // POST
 export const SEARCH_POST = "SEARCH_POST"

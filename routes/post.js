@@ -164,43 +164,55 @@ router.post("/:postId/emoji", isLoggedIn, (req, res) => {
 
         // post ownerの変更
         User.findById(post.creator)
-        .then(user => {
+        .then(owner => {
             if(!req.body.emoji){
-                user.notif.push({timeStamp: now, type: "POST_EMOJI", user: req.user.id, post: post._id})
-            } else {
-                user.notif.map((elem, index) => {
+                owner.notif.map((elem, index) => {
                     if((elem.type === "POST_EMOJI") && (elem.post === post._id)){
-                        user.notif.splice(index, 1)
-                    }
-                })
-            }
-        })
-
-        // req.userの変更
-        User.findById(req.user.id)
-        .then(user => {
-            if(!req.body.emoji){
-                user.postRating.map((elem,index) => {
-                    if(String(elem.post) === String(post.id)) {
-                        user.postRating.splice(index, 1)
+                        owner.notif.splice(index, 1)
                     }
                 })
             } else {
-                const res = user.postRating.map(elem => {
+                const res = owner.notif.map(elem => {
                     if(String(elem.post) === String(post.id)) {
-                        elem.rate = req.body.emoji
+                        elem.emoji = req.body.emoji
                         elem.timeStamp = now
                         return true
                     }
                 })
                 if(!res[0]){
-                    user.postRating.push({timeStamp: now, post: post.id, rate: req.body.emoji})
+                    owner.notif.push({timeStamp: now, type: "POST_EMOJI", user: req.user.id, post: post._id, emoji: req.body.emoji})
                 }
             }
-            post.save()
-            user.save()
 
-            res.send("DONE")
+            // req.userの変更
+            User.findById(req.user.id)
+            .then(user => {
+                if(!req.body.emoji){
+                    user.postRating.map((elem,index) => {
+                        if(String(elem.post) === String(post.id)) {
+                            user.postRating.splice(index, 1)
+                        }
+                    })
+                } else {
+                    const res = user.postRating.map(elem => {
+                        if(String(elem.post) === String(post.id)) {
+                            elem.rate = req.body.emoji
+                            elem.timeStamp = now
+                            return true
+                        }
+                    })
+                    if(!res[0]){
+                        user.postRating.push({timeStamp: now, post: post.id, rate: req.body.emoji})
+                    }
+                }
+
+                owner.save();
+                post.save();
+                user.save();
+
+                res.send("DONE");
+            })
+
         })
     })
     .catch(err => {

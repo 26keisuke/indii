@@ -5,14 +5,14 @@ import authReducer from "./authReducer"
 import categoryReducer from "./categoryReducer"
 import draftReducer from "./draftReducer"
 import postReducer from "./postReducer"
+import topicReducer from "./topicReducer"
 
 import { 
     SEARCH_FETCHING,
     SEARCH_TERM,
     ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
     REVERT_IMG,
-    SEARCH_TOPIC, SEARCH_FOLLOWER,
-    FETCH_TOPIC,
+    SEARCH_FOLLOWER,
     FETCH_PROFILE
 } from "../actions/types/types"
 
@@ -38,10 +38,6 @@ const initialState = {
     image: {
         revert: false,
     },
-    topic: {
-        search: [],
-        fetched: {},
-    },
     profile: {
         user: {},
     }
@@ -65,23 +61,6 @@ function profileReducer(state=initialState.profile, action) {
             return {
                 ...state,
                 user: action.payload
-            }
-        default:
-            return state
-    }
-}
-
-function topicReducer(state=initialState.topic, action) {
-    switch(action.type) {
-        case SEARCH_TOPIC:
-            return {
-                ...state,
-                search: action.payload.suggestions
-            }
-        case FETCH_TOPIC:
-            return {
-                ...state,
-                fetched: action.payload
             }
         default:
             return state

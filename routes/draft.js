@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
     User.findById(req.user.id)
         .then(user => {
             Draft.find({_id: {$in: user.draft}, isDeleted: false, isUploaded: false})
-            .populate("topicSquareImg").populate("postImg").populate("editCreator").populate("editLastEditedAuthor").exec()
+            .populate("topicSquareImg").populate("postImg").populate("editCreator").populate("editLastEditedAuthor").exec() // 最後の二つのpopulateはいらないかもしれない
             .then(draft => {
                 res.send(draft)
             })
@@ -21,6 +21,16 @@ router.get("/", (req, res) => {
         .catch(err => {
             console.log(err)
         })
+})
+
+router.get("/:draftId", (req, res) => {
+    Draft.findById(req.params.draftId).populate("editCreator").populate("editLastEditedAuthor").exec()
+    .then(draft => {
+        res.send(draft)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 })
 
 router.post("/upload", (req, res) => {
@@ -36,8 +46,12 @@ router.post("/upload", (req, res) => {
                 if(draft.config.allowEdit === false){
                     User.findById(draft.editCreator)
                     .then(user => {
-                        console.log("called", user)
+
+                        draft.editUploadedDate = now
+
                         user.notif.push({timeStamp: now, type: "POST_EDIT", user: req.user.id, post: draft.editPostId, draft: draft._id})
+
+                        draft.save();
                         user.save()
                         res.send("Success")
                         return

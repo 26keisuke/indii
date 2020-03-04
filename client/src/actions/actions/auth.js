@@ -7,7 +7,7 @@ import {
 } from "./update"
 
 import { 
-    FETCH_USER,
+    FETCH_USER, FETCH_NOTIF, FETCH_CONFIRM,
     SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
 } from "../types/types";
 
@@ -15,6 +15,16 @@ export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
     dispatch({type: FETCH_USER, payload: res.data});
 };
+
+export const fetchNotif = () => async dispatch => {
+    const res = await axios.get("/api/notif");
+    dispatch({type: FETCH_NOTIF, payload: res.data})
+}
+
+export const fetchConfirm = (id, nounce) => async (dispatch) => {
+    const res = await axios.get(`/api/notif/${id}`);
+    dispatch({type: FETCH_CONFIRM, payload: {data: res.data, nounce}})
+}
 
 export const showLogin = () => (dispatch) => {
     dispatch({type: SHOW_LOGIN})

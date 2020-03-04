@@ -2,7 +2,7 @@ import {
     IS_FETCHING, END_FETCHING,
     ENABLE_GRAY, DISABLE_GRAY, 
     UPDATE_MESSAGE, RESET_MESSAGE, HIDE_MESSAGE,
-    SHOW_CONFIRMATION, HIDE_CONFIRMATION, RESET_CONFIRMATION
+    SHOW_CONFIRMATION, HIDE_CONFIRMATION, RESET_CONFIRMATION, CHANGE_CONFIRMATION,
 } from "../types/types"
 
 export const isFetching = () => (dispatch) => {
@@ -40,4 +40,8 @@ export const hideConfirmation = () => (dispatch) => {
 
 export const resetConfirmation = () => (dispatch) => {
     dispatch({type: RESET_CONFIRMATION})
+}
+
+export const updateConfirmation = (obj) => (dispatch) => {
+    dispatch({type: CHANGE_CONFIRMATION, payload: obj})
 }

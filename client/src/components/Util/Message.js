@@ -1,17 +1,10 @@
 import React, { Component } from "react"
-import styled, { keyframes } from "styled-components"
+import styled from "styled-components"
 import { connect } from "react-redux"
 import { Transition } from 'react-transition-group';
 import { MdCheck, MdClose } from "react-icons/md"
 
 import * as actions from "../../actions"
-
-// const dangle = keyframes`
-//     0% {opacity: 0; margin-top: -30px;}
-//     10% {opacity: 1; margin-top: 0px;}
-//     90% {opacity: 1; margin-top: 0px;}
-//     100% {opacity: 0; margin-top: -30px;}
-// `
 
 const MessageElement = styled.div`
     background: ${props => props.type === "success" 
@@ -27,9 +20,11 @@ const MessageElement = styled.div`
     border-radius: 3px;
 
     position: absolute;
-    left: 50%;
+    /* left: 50%; */
+    left: 220px;
     transform: translate(-50%, -50%);
-    top: 13%;
+    /* top: 13%; */
+    bottom: -15px;
     z-index: 100;
     padding-left: 30px;
 
@@ -76,10 +71,14 @@ const defaultStyle = {
 }
 
 const transitionStyle = {
-    entering: {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
-    entered:  {opacity: 1, marginTop: "0px",},
-    exiting:  {opacity: 1, marginTop: "0px",},
-    exited:  {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
+    // entering: {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
+    // entered:  {opacity: 1, marginTop: "0px",},
+    // exiting:  {opacity: 1, marginTop: "0px",},
+    // exited:  {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
+    entering: {opacity: 0, bottom: "-35px", pointerEvents: "none"},
+    entered:  {opacity: 1, bottom: "-15px",},
+    exiting:  {opacity: 1, bottom: "-15px",},
+    exited:  {opacity: 0, bottom: "-35px", pointerEvents: "none"},
 }
 
 class Message extends Component {
@@ -115,7 +114,7 @@ class Message extends Component {
 
 const Fade = ({in: inProps, children, type, onExited, ...otherProps}) => {
     return (
-        <Transition in={inProps} timeout={100} { ...otherProps } onExited={onExited}>
+        <Transition in={inProps} timeout={100} { ...otherProps } onExited={() => {}}>
             {(state) => (
                 <MessageElement 
                     type={type}
