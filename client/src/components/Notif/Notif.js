@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import * as actions from "../../actions"
 
 import Element from "./Element/Element"
-import Filter from "./Filter/Filter";
+// import Filter from "./Filter/Filter";
 
 import Screen from "../Util/Screen"
 import { Border } from "../Theme"
@@ -15,14 +15,14 @@ const Title = styled.p`
     color: #434343;
 `
 
-const RightInsideTitle = styled.div`
-    height:35px;
-    padding-left:30px;
-    border: 1px solid #d2d2d2;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-`
+// const RightInsideTitle = styled.div`
+//     height:35px;
+//     padding-left:30px;
+//     border: 1px solid #d2d2d2;
+//     font-size: 16px;
+//     display: flex;
+//     align-items: center;
+// `
 
 class Notif extends Component {
     
@@ -53,10 +53,10 @@ class Notif extends Component {
     renderRightContent() {
         return(
             <div>
-                <RightInsideTitle>
+                {/* <RightInsideTitle>
                     <p>検索フィルター</p>
                 </RightInsideTitle>
-                <Filter/>
+                <Filter/> */}
             </div>
         )
     }

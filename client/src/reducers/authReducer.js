@@ -36,11 +36,11 @@ export default function authReducer(state={
         case FETCH_CONFIRM:
             const indexOfId = findArrObjIndex(state.info.notif, "_id", action.payload.data._id)
 
-            if(indexOfId){
+            // if(indexOfId !== undefined){
                 newObj = update(state, {info: {notif: {[indexOfId]: {$merge: action.payload.data}}}})
-            } else {
-                newObj = update(state, {info: {notif: {$push: action.payload.data}}})
-            }
+            // } else {
+            //     newObj = update(state, {info: {notif: {$push: action.payload.data}}})
+            // }
 
             newObj = update(newObj, {info: {nounce: {$set: action.payload.nounce}}})
 

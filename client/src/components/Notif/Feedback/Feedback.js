@@ -73,9 +73,9 @@ const FeedbackIcon = styled.img`
     `
     : css`
         &:hover {
-            animation-name: bounce;
+            /* animation-name: bounce;
             animation-duration: 300ms;
-            animation-fill-mode: forwards;
+            animation-fill-mode: forwards; */
             background-color: rgba(158, 175, 229, 0.3);
             border-radius: 100%;
         }

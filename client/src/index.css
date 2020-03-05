@@ -84,7 +84,9 @@ input {
     font-family: serif !important;
     -webkit-appearance: none;
     outline: none;
-
+    margin: 0px;
+    font-feature-settings: "palt";
+    letter-spacing: 0.7px;
 }
 
 input:focus{

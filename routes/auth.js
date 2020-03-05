@@ -215,8 +215,9 @@ router.get("/friend/:name", (req, res) => {
 })
 
 router.get("/notif", (req, res) => {
-    User.findById(req.user.id).sort({timeStamp: 1}).populate("notif.user")
+    User.findById(req.user.id).populate("notif.user")
     .then(user => {
+        user.notif.sort(compare)
         res.send(user.notif)
     })
     .catch(err => {
@@ -224,8 +225,21 @@ router.get("/notif", (req, res) => {
     })
 })
 
+function compare( a, b ) {
+    if (a.timeStamp < b.timeStamp){
+        return 1;
+    }
+    if (a.timeStamp > b.timeStamp){
+        return -1;
+    }
+    return 0;
+}
+
 router.get("/notif/:notifId", (req, res) => {
-    User.findById(req.user.id).populate("notif.user").populate("notif.post").populate({path: "notif.draft", populate: {path: "editLastEditedAuthor"}})
+    User.findById(req.user.id)
+    .populate("notif.user")
+    .populate({path: "notif.post", populate: [{path: "topicSquareImg"}, {path: "topic"}, {path: "creator"}, {path: "postImg"}]})
+    .populate({path: "notif.draft", populate: {path: "editLastEditedAuthor"}})
     .then(user => {
         for(var i=0; i < user.notif.length; i++){
             if(String(user.notif[i]._id) === String(req.params.notifId)){

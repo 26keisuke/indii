@@ -4,10 +4,9 @@ import { TiFlowSwitch } from "react-icons/ti"
 import { MdFeedback } from "react-icons/md"
 import { FiMinus } from "react-icons/fi"
 import { connect } from "react-redux"
-import { withRouter } from "react-router";
 import axios from "axios";
 
-import * as actions from "../../../actions"
+import * as actions from "../../actions"
 
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -16,19 +15,17 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField"
 
-import sample from "../../../images/sample1.png"
-import sample1 from "../../../images/sample0.jpg"
-import close from "../../../images/close-red.png"
-import tick from "../../../images/tick.png"
+import sample from "../../images/sample1.png"
+import sample1 from "../../images/sample0.jpg"
+import close from "../../images/close-red.png"
+import tick from "../../images/tick.png"
 
-import { Space } from "../../Theme"
-import Back from "../../Util/Back"
-import Edit from "./Edit/Edit"
-import Feedback from "../Feedback/Feedback"
-import Recommend from "../../Util/Recommend"
-import TopicRecommend from "../../Util/TopicRecommend"
-
-import { fmtDate } from "../../Util/util"
+import { Space } from "../Theme"
+import Back from "../Util/Back"
+import Edit from "../Notif/Confirm/Edit/Edit"
+import Feedback from "../Notif/Feedback/Feedback"
+import Recommend from "../Util/Recommend"
+import TopicRecommend from "../Util/TopicRecommend"
 
 const getSteps = () => {
     return ["フィードバックを選択", "編集者へのコメント", "編集リクエストを承認"]
@@ -46,7 +43,6 @@ class Setting extends Component {
             isOpened: false,
 
             id: Math.random().toString(36).substring(2, 15),
-            notifId: "",
 
             currentStep: 0,
         }
@@ -55,9 +51,6 @@ class Setting extends Component {
     componentDidMount(){
         const id = this.props.match.params.id;
         this.props.fetchConfirm(id, this.state.id) // notifId (DraftIdではない)
-
-        const indexOfId = findArrObjIndex(this.props.auth.info.notif, "_id", id)
-        this.setState({ notifId: indexOfId })
     }
 
     getContent(step) {
@@ -176,41 +169,20 @@ class Setting extends Component {
 
     render() {
 
-        var notifId = this.props.auth.info.notif[this.state.notifId] || {}
+        var user = this.props.auth.info.notif.user || {}
+        var draft = this.props.auth.info.notif.draft || {}
+        var post = this.props.auth.info.notif.post || {}
 
-        var user = notifId.user || {}
-        var draft = notifId.draft || {}
-        var post = notifId.post || {}
-        var topic = post.topic || {}
+        if(user && draft && post) {
+            var { photo, userName, comment } = user
+            var { topicName, topic, editLastEdited, editLastEditedAuthor, editUploadedDate, content } = draft
 
-        var { photo, userName, comment, intro } = user
-        var { editLastEdited, editLastEditedAuthor, editUploadedDate } = draft
-        var { topicName, tags, topicContent, postCount, likes } = topic
-        var { postName, lastEdited } = post
+            var beforePostName = post.postName
+            var afterPostName = draft.postName
 
-        var postImg = post.postImg || {}
-        var topicSquareImg = post.topicSquareImg || {}
-
-        // console.log(postImg)
-        // console.log(topicSquareImg)
-
-        var editLastEditedAuthor = draft.editLastEditedAuthor || {}
-
-        var tags = topic.tags || []
-
-        var beforePostName = post.postName
-        var afterPostName = draft.postName
-
-        var beforeContent = post.content
-        var afterContent = draft.content
-
-        var postId = post._id
-        var topicId = topic._id
-
-        var creator = post.creator || {}
-
-        console.log(post)
-        console.log(topic)
+            var beforeContent = post.content
+            var afterContent = draft.content
+        }
 
         const steps = getSteps();
         const disableNext = this.disableBtn()
@@ -276,23 +248,14 @@ class Setting extends Component {
                 <Title>ポストのタイトルが入ります</Title>
                 <Space height={"10px"}/>
                 <Top>
-                    <TopicRecommend
-                        id={topicId}
-                        img={topicSquareImg.image}
-                        topicName={topicName}
-                        tags={tags}
-                        content={topicContent}
-                        postCount={postCount}
-                        likes={likes}
-                    />
+                    <TopicRecommend/>
                     <Recommend
-                        id={postId}
-                        title={postName}
-                        content={beforeContent}
-                        authorImg={creator.photo}
-                        author={creator.userName}
-                        editDate={fmtDate(lastEdited)}
-                        postImg={postImg.image || topicSquareImg.image}
+                        title="タイトルが入ります"
+                        content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
+                        authorImg={sample1}
+                        author="飯塚啓介"
+                        editDate="作成日が入ります"
+                        postImg={sample}
                     />
                 </Top>
                 <Bottom>
@@ -302,17 +265,17 @@ class Setting extends Component {
                         <PostInfo>
                             <Edit
                                 title={"編集者"}
-                                date={fmtDate(editUploadedDate)}
-                                photo={photo}
-                                userName={userName}
-                                comment={comment}
-                                intro={intro}
+                                date={"January 1, 2014 9:59 PM"}
+                                photo={sample}
+                                userName={"沖田 政勝"}
+                                comment={"Chief株式会社 CTO"}
+                                intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなどから発せられる大容量のデータ（e.g., ログやイベント）を高スループット/低レイテンシに収集/配信することを目的に開発されている．"}
                                 followBtn={true}
                             />
 
                             <ChangeSection>
                                 <ChangeTitle>変更前のポスト名</ChangeTitle>
-                                <ChangeContent>{afterPostName}</ChangeContent>
+                                <ChangeContent>Apache Kafkaの長所</ChangeContent>
                                 <ChangeUnderline/>
                             </ChangeSection>
 
@@ -321,7 +284,7 @@ class Setting extends Component {
                         <h2>変更後の内容</h2>
 
                         <Content>
-                            {afterContent}
+                            
                         </Content>
                     </EditBox>
                     
@@ -337,18 +300,18 @@ class Setting extends Component {
 
                         <PostInfo>
                             <Edit
-                                title={"前回の編集者"}
-                                date={fmtDate(editLastEdited)}
-                                photo={editLastEditedAuthor.photo}
-                                userName={editLastEditedAuthor.userName}
-                                comment={editLastEditedAuthor.comment}
-                                intro={editLastEditedAuthor.intro}
+                                title={"編集者"}
+                                date={"January 1, 2014 9:59 PM"}
+                                photo={sample1}
+                                userName={"沖田 政勝"}
+                                comment={"Chief株式会社 CTO"}
+                                intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなどから発せられる大容量のデータ（e.g., ログやイベント）を高スループット/低レイテンシに収集/配信することを目的に開発されている．"}
                                 followBtn={true}
                             />
                         
                             <ChangeSection>
                                 <ChangeTitle>変更前のポスト名</ChangeTitle>
-                                <ChangeContent>{beforePostName}</ChangeContent>
+                                <ChangeContent>Apache Kafkaの長所</ChangeContent>
                                 <ChangeUnderline/>
                             </ChangeSection>
 
@@ -357,7 +320,7 @@ class Setting extends Component {
                         <h2>変更前の内容</h2>
 
                         <Content>
-                            {beforeContent}
+                            
                         </Content>
 
                     </EditBox>
@@ -366,14 +329,6 @@ class Setting extends Component {
                 <Space height={"300px"}/>
             </Wrapper>
         )
-    }
-}
-
-function findArrObjIndex(arr, lookUp, value){
-    for(var i=0; i < arr.length; i++){
-        if(arr[i][lookUp] === value){
-            return i
-        }
     }
 }
 
@@ -564,7 +519,7 @@ const ChangeSection = styled.div`
     position: relative;
 `
 
-export const ChangeTitle = styled.p`
+const ChangeTitle = styled.p`
     color: #4B4B4B;
     font-size: 13px;
     margin-bottom: 12px;
@@ -582,7 +537,7 @@ const ChangeContent = styled.p`
     margin-bottom: 5px;
 `
 
-export const ChangeUnderline = styled.div`
+const ChangeUnderline = styled.div`
     border: 0.5px solid #838383;
 `
 
@@ -631,4 +586,4 @@ function mapStateToProps({update, auth}){
     }
 }
 
-export default connect(mapStateToProps, actions)(withRouter(Setting))
+export default connect(mapStateToProps, actions)(Setting)

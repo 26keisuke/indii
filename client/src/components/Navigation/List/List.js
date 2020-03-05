@@ -85,12 +85,22 @@ class List extends Component {
 
 const SelectBar = styled.div`
     ${props => props.selected && css`
-        position: absolute;
+        /* position: absolute;
         height: 22px;
         left: -30px;
         top: 12px;
         width: 3px;
-        background-color: #636480;
+        background-color: #636480; */
+
+        position: absolute;
+        left: -30px;
+        top: 0px;
+        background-color: #9EAEE5;
+        width: 187px;
+        height: 45px;
+        opacity: 0.3;
+        border-top-right-radius: 22px;
+        border-bottom-right-radius: 22px;
     `}
 `
 
@@ -105,7 +115,7 @@ const ListWrapper = styled.div`
         top:56px;
         bottom:0px;
         position: fixed;
-        border-right: 1px solid #d2d2d2;
+        box-shadow: 1px 1px 3px #d2d2d2;
         z-index:1;
     `};
 
@@ -148,7 +158,7 @@ const ListElement = styled(Link)`
     &::before {
         content: "";
         display: none;
-        position: absolute;
+        /* position: absolute;
         top:2px;
         left:-16px;
         background-color: #9EAEE5;
@@ -160,7 +170,17 @@ const ListElement = styled(Link)`
         width: 170px;
         height:40px;
         border-radius: 20px;
-        z-index:-1;
+        z-index:-1; */
+
+        position: absolute;
+        left: -30px;
+        top: 0px;
+        background-color: #9EAEE5;
+        width: 187px;
+        height: 45px;
+        opacity: 0.1;
+        border-top-right-radius: 22px;
+        border-bottom-right-radius: 22px;
     }
 `
 

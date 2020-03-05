@@ -108,6 +108,11 @@ const Name = styled.div`
     & > span {
         font-weight: bold;
     }
+
+    & > a {
+        border-bottom: 1px dotted #000000;
+        height: 16px;
+    }
 `
 
 const Profile = styled.div`
@@ -156,6 +161,10 @@ const SkeletonWrapper = styled.div`
 
 const ActionWrapper = styled.div`
     display: flex;
+    & > a {
+        border-bottom: 1px dotted #000000;
+        height: 16px;
+    }
 `
 
 const EmojiWrapper = styled.div`

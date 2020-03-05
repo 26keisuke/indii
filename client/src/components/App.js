@@ -18,6 +18,7 @@ import EditTopic from "./Action/Topic/Edit/Controller"
 import EditPost from "./Action/Post/Edit/Controller"
 import AppState from "./AppState"
 import Verification from "./Verification/Verification"
+import Setting from "./Setting/Setting"
 
 class App extends Component {
 
@@ -46,6 +47,10 @@ class App extends Component {
                             <Route exact path="/action" component={Action} />
                             <Route path="/verification/:type" component={Verification}/>
                             <Route path="/verification/:type/:tokenId" component={Verification}/> 
+                            <Route path="/setting" component={Setting}/>
+
+                            <Route path="/temp" component={EditConfirm} />
+
                         </div>
                     </AppState>
                 </BrowserRouter>

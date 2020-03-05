@@ -1,11 +1,12 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 class Recommend extends Component {
 
     render () {
         return (
-            <TrendElement>
+            <TrendElement to={`/post/${this.props.id}`}>
                 <div>
                     <p>{this.props.title}</p>
                     <p>{this.props.content}</p>
@@ -25,7 +26,9 @@ class Recommend extends Component {
 
 
 
-const TrendElement = styled.div`
+const TrendElement = styled(Link)`
+
+    cursor: pointer;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -47,6 +50,8 @@ const TrendElement = styled.div`
         & > p:nth-child(2) {
             font-size: 10px;
             margin-bottom: 5px;
+            height: 45px;
+            overflow: hidden;
         }
     }
 
