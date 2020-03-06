@@ -12,7 +12,7 @@
 /* .profile-top-wrapper{
     width: 100%;
     padding-bottom: 25px;
-    border-bottom: 0.5px solid #d2d2d2;
+    border-bottom: 0.5px solid #eaeaea;
 } */
 /* 
 .profile-top{
@@ -182,7 +182,7 @@
 /*== profile home ==*/
 
 .profile-post-wrapper{  
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: 1px 1px 10px #eaeaea;
     width: 600px;
     margin-bottom: 12px;
 }
@@ -195,7 +195,7 @@
 /*== profile topic ==*/
 
 .profile-topic-wrapper{  
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: 1px 1px 10px #eaeaea;
     width: 600px;
     margin-bottom: 12px;
 }
@@ -210,7 +210,7 @@
 }
 
 .profile-follow-wrapper{
-    border: 1px solid #d2d2d2;
+    border: 1px solid #eaeaea;
     width: 300px;
     margin: 10px;
 } */

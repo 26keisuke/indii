@@ -5,8 +5,8 @@
     justify-content: start;
     background-color: #ffffff;
     padding: 20px;
-    border-bottom: 1px solid #d2d2d2;
-    border-right: 1px solid #d2d2d2
+    border-bottom: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea
 } */
 
 /* .post-feed:hover{  
@@ -203,7 +203,7 @@
 
 .post-feed-bottom-action p {
     padding: 12px 20px;
-    border-bottom: 0.5px solid #d2d2d2;
+    border-bottom: 0.5px solid #eaeaea;
     cursor: pointer;
 }
 

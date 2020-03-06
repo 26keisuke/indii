@@ -9,7 +9,7 @@ const TopicBox = styled.div`
 const TopicChild = styled.div`
     display: flex;
     align-items: center;
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: 1px 1px 10px #eaeaea;
     padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;

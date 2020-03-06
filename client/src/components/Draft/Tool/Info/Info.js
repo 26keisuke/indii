@@ -49,13 +49,13 @@ class Info extends Component {
                         handleFocus={this.props.handleFocus}
                         handleSubmit={this.props.handleSubmit}
                         focus={this.props.focus}
-                        width={340}
+                        width={275}
                     />
                 </div>
                 <Section
                     title={"トピック名"} 
                     content={this.props.value["topicName"]}
-                    width={340}
+                    width={275}
                 />
                 <Section
                     title={"オーナー"} 
@@ -74,7 +74,7 @@ class Info extends Component {
                 <Section
                     title={"作成日"} 
                     content={this.getDate(this.props.value["creationDate"])}
-                    width={340}
+                    width={275}
                 />
                 { this.props.value["lastEdited"] && 
                 ([

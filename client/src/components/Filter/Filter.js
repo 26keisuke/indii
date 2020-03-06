@@ -3,9 +3,9 @@ import PropTypes from "prop-types"
 import styled from "styled-components"
 
 const FilterElement = styled.div`
-    border-bottom: 1px solid #d2d2d2;
-    border-left: 1px solid #d2d2d2;
-    border-right: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
     padding: 18px;
     margin-bottom: 40px;
 `

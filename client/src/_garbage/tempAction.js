@@ -14,7 +14,7 @@
 
 
 // const CardElement = styled(Link)`
-//     border: 1px solid #d2d2d2;
+//     border: 1px solid #eaeaea;
 //     padding: 15px 20px;
 //     padding-top: 23px;
 //     width: 250px;

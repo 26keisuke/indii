@@ -1,5 +1,5 @@
 hover: background-color: rgba(233, 233, 238, 0.25);
-border: #d2d2d2
+border: #eaeaea
 light blue: #9EAEE5
 dark purple: #626480
 

@@ -94,6 +94,7 @@ const BackGivenElement = styled.div`
     & > p {
         font-size: 10px;
         color: #656565;
+        white-space: nowrap;
     }
 `
 

@@ -1,5 +1,6 @@
 import express from "express"
 import mongoose from "mongoose";
+import equal from "deep-equal"
 
 import User from "../models/User"
 import Topic from "../models/Topic"
@@ -262,6 +263,62 @@ router.post("/delete", (req, res) => {
         })
 })
 
+router.post("/edit", (req, res) => {
+
+    const now = Date.now();
+    const { draftId, accept, comment, feedback } = req.body
+
+    Draft.findById(draftId)
+    .then(draft => {
+        if(accept){
+            Post.findById(draft.editPostId)
+            .then(post => {
+                //==========================
+                //==========================
+                //==========================
+                //==========================
+                // draft.postImgがundefinedになっている！！
+                //==========================
+                //==========================
+                //==========================
+                //==========================
+                console.log(post.postName, draft.postImg)
+                post.lastEdited = now
+                post.contribution.push({ timeStamp: now, user: draft.user})
+                post.postName = (post.postName !== draft.postName) ? draft.postName : post.postName
+                if(!equal(post.postImg, draft.postImg)){
+
+                    // const imgId = mongoose.Types.ObjectId();
+
+                    // if(postImg){
+                    //     new Image({_id: imgId, image: draft.postImg}).save()
+                    // }
+
+                }
+
+            })
+        }
+
+        User.findById(draft.user)
+        .then(user => {
+            console.log(user.userName)
+            user.notif.push({
+                timeStamp: now,
+                type: "POST_EDIT_FEEDBACK",
+                user: req.user.id,
+                emoji: feedback,
+                draft: draftId, // これはallowEditがfalseの場合に必要
+                comment: comment, // これはPOST_EDIT_FEEDBACKの時のみ必要
+                isApproved: accept, // これはPOST_EDIT_FEEDBACKの時のみ必要
+            })
+        })
+
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
 router.post("/:id", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
@@ -283,7 +340,6 @@ router.post("/:id/name", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
         if(req.body.revert){
-            console.log(draft.editPostId)
             if(draft.type === "Edit") {
                 Post.findById(draft.editPostId)
                 .then(post => {

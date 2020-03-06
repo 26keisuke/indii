@@ -434,8 +434,8 @@ const ToggleBtn = styled.p`
     text-align: center;
     font-size: 12px;
     cursor: pointer;
-    border-bottom: 1px solid #d2d2d2;
-    border-right: ${props => props.borderRight && "1px solid #d2d2d2"};
+    border-bottom: 1px solid #eaeaea;
+    border-right: ${props => props.borderRight && "1px solid #eaeaea"};
 
     ${props => !props.toggleOn && css`
         &:hover {
@@ -467,7 +467,7 @@ const ThirdPartyButton = styled.div`
             font-family: ${props => props.theme.font};
             color: #252525;
             cursor: pointer;
-            border-color: #d2d2d2;
+            border-color: #eaeaea;
             outline: 0;
         }
 

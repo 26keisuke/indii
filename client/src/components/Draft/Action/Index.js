@@ -201,7 +201,7 @@ const IndexBox = styled.div`
     flex-direction: column;
     height: 300px;
     margin-bottom: 15px;
-    border: 1px solid #d2d2d2;
+    border: 1px solid #eaeaea;
     overflow: scroll;
 
     &::-webkit-scrollbar {
@@ -219,7 +219,7 @@ const IndexElement = styled.div`
     flex-direction: row;
     position: relative;
     padding: 13px 15px;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     cursor: pointer;
     transition: 100ms;
 

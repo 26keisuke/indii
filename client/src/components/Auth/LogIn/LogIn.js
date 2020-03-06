@@ -93,7 +93,7 @@ const Division = styled.div`
     & > div:nth-child(3){
         width: 44%;
         border: none;
-        border-bottom: 1px solid #d2d2d2;
+        border-bottom: 1px solid #eaeaea;
     }
 `
 

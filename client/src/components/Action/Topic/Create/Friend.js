@@ -230,7 +230,7 @@ const FriendTitle = styled.div`
 
 const FriendBox = styled.div`
     width: 420px;
-    border-top: 0.5px solid #d2d2d2;
+    border-top: 0.5px solid #eaeaea;
     height: 135px;
     padding: 15px;
     margin-top: 8px;

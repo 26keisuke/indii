@@ -18,7 +18,7 @@ const NavBar = styled.nav`
     justify-content: space-between;
     height: 55px;
     align-items: center;
-    border-bottom: 1px solid #D2D2D2;
+    border-bottom: 1px solid #eaeaea;
     background-color: #ffffff;
     position: absolute;
     top: 0px;
@@ -38,7 +38,7 @@ const Logo = styled(Link)`
 
     & > p {
         font-family: 'Libre Baskerville', serif;
-        text-shadow: 1px 2px 4px #d2d2d2;
+        text-shadow: 1px 2px 4px #eaeaea;
         font-size:24px;
         color: #222222;
         margin-right:20px;

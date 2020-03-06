@@ -12,7 +12,7 @@ const Box = styled.div`
 `
 
 const Wrapper = styled.div`
-    /* box-shadow: 1px 1px 10px #d2d2d2;
+    /* box-shadow: 1px 1px 10px #eaeaea;
     background-color: #ffffff; */
     width: 300px;
     margin: 10px;

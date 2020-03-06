@@ -7,7 +7,7 @@ import Skeleton from "react-loading-skeleton"
 import { fmtDate, renderType } from "../../Util/util"
 
 const DraftBox = styled(Link)`
-    border-bottom: 1px solid #d2d2d2;   
+    border-bottom: 1px solid #eaeaea;   
     display: flex;
     flex-direction: row;
     padding: 10px 20px;
@@ -71,7 +71,7 @@ const Date = styled.div`
 
 const Nil = styled.div`
     width: 30px;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     margin-left: 10px;
 `
 

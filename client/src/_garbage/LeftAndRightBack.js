@@ -17,7 +17,7 @@ const FeedLeft = styled.div`
     flex-shrink: 0;
     height:100%;
     position: relative;
-    border-right: 1px solid #d2d2d2;
+    border-right: 1px solid #eaeaea;
     overflow: scroll;
 
     &::-webkit-scrollbar {
@@ -44,8 +44,8 @@ const FeedBackHeader = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 1px solid #d2d2d2;
-    border-bottom: 1px solid #d2d2d2;
+    border-right: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
     margin-left: -1px;
     width: 100%;
     & > div {

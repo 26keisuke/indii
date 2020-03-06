@@ -79,7 +79,7 @@ const RefElement = styled.div`
         width: 97%;
         font-size: 12px;
         border: none;
-        border-bottom: 1px solid #d2d2d2;
+        border-bottom: 1px solid #eaeaea;
         padding: 3px 5px;
 
         &::placeholder{

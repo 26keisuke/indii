@@ -1,76 +1,11 @@
 import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import PropTypes from "prop-types"
 
 import Back from "./Back"
 
 import { Space } from "../Theme"
-
-export const FeedBox = styled.div`
-    /* height: 100%; */
-    display: flex;
-    flex-direction: row;
-    /* overflow-x: hidden; */
-`
-
-export const FeedLeft = styled.div`
-    width: 675px;
-    flex-shrink: 0;
-    height:100%;
-    position: relative;
-    border-right: ${props => props.noBorder ? "none" : "1px solid #d2d2d2"};
-    /* overflow: scroll; */
-
-    /* &::-webkit-scrollbar {
-        width: 0 !important;
-    } */
-`
-
-export const FeedRight = styled.div`
-    width:100%;
-    margin: 0px 15px;
-    margin-top: 20px;
-
-    & > div {
-        width: 360px;
-        height: 100%;
-        margin: 0px auto;
-    }
-`
-
-export const FeedSpace = styled.div`
-    height:10px;
-    background-color: #F9F9F9;
-`
-
-const FeedHeader = styled.div`
-    background-color: #ffffff;
-    height:44px;
-    border-bottom: 1px solid #d2d2d2;
-    padding-left: 80px;
-    display: flex;
-    align-items: center;
-`
-
-const FeedBackHeader = styled.div`
-    height:40px;
-    background-color: #ffffff;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid #d2d2d2;
-    margin-left: -1px;
-    width: 100%;
-    & > div {
-        margin-top:-20px;
-    }
-
-    & > p {
-        color: #878787;
-    }
-`
 
 class Screen extends Component {
 
@@ -82,21 +17,21 @@ class Screen extends Component {
         )
     }
 
-    renderBackHeader = () => {
-        return (
-            <FeedBackHeader>
-                <div>
-                    <Back
-                        back={() => this.props.history.goBack()}
-                        name="戻る"
-                    />
-                </div>
-                <p>
-                    {this.props.children[0]}
-                </p>
-            </FeedBackHeader>
-        )
-    }
+    // renderBackHeader = () => {
+    //     return (
+    //         <FeedBackHeader>
+    //             <div>
+    //                 <Back
+    //                     back={() => this.props.history.goBack()}
+    //                     name="戻る"
+    //                 />
+    //             </div>
+    //             <p>
+    //                 {this.props.children[0]}
+    //             </p>
+    //         </FeedBackHeader>
+    //     )
+    // }
 
     render() {
 
@@ -104,7 +39,7 @@ class Screen extends Component {
 
         return (
             <FeedBox>
-                <FeedLeft noBorder={this.props.noBorder}>
+                <FeedLeft noBorder={this.props.noBorder} post={this.props.post}>
                     {renderHeader()}
                     { !this.props.noHeaderSpace &&
                     <FeedSpace/>
@@ -120,7 +55,7 @@ class Screen extends Component {
                     : <Space height="90vh" backgroundColor="#f9f9f9"/>
                     }
                 </FeedLeft>
-                <FeedRight>
+                <FeedRight post={this.props.post}>
                     <div>
                         { this.props.noHeader
                         ?
@@ -134,6 +69,80 @@ class Screen extends Component {
         )
     }
 }
+
+
+export const FeedBox = styled.div`
+    /* height: 100%; */
+    display: flex;
+    flex-direction: row;
+    /* overflow-x: hidden; */
+`
+
+export const FeedLeft = styled.div`
+    width: ${props => props.post ? "725px" : "675px"};
+    padding: ${props => props.post ? "20px" : "0px"};
+    flex-shrink: 0;
+    height:100%;
+    position: relative;
+    border-right: ${props => props.noBorder ? "none" : "1px solid #eaeaea"};
+    /* overflow: scroll; */
+
+    /* &::-webkit-scrollbar {
+        width: 0 !important;
+    } */
+`
+
+export const FeedRight = styled.div`
+    width:100%;
+    /* margin: 0px 15px;
+    margin-top: 20px; */
+
+    & > div {
+        width: ${props => props.post ? "295px" : "340px"};
+        margin: 0px auto;
+        margin-top: ${props => props.post ? "15px" : "0px"};
+        height: 100%;
+    }
+
+    padding: 20px;
+    ${props => props.post && css`
+        padding-left: 2px;
+    `}
+`
+
+export const FeedSpace = styled.div`
+    height:10px;
+    background-color: #F9F9F9;
+`
+
+const FeedHeader = styled.div`
+    background-color: #ffffff;
+    height:44px;
+    border-bottom: 1px solid #eaeaea;
+    padding-left: 80px;
+    display: flex;
+    align-items: center;
+`
+
+const FeedBackHeader = styled.div`
+    height:40px;
+    background-color: #ffffff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #eaeaea;
+    margin-left: -1px;
+    width: 100%;
+    & > div {
+        margin-top:-20px;
+    }
+
+    & > p {
+        color: #878787;
+    }
+`
+
 
 Screen.defaultProps = {
     space: true,

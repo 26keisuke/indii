@@ -32,8 +32,8 @@ const ResultInsideHeader = styled.div`
     display: flex;
     align-items: center;
     padding-left: 35px;
-    border-top: 1px solid #d2d2d2;
-    border-bottom: 1px solid #d2d2d2;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
 
     & > p {
         font-size: 14px;
@@ -41,23 +41,23 @@ const ResultInsideHeader = styled.div`
 `
 
 const TopicWrapper = styled.div`
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
 `
 
 const PostWrapper = styled.div`
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
 `
 
 const PeopleWrapper = styled.div`
-    border-right:1px solid #d2d2d2;
-    border-left:1px solid #d2d2d2;
-    border-bottom:1px solid #d2d2d2;
+    border-right:1px solid #eaeaea;
+    border-left:1px solid #eaeaea;
+    border-bottom:1px solid #eaeaea;
 `
 
 const RightInsideTitle = styled.div`
     height:35px;
     padding-left:30px;
-    border: 1px solid #d2d2d2;
+    border: 1px solid #eaeaea;
     font-size: 16px;
     display: flex;
     align-items: center;

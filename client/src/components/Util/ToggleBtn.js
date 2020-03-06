@@ -56,13 +56,13 @@ const Toggle = styled.div`
             animation-name: ${rightToLeft};
             animation-duration: 300ms;
             animation-fill-mode: forwards;
-            background-color: #d2d2d2 !important;
+            background-color: #eaeaea !important;
         `}
     }
 
 
     & > div {
-        border: 1px solid #d2d2d2;
+        border: 1px solid #eaeaea;
         width: 48px;
         height: 30px;
         cursor: pointer;

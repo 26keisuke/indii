@@ -11,7 +11,7 @@ class ConfigBox extends Component {
             <Wrapper>
                 <div>
                     <Config
-                        width={340}
+                        width={275}
                         title={"承認無しに変更を許可する"}
                         text={["許可", "許可しない"]}
                         recommend={true}

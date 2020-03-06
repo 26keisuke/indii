@@ -379,7 +379,7 @@
     border-bottom-right-radius: 35px;
     border-bottom-left-radius: 35px;
     object-fit: contain;
-    border: 1px solid #d2d2d2;
+    border: 1px solid #eaeaea;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -395,7 +395,7 @@
 .thumb-preview-web{
     width: 120px;
     height: 120px;
-    border: 1px solid #d2d2d2;
+    border: 1px solid #eaeaea;
     object-fit: contain;
 } */
 
@@ -437,7 +437,7 @@
 
 /* .topic-form-friends{
     width: 420px;
-    border: 0.5px solid #d2d2d2;
+    border: 0.5px solid #eaeaea;
     height: 135px;
     padding: 15px;
     margin-top: 8px;
@@ -658,7 +658,7 @@
     animation-name: right-to-left;
     animation-duration: 300ms;
     animation-fill-mode: forwards;
-    background-color: #d2d2d2 !important;
+    background-color: #eaeaea !important;
 } */
 /* 
 .topic-form-config-toggle-on{
@@ -682,7 +682,7 @@
     width: 27px;
     height: 27px;
     margin-top: 12px;
-    background-color: #d2d2d2;
+    background-color: #eaeaea;
     cursor: pointer;
     border: none;
     border-radius: 100%;
@@ -690,7 +690,7 @@
 } */
 
 /* .topic-form-config-layer{
-    border: 1px solid #d2d2d2;
+    border: 1px solid #eaeaea;
     width: 48px;
     height: 30px;
     cursor: pointer;

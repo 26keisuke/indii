@@ -598,7 +598,6 @@ const Box = styled.div`
 `
 
 const RefButtonWrapper = styled.div`
-    padding: 0px 10px;
     margin-top: -15px;
     margin-right: 12px;
     margin-bottom: 15px;

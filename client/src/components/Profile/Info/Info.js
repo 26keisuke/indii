@@ -324,7 +324,7 @@ const Image = styled.div`
 const Wrapper = styled.div`
     width: 100%;
     padding-bottom: 25px;
-    border-bottom: 0.5px solid #d2d2d2;
+    border-bottom: 0.5px solid #eaeaea;
 `
 
 const Top = styled.div`

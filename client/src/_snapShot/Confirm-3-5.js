@@ -1,10 +1,11 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
-// import { TiFlowSwitch } from "react-icons/ti"
+import { TiFlowSwitch } from "react-icons/ti"
 import { MdFeedback } from "react-icons/md"
 import { FiMinus } from "react-icons/fi"
 import { connect } from "react-redux"
 import { withRouter } from "react-router";
+import axios from "axios";
 
 import * as actions from "../../../actions"
 
@@ -19,18 +20,16 @@ import TextField from "@material-ui/core/TextField"
 // import sample1 from "../../../images/sample0.jpg"
 import close from "../../../images/close-red.png"
 import tick from "../../../images/tick.png"
-import account from "../../../images/account.png"
 
 import { Space } from "../../Theme"
-import ToggleText from "../../Util/ToggleText"
+import ToggleBtn from "../../Util/ToggleBtn"
 import Back from "../../Util/Back"
-// import Edit from "./Edit/Edit"
+import Edit from "./Edit/Edit"
 import Feedback from "../Feedback/Feedback"
 import Recommend from "../../Util/Recommend"
 // import TopicRecommend from "../../Util/TopicRecommend"
 import Textarea from "../../Post/Textarea/Textarea"
 import SkeletonBox from "../../Post/Skeleton/SkeletonBox"
-import People from "../../People/People"
 
 import { fmtDate } from "../../Util/util"
 
@@ -54,7 +53,7 @@ class Setting extends Component {
 
             currentStep: 0,
 
-            before: null,
+            before: false,
         }
     }
 
@@ -157,12 +156,6 @@ class Setting extends Component {
         })
     }
 
-    handleToggle = () => {
-        this.setState({
-            before: !this.state.before
-        })
-    }
-
     handleFocus = () => {
         this.setState({
             textareaFocus: true
@@ -172,15 +165,14 @@ class Setting extends Component {
     handleSubmit = (accept) => {
 
         const text = accept ? "承認" : "拒否"
-        const draftId = this.props.auth.info.notif[this.state.notifId].draft._id
 
         const id = "1";
         const action = "CONFIRM_DRAFT";
-        const title = `編集リクエストを${text}する`
-        const message = `編集リクエストを${text}してよろしいですか？`;
+        const title = `編集リクエストを${text}}する`
+        const message = `編集リクエストを${text}}してよろしいですか？`;
         const caution = "";
         const buttonMessage = "送信する";
-        const value = {draftId, feedback: this.state.feedback, comment: this.state.textareaValue, accept}
+        const value = this.state.feedback
         this.props.showConfirmation(id, action, title, caution, message, buttonMessage, "", value);
         this.props.enableGray();
 
@@ -199,8 +191,7 @@ class Setting extends Component {
         // var topic = post.topic || {}
 
         var { photo, userName, comment, intro } = user
-        var { editLastEditedAuthor } = draft
-        // var { editLastEdited, editLastEditedAuthor, editUploadedDate } = draft
+        var { editLastEdited, editLastEditedAuthor, editUploadedDate } = draft
         // var { topicName, tags, topicContent, postCount, likes } = topic
         var { postName, lastEdited } = post
 
@@ -220,7 +211,6 @@ class Setting extends Component {
         var beforeContent = post.content
         var afterContent = draft.content
 
-        var userId = user._id
         var postId = post._id
         // var topicId = topic._id
 
@@ -280,49 +270,33 @@ class Setting extends Component {
                     </Stepper>
                 </StepperWrapper>
 
-                <Box>
+                <div>
                     <div>
-
                         <BackWrapper>
                             <Back
                                 url="/notification"
                                 name="通知一覧へ戻る"
                             />
                         </BackWrapper>
-                        <ToggleWrapper>
-                            <ToggleText
-                                on={this.state.before}
-                                handleClick={this.handleToggle}
-                            />
-                        </ToggleWrapper>
+                        <ToggleBtn/>
 
-                        <Space height={"26px"}/>
-                        <Title>編集{before ? "前" : "後"}の内容</Title>
-                        
-                        <TextWrapper>
+                        { !(afterContent && beforeContent) && <SkeletonBox/> }
 
-                            { !(afterContent && beforeContent) && <SkeletonBox/> }
-
-                            { (afterContent && beforeContent) && before 
-                            ?
-                            <Textarea
-                                postName={beforePostName}
-                                content={beforeContent}
-                            />
-                            :
-                            <Textarea
-                                postName={afterPostName}
-                                content={afterContent}
-                            />
-                            }
-
-                        </TextWrapper>
+                        { (afterContent && beforeContent) && before 
+                        ?
+                        <Textarea
+                            postName={beforePostName}
+                            content={beforeContent}
+                        />
+                        :
+                        <Textarea
+                            postName={afterPostName}
+                            content={afterContent}
+                        />
+                        }
 
                     </div>
                     <div>
-
-                        <SubTitle>編集対象のポスト</SubTitle>
-
                         <Recommend
                             id={postId}
                             title={postName}
@@ -332,32 +306,144 @@ class Setting extends Component {
                             editDate={fmtDate(lastEdited)}
                             postImg={postImg.image || topicSquareImg.image}
                         />
-
-                        <SubTitle>{before ? "前回の編集者" : "今回の編集者"}</SubTitle>
-
                         { !before 
                         ?
-                        <People
-                            id={userId}
-                            photo={photo || account}
-                            name={userName} 
-                            job={comment} 
+                        <Edit
+                            title={"編集者"}
+                            date={fmtDate(editUploadedDate)}
+                            photo={photo}
+                            userName={userName}
+                            comment={comment}
                             intro={intro}
-                            skeleton={!photo}
+                            followBtn={true}
                         />
                         :
-                        <People
-                            id={editLastEditedAuthor._id}
-                            photo={editLastEditedAuthor.photo || account}
-                            name={editLastEditedAuthor.userName} 
-                            job={editLastEditedAuthor.comment} 
+                        <Edit
+                            title={"前回の編集者"}
+                            date={fmtDate(editLastEdited)}
+                            photo={editLastEditedAuthor.photo}
+                            userName={editLastEditedAuthor.userName}
+                            comment={editLastEditedAuthor.comment}
                             intro={editLastEditedAuthor.intro}
-                            skeleton={!editLastEditedAuthor.photo}
+                            followBtn={true}
                         />
                         }
-
                     </div>
-                </Box>
+                </div>
+
+
+                
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <Space height={"30px"}/>
+                <Title>対象ポスト</Title>
+                <Space height={"10px"}/>
+                <Top>
+                    {/* <TopicRecommend
+                        id={topicId}
+                        img={topicSquareImg.image}
+                        topicName={topicName}
+                        tags={tags}
+                        content={topicContent}
+                        postCount={postCount}
+                        likes={likes}
+                    /> */}
+                    
+                </Top>
+                <Bottom>
+                    <EditBox>
+                        <h2>今回の編集</h2>
+
+                        <PostInfo>
+                            <Edit
+                                title={"編集者"}
+                                date={fmtDate(editUploadedDate)}
+                                photo={photo}
+                                userName={userName}
+                                comment={comment}
+                                intro={intro}
+                                followBtn={true}
+                            />
+
+                            <ChangeSection>
+                                <ChangeTitle>変更前のポスト名</ChangeTitle>
+                                <ChangeContent>{afterPostName}</ChangeContent>
+                                <ChangeUnderline/>
+                            </ChangeSection>
+
+                        </PostInfo>
+
+                        <h2>変更後の内容</h2>
+
+                        <Content>
+                            {afterContent}
+                        </Content>
+                    </EditBox>
+                    
+                    <Divider>
+                        <div/>
+                        <section>
+                            <TiFlowSwitch/>
+                        </section>
+                        <div/>
+                    </Divider>
+                    <EditBox>
+                        <h2>前回の編集</h2>
+
+                        <PostInfo>
+                            <Edit
+                                title={"前回の編集者"}
+                                date={fmtDate(editLastEdited)}
+                                photo={editLastEditedAuthor.photo}
+                                userName={editLastEditedAuthor.userName}
+                                comment={editLastEditedAuthor.comment}
+                                intro={editLastEditedAuthor.intro}
+                                followBtn={true}
+                            />
+                        
+                            <ChangeSection>
+                                <ChangeTitle>変更前のポスト名</ChangeTitle>
+                                <ChangeContent>{beforePostName}</ChangeContent>
+                                <ChangeUnderline/>
+                            </ChangeSection>
+
+                        </PostInfo>
+
+                        <h2>変更前の内容</h2>
+
+                        <Content>
+                            {beforeContent}
+                        </Content>
+
+                    </EditBox>
+                    
+                </Bottom>
                 <Space height={"300px"}/>
             </Wrapper>
         )
@@ -372,45 +458,8 @@ function findArrObjIndex(arr, lookUp, value){
     }
 }
 
-const Box = styled.div`
-    display: flex;
-
-    & > div:nth-child(1){
-        min-width: 725px;
-        max-width: 725px;
-        padding: 20px;
-    }
-
-    & > div:nth-child(2){
-        width: 100%;
-        padding: 20px;
-        padding-top: 13px;
-    }
-`
-
-const TextWrapper = styled.div`
-    padding: 28px 75px;
-    background-color: #ffffff;
-    box-shadow: 1px 1px 3px #eaeaea;
-`
-
-const ToggleWrapper = styled.div`
-    float: right;
-    margin-top: -15px;
-`
-
 const Title = styled.h1`
-    font-size: 15px;
-    position: absolute;
-    top: 31px;
-    left: 358px;
-    text-align: center;
-`
-
-const SubTitle = styled.h3`
-    color: #4B4B4B;
-    font-size: 13px;
-    margin-bottom: 12px;
+    font-size: 16px;
 `
 
 const StepperFakeWrapper = styled.div`
@@ -526,7 +575,74 @@ const Wrapper = styled.div`
 const BackWrapper = styled.div`
     margin-left: -9px;
     position: relative;
-    top: -25px;
+`
+
+const Top = styled.div`
+    display: flex;
+`
+
+const PostInfo = styled.div`
+    box-shadow: 1px 1px 3px #eaeaea;
+    padding: 15px;
+
+    & > div {
+        margin-bottom: 20px;
+    }
+`
+
+const Divider = styled.div`
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: 30px 20px;
+    margin-top: 50px;
+    height: inherit;
+    justify-content: space-around;
+
+    & > div {
+        border-left: 1px solid #eaeaea;
+        height: 40%;
+    }
+
+    & > section {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 1px 1px 5px #eaeaea;
+        margin: 10px 0px;
+    }
+`
+
+const Bottom = styled.div`
+    display: flex;
+    flex-direction: row;
+`
+
+const Content = styled.div`
+    box-shadow: 1px 1px 5px #eaeaea;
+    min-height: 300px;
+    padding: 37px;
+`
+
+const EditBox = styled.div`
+    min-width: 480px;
+    max-width: 480px;
+
+    & > h2 {
+        font-size: 15px;
+        margin-bottom: 10px;
+        margin-top: 20px;
+    }
+`
+
+const ChangeSection = styled.div`
+    margin-bottom:20px;
+    position: relative;
 `
 
 export const ChangeTitle = styled.p`
@@ -539,6 +655,12 @@ export const ChangeTitle = styled.p`
         color: #747474;
         margin-left: 10px;
     }
+`
+
+const ChangeContent = styled.p`
+    color: #333333;
+    font-size: 13px;
+    margin-bottom: 5px;
 `
 
 export const ChangeUnderline = styled.div`

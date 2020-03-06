@@ -6,7 +6,7 @@ const Box = styled.textarea`
     outline: none;
     margin-bottom: 15px;
     height: 100px;
-    border: 1px solid #d2d2d2;
+    border: 1px solid #eaeaea;
 `
 
 class TextArea extends Component {

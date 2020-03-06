@@ -41,7 +41,7 @@ const RefCarousel = styled.div`
         flex-direction: row;
         overflow-x: scroll;
         padding: 6px 15px;
-        border-bottom: 1px solid #d2d2d2;
+        border-bottom: 1px solid #eaeaea;
 
         &::-webkit-scrollbar{
             width: 0px !important;

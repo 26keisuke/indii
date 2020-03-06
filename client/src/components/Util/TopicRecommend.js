@@ -40,7 +40,7 @@ class TopicRecommend extends Component {
 const TopicInfo = styled(Link)`
 
     cursor: pointer;
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: 1px 1px 10px #eaeaea;
     padding: 15px;
     margin-right: 20px;
     height: 132px;
@@ -59,7 +59,7 @@ const TopicInfo = styled(Link)`
             max-width: 100px;
             min-height: 100px;
             max-height: 100px;
-            border: 1px solid #d2d2d2;
+            border: 1px solid #eaeaea;
             object-fit: contain;
             margin-right: 10px;
         }

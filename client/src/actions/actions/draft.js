@@ -109,7 +109,6 @@ export const uploadDraft = (value) => async (dispatch) => {
 
 export const deleteRef = (id) => async (dispatch) => {
     const url = `/api/draft/${id.draftId}/ref/${id.refId}`
-    console.log(url)
     axios.delete(url)
         .then(res => {
             dispatch(disableGray())
@@ -121,4 +120,15 @@ export const deleteRef = (id) => async (dispatch) => {
             console.log(err)
             return
         })
+}
+
+export const confirmDraft = (value) => async (dispatch) => {
+    const url = `/api/draft/edit`
+    axios.post(url, value)
+    .then(res => {
+        console.log(res)
+    })
+    .catch(err => {
+        console.log(err)
+    })
 }

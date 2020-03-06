@@ -145,7 +145,7 @@ const TopicTop = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     padding-top: 40px;
     padding-left: 30px;
     padding-right: 30px;
@@ -290,7 +290,7 @@ const BackWrapper = styled.div`
 
 const Gap = styled.div`
     height:10px;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     background-color: #F9F9F9;
 `
 

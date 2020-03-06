@@ -272,7 +272,7 @@ export const PreviewIndex = styled.div`
     & > hr {
         height:1px;
         border: none;
-        border-bottom: 1px solid #d2d2d2;
+        border-bottom: 1px solid #eaeaea;
     }
 `
 
@@ -382,12 +382,12 @@ export const TagElement = styled.p`
 //             `
 //             : css`
 //                 right: 20px; 
-//                 background-color: #d2d2d2;
+//                 background-color: #eaeaea;
 //             `};
 //         }
 
 //         & > div {
-//             border: 1px solid #d2d2d2;
+//             border: 1px solid #eaeaea;
 //             width: 48px;
 //             height: 30px;
 //             cursor: pointer;

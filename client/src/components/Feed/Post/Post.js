@@ -213,7 +213,7 @@ const PostBox = styled(Link)`
     justify-content: start;
     background-color: #ffffff;
     padding: 15px 20px;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
 
     &:hover {
         background-color: rgba(233, 233, 238, 0.25);    

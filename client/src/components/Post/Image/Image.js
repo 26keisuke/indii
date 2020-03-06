@@ -7,7 +7,9 @@ class Image extends Component {
 
     render () {
 
-        if(this.props.post.fetched.topic) {
+        // if(this.props.post.fetched.topic) {
+
+        if(this.props.sdmfksakdmf){
 
             const { topicName, tags, rectangleImg } = this.props.post.fetched.topic
 
@@ -32,7 +34,7 @@ class Image extends Component {
 
         return (
             <ImageBox skeleton={true}>
-                <Skeleton width={380} height={196}/>
+                <Skeleton width={318} height={176}/>
             </ImageBox>
         )
     }
@@ -44,17 +46,17 @@ const ImageBox = styled.div`
     margin-top: -15px;
     margin-bottom: 15px;
     ${props => !props.skeleton && css`
-        box-shadow: 1px 1px 10px #d2d2d2;
+        box-shadow: 1px 1px 10px #eaeaea;
     `}
-    min-width: 380px;
-    max-width: 380px;
-    min-height: 200px;
-    max-height: 200px;
+    min-width: 318px;
+    max-width: 318px;
+    min-height: 180px;
+    max-height: 180px;
     overflow: hidden;
     cursor: pointer;
 
     &:hover > div:nth-child(1) {
-        height: 200px;
+        height: 180px;
     }
 
     &:hover > div:nth-child(3) {
@@ -71,15 +73,15 @@ const ImageBox = styled.div`
 `
 
 const Container = styled.img`
-    height: 200px;
-    width: 380px;
+    height: 180px;
+    width: 318px;
 `
 
 const Overlay = styled.div`
     content: "";
     background-color: #000000;
     opacity: 0.6;
-    width: 380px;
+    width: 318px;
     height: 65px;
     left: 0px;
     transition: 250ms;

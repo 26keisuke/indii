@@ -17,7 +17,7 @@ class Trend extends Component {
             <div>
                 <SlashTitle>
                     <p>トレンド</p>
-                    <p>/////////////////////////////////////</p>
+                    <p>//////////////////////////////////</p>
                 </SlashTitle>
                 {/* {this.renderElement()} */}
                 <Recommend
@@ -69,7 +69,7 @@ export const SlashTitle = styled.div`
     }
 
     & > p:nth-child(2) {
-        color: #d2d2d2;
+        color: #eaeaea;
         font-size: 14px;
         letter-spacing: 2.5px;
     }

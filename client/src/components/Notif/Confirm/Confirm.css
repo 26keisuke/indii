@@ -348,7 +348,7 @@
 .check-change-bottom-space{
     height:400px;
     position: relative;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
 }
 
 /* .check-change-feedback img{

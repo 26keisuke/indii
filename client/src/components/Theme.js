@@ -17,26 +17,26 @@ const theme = {
         lightBlue: "#9EAEE5"
     },
     hover: "rgba(233, 233, 238, 0.25)",
-    borderColor: "#d2d2d2",
+    borderColor: "#eaeaea",
 
 };
 
 
 export const Border = styled.div`
     ${props => props.top && css`
-        border-top: 1px solid #d2d2d2;
+        border-top: 1px solid #eaeaea;
     `}
 
     ${props => props.left && css`
-        border-left: 1px solid #d2d2d2;
+        border-left: 1px solid #eaeaea;
     `}
 
     ${props => props.right && css`
-        border-right: 1px solid #d2d2d2;
+        border-right: 1px solid #eaeaea;
     `}
 
     ${props => props.bottom && css`
-        border-bottom: 1px solid #d2d2d2;
+        border-bottom: 1px solid #eaeaea;
     `}
 `
 

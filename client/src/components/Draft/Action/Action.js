@@ -147,7 +147,7 @@ const PermissionImg = styled(FaUserCheck)`
 export const Separator = styled.div`
     width: 560px;
     left: -30px;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     position: absolute;
     top: ${props => props.top};
     bottom: ${props => props.bottom};
@@ -173,7 +173,7 @@ export const DraftElement = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     padding: 12px 0px;
     padding-left: 5px;
     cursor: pointer;
@@ -217,7 +217,7 @@ export const DraftElement = styled.div`
 
             & span {
                 width: 30px;
-                border-bottom: 1px solid #d2d2d2;
+                border-bottom: 1px solid #eaeaea;
                 position: absolute;
                 top: 7px;
                 right: -35px;
@@ -246,7 +246,7 @@ const DraftSelect = styled.div`
     border-radius: 100%;
     width: 21px;
     height: 21px;
-    border: ${props => props.selected ? props.type === "delete" ? "1px solid #FF5F5F" : "1px solid #4CD964" : "1px solid #d2d2d2"};
+    border: ${props => props.selected ? props.type === "delete" ? "1px solid #FF5F5F" : "1px solid #4CD964" : "1px solid #eaeaea"};
     position: absolute;
     right: 15px;
 `

@@ -1,20 +1,20 @@
 .search-res-space{
     height: 20px;
     background-color: #F9F9F9;
-    border-right: 1px solid #d2d2d2;
+    border-right: 1px solid #eaeaea;
 }
 
 /*=== topic ====*/
 
 .search-res-topic-wrapper{
-    border-bottom: 1px solid #d2d2d2;
-    border-right: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
 }
 
 /*== post ==*/
 .search-post-wrapper{
-    border-bottom: 1px solid #d2d2d2;
-    border-right: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
 }
 
 .search-post-wrapper .post-img{
@@ -29,7 +29,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     background-color: #ffffff;
 }
 
@@ -106,9 +106,9 @@
 /*== search filter ==*/
 
 /* .search-filter{
-    border-bottom: 1px solid #d2d2d2;
-    border-left: 1px solid #d2d2d2;
-    border-right: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
     padding: 18px;
     margin-bottom: 40px;
 } */
@@ -141,7 +141,7 @@
 /*== people ==*/
 
 .search-people-wrapper{
-    border-right:1px solid #d2d2d2;
-    border-left:1px solid #d2d2d2;
-    border-bottom:1px solid #d2d2d2;
+    border-right:1px solid #eaeaea;
+    border-left:1px solid #eaeaea;
+    border-bottom:1px solid #eaeaea;
 }

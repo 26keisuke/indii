@@ -130,7 +130,7 @@ const Input = styled.form`
     & > input {
         width: ${props => String(props.width) + "px"};
         border: none;
-        border-bottom: 1px solid #d2d2d2;
+        border-bottom: 1px solid #eaeaea;
         font-size: 13px;
     }
 

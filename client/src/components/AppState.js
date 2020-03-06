@@ -124,6 +124,9 @@ class AppState extends Component {
     
                 case "DRAFT_UPLOAD_CHECK":
                     this.props.uploadDraft(index); break
+
+                case "CONFIRM_DRAFT":
+                    this.props.confirmDraft(value); break
     
                 case "DELETE_REF":
                     this.props.deleteRef(id); break

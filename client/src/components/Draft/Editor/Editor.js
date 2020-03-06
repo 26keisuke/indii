@@ -12,8 +12,14 @@ import * as actions from "../../../actions"
 import Screen from "../../Util/Screen"
 import TextArea from "../TextArea/TextArea"
 import Tool from "../Tool/Tool"
+import Back from "../../Util/Back"
 
 import { renderType } from "../../Util/util"
+
+const BackWrapper = styled.div`
+    top: 9px;
+    position: absolute;
+`
 
 const EditorNavi = styled.div`
     display: flex;
@@ -28,15 +34,21 @@ const EditorNavi = styled.div`
 
 const EditorTop = styled.div`
     height: 100%;
+    box-shadow: 1px 1px 10px #d2d2d2;
+    padding: 20px 0px;
+    margin-top: 13px;
+
     & > div:nth-child(1) {
-        position: absolute;
-        height:30px;
-        top:33px;
-        padding-bottom: 5px;
-        width: 100%;
-        left: -1px;
-        background-color: #ffffff;
-        border-bottom: 1px solid #d2d2d2;
+
+    }
+
+    & > div:nth-child(2) {
+        display: flex;
+        justify-content: center;
+    }
+
+    & > div:nth-child(3) {
+        margin-top: 10px;
         display: flex;
         justify-content: center;
 
@@ -175,7 +187,19 @@ class Editor extends Component {
 
     renderLeft() {
         return (
+           
             <EditorTop>
+                <BackWrapper>
+                    <Back
+                        back={() => this.props.history.goBack()}
+                        name="下書き一覧へ戻る"
+                    />
+                </BackWrapper>
+                <div>
+                    <EditorNavi>
+                        <Hopper type={renderType(this.state.draft.type)} name={this.state.draft.topicName} link={`/topic/${this.state.draft.topic}`}/>
+                    </EditorNavi>
+                </div>
                 <div>
                     <div>
                         <p>{this.state.draft.postName}</p>
@@ -204,8 +228,8 @@ class Editor extends Component {
 
     render() {
         return(
-            <Screen withBack={true} space={false}>
-                {this.renderTitle()}
+            <Screen withBack={true} space={false} post={true} noHeader={true} noHeaderSpace={true} noBorder={true}>
+                {/* {this.renderTitle()} */}
                 {this.renderLeft()}
                 {this.renderRight()}
             </Screen>

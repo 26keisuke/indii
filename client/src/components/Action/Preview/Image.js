@@ -1,9 +1,8 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 
-import { PreviewImg } from "../Controller/Image"
-
 import { Space } from "../../Theme"
+import Preview from "../../Util/Preview"
 
 class Image extends Component {
     render () {
@@ -26,25 +25,23 @@ class Image extends Component {
 
                 { flag && <Text>After:</Text> }
 
-                <PreviewImg mobile={true}>
-                    <p>モバイルでの表示</p>
-                    <div/>
-                    <img 
-                        src={mobileImg} 
-                        alt={"変更が適用された後のモバイル用のトピックの画像プレビュー"}/>
-                </PreviewImg>
+                <Preview
+                    placeholder="モバイルでの表示"
+                    mobile={true}
+                    display={mobileImg}
+                    alt="変更が適用された後のモバイル用のトピックの画像プレビュー"
+                />
 
                 { flag && <Space height={"30px"}/> }
                 { flag && <Text>Before:</Text> }
                 
                 { flag &&
-                <PreviewImg mobile={true}>
-                    <p>モバイルでの表示</p>
-                    <div/>
-                    <img 
-                        src={originalMobileImg} 
-                        alt={"変更が適用された後のモバイル用のトピックの画像プレビュー"}/>
-                </PreviewImg>
+                <Preview
+                    placeholder={"モバイルでの表示"}
+                    mobile={true}
+                    display={originalMobileImg}
+                    alt="変更が適用された後のモバイル用のトピックの画像プレビュー"
+                />
                 }
 
                 {/* トピック */}
@@ -52,27 +49,24 @@ class Image extends Component {
                 { flag && <Space height={"30px"}/> }
                 { flag && <Text>After:</Text> }
 
-                <PreviewImg topic={true}>
-                    <p>トピック画面での表示</p>
-                    <div/>
-                    <img 
-                        src={squareImg} 
-                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
-                    />
-                </PreviewImg>
+                <Preview
+                    placeholder={"トピック画面での表示"}
+                    mobile={true}
+                    display={squareImg}
+                    alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
+                />
 
                 { flag && <Space height={"30px"}/> }
                 { flag && <Text>Before:</Text> }
                 
                 { flag && 
-                <PreviewImg topic={true}>
-                    <p>トピック画面での表示</p>
-                    <div/>
-                    <img 
-                        src={originalSquareImg} 
-                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
-                    />
-                </PreviewImg>
+
+                <Preview
+                    placeholder={"トピック画面での表示"}
+                    mobile={true}
+                    display={originalSquareImg}
+                    alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
+                />
                 }
 
                 {/* ポスト */}
@@ -80,27 +74,24 @@ class Image extends Component {
                 { flag && <Space height={"30px"}/> }
                 { flag && <Text>After:</Text> }
 
-                <PreviewImg>
-                    <p>ポスト画面での表示</p>
-                    <div/>
-                    <img 
-                        src={rectangleImg} 
-                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
-                    />
-                </PreviewImg>
+                <Preview
+                    placeholder={"ポスト画面での表示"}
+                    mobile={true}
+                    display={rectangleImg}
+                    alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
+                />
 
                 { flag && <Space height={"30px"}/> }
                 { flag && <Text>Before:</Text> }
                 
                 { flag &&
-                <PreviewImg>
-                    <p>ポスト画面での表示</p>
-                    <div/>
-                    <img 
-                        src={originalRectangleImg} 
-                        alt={"変更が適用された後のウェブ用のトピックの画像プレビュー"}
-                    />
-                </PreviewImg>
+
+                <Preview
+                    placeholder={"ポスト画面での表示"}
+                    mobile={true}
+                    display={originalRectangleImg}
+                    alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
+                />
                 }
 
             </PreviewColumn>

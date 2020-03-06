@@ -4,7 +4,7 @@ import styled from "styled-components"
 const AddColumnInput = styled.input`
     width: 90%;
     border: none;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     margin-top: 10px;
     font-size: 13px;
     margin-bottom: 18px;

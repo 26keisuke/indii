@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
-import BraftEditor from 'braft-editor'
 
 import * as actions from "../../actions"
 
@@ -9,6 +8,7 @@ import sample from "../../images/sample1.png"
 import sample0 from "../../images/sample0.jpg"
 import account from "../../images/account.png"
 
+import Textarea from "./Textarea/Textarea"
 import { SlashTitle } from "../Feed/Trend/Trend"
 import People from "../People/People"
 import Screen from "../Util/Screen"
@@ -19,7 +19,6 @@ import SkeletonBox from "./Skeleton/SkeletonBox"
 import Image from "./Image/Image"
 import Slider from "./Slider/Slider"
 // import Navigation from "./Navigation/Navigation"
-import Response from "../Util/Response"
 
 class Post extends Component {
     
@@ -32,22 +31,11 @@ class Post extends Component {
             <LeftWrapper>
                 { this.props.post.fetched.content
                 ? 
-                <div>
-                    <HeaderTitle>
-                        {this.props.post.fetched.postName}
-                    </HeaderTitle>
-                    <HeaderUnderline/>
-                    <BraftEditor
-                        controls={[]}
-                        readOnly={true}
-                        value={BraftEditor.createEditorState(this.props.post.fetched.content)}
-                        contentClassName="post-braft"
-                    />
-                    <Response
-                        postId={this.props.post.fetched._id}
-                        wrapperStyle={wrapperStyle}
-                    />
-                </div>
+                <Textarea
+                    postName={this.props.post.fetched.postName}
+                    content={this.props.post.fetched.content}
+                    postId={this.props.post.fetched._id}
+                />
                 :      
                 <SkeletonBox/>
                 }   
@@ -70,7 +58,7 @@ class Post extends Component {
                 <TitleWrapper>
                     <SlashTitle>
                         <p>このポストの著者</p>
-                        <p>{"//////////////////////////////"}</p>
+                        <p>{"//////////////////////"}</p>
                     </SlashTitle>
                 </TitleWrapper>
                 <People
@@ -84,7 +72,7 @@ class Post extends Component {
                 <TitleWrapper>
                     <SlashTitle>
                         <p>参照</p>
-                        <p>{"////////////////////////////////////////"}</p>
+                        <p>{"///////////////////////////////"}</p>
                     </SlashTitle>
                 </TitleWrapper>
                 <ListWrapper>
@@ -96,7 +84,7 @@ class Post extends Component {
                 <TitleWrapper>
                     <SlashTitle>
                         <p>関連するポスト</p>
-                        <p>{"////////////////////////////////"}</p>
+                        <p>{"///////////////////////"}</p>
                     </SlashTitle>
                 </TitleWrapper>
                 <Recommend
@@ -129,7 +117,7 @@ class Post extends Component {
 
     render() {
         return (
-            <Screen space={false} noHeader={true}>
+            <Screen space={false} noHeader={true} post={true} noBorder={true}>
                 {this.renderLeft()}
                 {this.renderRight()}
             </Screen>
@@ -137,15 +125,12 @@ class Post extends Component {
     }
 }
 
-const wrapperStyle= {
-    display: "flex",
-    justifyContent: "space-around",
-}
-
 const LeftWrapper = styled.div`
     padding: 28px 75px;
     background-color: #ffffff;
     margin-top: -10px;
+
+    box-shadow: 1px 1px 3px #eaeaea;
 `
 
 const TitleWrapper = styled.div`
@@ -154,19 +139,6 @@ const TitleWrapper = styled.div`
 
 const ListWrapper = styled.div`
     margin-left: -10px;
-`
-
-const HeaderTitle = styled.h1`
-    color: #222222;
-    font-size: 18px;
-    text-align: center;
-`
-
-const HeaderUnderline = styled.div`
-    border-bottom: 1px solid #d2d2d2;
-    width: 50px;
-    margin: 0 auto;
-    margin-top: 8px;
 `
 
 function mapStateToProps(state) {

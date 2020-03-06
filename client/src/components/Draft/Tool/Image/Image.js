@@ -2,8 +2,8 @@ import React, { Component } from "react"
 import styled from "styled-components"
 
 import Upload from "../../../Util/Upload"
-import { PreviewElement } from "../../../Action/Controller/Image"
 import Crop from "../../../Util/Crop"
+import Preview from "../../../Util/Preview"
 
 class Image extends Component {
     render () {
@@ -14,14 +14,10 @@ class Image extends Component {
             <Wrapper>
                 <UploadWrapper>
                     <PreviewWrapper>
-                        <PreviewElement hide={!display}>
-                            <p>プレビュー</p>
-                            <div/>
-                            <img 
-                                src={display} 
-                                alt={"ウェブ用のトピックの画像プレビュー"}
-                            />
-                        </PreviewElement>
+                        <Preview
+                            display={display}
+                            post={true}
+                        />
                     </PreviewWrapper>
                     <Upload
                         message="ここに画像をドラッグするか、ボックスをクリックしてください"
@@ -41,7 +37,7 @@ class Image extends Component {
                         setUrl={setUrl}
                         crop={crop}
                         config={config}
-                        style={{ marginTop: "10px", width: "323px", border: "1px solid #d2d2d2", boxSizing: "border-box" }}
+                        style={{ marginTop: "10px", width: "323px", border: "1px solid #eaeaea", boxSizing: "border-box" }}
                         imageStyle={{ width: "324px" }}
                     />
                 </CropWrapper>
@@ -60,7 +56,7 @@ const UploadWrapper = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    
+    flex-direction: column;
 `
 
 const CropWrapper = styled.div`
@@ -78,8 +74,9 @@ const baseStyle = {
     flexDirection: 'column',
     textAlign: "center",
     alignItems: 'center',
-    padding: '45px 10px',
-    width: "160px",
+    padding: "0px 10px",
+    paddingTop: "15px",
+    width: "270px",
     maxHeight: "52px",
     minHeight: "52px",
     borderWidth: 2,

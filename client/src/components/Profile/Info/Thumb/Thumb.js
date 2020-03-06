@@ -3,8 +3,7 @@ import styled, { css } from "styled-components"
 
 import Upload from "../../../Util/Upload"
 import Crop from "../../../Util/Crop"
-import { PreviewElement } from "../../../Action/Controller/Image"
-
+import Preview from "../../../Util/Preview"
 
 class Thumb extends Component {
 
@@ -36,14 +35,10 @@ class Thumb extends Component {
         return (
             <div>
                 <Wrapper>
-                    <PreviewElement hide={!display}>
-                        <p>プレビュー</p>
-                        <div/>
-                        <img 
-                            src={display} 
-                            alt={"プロフィール画像の画像プレビュー"}
-                        />
-                    </PreviewElement>
+                    <Preview
+                        display={display}
+                        alt="プロフィール画像の画像プレビュー"
+                    />
                     <CropWrapper hide={!file.preview}>
                         <Crop
                             file={file}
@@ -55,7 +50,7 @@ class Thumb extends Component {
                                 y: 0,
                             }}
                             config={"profileImg"}
-                            style={{ marginTop: "10px", maxWidth: "300px", maxHeight: "300px", border: "1px solid #d2d2d2", boxSizing: "border-box" }}
+                            style={{ marginTop: "10px", maxWidth: "300px", maxHeight: "300px", border: "1px solid #eaeaea", boxSizing: "border-box" }}
                         />
                     </CropWrapper>
                     {

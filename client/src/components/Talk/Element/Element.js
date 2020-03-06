@@ -9,7 +9,7 @@ const TalkElement = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     background-color: #ffffff;
 
     &:hover {

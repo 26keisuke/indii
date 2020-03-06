@@ -18,7 +18,7 @@ const Title = styled.p`
 // const RightInsideTitle = styled.div`
 //     height:35px;
 //     padding-left:30px;
-//     border: 1px solid #d2d2d2;
+//     border: 1px solid #eaeaea;
 //     font-size: 16px;
 //     display: flex;
 //     align-items: center;

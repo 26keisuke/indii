@@ -34,7 +34,7 @@ const Row = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     padding-bottom: 3px;
 `
 

@@ -96,9 +96,9 @@ const SelectBar = styled.div`
         left: -30px;
         top: 0px;
         background-color: #9EAEE5;
+        opacity: 0.1;
         width: 187px;
         height: 45px;
-        opacity: 0.3;
         border-top-right-radius: 22px;
         border-bottom-right-radius: 22px;
     `}
@@ -115,7 +115,7 @@ const ListWrapper = styled.div`
         top:56px;
         bottom:0px;
         position: fixed;
-        box-shadow: 1px 1px 3px #d2d2d2;
+        box-shadow: 1px 1px 3px #eaeaea;
         z-index:1;
     `};
 
@@ -175,10 +175,10 @@ const ListElement = styled(Link)`
         position: absolute;
         left: -30px;
         top: 0px;
-        background-color: #9EAEE5;
+        background-color: gainsboro;
+        opacity: 0.3;
         width: 187px;
         height: 45px;
-        opacity: 0.1;
         border-top-right-radius: 22px;
         border-bottom-right-radius: 22px;
     }

@@ -49,12 +49,12 @@ export const PreviewConfig = styled.div`
             `
             : css`
                 right: 20px; 
-                background-color: #d2d2d2;
+                background-color: #eaeaea;
             `};
         }
 
         & > div {
-            border: 1px solid #d2d2d2;
+            border: 1px solid #eaeaea;
             width: 48px;
             height: 30px;
             border-radius: 50px;

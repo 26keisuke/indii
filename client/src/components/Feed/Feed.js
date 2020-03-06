@@ -19,8 +19,8 @@ const FeedInsideHeader = styled.div`
     display: flex;
     align-items: center;
     padding-left: 35px;
-    border-top: 1px solid #d2d2d2;
-    border-bottom: 1px solid #d2d2d2;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
 
     & > p {
         font-size: 14px;
@@ -28,7 +28,7 @@ const FeedInsideHeader = styled.div`
 `
 
 const PeopleWrapper = styled.div`
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid #eaeaea;
     background-color: #ffffff;
 `
 
@@ -45,7 +45,7 @@ class Feed extends Component {
     renderLeft = () => {
         return(
             <div>
-                <div style={{borderBottom: "1px solid #d2d2d2"}}/>
+                <div style={{borderBottom: "1px solid #eaeaea"}}/>
                 {Object.keys(this.props.post.feed).length > 0
                 ?
                     this.props.post.feed.map(elem => 
@@ -65,7 +65,13 @@ class Feed extends Component {
                         />
                     )
                 :
-                    <PostFeed skeleton={true}/>
+                    ([
+                    <PostFeed key={"s1"} skeleton={true}/>
+                    ,
+                    <PostFeed key={"s2"} skeleton={true}/>
+                    ,
+                    <PostFeed key={"s3"} skeleton={true}/>
+                    ])
                 }
                 <FeedSpace/>
                 <FeedInsideHeader>

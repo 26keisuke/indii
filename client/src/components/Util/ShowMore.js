@@ -24,7 +24,7 @@ const Action = styled.div`
 
     & p {
         padding: 12px 20px;
-        border-bottom: 0.5px solid #d2d2d2;
+        border-bottom: 0.5px solid #eaeaea;
         cursor: pointer;
 
         &:hover {

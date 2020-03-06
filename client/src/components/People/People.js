@@ -8,7 +8,7 @@ import PeopleFollow from "../PeopleFollow"
 const PeopleElement = styled.div`
 
     padding: 15px;
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: 1px 1px 10px #eaeaea;
     border-radius: 4px;
     cursor: pointer;
 
@@ -17,6 +17,10 @@ const PeopleElement = styled.div`
         margin: 0px 1px;
         cursor: default;
         min-height: 51px;
+
+        & > span {
+            width: 100%;
+        }
     }
 
     & > div {
@@ -86,7 +90,7 @@ class People extends Component {
                         </div>
                         }
                     </div>
-                    {this.props.skeleton ? <p><Skeleton count={4} width={330} height={18}/></p> : <p>{this.props.intro}</p>}
+                    {this.props.skeleton ? <p><Skeleton count={4} height={17}/></p> : <p>{this.props.intro}</p>}
                 </PeopleElement>
             </Link>
         )

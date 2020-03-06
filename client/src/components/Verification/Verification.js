@@ -202,7 +202,7 @@ const VerifyPage = styled.div`
         display: flex;
         flex-direction: row;
         align-items: center;
-        border-bottom: 1px solid #d2d2d2;
+        border-bottom: 1px solid #eaeaea;
         padding-left: 300px;
 
         & > img {
