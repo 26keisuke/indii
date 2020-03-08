@@ -239,7 +239,7 @@ router.get("/notif/:notifId", (req, res) => {
     User.findById(req.user.id)
     .populate("notif.user")
     .populate({path: "notif.post", populate: [{path: "topicSquareImg"}, {path: "topic"}, {path: "creator"}, {path: "postImg"}]})
-    .populate({path: "notif.draft", populate: {path: "editLastEditedAuthor"}})
+    .populate({path: "notif.draft", populate: [{path: "editLastEditedAuthor"}, {path: "postImg"}]})
     .then(user => {
         for(var i=0; i < user.notif.length; i++){
             if(String(user.notif[i]._id) === String(req.params.notifId)){

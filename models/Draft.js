@@ -27,8 +27,42 @@ const draftSchema = new Schema({
     isValid: {type: Boolean, default: true}, // 同じタイトルのコンテンツが他のユーザーによって投稿された場合
     isDeleted: {type: Boolean, default: false},
     isUploaded: {type: Boolean, default: false},
+    isApproved: {type: String, enum: ["APPROVE", "REJECT", "WAIT"], default: "WAIT"},
+
+
+    ref: [{
+        refType: String,
+        title: String,
+        url: String,
+        author: String,
+        postDate: String,
+        website: String,
+        source: String,
+        date: String,
+        publishDate: String,
+        publisher: String,
+        isbnurl: String,
+        page: String,
+        doi: String,
+        bookTitle: String,
+        chapterTitle: String,
+        editor: String,
+        heldDate: String,
+        conferenceName: String,
+        creator: String,
+        creatorUrl: String, 
+        sourceUrl: String,
+        licenseName: String,
+        licenseUrl: String,
+        licenseHolder: String,
+        licenseDate: String,
+        isDeleted: {type: Boolean, default: false},
+    }],
 
     // 他のユーザーのポストをedit時のみに使うもの
+    editPostName: String,
+    editContent: String,
+    editPostImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     editPostId: { type: mongoose.Schema.Types.ObjectId, ref: "Post"}, 
     editCreator: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     editCreationDate: Date,
@@ -36,13 +70,10 @@ const draftSchema = new Schema({
     editLastEditedAuthor: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
     editIsConfirmed: {type: Boolean, default: false}, // こいつはallowEditの時に必要。後処理としてのログ。
     editUploadedDate: Date,
-    // editContribution: [{
-    //     timeStamp: Date,
-    //     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    // }],
+    editConfirmedDate: Date,
     editIndex: [Number],
-
-    ref: [{
+    editComment: "",
+    editRef: [{
         refType: String,
         title: String,
         url: String,

@@ -25,7 +25,10 @@ import profile from "./routes/profile"
 import topic from "./routes/topic"
 import post from "./routes/post"
 
-mongoose.connect(keys.mongoURI, err => {
+mongoose.connect(keys.mongoURI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+}, err => {
     if (err){
         console.error(err)
     } else {

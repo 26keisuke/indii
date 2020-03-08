@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
+import BraftEditor from 'braft-editor'
 
 class Recommend extends Component {
 
@@ -13,7 +14,7 @@ class Recommend extends Component {
             <TrendElement to={`/post/${this.props.id}`}>
                 <div>
                     { flag ? <p>{this.props.title}</p> : <p><Skeleton height={16} width={120}/></p>}
-                    { flag ? <p>{this.props.content}</p> : <p><Skeleton height={12} width={140} count={4}/></p>}
+                    { flag ? <p>{BraftEditor.createEditorState(this.props.content).toText().replace(/a\s/g, "").substring(0, 100)}</p> : <p><Skeleton height={12} width={140} count={4}/></p>}
                     <TrendInfo>
                         <TrendAuthor>
                             { flag ? <img src={this.props.authorImg} alt={"ポストの作成者の写真"}/> : <section><Skeleton width={27} height={27}/></section>}

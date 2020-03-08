@@ -38,13 +38,13 @@ router.post("/upload", (req, res) => {
 
     const { draftId, index, addColumn } = req.body.value
 
-    Draft.findById(draftId)
+    Draft.findById(draftId).populate("postImg").populate("editCreator")
         .then(draft => {
 
             const now = Date.now()
 
             if(draft.type !== "New") {
-                if(draft.config.allowEdit === false){
+                if((draft.config.allowEdit === false) && (draft.editCreator._id !== req.user.id)){
                     User.findById(draft.editCreator)
                     .then(user => {
 
@@ -68,7 +68,7 @@ router.post("/upload", (req, res) => {
 
                     if(post.postImg !== draft.postImg) {
                         const imgId = mongoose.Types.ObjectId()
-                        new Image({_id: imgId, image: draft.postImg}).save()
+                        new Image({_id: imgId, image: draft.postImg.image}).save()
                         post.postImg = imgId
                     }
 
@@ -81,7 +81,7 @@ router.post("/upload", (req, res) => {
 
                         topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST"})
 
-                        topic.save()
+                        topicElem.save()
                         post.save()
                         draft.save()
 
@@ -268,50 +268,85 @@ router.post("/edit", (req, res) => {
     const now = Date.now();
     const { draftId, accept, comment, feedback } = req.body
 
-    Draft.findById(draftId)
+    Draft.findById(draftId).populate("postImg")
     .then(draft => {
         if(accept){
             Post.findById(draft.editPostId)
             .then(post => {
-                //==========================
-                //==========================
-                //==========================
-                //==========================
-                // draft.postImgがundefinedになっている！！
-                //==========================
-                //==========================
-                //==========================
-                //==========================
-                console.log(post.postName, draft.postImg)
+
                 post.lastEdited = now
                 post.contribution.push({ timeStamp: now, user: draft.user})
                 post.postName = (post.postName !== draft.postName) ? draft.postName : post.postName
-                if(!equal(post.postImg, draft.postImg)){
+                post.content = (post.content !== draft.content) ? draft.content : post.content
 
-                    // const imgId = mongoose.Types.ObjectId();
+                if(draft.postImg && !equal(post.postImg, draft.postImg.image)){
 
-                    // if(postImg){
-                    //     new Image({_id: imgId, image: draft.postImg}).save()
-                    // }
+                    const imgId = mongoose.Types.ObjectId();
+                    new Image({_id: imgId, image: draft.postImg.image}).save();
+
+                    post.postImg = imgId;
 
                 }
 
+                if(!equal(post.ref, draft.ref)){
+                    post.ref = draft.ref
+                }
+
+                User.findById(draft.user)
+                .then(user => {
+                    user.notif.push({
+                        timeStamp: now,
+                        type: "POST_EDIT_FEEDBACK",
+                        user: req.user.id,
+                        emoji: feedback,
+                        draft: draftId, // これはallowEditがfalseの場合に必要
+                        post: post._id,
+                        topic: post.topic,
+                        comment: comment, // これはPOST_EDIT_FEEDBACKの時のみ必要
+                        isApproved: accept, // これはPOST_EDIT_FEEDBACKの時のみ必要
+                    })
+
+                    draft.isApproved = "APPROVE";
+                    draft.editConfirmedDate = now;
+                    draft.comment = comment;
+
+                    Topic.findById(post.topic)
+                    .then(topicElem => {
+
+                        topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST"})
+
+                        topicElem.save()
+                        draft.save();
+                        post.save();
+                        user.save();
+
+                        res.send(accept)
+                        return
+                    })
+                })
+            })
+        } else {
+            User.findById(draft.user)
+            .then(user => {
+                user.notif.push({
+                    timeStamp: now,
+                    type: "POST_EDIT_FEEDBACK",
+                    user: req.user.id,
+                    emoji: feedback,
+                    draft: draftId, // これはallowEditがfalseの場合に必要
+                    comment: comment, // これはPOST_EDIT_FEEDBACKの時のみ必要
+                    isApproved: accept, // これはPOST_EDIT_FEEDBACKの時のみ必要
+                })
+
+                draft.isApproved = "REJECT";
+                draft.editConfirmedDate = now;
+
+                draft.save();
+                user.save();
+
+                res.send(accept)
             })
         }
-
-        User.findById(draft.user)
-        .then(user => {
-            console.log(user.userName)
-            user.notif.push({
-                timeStamp: now,
-                type: "POST_EDIT_FEEDBACK",
-                user: req.user.id,
-                emoji: feedback,
-                draft: draftId, // これはallowEditがfalseの場合に必要
-                comment: comment, // これはPOST_EDIT_FEEDBACKの時のみ必要
-                isApproved: accept, // これはPOST_EDIT_FEEDBACKの時のみ必要
-            })
-        })
 
     })
     .catch(err => {

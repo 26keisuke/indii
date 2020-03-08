@@ -52,7 +52,9 @@ class Post extends Component {
 
         return(
             <div>
-                <Image/>
+                <Image
+                    id={this.props.post.fetched.topic && this.props.post.fetched.topic._id}
+                />
                 {/* <Navigation/> */}
                 <Slider/>
                 <TitleWrapper>
@@ -126,7 +128,7 @@ class Post extends Component {
 }
 
 const LeftWrapper = styled.div`
-    padding: 28px 75px;
+    padding: 28px 65px;
     background-color: #ffffff;
     margin-top: -10px;
 

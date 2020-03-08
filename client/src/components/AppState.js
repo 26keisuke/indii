@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { connect } from "react-redux"
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import { withRouter } from "react-router-dom"
 
 import Message from "./Util/Message"
 // import Loading from "./Util/Loading"
@@ -126,7 +127,7 @@ class AppState extends Component {
                     this.props.uploadDraft(index); break
 
                 case "CONFIRM_DRAFT":
-                    this.props.confirmDraft(value); break
+                    this.props.confirmDraft(value); this.props.history.push("/notification"); break
     
                 case "DELETE_REF":
                     this.props.deleteRef(id); break
@@ -233,4 +234,4 @@ function mapStateToProps({ update, auth }){
     }
 }
 
-export default connect(mapStateToProps, actions)(AppState)
+export default connect(mapStateToProps, actions)(withRouter(AppState))

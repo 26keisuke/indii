@@ -2,18 +2,20 @@ import React, { Component } from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
 import Skeleton from "react-loading-skeleton"
+import { Link } from "react-router-dom"
+
+import { FaHashtag } from "react-icons/fa"
 
 class Image extends Component {
 
     render () {
 
-        // if(this.props.post.fetched.topic) {
-
-        if(this.props.sdmfksakdmf){
+        if(this.props.post.fetched.topic) {
 
             const { topicName, tags, rectangleImg } = this.props.post.fetched.topic
 
             return (
+                <Link to={`/topic/${this.props.id}`}>
                     <ImageBox>
                         <Overlay/>
                         <Container src={rectangleImg.image}/>
@@ -21,7 +23,8 @@ class Image extends Component {
                             {
                                 tags.map(tag => 
                                     <div key={tag}>
-                                        <p># {tag}</p>
+                                        <TagIcon/>
+                                        <p>{tag}</p>
                                     </div>
                                 )
                             }
@@ -29,6 +32,7 @@ class Image extends Component {
                         <Title>{topicName}</Title>
                         <Content>桶狭間の戦い（おけはざまのたたかい）は、日本の戦国時代の永禄3年5月19日（1560年6月12日）に尾張国桶狭間で行われた。</Content>
                     </ImageBox>
+                </Link>
             )
         } 
 
@@ -39,6 +43,11 @@ class Image extends Component {
         )
     }
 }
+
+const TagIcon = styled(FaHashtag)`
+    transform: scale(0.8);
+    margin-right: 2px;
+`
 
 const ImageBox = styled.div`
     position: relative;
@@ -68,7 +77,7 @@ const ImageBox = styled.div`
     }
 
     &:hover > p:nth-child(5) {
-        top:118px;
+        top:100px;
     }
 `
 
@@ -90,6 +99,7 @@ const Overlay = styled.div`
 `
 
 const Tag = styled.div`
+    transform: scale(0.9);
     position: absolute;
     display: flex;
     flex-direction: row;
@@ -106,9 +116,10 @@ const Tag = styled.div`
         justify-content: center;
         align-items: center;
         margin-right: 10px;
-        background-color: #626480;
-        padding: 1px 10px;
-        border-radius: 15px;
+        /* background-color: #626480; */
+        border: 1px solid white;
+        padding: 1px 8px;
+        border-radius: 3px;
         font-size: 10px;
     }
 `
@@ -125,7 +136,7 @@ const Title = styled.h2`
 
 const Content = styled.p`
     position: absolute;
-    top: 240px;
+    top: 179px;
     left: 20px;
     margin-left: -2px;
     color: white;

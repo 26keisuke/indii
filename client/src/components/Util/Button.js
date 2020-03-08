@@ -10,6 +10,8 @@ const Button = styled.button`
     color: ${props => props.inverse ? "#636480" : "#ffffff"};
     outline: 0;
     width: ${props => props.width ? props.width : "auto"}; 
+    display: flex;
+    align-items: center;
 
     opacity: ${props => props.disabled && 0.2};
 `

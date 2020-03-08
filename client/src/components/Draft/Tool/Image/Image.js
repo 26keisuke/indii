@@ -60,7 +60,7 @@ const UploadWrapper = styled.div`
 `
 
 const CropWrapper = styled.div`
-    margin-left: 19px;
+    /* margin-left: 19px; */
     margin-bottom: 25px;
 `
 

@@ -124,11 +124,9 @@ class DraftAction extends Component {
     }
 
     render () {
-
         return (
-
             <DraftBox>
-                <Separator top="150px"/>
+                <Separator top="132px"/>
                 {this.renderDraft()}
                 <Separator bottom="48px"/>
             </DraftBox>

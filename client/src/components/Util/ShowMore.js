@@ -31,10 +31,18 @@ const Action = styled.div`
             background-color: rgba(28,28,28,0.1);
         }
 
+        &:first-child{
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+
         &:last-child {
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
             border-bottom: none;
         }
     }
+
 `
 
 const ShowBox = styled(HoverIcon)`

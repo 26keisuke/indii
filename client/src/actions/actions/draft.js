@@ -123,10 +123,14 @@ export const deleteRef = (id) => async (dispatch) => {
 }
 
 export const confirmDraft = (value) => async (dispatch) => {
+    dispatch(isFetching())
     const url = `/api/draft/edit`
     axios.post(url, value)
     .then(res => {
-        console.log(res)
+        const msg = res.data === true ? "リクエストを承認しました。" : "リクエストを拒否しました。"
+        dispatch(updateMessage("success", msg))
+        dispatch(endFetching())
+        return;
     })
     .catch(err => {
         console.log(err)

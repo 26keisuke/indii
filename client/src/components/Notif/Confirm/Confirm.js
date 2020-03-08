@@ -5,6 +5,7 @@ import { MdFeedback } from "react-icons/md"
 import { FiMinus } from "react-icons/fi"
 import { connect } from "react-redux"
 import { withRouter } from "react-router";
+import { IoIosDocument } from "react-icons/io"
 
 import * as actions from "../../../actions"
 
@@ -31,6 +32,8 @@ import Recommend from "../../Util/Recommend"
 import Textarea from "../../Post/Textarea/Textarea"
 import SkeletonBox from "../../Post/Skeleton/SkeletonBox"
 import People from "../../People/People"
+import Ribbon from "../../Util/Ribbon"
+import List from "../../Draft/Tool/List/List"
 
 import { fmtDate } from "../../Util/util"
 
@@ -180,10 +183,9 @@ class Setting extends Component {
         const message = `編集リクエストを${text}してよろしいですか？`;
         const caution = "";
         const buttonMessage = "送信する";
-        const value = {draftId, feedback: this.state.feedback, comment: this.state.textareaValue, accept}
+        const value = {draftId, feedback: Object.keys(this.state.feedback)[0], comment: this.state.textareaValue, accept}
         this.props.showConfirmation(id, action, title, caution, message, buttonMessage, "", value);
         this.props.enableGray();
-
     }
 
 
@@ -198,26 +200,32 @@ class Setting extends Component {
         var post = notifId.post || {}
         // var topic = post.topic || {}
 
+        var feedback = draft.comment || "仮のvalueを入力しています。後で消してください。"
+
         var { photo, userName, comment, intro } = user
-        var { editLastEditedAuthor } = draft
+        var { editLastEditedAuthor, isApproved } = draft
         // var { editLastEdited, editLastEditedAuthor, editUploadedDate } = draft
         // var { topicName, tags, topicContent, postCount, likes } = topic
-        var { postName, lastEdited } = post
+        var { lastEdited } = post
+        var afterReference = draft.ref
+        var beforeReference = draft.editRef
 
-        var postImg = post.postImg || {}
         var topicSquareImg = post.topicSquareImg || {}
-
-        // console.log(postImg)
-        // console.log(topicSquareImg)
 
         var editLastEditedAuthor = draft.editLastEditedAuthor || {}
 
         // var tags = topic.tags || []
 
-        var beforePostName = post.postName
+        var nowPostImg = post.postImg || {}
+        var beforePostImg = draft.editPostImg || {}
+        var afterPostImg = draft.postImg || {}
+
+        var nowPostName = post.postName
+        var beforePostName = draft.editPostName
         var afterPostName = draft.postName
 
-        var beforeContent = post.content
+        var nowContent = post.content
+        var beforeContent = draft.editContent
         var afterContent = draft.content
 
         var userId = user._id
@@ -232,53 +240,57 @@ class Setting extends Component {
         return(
             <Wrapper>
 
-                <StepperFakeWrapper isOpened={this.state.isOpened}>
-                    <div onClick={() => this.setState({ isOpened: true })}>
-                        <FeedbackIcon/>
-                        <h3>フィードバックを返信</h3>
-                        <MinusIcon/>
-                    </div>
-                </StepperFakeWrapper>
+                { isApproved === "WAIT" && (creator._id === this.props.auth.info._id) &&
+                <div>
+                    <StepperFakeWrapper isOpened={this.state.isOpened}>
+                        <div onClick={() => this.setState({ isOpened: true })}>
+                            <FeedbackIcon/>
+                            <h3>フィードバックを返信</h3>
+                            <MinusIcon/>
+                        </div>
+                    </StepperFakeWrapper>
 
-                <StepperWrapper 
-                    isOpened={this.state.isOpened}
-                >
-                    <div onClick={() => this.setState({ isOpened: false })}>
-                        <FeedbackIcon/>
-                        <h3>フィードバックを返信</h3>
-                        <MinusIcon/>
-                    </div>
-                    <Stepper activeStep={this.state.currentStep} orientation="vertical">
-                        {steps.map((label, index) => {
-                            return(
-                                <Step key={label} completed={index < this.state.currentStep}>
-                                    <StepLabel>
-                                        {label}
-                                    </StepLabel>
-                                    <StepContent>
-                                        {this.getContent(index)}
-                                    </StepContent>
-                                </Step>
-                            )   
-                        })
-                        }
-                        <ButtonWrapper>
-                            <Button disabled={this.state.currentStep === 0} onClick={this.handleBack}>
-                                戻る
-                            </Button>
-                            { this.state.currentStep < 2 &&
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={this.handleNext}
-                                disabled={disableNext}
-                            >
-                                次へ
-                            </Button>
+                    <StepperWrapper 
+                        isOpened={this.state.isOpened}
+                    >
+                        <div onClick={() => this.setState({ isOpened: false })}>
+                            <FeedbackIcon/>
+                            <h3>フィードバックを返信</h3>
+                            <MinusIcon/>
+                        </div>
+                        <Stepper activeStep={this.state.currentStep} orientation="vertical">
+                            {steps.map((label, index) => {
+                                return(
+                                    <Step key={label} completed={index < this.state.currentStep}>
+                                        <StepLabel>
+                                            {label}
+                                        </StepLabel>
+                                        <StepContent>
+                                            {this.getContent(index)}
+                                        </StepContent>
+                                    </Step>
+                                )   
+                            })
                             }
-                        </ButtonWrapper>
-                    </Stepper>
-                </StepperWrapper>
+                            <ButtonWrapper>
+                                <Button disabled={this.state.currentStep === 0} onClick={this.handleBack}>
+                                    戻る
+                                </Button>
+                                { this.state.currentStep < 2 &&
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={this.handleNext}
+                                    disabled={disableNext}
+                                >
+                                    次へ
+                                </Button>
+                                }
+                            </ButtonWrapper>
+                        </Stepper>
+                    </StepperWrapper>
+                </div>
+                }
 
                 <Box>
                     <div>
@@ -298,8 +310,18 @@ class Setting extends Component {
 
                         <Space height={"26px"}/>
                         <Title>編集{before ? "前" : "後"}の内容</Title>
-                        
+
                         <TextWrapper>
+
+                            { isApproved === "APPROVE"
+                            ?
+                            <Ribbon success={true} content={"承認済み"}/>
+                            : isApproved === "REJECT"
+                            ?
+                            <Ribbon success={false} content={"拒否済み"}/>
+                            :
+                            ""
+                            }                            
 
                             { !(afterContent && beforeContent) && <SkeletonBox/> }
 
@@ -325,12 +347,12 @@ class Setting extends Component {
 
                         <Recommend
                             id={postId}
-                            title={postName}
-                            content={beforeContent}
+                            title={nowPostName}
+                            content={nowContent}
                             authorImg={creator.photo}
                             author={creator.userName}
                             editDate={fmtDate(lastEdited)}
-                            postImg={postImg.image || topicSquareImg.image}
+                            postImg={nowPostImg.image || topicSquareImg.image}
                         />
 
                         <SubTitle>{before ? "前回の編集者" : "今回の編集者"}</SubTitle>
@@ -356,6 +378,62 @@ class Setting extends Component {
                         />
                         }
 
+                    <Space height={"25px"}/>
+
+                    <SubTitle>{before ? "前回の" : "編集後の"}参照一覧</SubTitle>
+
+                    <div>
+                        {!before
+                        ?
+                        <List
+                            readOnly={true}
+                            reference={afterReference || []}
+                        />
+                        :
+                        <List
+                            readOnly={true}
+                            reference={beforeReference || []}
+                        />
+                        }
+                    </div>
+
+                    <Space height={"25px"}/>
+
+                    <ImageWrapper>
+                        <SubTitle>{before ? "前回の" : "編集後の"}メイン画像</SubTitle>
+                        { afterPostImg.image && !before 
+                        ?
+                        <img src={afterPostImg.image} alt={"編集後のポスト画像"}/>
+                        : beforePostImg.image && before 
+                        ?
+                        <img src={beforePostImg.image} alt={"編集前のポスト画像"}/>
+                        :
+                        ""
+                        }
+                    </ImageWrapper>
+
+                    <Space height={"25px"}/>
+
+                    { feedback && 
+                    <OwnerComment>
+                        <SubTitle>
+                            <Document/>
+                            オーナーからのコメント
+                        </SubTitle>
+
+                        <TextField
+                            id="outlined-multiline-flexible"
+                            multiline
+                            rowsMax="4"
+                            defaultValue={feedback}
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
+                    </OwnerComment>
+                    }
+
                     </div>
                 </Box>
                 <Space height={"300px"}/>
@@ -372,26 +450,46 @@ function findArrObjIndex(arr, lookUp, value){
     }
 }
 
+const OwnerComment = styled.div`
+    & > div {
+        width: 100%;
+    }
+`
+
+const Document = styled(IoIosDocument)`
+    color: #636480;
+    margin-right: 8px;
+`
+
 const Box = styled.div`
     display: flex;
 
     & > div:nth-child(1){
         min-width: 725px;
         max-width: 725px;
-        padding: 20px;
+        padding: 20px 0px;
     }
 
     & > div:nth-child(2){
-        width: 100%;
+        max-width: 300px;
         padding: 20px;
         padding-top: 13px;
     }
 `
 
+const ImageWrapper = styled.div`
+    & > img {
+        min-width: 292px;
+        max-width: 292px;
+    }
+`
+
 const TextWrapper = styled.div`
-    padding: 28px 75px;
+    padding: 28px 65px;
     background-color: #ffffff;
     box-shadow: 1px 1px 3px #eaeaea;
+    position: relative;
+    overflow: scroll;
 `
 
 const ToggleWrapper = styled.div`
@@ -403,7 +501,7 @@ const Title = styled.h1`
     font-size: 15px;
     position: absolute;
     top: 31px;
-    left: 358px;
+    left: 337px;
     text-align: center;
 `
 
@@ -411,6 +509,8 @@ const SubTitle = styled.h3`
     color: #4B4B4B;
     font-size: 13px;
     margin-bottom: 12px;
+    display: flex;
+    align-items: center;
 `
 
 const StepperFakeWrapper = styled.div`

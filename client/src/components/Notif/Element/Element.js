@@ -53,6 +53,10 @@ class Element extends Component {
         }   
     }
 
+    handleFeedback = () => {
+
+    }
+
     render() {
 
         const { user, timeStamp, type, checked } = this.props.notif
@@ -60,7 +64,7 @@ class Element extends Component {
         return(
             <Link to={renderUrl(this.props.notif, type)} onClick={this.handleClick}>
                 <Box>
-                    { !checked && <Check/> }
+                    { user.photo && !checked && <Check/> }
                     <Profile>
                         <Link to={`/profile/${user._id}`}>
                             { user.photo

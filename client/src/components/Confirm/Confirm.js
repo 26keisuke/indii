@@ -290,8 +290,6 @@ class Confirm extends Component {
 
     render () {
 
-        console.log(this.state.counter, this.state.currentStep, this.state.skipped)
-
         const { confirmation } = this.props.update
         const { id, action, title, caution, message, buttonMessage, next, transparent } = this.props.update.confirmation
         const { innerRef, postAction, update } = this.props
@@ -309,13 +307,15 @@ class Confirm extends Component {
                 <div ref={innerRef}>
 
                     { steps.length > 0 &&
-                    <Stepper nonLinear activeStep={this.state.currentStep} completed={this.state.counter === this.state.currentStep}>
-                        {steps.map(label => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
+                    <StepperWrapper>
+                        <Stepper nonLinear activeStep={this.state.currentStep} completed={this.state.counter === this.state.currentStep}>
+                            {steps.map(label => (
+                                <Step key={label}>
+                                    <StepLabel>{label}</StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                    </StepperWrapper>
                     }
 
                     {/* <ConfirmIcon onClick={() => postAction(action)}/> */}
@@ -376,6 +376,12 @@ const Fade = ({in: inProps, children, onExited, ...otherProps}) => {
         </Transition>
     )
 }
+
+const StepperWrapper = styled.div`
+    & .MuiStepper-root{
+        padding: 15px 24px !important;
+    }
+`
 
 const ConfirmButton = styled.div`
     align-self: flex-end;
