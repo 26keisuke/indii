@@ -225,7 +225,11 @@ class TopicPage extends Component {
                     />
                 </TopWrapper>
 
-                <Waypoint onEnter={() => this.setState({ trigger: false　})} onLeave={() => this.setState({ trigger: true })}>
+                <Waypoint 
+                    onEnter={() => this.setState({ trigger: false　})} 
+                    onLeave={() => this.setState({ trigger: true })}
+                    fireOnRapidScroll
+                >
                     <Gap/>
                 </Waypoint>
 
