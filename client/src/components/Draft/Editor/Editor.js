@@ -230,7 +230,7 @@ class Editor extends Component {
         return(
             <div>
                 <Helmet>
-                    <title>"{this.state.draft.postName}"の編集 | Indii</title>
+                    <title>`"{this.state.draft.postName}"の編集` | Indii</title>
                     <meta name="description" content={`"${this.state.draft.postName}"の${renderType(this.state.draft.type)}をします。`}/>
                     <meta name="keywords" content={`${this.state.draft.postName},${renderType(this.state.draft.type)},ポスト,下書き`}/>
                 </Helmet>

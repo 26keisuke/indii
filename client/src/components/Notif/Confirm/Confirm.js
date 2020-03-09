@@ -1,11 +1,11 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
-// import { TiFlowSwitch } from "react-icons/ti"
 import { MdFeedback } from "react-icons/md"
 import { FiMinus } from "react-icons/fi"
 import { connect } from "react-redux"
 import { withRouter } from "react-router";
 import { IoIosDocument } from "react-icons/io"
+import { Helmet } from "react-helmet"
 
 import * as actions from "../../../actions"
 
@@ -16,8 +16,6 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField"
 
-// import sample from "../../../images/sample1.png"
-// import sample1 from "../../../images/sample0.jpg"
 import close from "../../../images/close-red.png"
 import tick from "../../../images/tick.png"
 import account from "../../../images/account.png"
@@ -25,10 +23,8 @@ import account from "../../../images/account.png"
 import { Space } from "../../Theme"
 import ToggleText from "../../Util/ToggleText"
 import Back from "../../Util/Back"
-// import Edit from "./Edit/Edit"
 import Feedback from "../Feedback/Feedback"
 import Recommend from "../../Util/Recommend"
-// import TopicRecommend from "../../Util/TopicRecommend"
 import Textarea from "../../Post/Textarea/Textarea"
 import SkeletonBox from "../../Post/Skeleton/SkeletonBox"
 import People from "../../People/People"
@@ -239,6 +235,11 @@ class Setting extends Component {
 
         return(
             <Wrapper>
+                <Helmet>
+                    <title>"{afterPostName}"への編集リクエスト | Indii</title>
+                    <meta name="description" content={`${afterPostName}への編集リクエストを確認します。ポストのオーナーはリクエストを承認か拒否することができます。`}/>
+                    <meta name="keywords" content={`${afterPostName},編集リクエスト`}/>
+                </Helmet>
 
                 { isApproved === "WAIT" && (creator._id === this.props.auth.info._id) &&
                 <div>

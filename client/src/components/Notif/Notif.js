@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components"
 import { connect } from "react-redux"
+import { Helmet } from "react-helmet"
 
 import * as actions from "../../actions"
 
@@ -63,11 +64,18 @@ class Notif extends Component {
 
     render() {
         return(
-            <Screen>
-                {this.renderTopContent()} 
-                {this.renderLeftContent()} 
-                {this.renderRightContent()}
-            </Screen>
+            <div>
+                <Helmet>
+                    <title>通知一覧 | Indii</title>
+                    <meta name="description" content="あなたへの通知一覧です。フォロワーからのリスポンスや編集リクエストを確認することができます。"/>
+                    <meta name="keywords" content="通知,編集リクエスト,フォロワー"/>
+                </Helmet>
+                <Screen>
+                    {this.renderTopContent()} 
+                    {this.renderLeftContent()} 
+                    {this.renderRightContent()}
+                </Screen>
+            </div>
         )
     }
 }
