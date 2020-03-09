@@ -13,11 +13,8 @@ import crypto from "crypto"
 import sgMail from "@sendgrid/mail"
 
 import User from "./models/User"
-// import Topic from "./models/Topic"
 import Post from "./models/Post"
-// import Draft from "./models/Draft"
 import Token from "./models/Token";
-// import Image from "./models/Image"
 
 import auth from "./routes/auth"
 import draft from "./routes/draft"

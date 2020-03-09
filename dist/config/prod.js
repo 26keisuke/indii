@@ -1,5 +1,11 @@
 "use strict";
 
 module.exports = {
-  mongoURI: "mongodb://26keisuke:Sheep-master13@ds135305.mlab.com:35305/indii"
+  mongoURI: process.env.MONGO_URI,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  COOKIE_KEY: process.env.COOKIE_KEY,
+  FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY
 };

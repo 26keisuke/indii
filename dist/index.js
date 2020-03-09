@@ -44,9 +44,6 @@ var _post = _interopRequireDefault(require("./routes/post"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-// import Topic from "./models/Topic"
-// import Draft from "./models/Draft"
-// import Image from "./models/Image"
 _mongoose["default"].connect(_keys["default"].mongoURI, {
   useUnifiedTopology: true,
   useNewUrlParser: true
