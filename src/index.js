@@ -41,7 +41,7 @@ mongoose.connect(keys.mongoURI, {
 const app = express();
 
 app.use(session({
-    secret: [keys.cookieKey],
+    secret: [keys.COOKIE_KEY],
     resave: true,
     saveUninitialized: true,
 }))
