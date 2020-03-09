@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import axios from "axios"
+import { Helmet } from "react-helmet"
 
 import Index from "./Index/Index"
 import EditPreviewTopic from "./Preview"
@@ -207,19 +208,26 @@ class CreatePost extends Component {
 
     render () {
         return (
-            <Form
-                step={this.state.step}
-                stepNames={[
-                    "トピックを選択",
-                    "写真を変更",
-                    "タグを編集",
-                    "目次を編集",
-                    "プレビュー"
-                ]}
-                title="既存のトピックを編集する"
-            >
-                {this.renderStep()}
-            </Form>
+            <div>
+                <Helmet>
+                    <title>トピックの編集 | Indii</title>
+                    <meta name="description" content="トピックの編集をします。あなたの理想とする形に自由にカスタマイズしましょう。"/>
+                    <meta name="keywords" content="編集,トピック"/>
+                </Helmet>
+                <Form
+                    step={this.state.step}
+                    stepNames={[
+                        "トピックを選択",
+                        "写真を変更",
+                        "タグを編集",
+                        "目次を編集",
+                        "プレビュー"
+                    ]}
+                    title="既存のトピックを編集する"
+                >
+                    {this.renderStep()}
+                </Form>
+            </div>
             // <FormWrapper>
             //     <div>
             //         <BackWrapper>

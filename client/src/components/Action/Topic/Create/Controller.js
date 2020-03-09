@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Helmet } from "react-helmet"
 
 import CreateFriendsTopic from "./Friend"
 import CreatePreviewTopic from "./Preview"
@@ -130,19 +131,26 @@ class CreateTopic extends Component {
     render() {
          
         return (
-            <Form
-                step={this.state.step}
-                stepNames={[
-                    "トピック名を決定",
-                    "写真を選択",
-                    "タグを追加",
-                    "友達を招待する",
-                    "プレビュー"
-                ]}
-                title="新しいトピックを作成する"
-            >
-                {this.renderStep()}
-            </Form>
+            <div>
+                <Helmet>
+                    <title>トピックの作成 | Indii</title>
+                    <meta name="description" content="トピックの編集をします。あなたの理想とする形に自由にカスタマイズしましょう。"/>
+                    <meta name="keywords" content="新規作成,トピック"/>
+                </Helmet>
+                <Form
+                    step={this.state.step}
+                    stepNames={[
+                        "トピック名を決定",
+                        "写真を選択",
+                        "タグを追加",
+                        "友達を招待する",
+                        "プレビュー"
+                    ]}
+                    title="新しいトピックを作成する"
+                >
+                    {this.renderStep()}
+                </Form>
+            </div>
             // <FormWrapper>
             //     <div>
             //         <BackWrapper>

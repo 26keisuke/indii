@@ -1,6 +1,7 @@
 //将来的には、要請とか要望が強いものとかも載せられるようにする
 
 import React, {Component} from "react"
+import { Helmet } from "react-helmet"
 
 import post_create from "../../images/post-create.png"
 import post_edit from "../../images/post-edit.png"
@@ -32,6 +33,11 @@ class Create extends Component {
     render () {
         return (
             <GridWrapper>
+                <Helmet>
+                    <title>編集・作成 | Indii</title>
+                    <meta name="description" content="トピックとポストの編集及び作成ができます。あなたの理想とする形に自由にカスタマイズしましょう。"/>
+                    <meta name="keywords" content="編集,新規作成,ポスト,トピック"/>
+                </Helmet>
                 <Grid config={config}/>
                 <Space height="10px"/>
             </GridWrapper>

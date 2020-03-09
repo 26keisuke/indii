@@ -1,7 +1,8 @@
 import React, {Component} from "react"
+import { Helmet } from "react-helmet"
+
 import EditPreviewPost from "./Preview"
 import Form from "../../Form/Form"
-
 import Select from "../../Controller/Select"
 
 class EditPost extends Component {
@@ -99,17 +100,24 @@ class EditPost extends Component {
 
     render () {
         return (
-            <Form
-                step={this.state.step}
-                stepNames={[
-                    "トピックを選択",
-                    "ポストを選択",
-                    "プレビュー"
-                ]}
-                title="既存のポストを編集する"
-            >
-                {this.renderStep()}
-            </Form>
+            <div>
+                <Helmet>
+                    <title>ポストの編集 | Indii</title>
+                    <meta name="description" content="ポストの編集をします。あなたの理想とする形に自由にカスタマイズしましょう。"/>
+                    <meta name="keywords" content="編集,ポスト"/>
+                </Helmet>
+                <Form
+                    step={this.state.step}
+                    stepNames={[
+                        "トピックを選択",
+                        "ポストを選択",
+                        "プレビュー"
+                    ]}
+                    title="既存のポストを編集する"
+                >
+                    {this.renderStep()}
+                </Form>
+            </div>
             // <FormWrapper>
             //     <div>
             //         <BackWrapper>

@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import { MdCheck } from "react-icons/md"
 import { Link } from "react-router-dom"
-
+import { Helmet } from "react-helmet"
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 import * as actions from "../../../actions"
@@ -228,11 +228,18 @@ class Editor extends Component {
 
     render() {
         return(
-            <Screen withBack={true} space={false} post={true} noHeader={true} noHeaderSpace={true} noBorder={true}>
-                {/* {this.renderTitle()} */}
-                {this.renderLeft()}
-                {this.renderRight()}
-            </Screen>
+            <div>
+                <Helmet>
+                    <title>"{this.state.draft.postName}"の編集 | Indii</title>
+                    <meta name="description" content={`"${this.state.draft.postName}"の${renderType(this.state.draft.type)}をします。`}/>
+                    <meta name="keywords" content={`${this.state.draft.postName},${renderType(this.state.draft.type)},ポスト,下書き`}/>
+                </Helmet>
+                <Screen withBack={true} space={false} post={true} noHeader={true} noHeaderSpace={true} noBorder={true}>
+                    {/* {this.renderTitle()} */}
+                    {this.renderLeft()}
+                    {this.renderRight()}
+                </Screen>
+            </div>
         )
     }
 }

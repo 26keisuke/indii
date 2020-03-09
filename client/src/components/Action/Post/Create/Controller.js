@@ -1,8 +1,9 @@
 import React, {Component} from "react"
+import { Helmet } from "react-helmet"
+
 import CreateConfigurationPost from "./Configuration"
 import CreatePreviewPost from "./Preview"
 import Form from "../../Form/Form"
-
 import Select from "../../Controller/Select"
 
 class CreatePost extends Component {
@@ -116,18 +117,25 @@ class CreatePost extends Component {
 
     render () {
         return (
-            <Form
-                step={this.state.step}
-                stepNames={[
-                    "トピックを選択",
-                    "ポストを選択",
-                    "初期設定",
-                    "プレビュー"
-                ]}
-                title="既存のポストを編集する"
-            >
-                {this.renderStep()}
-            </Form>
+            <div>
+                <Helmet>
+                    <title>ポストの作成 | Indii</title>
+                    <meta name="description" content="ポストの作成をします。あなたの理想とする形に自由にカスタマイズしましょう。"/>
+                    <meta name="keywords" content="作成,ポスト"/>
+                </Helmet>
+                <Form
+                    step={this.state.step}
+                    stepNames={[
+                        "トピックを選択",
+                        "ポストを選択",
+                        "初期設定",
+                        "プレビュー"
+                    ]}
+                    title="既存のポストを編集する"
+                >
+                    {this.renderStep()}
+                </Form>
+            </div>
             // <FormWrapper>
             //     <div>
             //         <BackWrapper>

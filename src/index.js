@@ -22,7 +22,7 @@ import profile from "./routes/profile"
 import topic from "./routes/topic"
 import post from "./routes/post"
 
-mongoose.connect(keys.mongoURI, {
+mongoose.connect(keys.MONGO_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
 }, err => {

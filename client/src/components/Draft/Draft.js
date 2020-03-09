@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
+import { Helmet } from "react-helmet"
 
 import Screen from "../Util/Screen"
 
@@ -134,6 +135,13 @@ class DraftNavigation extends Component {
  
         return (
             <div>
+
+                <Helmet>
+                    <title>下書き一覧 | Indii</title>
+                    <meta name="description" content="下書き一覧"/>
+                    <meta name="keywords" content="下書き,新規作成,編集,ポスト"/>
+                </Helmet>
+
                 <Border bottom={true}/>
                 { ((this.props.draft.nounce === this.state.id) || (counter > 0)) 
                 ? "" 
