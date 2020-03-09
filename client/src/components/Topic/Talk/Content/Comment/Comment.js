@@ -51,14 +51,14 @@ const CommentBox = styled.div`
     position: absolute;
     bottom: 10px;
     width: 80%;
-    left: 50%;
-    transform: translate(-50%, 0);
+    left: 41px;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
     max-height: 155px;
-    padding-top: 20px;
+    padding-top: 30px;
+    border-radius: 3px;
     padding-bottom: 10px;
 
     & > div:nth-child(1) {

@@ -24,6 +24,7 @@ const topicSchema = new Schema({
     
     activity: [{
         type: { type: String, enum: ["EDIT_POST", "CREATE_POST", "EDIT_TOPIC", "CREATE_TOPIC"] },
+        postName: String, // for fast lookUp
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         timeStamp: Date,
     }],

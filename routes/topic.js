@@ -253,7 +253,8 @@ router.get("/:topicId/:type", (req, res) => {
                 .populate("mobileImg")
                 .populate("squareImg")
                 // .populate({path: "column.posts", populate: {path: "postImg"}})
-                .populate({path: "posts", populate: {path: "postImg"}})
+                .populate({path: "posts", populate: [{path: "postImg"}, {path: "creator"}]})
+                .populate("activity.user")
                 .exec()
                 .then(topic => {
                     res.send(topic)

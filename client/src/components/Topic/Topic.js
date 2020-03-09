@@ -1,20 +1,16 @@
 import React, { Component, PureComponent } from "react"
-import { withRouter } from "react-router-dom"
-import styled, {css, keyframes} from "styled-components"
+import styled, {css} from "styled-components"
 import { connect } from "react-redux"
 import BraftEditor from 'braft-editor'
-import { FaHashtag } from "react-icons/fa"
-import Skeleton from "react-loading-skeleton"
 import { Waypoint } from "react-waypoint"
+import { Link } from "react-router-dom"
 
 import * as actions from "../../actions"
 
-import question from "../../images/question.png"
-import post from "../../images/post.png"
-
 import Talk from "./Talk/Talk"
+import Info from "./Info/Info"
+import Activity from "./Activity/Activity"
 import { Space } from "../Theme"
-import Back from "../Util/Back"
 
 import { arrObjLookUp } from "../Util/util"
 
@@ -35,18 +31,20 @@ class PostElement extends PureComponent {
     render() {
         return (
             <Waypoint onEnter={this.props.onEnter} onLeave={this.props.onLeave}>
-                <Post>
-                    <PostTop>
-                        <p>{this.props.index}</p>
-                        <h3>{this.props.postName}</h3>
-                    </PostTop>
-                    <BraftEditor
-                        controls={[]}
-                        readOnly={true}
-                        value={this.props.content}
-                        contentClassName="post-braft"
-                    />
-                </Post>
+                <Link to={`/post/${this.props.postId}`}>
+                    <Post>
+                        <PostTop>
+                            <p>{this.props.index}</p>
+                            <h3>{this.props.postName}</h3>
+                        </PostTop>
+                        <BraftEditor
+                            controls={[]}
+                            readOnly={true}
+                            value={this.props.content}
+                            contentClassName="post-braft"
+                        />
+                    </Post>
+                </Link>
             </Waypoint>
         )
     }
@@ -150,7 +148,7 @@ class TopicPage extends Component {
             column = arrObjLookUp(columns, "_id", order[i]);
             fstArr.push(
                 <ColumnElement
-                    key={column.index}
+                    key={"column" + column.index}
                     index={column.index}
                     title={column.title}
                     onLeave={this.handleEnter}
@@ -160,7 +158,7 @@ class TopicPage extends Component {
 
             tableArr.push(
                 <TOF
-                    key={column.index}
+                    key={"tof" + column.index}
                     index={column.index}
                     title={column.title}
                     indent={false}
@@ -172,7 +170,8 @@ class TopicPage extends Component {
 
                 sndArr.push(
                     <PostElement
-                        key={String(post.index.join("."))}
+                        key={"post" + String(post.index.join("."))}
+                        postId={post._id}
                         onEnter={(data) => this.handleEnter(true, data)} 
                         onLeave={(data) => this.handleEnter(false, data)}
                         index={post.index.join(".")}
@@ -183,7 +182,7 @@ class TopicPage extends Component {
 
                 tableArr.push(
                     <TOF
-                        key={String(post.index.join("."))}
+                        key={"tof" + String(post.index.join("."))}
                         index={post.index.join(".")}
                         title={post.postName}
                         indent={true}
@@ -191,7 +190,7 @@ class TopicPage extends Component {
                 )
             }
 
-            fstArr.push(<PostWrapper>{sndArr}</PostWrapper>)
+            fstArr.push(<PostWrapper key={"wrapper" + i}>{sndArr}</PostWrapper>)
 
             sndArr = [];
         }
@@ -201,7 +200,7 @@ class TopicPage extends Component {
 
     render() {
         const flag = this.props.topic.fetched._id
-        const { tags, posts, likes, postCount, _id, topicName, column, activity } = this.props.topic.fetched
+        const { tags, posts, likes, postCount, _id, topicName, order, column, activity } = this.props.topic.fetched
 
         const squareImg = this.props.topic.fetched.squareImg || {}
 
@@ -212,91 +211,30 @@ class TopicPage extends Component {
 
         return (
             <TopicBox>
+
                 <TopWrapper>
-                <TopicTop>
-                    <div>
-                        <BackWrapper>
-                            <div>
-                                <Back
-                                    back={() => this.props.history.goBack()}
-                                    name="戻る"
-                                />
-                            </div>
-                        </BackWrapper>
-                        <TopicTags>
-                            { flag 
-                            ?
-                                tags.map(tag =>
-                                    <div>
-                                        <Tag/>
-                                        <p>{tag}</p>
-                                    </div>
-                                )
-                            :
-                                <div><Skeleton count={3} width={50} height={22}/></div>
-                            }
-                        </TopicTags>
-                        <TopicTitle>{flag ? topicName : <Skeleton width={300} height={28}/>}</TopicTitle>
-                        <TopicContent>
-                            {
-                                flag 
-                                ?
-                                "You can use withRouter to accomplish this. Simply wrap your exported classed component inside of withRouter and then you can use this.props.match.params.id to get the parameters instead of using useParams(). You can also get any location, match, or history info by using withRouter. They are all passed in under this.props"   
-                                :
-                                <ContentSkeleton>
-                                    <Skeleton count={5} height={18}/>
-                                </ContentSkeleton>
-                            }
-                        </TopicContent>
-                        <TopicTimeStamp>
-                            {flag && <p>ポスト数: {postCount}</p> }
-                            {flag && <p>お気に入り数: {likes}</p>}
-                            {!flag && <p><Skeleton width={160} height={18}/></p> }
-                        </TopicTimeStamp>
-                        <TopicOption>
-                            { flag && 
-                            <div>
-                                <PostRequestIcon src={question} alt="ポストリクエストのボタン"/>
-                            </div>
-                            }
-                            { flag && 
-                            <div>
-                                <PostCreateIcon src={post} alt="ポスト作成のボタン"/>
-                            </div>
-                            }
-                        </TopicOption>
-                        { flag &&
-                        <TopicToggle>
-                            <TopicToggleElement selected={this.state.toggle["topic"]} onClick={() => this.toggleState("topic")}>
-                                <p>トピック</p>
-                                <div/>
-                            </TopicToggleElement>
-                            <TopicToggleElement selected={this.state.toggle["talk"]} onClick={() => this.toggleState("talk")}>
-                                <p>フリートーク</p>
-                                <div/>
-                            </TopicToggleElement>
-                            <TopicToggleElement selected={this.state.toggle["activity"]} onClick={() => this.toggleState("activity")}> 
-                                <p>アクティビティー </p>
-                                <div/>
-                            </TopicToggleElement>
-                        </TopicToggle>
-                        }
-                    </div>
-                    { flag 
-                    ? <img src={squareImg.image} alt="トピックを代表する写真"/>
-                    : <section><Skeleton width={250} height={250}/></section>
-                    }
-                </TopicTop>
+                    <Info
+                        flag={flag}
+                        tags={tags}
+                        topicName={topicName}
+                        postCount={postCount}
+                        likes={likes}
+                        handleClick={this.toggleState}
+                        selected={this.state.toggle}
+                        squareImg={squareImg}
+                    />
                 </TopWrapper>
+
                 <Waypoint onEnter={() => this.setState({ trigger: false　})} onLeave={() => this.setState({ trigger: true })}>
                     <Gap/>
                 </Waypoint>
+
                 { this.state.toggle["topic"] &&
                 <TopicBottom>
-                    <div className="topic-contents">
+                    <TopicPostWrapper>
                         { flag && renderedPosts }
                         <Space height={"200px"}/>
-                    </div>
+                    </TopicPostWrapper>
 
                     { flag ?
                     <TocWrapper className="fake" position={this.state.trigger}>
@@ -309,12 +247,26 @@ class TopicPage extends Component {
                     }
                 </TopicBottom>
                 }
+
                 { this.state.toggle["talk"] &&
                 <div>
                     <Talk/>
-                    <Space height={"200px"}/>
+                    <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
                 </div>
                 }
+                
+                { this.state.toggle["activity"] &&
+                <div>
+                    <Activity
+                        order={order}
+                        columns={column}
+                        posts={posts}
+                        activity={activity}
+                    />
+                    <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
+                </div>
+                }
+
             </TopicBox>
         )
     }
@@ -325,7 +277,7 @@ const TocWrapper = styled.div`
     ? css`
         position: fixed;
         top: 66px;
-        left: 954px;
+        left: 974px;
     `
     : css`
         position: relative;
@@ -344,8 +296,11 @@ const FocusBar = styled.div`
     left: 10px;
 `
 
+const TopicPostWrapper = styled.div`
+    margin-right: 20px;
+`
+
 const TableOfContent = styled.div`
-    margin-left: 20px;
     width: 236px;
     background-color: white;
     box-shadow: 1px 1px 10px #d2d2d2;
@@ -368,11 +323,7 @@ const TableRow = styled.div`
     display: flex;
 `
 
-const ContentSkeleton = styled.div`
-    & span {
-        width: 100%;
-    }
-`
+
 
 const PostWrapper = styled.div`
     padding-top: 15px;
@@ -458,195 +409,12 @@ const TopWrapper = styled.div`
     background-color: #F9FAFB;
 `
 
-const TopicTop = styled.div`
-    background-color: white;
-    min-width: 770px;
-    box-shadow: 1px 1px 10px #d2d2d2;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: row;
-    border-bottom: 1px solid #eaeaea;
-    padding-top: 20px;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-bottom: 50px;
-    min-width: 960px;
-
-    & > div {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        min-width: 420px;
-        width: 100%;
-    }
-
-    & > img {
-        min-height: 250px;
-        min-width: 250px;
-        max-height: 250px;
-        max-width: 250px;
-        /* padding-right: 30px; */
-        object-fit: contain;
-        flex-shrink: 0;
-    }
-
-    & > section {
-        /* padding-right: 30px; */
-        flex-shrink: 0;
-    }
-`
-
-const TopicTags = styled.div`
-    display: flex;
-    flex-direction: row;
-
-    & > div {
-
-        display: flex;
-        align-items: center;
-        margin-right: 7px;
-
-        & > p {
-            color: #5a5a5a;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
-    }    
-
-    & span {
-        margin-right: 7px;
-    }
-`
-
-const Tag = styled(FaHashtag)`
-    color: #5a5a5a;
-    transform: scale(0.9);
-    margin-top: -2px;
-    margin-right: 2px;
-`
-
-const TopicTitle = styled.h1`
-    color: #1C1C1C;
-    font-size: 23px;
-    font-weight: bold;
-    margin-bottom:15px;
-`
-
-const TopicTimeStamp = styled.p`
-    display: flex;
-    flex-direction: row;
-    font-size: 11px;
-    color: #5a5a5a;
-    position: absolute;
-    bottom: 0px;
-
-    & > p {
-        margin-right: 10px;
-    }
-`
-
 const TopicBottom = styled.div`
     display: flex;
     flex-direction: row;
     width:100%;
     padding: 0px 30px;
     background-color: #f9f9f9;
-`
-
-const TopicContent = styled.h2`
-    color: #2B2B2b;
-    margin-bottom: 30px;
-    margin-right:30px;
-    font-size: 12px;
-
-    & > div {
-        & span {
-            margin-bottom: 5px;
-        }
-    }
-`
-
-const TopicOption = styled.div`
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    right:38px;
-    bottom: 0px;
-
-    & > div {
-        width:28px;
-        height:28px;
-        border: 0.5px solid #636480;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 3px;
-        cursor: pointer;
-        margin-left: 30px;
-    }
-`
-
-const PostRequestIcon = styled.img`
-    width: 22px;
-    height: 22px;
-`
-
-const PostCreateIcon = styled.img`
-    width: 18px;
-    height: 18px;
-`
-
-const TopicToggle = styled.div`
-    display: flex;
-    position: absolute;
-    bottom:-45px;
-`
-
-const extend = keyframes`
-    from {
-        width: 0px;
-    } to {
-        width: 80%;
-    }
-`
-
-const TopicToggleElement = styled.div`
-    padding: 10px;
-    padding-bottom: 0px;
-    margin-right:70px;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    flex-shrink: 0;
-    align-items: center;
-    position: relative;
-
-    & > p {
-        color: ${props => props.selected ? "#000000" : "#8D8D8D"}
-    }
-
-    & > div {
-        ${props => props.selected && css`
-            background-color: #636480;
-            width:100%;
-            height:1px;
-            animation-name: ${extend};
-            animation-duration: 250ms;
-            animation-timing-function: ease-in-out;
-        `}
-    }
-`
-
-const BackWrapper = styled.div`
-    position: relative;
-    margin-top: 6px;
-
-    & > div {
-        position: absolute;
-        width: 300px;
-        top: -54px;
-        left: -36px;
-    }
 `
 
 const Gap = styled.div`
@@ -661,4 +429,4 @@ function mapStateToProps({auth, topic}){
     }
 }
 
-export default connect(mapStateToProps, actions)(withRouter(TopicPage));
+export default connect(mapStateToProps, actions)(TopicPage);

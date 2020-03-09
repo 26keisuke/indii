@@ -4,38 +4,61 @@ import { GoComment } from "react-icons/go"
 import { AiOutlineLike } from "react-icons/ai"
 
 import CommentBox from "./Comment/Comment"
-import CommentList from "./List/List"
+import Element from "./Element/Element"
 
 import { Space } from "../../../Theme"
 
 class Content extends Component {
+
+    constructor(props){
+        super(props)
+    }
+
     render() {
         return(
-            <Box>
-                <UserName>ここにトピック名 / ユーザー名が入ります</UserName>
-                <Title>ここにトークのタイトルが入ります。長いことも短いこともあります。</Title>
-                <Description>ここにトークのタイトルが入ります。長いことも短いこともあります。ここにトークのタイトルが入ります。長いことも短いこともあります。ここにトークのタイトルが入ります。長いことも短いこともあります。</Description>
-                <Bottom>
-                    <div>
-                        <GoComment/>
-                        10
-                    </div>
-                    <div>
-                        <AiOutlineLike/>
-                        120
-                    </div>
-                </Bottom>
+            <Wrapper>
+                <Box>
+                    <UserName>ここにトピック名 / ユーザー名が入ります</UserName>
+                    <Title>ここにトークのタイトルが入ります。長いことも短いこともあります。</Title>
+                    <Description>ここにトークのタイトルが入ります。長いことも短いこともあります。ここにトークのタイトルが入ります。長いことも短いこともあります。ここにトークのタイトルが入ります。長いことも短いこともあります。</Description>
+                    <Bottom>
+                        <div>
+                            <GoComment/>
+                            10
+                        </div>
+                        <div>
+                            <AiOutlineLike/>
+                            120
+                        </div>
+                    </Bottom>
 
-                <Space height={"30px"}/>
+                    <Space height={"30px"}/>
 
-                <CommentList/>
+                    <MessageWrapper>
+                        <Element/>
+                        <Element/>
+                        <Element/>
+                        <Element/>
+                        <Element/>
+                    </MessageWrapper>
 
+                    
 
+                    <Space height={"300px"}/>
+                </Box>
                 <CommentBox/>
-            </Box>
+            </Wrapper>
         )
     }
 }
+
+const Wrapper = styled.div`
+    position: relative;
+`
+
+const MessageWrapper = styled.div`
+
+`
 
 const UserName = styled.p`
     margin-bottom: 5px;
@@ -44,6 +67,8 @@ const UserName = styled.p`
 const Description = styled.h4`
     font-size: 12px;
     color: #555555;
+    margin-top: 15px;
+    margin-bottom: 20px;
 `
 
 const Box = styled.div`
@@ -51,13 +76,18 @@ const Box = styled.div`
     background-color: white;
     width: 100%;
     margin-right: 60px;
-    min-width: 600px;
+    min-width: 581px;
+    max-width: 581px;
     padding: 40px;
     position: relative;
+    overflow: scroll;
+
+    max-height: 575px;
+    min-height: 575px;
 `
 
 const Title = styled.h2`
-    margin-bottom: 5px;
+    
 `
 
 const Bottom = styled.div`

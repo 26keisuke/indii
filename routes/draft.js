@@ -79,7 +79,7 @@ router.post("/upload", (req, res) => {
                     Topic.findById(post.topic)
                     .then(topicElem => {
 
-                        topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST"})
+                        topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST", postName: draft.postName})
 
                         topicElem.save()
                         post.save()
@@ -313,7 +313,7 @@ router.post("/edit", (req, res) => {
                     Topic.findById(post.topic)
                     .then(topicElem => {
 
-                        topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST"})
+                        topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST", postName: draft.postName})
 
                         topicElem.save()
                         draft.save();

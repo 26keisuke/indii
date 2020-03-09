@@ -5,7 +5,7 @@ import { IoIosAddCircleOutline } from "react-icons/io"
 import TalkFeed from "./Element/Element"
 import Content from "./Content/Content"
 
-import sample from "../../../images/sample1.png"
+import { Space } from "../../Theme"
 
 class Talk extends Component {
     render() {
@@ -28,6 +28,7 @@ class Talk extends Component {
                         <TalkFeed/>
                         <TalkFeed/>
                     </div>
+                    <BottomSpace/>
                 </Feed>
 
                 <Content/>
@@ -36,6 +37,11 @@ class Talk extends Component {
         )
     }
 }
+
+const BottomSpace = styled.div`
+    box-shadow: 0px -1px 4px #d2d2d2;
+    height: 30px;
+`
 
 const Feed = styled.div`
     min-width: 360px;
@@ -46,8 +52,8 @@ const Feed = styled.div`
     border-bottom-left-radius: 3px;
 
     & > div:nth-child(2){
-        max-height: 650px;
-        min-height: 650px;
+        max-height: 584px;
+        min-height: 584px;
         overflow: scroll;
     }
 `
@@ -56,7 +62,7 @@ const TalkHeader = styled.div`
     display: flex;
     padding: 10px 27px;
     position: relative;
-    border-bottom: 1px solid #d2d2d2;
+    box-shadow: 0px 1px 4px #d2d2d2;
     
     & > h2 {
         font-size: 14px !important;
