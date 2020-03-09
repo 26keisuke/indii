@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
+import { Helmet } from "react-helmet"
 
 import * as actions from "../../actions"
 
@@ -119,10 +120,17 @@ class Post extends Component {
 
     render() {
         return (
-            <Screen space={false} noHeader={true} post={true} noBorder={true}>
-                {this.renderLeft()}
-                {this.renderRight()}
-            </Screen>
+            <div>
+                <Helmet>
+                    <title>{this.props.post.fetched.postName + " | Indii"}</title>
+                    <meta name="description" content={`${BraftEditor.createEditorState(this.props.post.fetched.content).toText().replace(/a\s/g, "").substring(0, 30)}`}/>
+                    <meta name="keywords" content={`${this.props.post.fetched.postName}`}/>
+                </Helmet>
+                <Screen space={false} noHeader={true} post={true} noBorder={true}>
+                    {this.renderLeft()}
+                    {this.renderRight()}
+                </Screen>
+            </div>
         )
     }
 }

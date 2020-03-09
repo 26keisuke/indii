@@ -175,15 +175,15 @@ class Editor extends Component {
         }, 5000)
     }
 
-    renderTitle() {
-        return (
-            <div>
-                <EditorNavi>
-                    <Hopper type={renderType(this.state.draft.type)} name={this.state.draft.topicName} link={`/topic/${this.state.draft.topic}`}/>
-                </EditorNavi>
-            </div>
-        )
-    }
+    // renderTitle() {
+    //     return (
+    //         <div>
+    //             <EditorNavi>
+    //                 <Hopper type={renderType(this.state.draft.type)} name={this.state.draft.topicName} link={`/topic/${this.state.draft.topic}`}/>
+    //             </EditorNavi>
+    //         </div>
+    //     )
+    // }
 
     renderLeft() {
         return (
@@ -230,7 +230,7 @@ class Editor extends Component {
         return(
             <div>
                 <Helmet>
-                    <title>`"{this.state.draft.postName}"の編集` | Indii</title>
+                    <title>{'"' + this.state.draft.postName + "\"の編集"} | Indii</title>
                     <meta name="description" content={`"${this.state.draft.postName}"の${renderType(this.state.draft.type)}をします。`}/>
                     <meta name="keywords" content={`${this.state.draft.postName},${renderType(this.state.draft.type)},ポスト,下書き`}/>
                 </Helmet>
