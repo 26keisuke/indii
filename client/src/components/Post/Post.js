@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import { Helmet } from "react-helmet"
+import BraftEditor from "braft-editor"
 
 import * as actions from "../../actions"
 
@@ -119,12 +120,16 @@ class Post extends Component {
     }
 
     render() {
+
+        const titleName = this.props.post.fetched.postName || ""
+        const description = BraftEditor.createEditorState(this.props.post.fetched.content).toText().replace(/a\s/g, "").substring(0, 30)
+
         return (
             <div>
                 <Helmet>
-                    <title>{this.props.post.fetched.postName + " | Indii"}</title>
-                    <meta name="description" content={`${BraftEditor.createEditorState(this.props.post.fetched.content).toText().replace(/a\s/g, "").substring(0, 30)}`}/>
-                    <meta name="keywords" content={`${this.props.post.fetched.postName}`}/>
+                    <title>{titleName + " | Indii"}</title>
+                    <meta name="description" content={`${description}`}/>
+                    <meta name="keywords" content={`${titleName}`}/>
                 </Helmet>
                 <Screen space={false} noHeader={true} post={true} noBorder={true}>
                     {this.renderLeft()}
