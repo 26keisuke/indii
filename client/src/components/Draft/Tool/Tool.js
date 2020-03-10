@@ -128,7 +128,7 @@ class Reference extends Component {
                 isOpened: false,
                 changed: false,
             },
-            
+
             info: {
                 isOpened: false,
                 changed: false,
@@ -586,9 +586,9 @@ class Reference extends Component {
                     handleClick={() => this.handleClick("tagAdd")}
                 />
                 ,
-                <div>
-                    タグを追加
-                </div>
+                <Collapse key={"contentTag"} isOpened={this.state.tagAdd.isOpened}>
+                    <div>タグを追加</div>
+                </Collapse>
                 ])}   
 
                 { (this.props.draft.type !== "Zero") &&
