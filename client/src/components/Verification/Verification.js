@@ -7,6 +7,7 @@ import { connect } from "react-redux"
 import styled from "styled-components"
 import axios from "axios"
 import { withRouter } from "react-router-dom" 
+import { Helmet } from "react-helmet"
 
 import * as actions from "../../actions"
 
@@ -145,8 +146,15 @@ class Verification extends Component {
 
         const { type } = this.props.match.params
 
+        const titleName = type === "token" ? "認証メールの再送信" : type === "password" ? "パスワードのリセット" : type === "change" ? "パスワードのリセット" : ""
+
         return (
             <VerifyPage>
+                <Helmet>
+                    <title>{titleName + " | Indii"}</title>
+                    <meta name="description" content={`${titleName}をします。`}/>
+                    <meta name="keywords" content=""/>
+                </Helmet>
                 <div>
                     <img src={indii} alt={"ロゴの写真"}/>
                     <p>

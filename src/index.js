@@ -22,7 +22,7 @@ import profile from "./routes/profile"
 import topic from "./routes/topic"
 import post from "./routes/post"
 
-mongoose.connect("mongodb://26keisuke:Sheep-master13@ds135305.mlab.com:35305/indii", {
+mongoose.connect(keys.MONGO_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
 }, err => {

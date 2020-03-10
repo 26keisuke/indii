@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import BraftEditor from 'braft-editor'
 import { Waypoint } from "react-waypoint"
 import { Link } from "react-router-dom"
+import { Helmet } from "react-helmet"
 
 import * as actions from "../../actions"
 
@@ -200,8 +201,9 @@ class TopicPage extends Component {
 
     render() {
         const flag = this.props.topic.fetched._id
-        const { tags, posts, likes, postCount, _id, topicName, order, column, activity } = this.props.topic.fetched
+        const { tags, likes, postCount, _id, topicName, order, column, activity } = this.props.topic.fetched
 
+        const posts = this.props.topic.fetched.posts || {}
         const squareImg = this.props.topic.fetched.squareImg || {}
 
         const overview = flag ? arrObjLookUp(posts, "_id", column[0].posts[0]) : ""
@@ -209,9 +211,18 @@ class TopicPage extends Component {
         const renderedPosts = flag && this.renderPost()[0]
         const renderedTable = flag && this.renderPost()[1]
 
+        const titleName = topicName || " "
+
+        const descriptionPost = posts[0] || {}
+        const description = BraftEditor.createEditorState(descriptionPost.content).toText().replace(/a\s/g, "").substring(0, 30) || `${topicName}に関する情報です。`
+
         return (
             <TopicBox>
-
+                <Helmet>
+                    <title>{titleName + " | Indii"}</title>
+                    <meta name="description" content={description}/>
+                    <meta name="keywords" content={`${titleName}`}/>
+                </Helmet>
                 <TopWrapper>
                     <Info
                         flag={flag}

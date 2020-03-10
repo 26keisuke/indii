@@ -236,7 +236,7 @@ class Setting extends Component {
         return(
             <Wrapper>
                 <Helmet>
-                    <title>"{afterPostName}"への編集リクエスト | Indii</title>
+                    <title>{'"' + afterPostName + "\"への編集リクエスト" + " | Indii"}</title>
                     <meta name="description" content={`${afterPostName}への編集リクエストを確認します。ポストのオーナーはリクエストを承認か拒否することができます。`}/>
                     <meta name="keywords" content={`${afterPostName},編集リクエスト`}/>
                 </Helmet>

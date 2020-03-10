@@ -11,6 +11,15 @@ const Box = styled.div`
     justify-content: center;
 `
 
+const BoxWrapper = styled.div`
+    height: 100%;
+    background-color: #fafafa;
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
+
 const Wrapper = styled.div`
     /* box-shadow: 1px 1px 10px #eaeaea;
     background-color: #ffffff; */
@@ -24,7 +33,7 @@ class Follow extends Component {
 
     render() {
         return (
-            <div className="profile-wrapper-extra">
+            <BoxWrapper>
                 <Box>
                     {
                         this.props.users.map(user => 
@@ -40,7 +49,7 @@ class Follow extends Component {
                         )
                     }
                 </Box>
-            </div>
+            </BoxWrapper>
         )
     }
 }

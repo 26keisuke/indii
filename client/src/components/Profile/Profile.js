@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
+import { Helmet } from "react-helmet"
 
 import * as actions from "../../actions"
 
@@ -8,8 +9,6 @@ import Top from "./Info/Info"
 import Topic from "./Topic/Topic"
 import Post from "./Post/Post"
 import Follow from "./Follow/Follow"
-
-import "./Profile.css"
 
 const Wrapper = styled.div`
     height: 100%;
@@ -76,8 +75,15 @@ class Profile extends Component {
 
         const { isThisUser, toggle } = this.state
 
+        const titleName = this.props.profile.user || " "
+
         return (
             <Wrapper>
+                <Helmet>
+                    <title>{titleName + " | Indii"}</title>
+                    <meta name="description" content={`${titleName}のプロフィールです。過去に作成したポスト、お気に入りのトピック、フォロワーなどを確認することができます。`}/>
+                    <meta name="keywords" content={`${titleName},プロフィール`}/>
+                </Helmet>
                 { !!this.props.profile.user._id 
                 ?
                 <Top

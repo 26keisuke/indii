@@ -1,14 +1,13 @@
 import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
 import styled from "styled-components"
+import { Helmet } from "react-helmet"
 
 import sample from "../../images/sample1.png"
 
 import Post from "../Post/Element/Element"
 import Screen from "../Util/Screen"
 import Topic from "./Topic/Topic"
-
-import "./SearchResult.css"
 
 const Title = styled.div`
     display: flex;
@@ -85,10 +84,17 @@ class SearchResult extends Component {
 
     render() {
         return (
-            <Screen space={false} noHeader={true} noBorder={true} noHeaderSpace={true}>
-                {this.renderLeft()}
-                {this.renderRight()}
-            </Screen>
+            <div>
+                <Helmet>
+                    <title>{"Neural Networks" + "の検索結果 | Indii"}</title>
+                    <meta name="description" content=""/>
+                    <meta name="keywords" content=""/>
+                </Helmet>
+                <Screen space={false} noHeader={true} noBorder={true} noHeaderSpace={true}>
+                    {this.renderLeft()}
+                    {this.renderRight()}
+                </Screen>
+            </div>
         )
     }
 }

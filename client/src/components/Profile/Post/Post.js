@@ -10,8 +10,8 @@ class ProfileHome extends Component {
 
     render() {
         return (
-            <div className="profile-wrapper">
-                <div className="profile-post-wrapper">
+            <Wrapper>
+                <Box>
                     <Post
                         topic={"Apache Kafka"}
                         title={"Stream Processingとの関係"}
@@ -20,11 +20,26 @@ class ProfileHome extends Component {
                         date={"August 21, 2013 5:36 AM"}
                         img={sample}
                     />
-                </div>
-            </div>
+                </Box>
+            </Wrapper>
         )
     }
 }
+
+const Wrapper = styled.div`
+    height: 100%;
+    background-color: #fafafa;
+    padding: 30px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
+
+const Box = styled.div`
+    box-shadow: 1px 1px 10px #eaeaea;
+    width: 600px;
+    margin-bottom: 12px;
+`
 
 function mapStateToProps({auth}) {
     return {
