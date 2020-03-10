@@ -44,7 +44,7 @@ var _post = _interopRequireDefault(require("./routes/post"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-_mongoose["default"].connect("mongodb+srv://26keisuke:zNdJdQNasD0wVBe3@indii-hbxor.mongodb.net/test?retryWrites=true&w=majority", {
+_mongoose["default"].connect(_keys["default"].MONGO_URI, {
   useUnifiedTopology: true,
   useNewUrlParser: true
 }, function (err) {

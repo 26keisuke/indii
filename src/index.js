@@ -22,7 +22,7 @@ import profile from "./routes/profile"
 import topic from "./routes/topic"
 import post from "./routes/post"
 
-mongoose.connect("mongodb+srv://26keisuke:zNdJdQNasD0wVBe3@indii-hbxor.mongodb.net/test?retryWrites=true&w=majority", {
+mongoose.connect(keys.MONGO_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
 }, err => {
