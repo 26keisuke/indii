@@ -7,6 +7,7 @@ import axios from "axios"
 
 import { FaGlobe, FaClipboardList, FaImage } from "react-icons/fa"
 import { IoIosInformationCircleOutline, IoIosSettings } from "react-icons/io"
+import { IoIosPricetag } from "react-icons/io"
 
 import * as actions from "../../../actions"
 
@@ -123,6 +124,11 @@ class Reference extends Component {
                 isOpened: false,
                 changed: false,
             },
+            tagAdd: {
+                isOpened: false,
+                changed: false,
+            },
+            
             info: {
                 isOpened: false,
                 changed: false,
@@ -569,6 +575,22 @@ class Reference extends Component {
                     <Space height="20px"/>
                 </Collapse> 
                 ])}
+
+                { this.props.draft.type !== "Zero" &&
+                ([
+                <Title
+                    title="タグを追加"
+                    icon={<IoIosPricetag/>}
+                    isOpened={this.state.tagAdd.isOpened}
+                    changed={this.state.tagAdd.changed}
+                    handleClick={() => this.handleClick("tagAdd")}
+                />
+                ,
+                <div>
+                    タグを追加
+                </div>
+                ])}   
+
                 { (this.props.draft.type !== "Zero") &&
                 ([<Title
                     key={"titleConfig"}
