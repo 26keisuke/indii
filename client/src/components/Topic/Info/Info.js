@@ -74,10 +74,10 @@ class Info extends Component {
                             <p>トピック</p>
                             <div/>
                         </TopicToggleElement>
-                        <TopicToggleElement selected={selected["talk"]} onClick={() => handleClick("talk")}>
+                        {/* <TopicToggleElement selected={selected["talk"]} onClick={() => handleClick("talk")}>
                             <p>フリートーク</p>
                             <div/>
-                        </TopicToggleElement>
+                        </TopicToggleElement> */}
                         <TopicToggleElement selected={selected["activity"]} onClick={() => this.props.handleClick("activity")}> 
                             <p>アクティビティー </p>
                             <div/>

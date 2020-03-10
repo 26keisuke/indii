@@ -99,20 +99,6 @@ class TopicPage extends Component {
         })
     }
 
-    toggleBar = (name) => {
-        if(this.state.toggle[name] === true) {
-            return ""
-        } 
-        return "hide"
-    }
-
-    toggleText = (name) => {
-        if(this.state.toggle[name] === true) {
-            return "topic-top-toggle-selected"
-        } 
-        return "topic-top-toggle-unselected"
-    }
-
     handleEnter = (isEnter, data) => {
         const prev = data.previousPosition
         const now = data.currentPosition
@@ -263,12 +249,12 @@ class TopicPage extends Component {
                 </TopicBottom>
                 }
 
-                { this.state.toggle["talk"] &&
+                {/* { this.state.toggle["talk"] &&
                 <div>
                     <Talk/>
                     <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
                 </div>
-                }
+                } */}
                 
                 { this.state.toggle["activity"] &&
                 <div>
