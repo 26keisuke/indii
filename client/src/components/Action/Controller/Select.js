@@ -6,15 +6,15 @@
 // 将来的には、getSuggestionの中のreturn [{added: true}]の部分を再考する。ここのせいでより複雑になっている
 
 import React, { Component } from "react";
+import styled, { css } from "styled-components"
 import PropTypes from "prop-types"
 import Autosuggest from "react-autosuggest";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux"
 
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { IoIosSearch } from "react-icons/io";
-import search from "../../../images/search.png";
-import searchClick from "../../../images/search-click.png";
 
 import Topic from "../../Search/Suggestion/Topic";
 import Post from "../../Search/Suggestion/Post";
@@ -28,6 +28,9 @@ import { ButtonWrapper, ButtonLeft, } from "../Element/TwoButtons"
 
 import getSuggestions from "../../__Mock__/method/getSuggestions"
 
+
+
+// 将来的には、一定時間Inputがなければ、renderMarkとrenderWarningをするようにする
 class Select extends Component {
 
     // ======================================================
@@ -64,17 +67,23 @@ class Select extends Component {
 
         if (prevProps.storage !== this.props.storage){ // Selectが二回続いた時（ページを超えて）stateは初期化されない（constructorが呼ばれない）valueを初期化しなくてはいけない
             this.setState({
+                suggestions: [],
                 value: localStorage.getItem(this.props.storage) || "",
                 showWarning: false,
                 mark: "",
             }, () => {
-                if(this.props.content === "Topic") {
-                    this.props.searchTopic(this.props.type, this.state.value)  
-                } else if (this.props.content === "Post") {
-                    this.props.searchPost(this.props.type, this.state.value, this.props.topicId)
+                if(this.state.value){
+                    if(this.props.content === "Topic") {
+                        this.props.searchTopic(this.props.type, this.state.value)  
+                    } else if (this.props.content === "Post") {
+                        this.props.searchPost(this.props.type, this.state.value, this.props.topicId)
+                    }
+                    renderWarning();
+                    renderMark();
+                } else {
+                    this.setState({ showWarning: false })
+                    this.setState({ mark: "" })
                 }
-                renderWarning();
-                renderMark();
             })
         } else if(prevProps.topic.search !== this.props.topic.search) {
             this.setState({
@@ -86,7 +95,16 @@ class Select extends Component {
             })
         }
 
+        // もしsuggetionが変わった時だけ、renderWarningとrenderMarkをする
         if(prevState.suggestions !== this.state.suggestions) { renderWarning(); renderMark(); }
+
+        // valueがゼロの時もprevState.suggestions === this.state.suggestionsなので直接setstateする必要がある
+        if(prevState.value && !this.state.value) { 
+            setTimeout(() => {
+                this.setState({ showWarning: false })
+                this.setState({ mark: "" })
+            }, 800) 
+        }
     }
 
     onChange = (event, { newValue }) => {
@@ -183,8 +201,6 @@ class Select extends Component {
     renderUniqueMark = () =>{
         if(this.state.blur) {
             return;
-        } else if(!this.state.value) {
-            setTimeout(() => { this.setState({ mark: "" }) }, 800)
         } else {
             if(this.state.value) {
                 setTimeout(() => {
@@ -270,7 +286,7 @@ class Select extends Component {
                     value={this.state.value}
                     handleClick={this.handleClick}
                 >
-                    <IoIosSearch/>
+                    <SearchOutlinedIcon color="primary" fontSize="small"/>
                 </New>
             );
         }
@@ -287,9 +303,6 @@ class Select extends Component {
     // Warningを出す動作 setTimeoutを設けてるのは、flickering effectをなくすため
     renderUniqueWarning = () => {
         if(this.state.blur) {
-            return;
-        } else if(!this.state.value) {
-            setTimeout(() => {this.setState({ showWarning: false })}, 800)
             return;
         } else {
             setTimeout(() => {
@@ -310,9 +323,6 @@ class Select extends Component {
 
     renderMatchWarning = () => {
         if(this.state.blur) {
-            return;
-        } else if(!this.state.value) {
-            setTimeout(() => {this.setState({ showWarning: false })}, 800)
             return;
         } else {
             setTimeout(() => {
@@ -414,12 +424,8 @@ class Select extends Component {
 
         if (searchBox) {
             return (
-                <form onSubmit={(e) => this.formBoxSubmit(e)} className="search-box">
-                    <img 
-                        src={onSearch ? searchClick : search}
-                        className="search-icon"
-                        alt={"検索バーにある検索アイコン"}
-                    />
+                <SearchBox className="search-box" onSubmit={(e) => this.formBoxSubmit(e)} isSearching={onSearch}>
+                    <SearchOutlinedIcon className="search-icon" color="primary"/>
                     <Autosuggest
                         className="search-input" 
                         suggestions={suggestions}
@@ -429,7 +435,7 @@ class Select extends Component {
                         renderSuggestion={this.renderBoxSuggestion}
                         inputProps={inputProps} 
                     />
-                </form>
+                </SearchBox>
             )
         } else {
 
@@ -506,6 +512,27 @@ class Select extends Component {
         }
     }
 }
+
+const SearchBox = styled.div`
+    display: flex;
+    align-items: center;
+    width:100%;
+    z-index: 1000;
+    max-width: 550px;
+    position: relative;
+
+    @media  only screen and (max-width: 670px) {
+        max-width: 300px !important;
+    }
+
+    & .react-autosuggest__input {
+        ${props => props.isSearching && css`
+            border: 0.5px solid #9EAEE6;
+            background-color: white;
+        `}
+    }
+
+`
 
 Select.propTypes = {
     searchBox: PropTypes.bool,

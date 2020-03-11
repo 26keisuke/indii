@@ -117,7 +117,7 @@ class Post extends Component {
                                 <StarImg/>
                                 <p>{star.counter}</p>
                                 <p>最後の編集日:</p>
-                                <p>{lastEdited ? fmtDate(lastEdited.timeStamp) : "-"}</p>
+                                <p>{lastEdited ? fmtDate(lastEdited) : "-"}</p>
                             </div>
                         </PostMiddle>
                         {/* <div>

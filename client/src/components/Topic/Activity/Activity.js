@@ -1,6 +1,7 @@
 import React, { Component, PureComponent } from "react"
 import styled from "styled-components"
 import { IoMdDocument } from "react-icons/io"
+import { FaHashtag } from "react-icons/fa"
 
 import People from "../../People/People"
 
@@ -11,7 +12,7 @@ import { arrObjLookUp, fmtDate } from "../../Util/util"
 class Element extends PureComponent {
     render() {
 
-        const { author, index, lastEdited, topicName, postName } = this.props
+        const { author, index, lastEdited, tags, postName } = this.props
 
         return (
             <Post>
@@ -22,7 +23,12 @@ class Element extends PureComponent {
                     <div/>
                 </div>
                 <Content>
-                    <h3>{topicName}</h3>
+                    <h3>
+                        { tags.map(tag => 
+                            <div key={tag}><FaHashtag/> {tag}</div>
+
+                        )}
+                    </h3>
                     <h2>{postName}</h2>
                     <Date>
                         作成日:
@@ -115,6 +121,7 @@ class Activity extends Component {
                 arr.push(
                     <Element
                         index={String(post.index.join("."))}
+                        tags={post.tags}
                         topicName={post.topicName}
                         postName={post.postName}
                         author={post.creator}
@@ -255,6 +262,11 @@ const Content = styled.div`
     & > h3 {
         font-size: 11px !important;
         color: #777777;
+        display: flex;
+
+        & > div {
+            margin-right: 8px;
+        }
     }
 
     & > h2 {

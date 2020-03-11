@@ -1,6 +1,6 @@
 // ここをPureComponentにしてるのは、メッセージがrenderされるとinputのカーソルが崩れるのを防ぐため
 import React, { PureComponent } from "react";
-import styled, { css } from "styled-components"
+import styled, { css, keyframes } from "styled-components"
 import axios from "axios"
 import { connect } from "react-redux"
 import { Transition } from 'react-transition-group';
@@ -43,17 +43,18 @@ class Auth extends PureComponent {
             },
 
             remember: false,
-            policy: false,
 
             // signUpに関するもの
             signUp: {
                 userName: "",
                 email: "",
                 password: "",
+                confirm: "",
             },
 
             validEmail: null,
             uniqueEmail: null,
+            matchPassword: null,
             longPassword: null,
             valid: null,
         }
@@ -106,6 +107,14 @@ class Auth extends PureComponent {
                 .catch(err => {
                     console.error(err)
                 }) 
+
+            } else {
+                res = false
+            }
+        } else if (type === "confirm") {
+            check = "matchPassword"
+            if (this.state.signUp.password === value) {
+                res = true
             } else {
                 res = false
             }
@@ -113,12 +122,21 @@ class Auth extends PureComponent {
             if (value.length < 8) {
                 check = "longPassword"
                 res = false
+            } else if(this.state.signUp.confirm){
+                check = "matchPassword"
+                check2 = "longPassword" // password length is equal to or longer than 8
+                res2 = true
+                if (this.state.signUp.confirm === value) {
+                    res = true
+                } else {
+                    res = false
+                }
             } else {
                 check = "longPassword"
                 res = true
             }
         }
-        this.setSignUpState(value, type, check, res)
+        this.setSignUpState(value, type, check, res, check2, res2)
     }
 
     setSignUpState = (value, type, check, res, check2, res2) => {
@@ -132,22 +150,27 @@ class Auth extends PureComponent {
                 [type]: value
             }
         }, () => {
-            const { userName } = this.state.signUp
-            const { uniqueEmail, longPassword } = this.state
-            
-            const result = uniqueEmail && userName && longPassword
-
-            this.setState({ valid: result })
+            const {userName} = this.state.signUp
+            const {uniqueEmail, matchPassword} = this.state
+            // longPasswordとvalidEmailはいらない。なぜなら、longPasswordでないとmatchPasswordにならないから
+            if(uniqueEmail && matchPassword && userName) {
+                this.setState({
+                    valid: true,
+                })
+            } else {
+                this.setState({
+                    valid: false,
+                })
+            }
         })   
     }
 
     handleSubmit = (e, type) => {
         e.preventDefault()
 
-        var value, data, newObj;
-
         const { signUp, logIn, remember } = this.state
         
+
         if(type === "signUp") {
 
             if(this.state.signUp.userName.length > 25) {
@@ -155,45 +178,36 @@ class Auth extends PureComponent {
                 return
             }
 
-            value = {
+            const value = {
                 username: signUp.userName,
                 email: signUp.email,
                 password: signUp.password,
             }
 
-            this.props.postAction(true, "SIGN_UP", value)
+            this.props.postAction("SIGN_UP", "", value)
 
         } else if (type === "logIn") {
-            value = {
+            const value = {
                 email: logIn.email,
                 password: logIn.password,
                 remember: remember,
             }
 
-            this.props.postAction(true, "LOG_IN", value)
+            this.props.postAction("LOG_IN", "", value)
         }
     }
 
-    handleRemember = (e) => {
-        e.preventDefault()
-        this.setState({remember: !this.state.remember})
-    }
-
-    handlePolicy = (e) => {
-        e.preventDefault()
-        this.setState({policy: !this.state.policy})
-    }
-
     renderLogIn = () => {
+        
         return (
             <LogIn
                 postAction={this.props.postAction}
                 handleLogInChange={this.handleLogInChange}
                 handleSubmit={this.handleSubmit}
-                setRemember={this.handleRemember}
+                setRemember={() => this.setState({remember: !this.state.remember})}
                 logInStates={this.state.logIn}
                 remember={this.state.remember}
-                error={this.props.auth.logInError}
+                error={this.props.error}
             />
         )
     }
@@ -203,13 +217,12 @@ class Auth extends PureComponent {
             <SignUp
                 postAction={this.props.postAction}
                 handleSignUpChange={this.handleSignUpChange}
-                setPolicy={this.handlePolicy}
                 handleSubmit={this.handleSubmit}
                 signUpStates={this.state.signUp}
                 valid={{
-                    policy: this.state.policy,
                     validEmail: this.state.validEmail,
                     uniqueEmail: this.state.uniqueEmail,
+                    matchPassword: this.state.matchPassword,
                     longPassword: this.state.longPassword,
                     valid: this.state.valid,
                 }}
@@ -252,11 +265,6 @@ class Auth extends PureComponent {
                             </button>
                         </a>
                     </ThirdPartyButton>
-                    <Division>
-                        <div/>
-                        <p>OR</p>
-                        <div/>
-                    </Division>
                     { logBtn ? this.renderLogIn() : this.renderSignUp() }
                 </div>
             </Fade>
@@ -281,29 +289,10 @@ const Fade = ({in: inProps, children, ...otherProps}) => {
     )
 }
 
-const Division = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative;
-    & > p {
-        color: #B3B3C8;
-        font-size: 10px;
-    }
-
-    & > div:nth-child(1),
-    & > div:nth-child(3){
-        width: 44%;
-        border: none;
-        border-bottom: 1px solid #eaeaea;
-    }
-`
 
 const LogInCard = styled.div`
     width: 400px;
-    height: 480px;
+    height: 430px;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     background-color: #ffffff;
@@ -337,12 +326,12 @@ const ToggleBtn = styled.p`
 
     ${props => !props.toggleOn && css`
         &:hover {
-            background-color: rgba(100,100,100, 0.05);
+            background-color: rgba(158, 174, 229, 0.05);
         }
     `}
 
     ${props => props.toggleOn && css`
-        background-color: rgba(100,100,100, 0.1);
+        background-color: rgba(158, 174, 229, 0.2);
     `}
 
 `
@@ -351,8 +340,7 @@ const ThirdPartyButton = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    margin-top: 18px;
-    margin-bottom: 13px;
+    margin: 18px 0px;
     
     & > a {
         -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -382,7 +370,7 @@ const ThirdPartyButton = styled.div`
 
 function mapStateToProps({auth}){
     return {
-        auth,
+        auth
     }
 }
 

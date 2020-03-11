@@ -57,7 +57,8 @@ class Feed extends Component {
                             name={elem.creator.userName}
                             action={"CREATE_POST"}
                             date={elem.lastEdited}
-                            topic={elem.topicName}
+                            topicId={elem.topic}
+                            topicName={elem.topicName}
                             title={elem.postName}
                             content={elem.content}
                             star={elem.star.lookUp}

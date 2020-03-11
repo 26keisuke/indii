@@ -72,7 +72,9 @@ class List extends Component {
     }
 
     setRef = (ref) => {
-        this.state.refs.push(ref)
+        this.setState({
+            refs: [...this.state.refs, ref]
+        })
     }
 
     componentDidUpdate() {
@@ -90,13 +92,10 @@ class List extends Component {
     outsideClick = (e) => {
         for(var k in this.state.refs) {
             if (this.state.refs[k].contains(e.target)) {
-                return null
+                return
             }
-        }
-
-        this.setState({
-            isOpened: "",
-        })
+        } 
+        this.setState({isOpened: ""})
     }
 
     handleClick = (id) => {
@@ -159,7 +158,7 @@ class List extends Component {
                             <ShowMore
                                 ref={this.setRef}
                                 handleClick={() => this.handleClick(ref._id)}
-                                show={this.state.isOpened === ref._id}
+                                show={this.state.isOpened === (ref._id)}
                                 shadow={false}
                                 left="-159px"
                                 bottom="-39px"

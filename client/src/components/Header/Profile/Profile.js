@@ -8,6 +8,8 @@ import account from "../../../images/account.png";
 const ProfileArea = styled.div`
     @media only screen and (max-width: 670px) {
         padding-left: 15px !important;
+        margin-right: 70px !important;
+        margin-left: 0px !important;
     }   
 
     display: flex;
@@ -49,12 +51,13 @@ const Name = styled(Link)`
 
 const LogInButton = styled.div`
     @media only screen and (max-width: 670px) {
-        font-size: 10px;
+        font-size: 12px;
         margin-right: -20px;
     }   
-    width: 125px;
+
     font-size: 12px;
     cursor: pointer;
+    white-space: nowrap;
 `
 
 class Profile extends Component {
@@ -83,7 +86,7 @@ class Profile extends Component {
                         </Name>
                         :
                         <LogInButton onClick={(e) => this.props.click(e)}>
-                            ログイン/サインアップ
+                            ログイン
                         </LogInButton>
                     }
                 </div>

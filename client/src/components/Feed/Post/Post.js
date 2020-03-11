@@ -95,7 +95,7 @@ class Post extends PureComponent {
 
     render() {
         return (
-                <PostBox to={"/post/" + this.props.id}>
+                <PostBox to={this.props.skeleton ? "" : "/post/" + this.props.id}>
                     { this.props.skeleton 
                     ?
                     <PostTop>
@@ -159,7 +159,7 @@ class Post extends PureComponent {
                     </PostMiddle>
                     :
                     <PostMiddle>
-                        <Link to={"/topic"}>{this.props.topic}</Link>
+                        <Link to={`/topic/${this.props.topicId}`}>{this.props.topicName}</Link>
                         <p>{this.props.title}</p>
                         <Collapse isOpened={this.state.isOpened}>
                         <EditorWrapper>

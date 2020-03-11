@@ -54,7 +54,7 @@ const CircleFake = styled.div`
     height: 45px;
     border-radius: 50%;
     z-index: 4;
-    background-color: #455964;
+    background-color: ${props => props.theme.secondary};
 
     & > p {
         position: absolute;
@@ -89,7 +89,7 @@ const BarFake = styled.div`
     position: absolute;
     z-index: 3;
     height: 8px;
-    background-color: #455964;
+    background-color: ${props => props.theme.secondary};
     left: -2px;
     top: 0px;
 `
@@ -98,7 +98,7 @@ const BarDone = styled.div`
     position: absolute;
     width:55px;
     height: 8px;
-    background-color: #455964;
+    background-color: ${props => props.theme.secondary};
     left: -2px;
     top: 0px;
 `

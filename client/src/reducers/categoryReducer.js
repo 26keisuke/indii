@@ -12,6 +12,10 @@ export default function categoryReducer(state={
         selected: false,
         nudge: false,
     },
+    talk: {
+        selected: false,
+        nudge: false,
+    },
     action: {
         selected: false,
         nudge: false,
@@ -40,6 +44,7 @@ export default function categoryReducer(state={
             return{
                 home: { ...state[action.payload], selected: false },
                 draft: { ...state[action.payload], selected: false },
+                talk: { ...state[action.payload], selected: false },
                 action: { ...state[action.payload], selected: false },
                 notification: { ...state[action.payload], selected: false },
                 setting: { ...state[action.payload], selected: false },

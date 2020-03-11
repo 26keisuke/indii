@@ -124,12 +124,14 @@ class Post extends Component {
         const titleName = this.props.post.fetched.postName || ""
         const description = BraftEditor.createEditorState(this.props.post.fetched.content).toText().replace(/a\s/g, "").substring(0, 30)
 
+        const keywords = this.props.post.fetched.tags ? titleName + "," + this.props.post.fetched.tags.join(",") : ""
+
         return (
             <div>
                 <Helmet>
                     <title>{titleName + " | Indii"}</title>
-                    <meta name="description" content={`${description}`}/>
-                    <meta name="keywords" content={`${titleName}`}/>
+                    <meta name="description" content={description}/>
+                    <meta name="keywords" content={keywords}/>
                 </Helmet>
                 <Screen space={false} noHeader={true} post={true} noBorder={true}>
                     {this.renderLeft()}

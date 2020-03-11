@@ -13,7 +13,6 @@ import crypto from "crypto"
 import sgMail from "@sendgrid/mail"
 
 import User from "./models/User"
-import Post from "./models/Post"
 import Token from "./models/Token";
 
 import auth from "./routes/auth"
@@ -21,6 +20,7 @@ import draft from "./routes/draft"
 import profile from "./routes/profile"
 import topic from "./routes/topic"
 import post from "./routes/post"
+import feed from "./routes/feed"
 
 mongoose.connect(keys.MONGO_URI, {
     useUnifiedTopology: true,
@@ -68,7 +68,7 @@ passport.use(new LocalStrategy({
     passwordField: "password", 
     passReqToCallback : true,  
 }, (req, email, password, done) => {
-    User.findOne({email: email, facebookId: { $exists: false }, googleId: { $exists: false }})
+    User.findOne({email: email})
         .then(user => {
 
             if(user){
@@ -137,7 +137,7 @@ passport.use(new LocalStrategy({
                                         sgMail.send(msg)
                                         .then(() => {
                                             console.log("Email has been sent")
-                                            done(null, user)
+                                            return done(null, user)
                                         })                                        
                                     })
                                 })            
@@ -172,24 +172,31 @@ passport.use(new FacebookStrategy({
 
                 const { id, displayName, familyName, givenName, emails, photos } = profile
 
-                const value = {
-                    facebookId: id,
-                    userName: displayName,
-                    name: {
-                        familyName: familyName,
-                        givenName: givenName
-                    },
-                    email: emails[0].value,
-                    photo: photos[0].value,
-                    isVerified: true,
-                    verifiedDate: Date.now(),
-                }
+                User.findOne({email: emails[0].value})
+                .then(user => {
+                    if(user){
+                        return done(null, false);
+                    }
 
-                new User(value)
-                    .save()
-                    .then(user => {
-                        done(null,user)
-                    })
+                    const value = {
+                        facebookId: id,
+                        userName: displayName,
+                        name: {
+                            familyName: familyName,
+                            givenName: givenName
+                        },
+                        email: emails[0].value,
+                        photo: photos[0].value,
+                        isVerified: true,
+                        verifiedDate: Date.now(),
+                    }
+    
+                    new User(value)
+                        .save()
+                        .then(user => {
+                            return done(null,user)
+                        })
+                })
             }
         })
         .catch(err => {
@@ -219,23 +226,30 @@ passport.use(new GoogleStrategy({
 
                 const {id, displayName, name, emails, photos} = profile
 
-                const value = {
-                    googleId: id || "",
-                    userName: displayName,
-                    name: {
-                        familyName: name.familyName || "",
-                        givenName: name.givenName || ""
-                    },
-                    email: emails[0].value,
-                    photo: photos[0].value || "",
-                    isVerified: true,
-                    verifiedDate: Date.now(),
-                }
-                new User(value)
-                    .save()
-                    .then(user => {
-                        done(null,user)
-                    })
+                User.findOne({email: emails[0].value})
+                .then(user => {
+                    if(user){
+                        return done(null, false);
+                    }
+
+                    const value = {
+                        googleId: id || "",
+                        userName: displayName,
+                        name: {
+                            familyName: name.familyName || "",
+                            givenName: name.givenName || ""
+                        },
+                        email: emails[0].value,
+                        photo: photos[0].value || "",
+                        isVerified: true,
+                        verifiedDate: Date.now(),
+                    }
+                    new User(value)
+                        .save()
+                        .then(user => {
+                            return done(null,user)
+                        })
+                })
             }
         })
         .catch(err => {
@@ -245,12 +259,14 @@ passport.use(new GoogleStrategy({
 ));
 
 app.use("/api", auth)
+app.use("/api/feed", feed)
 app.use("/api/draft", draft)
 app.use("/api/profile", profile)
 app.use("/api/topic", topic)
 app.use("/api/post", post)
 
 app.get("/auth/google", passport.authenticate("google", {scope: ["profile", "email"]}))
+
 app.get("/auth/google/callback", passport.authenticate("google", {failureRedirect: "/"}), 
     (req, res) => {
         res.redirect("/")
@@ -258,34 +274,12 @@ app.get("/auth/google/callback", passport.authenticate("google", {failureRedirec
 )
 
 app.get("/auth/facebook", passport.authenticate("facebook"))
+
 app.get("/auth/facebook/callback", passport.authenticate("facebook", {failureRedirect: "/"}),
     (req, res) => {
         res.redirect("/")
     }
 )
-
-app.get("/api/feed", (req, res) => {
-    // Post.find({contribution: { $exists: true, $ne: [] }}).sort({contribution: 1}).limit(10)
-    Post.find({lastEdited: { $exists: true }}).sort({lastEdited: -1}).limit(10)
-    .populate("creator")
-    .then(posts => {
-        res.send(posts)
-    })
-    .catch(err => {
-        console.log(err)
-    })
-})
-
-app.get("/api/search/:term", (req, res) => {
-    console.log(`A TERM "${req.params.term}" HAS BEEN SEARCHED`)
-    res.send("")
-})
-
-
-app.post("/api/feedback", (req, res) => {
-    console.log("Feedback Received! \n",req.body)
-    res.send("")
-})
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));

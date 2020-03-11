@@ -1,11 +1,14 @@
 import React, { Component } from "react"
+import styled from "styled-components"
 
+import Chip from '@material-ui/core/Chip';
 import Autosuggest from "react-autosuggest";
 
-import { Box, BoxTransition, BoxTitle, TagList, TagBox, TagIcon, RevertBtn } from "../Element/Element"
+import { Box, BoxTransition, BoxTitle, RevertBtn } from "../Element/Element"
 import { Space } from "../../Theme"
 import Warning from "../../Search/Warning/Warning"
 import TwoButtons from "../Element/TwoButtons"
+
 
 class ActionTag extends Component {
 
@@ -69,10 +72,10 @@ class ActionTag extends Component {
         }
     }
 
-    deleteTag = (e) => {
+    handleDelete = (name) => {
         this.setState(state => {
             const tags = state.tags.filter(tag => 
-                tag.toLowerCase() !== e
+                tag.toLowerCase() !== name
             )
             return {
                 tags,
@@ -105,11 +108,12 @@ class ActionTag extends Component {
     };
 
     renderTags = () => {
-        const tagItems = this.state.tags.map(tag => 
-            <TagBox key={tag} onClick={() => this.deleteTag(tag)}>
-                <p>{tag}</p>
-                <TagIcon/>
-            </TagBox>
+        const tagItems = this.state.tags.map((tag,index) => 
+            <Chip
+                key={index+tag}
+                label={tag}
+                onDelete={() => this.handleDelete(tag)}
+            />
         )   
         return tagItems;
     }
@@ -203,5 +207,22 @@ class ActionTag extends Component {
         )
     }
 }
+
+const TagList = styled.div`
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    left: 0px;
+    top: -2px;
+
+    & > div {
+        height: 23px;
+        margin: 5px;
+        font-size: 10px;
+        & svg {
+            width: 15px;
+        }
+    }
+`
 
 export default ActionTag;

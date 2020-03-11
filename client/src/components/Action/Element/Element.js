@@ -118,10 +118,7 @@ export const BoxTransition = styled.div`
             background-color: #fff;
             box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
             font-size: 12px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
+            border-radius: 2px;
             z-index: 2;
             overflow-x: hidden;
         }
@@ -138,10 +135,7 @@ export const BoxTransition = styled.div`
 
         & .react-autosuggest__suggestion--highlighted {
             background-color: rgba(62,62,62,0.1);
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
+            border-radius: 2px;
         }
 
         & .react-autosuggest__input--focused {
@@ -220,12 +214,6 @@ export const PreviewTitle = styled.p`
     margin-bottom: 7px;
     font-size: 14px;
 `
-
-/* export const PreviewUnderline = styled.div`
-    width: ${props => String(props.width) + "px"};
-    border-bottom: 1px solid #838383;
-    margin-bottom: 30px;
-` */
 
 export const FinalCheck = styled.p`
     font-size: 15px;
@@ -345,58 +333,18 @@ export const FriendNone = styled.p`
 `
 
 export const TagElement = styled.p`
-    padding: 2px 5px;
-    border: 0.5px solid #646380;
-    border-radius: 3px;
-    margin-right: 10px;
-    font-size: 11px;
-    cursor: pointer;
-    color: #646380;
+    padding: 2px 9px;
+    height: 23px;
+    background-color: #e0e0e0;
+    margin: 5px;
+    font-size: 10px;
+    border-radius: 16px;
+    color: rgba(0, 0, 0, 0.87);
+    cursor: default;
+    display: flex;
+    align-items: center;
+
 `
-
-// export const PreviewConfig = styled.div`
-//     display: flex;
-//     flex-direction: row;
-//     width: 433px;
-//     align-items: center;
-//     justify-content: space-between;
-
-//     & > div {
-//         position: relative;
-
-//         & > input {
-//             position:absolute;
-//             top: -10px;
-//             width: 27px;
-//             height: 27px;
-//             margin-top: 12px;
-//             cursor: pointer;
-//             border: none;
-//             border-radius: 100%;
-//             box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
-
-//             ${props => props.config
-//             ? css`
-//                 right: 3px; 
-//                 background-color: #9EAEE6;
-//             `
-//             : css`
-//                 right: 20px; 
-//                 background-color: #eaeaea;
-//             `};
-//         }
-
-//         & > div {
-//             border: 1px solid #eaeaea;
-//             width: 48px;
-//             height: 30px;
-//             cursor: pointer;
-//             border-radius: 50px;
-//         }
-
-//     }
-
-// `
 
 export const RevertBtn = styled.p`
     margin-left: 185px;
@@ -407,12 +355,6 @@ export const RevertBtn = styled.p`
     font-size: 11px !important;
     margin-bottom: 0px !important;
 `
-
-// export const ConfigUnderline = styled.div`
-//     width: 440px;
-//     border-bottom: 1px solid #838383;
-//     margin-bottom: 30px;
-// `
 
 export const AddBtn = styled.div`
     border: none;
@@ -426,37 +368,6 @@ export const AddBtn = styled.div`
     outline:none;
 `
 
-export const TagList = styled.div`
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    left: 0px;
-    top: -2px;
-`
-
-export const TagBox = styled.div`
-    position: relative;   
-
-    & > p {
-        padding: 2px;
-        height: 15px;
-        border: 0.5px solid #636480;
-        border-radius: 3px;
-        padding-right: 15px;
-        margin-right: 10px;
-        font-size: 10px;
-        padding-left:4px;
-        cursor: pointer;
-        color: #646380;
-    }
-`
-
-export const TagIcon = styled(IoIosClose)`
-    position: absolute;
-    pointer-events: none;
-    top: 4px;
-    right: 13px;
-`
 const eclipse = keyframes`
     0% { transform: rotate(0deg) }
     50% { transform: rotate(180deg) }

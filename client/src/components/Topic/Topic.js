@@ -273,12 +273,20 @@ class TopicPage extends Component {
     }
 }
 
-const TocWrapper = styled.div`
+const TocWrapper = styled.div`    
+
     ${ props => props.position 
     ? css`
         position: fixed;
         top: 66px;
-        left: 974px;
+
+        @media only screen and (max-width: 1024px) {
+            left: 860px;
+        } 
+
+        @media (min-width: 1024px) {
+            left: 974px;
+        }
     `
     : css`
         position: relative;

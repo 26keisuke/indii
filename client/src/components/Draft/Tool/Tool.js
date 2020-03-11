@@ -4,6 +4,9 @@ import { withRouter } from "react-router-dom"
 import { Collapse } from 'react-collapse';
 import { connect } from "react-redux"
 import axios from "axios"
+import equal from "deep-equal"
+import update from "immutability-helper"
+import { ObjectID } from "bson"
 
 import { FaGlobe, FaClipboardList, FaImage } from "react-icons/fa"
 import { IoIosInformationCircleOutline, IoIosSettings } from "react-icons/io"
@@ -23,6 +26,7 @@ import {
         generalList,
         stateName} from "./Data/data"
 
+import Tag from "./Tag/Tag"
 import Info from "./Info/Info"
 import Title from "./Title/Title"
 import Button from "../../Util/Button"
@@ -33,6 +37,30 @@ import Carousel from "./Carousel/Carousel"
 import Image from "./Image/Image"
 import { Space } from "../../Theme"
 
+
+const renderList = (toggle) => {
+    switch(toggle){
+        case "website":
+            return websiteList
+        case "news":
+            return newsList
+        case "book":
+            return bookList
+        case "journal":
+            return journalList
+        case "chapter":
+            return chapterList
+        case "paper":
+            return paperList
+        case "media":
+            return mediaList
+        case "general":
+            return generalList
+        default:
+            return ""
+    }
+}
+
 class Reference extends Component {
 
     constructor(props) {
@@ -40,9 +68,6 @@ class Reference extends Component {
         this.state = {
 
             toggle: "website",
-
-            // reference: [], こいつをdefineしてしまうとうまくいかない（何故だかはよくわからん）
-            tempReference: {},
 
             transparent: true,
 
@@ -143,6 +168,7 @@ class Reference extends Component {
                     allowEdit: false,
                 }
             },
+
             config: {
                 isOpened: false,
                 changed: false,
@@ -155,33 +181,9 @@ class Reference extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // tempReferenceの部分は、最初にinitializeした時に呼ばれる（空白のobjがaxiosで送られる）から必要
-
-        if(prevProps.draft.ref && this.props.draft.ref){
-            var prev = prevProps.draft.ref.filter(r => r.isDeleted === false).length
-            var now = this.props.draft.ref.filter(r => r.isDeleted === false).length
-        }
-
-        if(prevState.reference && (prevState.reference.length !== this.state.reference.length) && this.state.tempReference.refType) {
-
-            axios.post(`/api/draft/${this.props.draft._id}/ref`, {ref: this.state.tempReference})
-            .then(
-                this.setState({
-                    tempReference: {},
-                    transparent: true
-                })
-            )
-            .catch(err => {
-                console.log(err)
-            })
-
-        } else if ((!prevProps.draft.ref && (this.props.draft.ref.length > 0)) || (prev != now)) {
-            this.setState({
-                reference: this.props.draft.ref || []
-            })
-
-        } else if ((prevState.toggle !== this.state.toggle) || 
-                (prevState[this.state.toggle] !== this.state[this.state.toggle])) {
+        
+        if ((prevState.toggle !== this.state.toggle) || 
+                (!equal(prevState[this.state.toggle], this.state[this.state.toggle]))) {
 
             const empty = this.checkForRequired()
             empty ? this.setState({ transparent: true }) : this.setState({ transparent: false })
@@ -249,11 +251,11 @@ class Reference extends Component {
     }
 
     checkForRequired = () => {
-        const list = this.renderList()
+        const list = renderList(this.state.toggle)
         for (var k in list){
             if(list[k].required === true) {
                 const filledVal = this.state[this.state.toggle][list[k].stateName]
-                if((filledVal === "") || (filledVal === null)) {
+                if(!filledVal) {
                     return true
                 }
             }
@@ -315,41 +317,25 @@ class Reference extends Component {
         })
     }
 
-    renderList = () => {
-
-        const { toggle } = this.state
-
-        if (toggle === "website") {
-            return websiteList
-        } else if (toggle === "news") {
-            return newsList
-        } else if (toggle === "book") {
-            return bookList
-        } else if (toggle === "journal") {
-            return journalList
-        } else if (toggle === "chapter") {
-            return chapterList
-        } else if (toggle === "paper") {
-            return paperList
-        } else if (toggle === "media") {
-            return mediaList
-        } else if (toggle === "general") {
-            return generalList
-        }
-    }
-
     handleSubmit = () => {
 
+        const _id = new ObjectID();
+
         const type = {
+            _id: String(_id),
             refType: this.state.toggle,
         }
 
         const data = Object.assign({}, this.state[this.state.toggle])
         const merged = Object.assign({}, type, data)
-        const subject = this.state.reference.slice()
 
-        subject.push(merged)
+        const newObj = update(this.props.draft, {ref: {$push: [merged]}})
 
+        this.props.updateDraftOne(newObj)
+
+        axios.post(`/api/draft/${this.props.draft._id}/ref`, {ref: merged})
+
+        // 初期化
         Object.keys(data).forEach(key => {
             if(key.toLowerCase().includes("date")){
                 data[key] = null
@@ -359,13 +345,11 @@ class Reference extends Component {
         })
 
         this.setState({
-            ...this.state,
-            reference: subject,
-            tempReference: merged,
+            transparent: true,
             [this.state.toggle]: data,
-        }, () => {
-            this.props.updateMessage("success", "参照を追加しました。")
         })
+
+        this.props.updateMessage("success", "参照を追加しました。")
     }
 
     handleClick = (name) => {
@@ -494,7 +478,7 @@ class Reference extends Component {
                         />
                         <Form
                             toggle={this.state.toggle}
-                            list={this.renderList() || generalList} // just in case
+                            list={renderList(this.state.toggle) || generalList} // just in case
                             getState={this.getState}
                             handleDateChange={this.handleDateChange}
                             handleTextChange={this.handleTextChange}
@@ -511,7 +495,7 @@ class Reference extends Component {
                             <Button 
                                 inverse={true} 
                                 disabled={this.state.transparent} 
-                                onClick={() => this.handleSubmit()}
+                                onClick={this.handleSubmit}
                             >
                                 参照を追加する
                             </Button>
@@ -531,7 +515,7 @@ class Reference extends Component {
                 <Collapse isOpened={this.state.refList.isOpened}>
                     <List
                         id={this.props.draft._id}
-                        reference={this.state.reference || []}
+                        reference={this.props.draft.ref || []}
                     />
                     <Space height="20px"/>
                 </Collapse>
@@ -587,7 +571,10 @@ class Reference extends Component {
                 />
                 ,
                 <Collapse key={"contentTag"} isOpened={this.state.tagAdd.isOpened}>
-                    <div>タグを追加</div>
+                    <Tag
+                        id={this.props.draft._id}
+                        tags={this.props.draft.tags}
+                    />
                 </Collapse>
                 ])}   
 

@@ -1,76 +1,49 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 
-import { IoIosCheckmark, IoMdMail, IoIosLock } from "react-icons/io"
-import { FaUserCircle } from "react-icons/fa"
+import TextField from '@material-ui/core/TextField';
+
+import { IoIosCheckmark　} from "react-icons/io"
 
 import { BottomWrapper } from "../LogIn/LogIn"
 import { Space } from "../../Theme"
 import Button from "../../Util/Button"
 
-const UserIcon = styled(FaUserCircle)`
-    position: absolute;
-    color: #636480;
-    z-index: 1;
-    left: 30px;
-    top: 10px;
-    transform: scale(1.2);
-`
-
-const MailIcon = styled(IoMdMail)`
-    position: absolute;
-    color: #636480;
-    z-index: 1;
-    left: 30px;
-    top: 10px;
-    transform: scale(1.2);
-`
-
-const PasswordIcon = styled(IoIosLock)`
-    position: absolute;
-    color: #636480;
-    z-index: 1;
-    left: 30px;
-    top: 10px;
-    transform: scale(1.2);
-`
-
 class SignUp extends Component {
 
     render () {
         return (
-            <form>
+            <Wrapper>
                 <InputWrapper>
-                    <UserIcon/>
-                    <input 
+                    <TextField 
+                        id="standard-basic" 
+                        label="ユーザー名" 
                         value={this.props.signUpStates.userName}
-                        placeholder="表示名" 
                         onChange={(e) => this.props.handleSignUpChange(e,"userName")} 
-                        type="text" 
-                        id="userName"
+                        type="text"
                         maxlength="25"
                     />
                     { this.props.signUpStates.userName &&
-                    <Match top={9} right={37}>
+                    <Match>
                         <Check/>
                     </Match>
                     }
                 </InputWrapper>
                 <InputWrapper>
-                    <MailIcon/> 
-                    <input 
+                    <TextField 
+                        id="standard-basic" 
+                        label="Eメール" 
                         value={this.props.signUpStates.email}
-                        placeholder="Eメール" 
-                        onChange={(e) => this.props.handleSignUpChange(e,"email")} 
+                        onChange={(e) => this.props.handleSignUpChange(e,"email")}
                         type="email"
                     />
                     {   (this.props.valid.validEmail && this.props.valid.uniqueEmail) 
                     ?
-                    <Match top={9} right={37}>
+                    <Match>
                         <Check/>
                     </Match>
                     :
-                    <Match top={-18} left={25}>
+                    <Match>
                         {   ((this.props.valid.validEmail　=== false) || (this.props.valid.uniqueEmail === false)) &&
                         <div/>
                         }
@@ -84,82 +57,73 @@ class SignUp extends Component {
                     }
                 </InputWrapper>
                 <InputWrapper>
-                    <PasswordIcon/>
-                    <input 
+                    <TextField 
+                        id="standard-basic" 
+                        label="パスワード" 
                         value={this.props.signUpStates.password}
-                        placeholder="パスワード" 
                         onChange={(e) => this.props.handleSignUpChange(e,"password")} 
-                        type="password" 
-                        id="password"
+                        type="password"
                     />
-                    {   (this.props.valid.matchPassword && this.props.valid.longPassword)
+                    {   this.props.valid.longPassword
                     ?
                     <Match top={9} right={37}>
                         <Check/>
                     </Match>
                     :
                     <Match top={-18} left={25}>
-                        { ((this.props.valid.matchPassword === false) || (this.props.valid.longPassword === false)) &&
+                        { this.props.valid.longPassword === false &&
                         <div/>
                         }
                         { this.props.valid.longPassword === false &&
-                        <p>パスワードが短すぎます。</p>
-                        }
-                        { (this.props.valid.longPassword) && (this.props.valid.matchPassword === false) &&
-                        <p>パスワードが一致しません。</p>
+                        <p>パスワードは8文字以上にしてください。</p>
                         }
                     </Match>
                     }
                 </InputWrapper>
-                <InputWrapper>
-                    <PasswordIcon/>
+                <Remember onClick={(e) => this.props.setPolicy(e)}>
                     <input 
-                        value={this.props.signUpStates.confirm}
-                        placeholder="パスワードの確認" 
-                        onChange={(e) => this.props.handleSignUpChange(e,"confirm")} 
-                        type="password" 
-                        id="confirmPassowrd"
+                        type="checkbox" 
+                        id="remember" 
+                        name="remember" 
+                        checked={this.props.valid.policy} 
                     />
-                    {   (this.props.valid.matchPassword && this.props.valid.longPassword) &&
-                    <Match top={9} right={37}>
-                        <Check/>
-                    </Match>
-                    }
-                </InputWrapper>
+                    <label htmlFor="remember">利用規約、及びCookieの使用を含むプライバシーポリシーに同意します。</label>
+                </Remember>
                 <Space height="20px"/>
                 <BottomWrapper signUp={true}>
-                    {this.props.valid.valid
-                    ? <Button width={"360px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "signUp")}>アカウントを作成</Button>
-                    : <Button width={"360px"} disabled={true} type="submit">アカウントを作成</Button>
+                    {this.props.valid.valid && this.props.valid.policy
+                    ? <Button width={"316px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "signUp")}>アカウントを作成</Button>
+                    : <Button width={"316px"} disabled={true} type="submit">アカウントを作成</Button>
                     }
-                    <p>アカウントを作成すると、利用規約、及びCookieの使用を含むプライバシーポリシーに同意したことになります。</p>
                 </BottomWrapper>
-            </form>
+            </Wrapper>
         )
     }
 }
+
+const Wrapper = styled.div`
+    margin-top:  -15px;
+`
+
+const Remember = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0px 42px;
+    margin-bottom: 37px;
+`
 
 const InputWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     position: relative;
 
-    & > input {
+    & input {
         width:  316px;
-        padding-right: 12px;
-        padding-left: 32px;
-        height: 29px;
+        height: 20px;
         font-size: 12px;
-        font-family: ${props => props.theme.font};
-        position: relative;
-        border: none;
-        background-color: #f6f6f6;
-    }
-
-    & > input:nth-child(1) {
-        width: 116px !important;
     }
 `
 
@@ -167,9 +131,8 @@ const Match = styled.div`
     position: absolute;
     display: flex;
     align-items: center;
-    top: ${props => String(props.top) + "px"};
-    left: ${props => String(props.left) + "px"};
-    right: ${props => String(props.right) + "px"};
+    top: 24px;
+    right: 47px;
 
     & > div {
         background-color: #FF5F5F;
@@ -187,8 +150,7 @@ const Match = styled.div`
 `
 
 const Check = styled(IoIosCheckmark)`
-    transform: scale(2.2);
-    margin-top: 1px;
+    transform: scale(3.0);
     color: #4CD964;
 `
 

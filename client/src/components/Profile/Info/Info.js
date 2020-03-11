@@ -10,7 +10,7 @@ import * as actions from "../../../actions"
 import account from "../../../images/account.png"
 
 import InputText from "../../Util/InputText"
-import PeopleFollow from "../../PeopleFollow"
+import PeopleFollow from "../../People/FollowBtn/FollowBtn"
 
 class ProfileTop extends Component {
 

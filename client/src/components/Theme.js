@@ -16,6 +16,10 @@ const theme = {
     themeColor: {
         lightBlue: "#9EAEE5"
     },
+    primary: "#0E1222",
+    secondary: "#333A49",
+    tertiary: "#9EAEE5",
+    unselected: "#888888", // 記述はしているが実際にはつかわれていない。参考まで程度。
     hover: "rgba(233, 233, 238, 0.25)",
     borderColor: "#eaeaea",
 

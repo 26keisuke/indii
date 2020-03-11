@@ -168,7 +168,7 @@ class Index extends Component {
         return (
             <IndexBox>
                 {!!selectedId &&
-                <IndexPreview top="66px" right="40px">
+                <IndexPreview top="50px" right="40px">
                     <div/>
                     <p>{selectedIndex.join(".")}</p>
                     <p>{selectedTitle}</p>

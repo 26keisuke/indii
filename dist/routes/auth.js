@@ -11,6 +11,8 @@ var _passport = _interopRequireDefault(require("passport"));
 
 var _User = _interopRequireDefault(require("../models/User"));
 
+var _Token = _interopRequireDefault(require("../models/Token"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var router = _express["default"].Router();
@@ -52,7 +54,7 @@ router.get("/email/:id", function (req, res) {
 }); // 本来はここでもう一段階emailを入力してもらうステップを置いて、POSTで確認するのが理想（tokenIdを取得すれば誰でもできちゃうから）
 
 router.get("/confirmation/:tokenId", function (req, res) {
-  Token.findOne({
+  _Token["default"].findOne({
     token: req.params.tokenId
   }).then(function (token) {
     _User["default"].findById({
@@ -90,7 +92,7 @@ router.post("/password/reset/:tokenId", function (req, res) {
     return;
   }
 
-  Token.findOne({
+  _Token["default"].findOne({
     token: req.params.tokenId
   }).then(function (token) {
     _User["default"].findById({
@@ -126,7 +128,7 @@ router.post("/password/reset/email", function (req, res) {
       return;
     }
 
-    var token = new Token({
+    var token = new _Token["default"]({
       _userId: user._id,
       token: crypto.randomBytes(16).toString("hex")
     });
@@ -147,7 +149,7 @@ router.post("/password/reset/email", function (req, res) {
 }); // ログインしなくてもパスワードが再設定できるが大丈夫なのか？
 
 router.get("/password/reset/:tokenId", function (req, res) {
-  Token.findOne({
+  _Token["default"].findOne({
     token: req.params.tokenId
   }).then(function (token) {
     _User["default"].findById({
@@ -172,16 +174,18 @@ router.post("/resend", function (req, res) {
     if (!user) {
       console.log("User not found");
       res.send("FAIL");
+      res.redirect("/");
       return;
     }
 
     if (user.isVerified) {
       console.log("User is already verified");
       res.send("ALREADY");
+      res.redirect("/");
       return;
     }
 
-    var token = new Token({
+    var token = new _Token["default"]({
       _userId: user._id,
       token: crypto.randomBytes(16).toString("hex")
     });

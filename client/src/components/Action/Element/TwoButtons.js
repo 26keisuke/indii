@@ -26,7 +26,7 @@ export const ButtonLeft = styled.button`
     height:34px;
     cursor: pointer;
     background-color: #ffffff;
-    border: 0.5px solid #636480;
+    border: 0.5px solid ${props => props.theme.primary};
     outline:0;
 `
 
@@ -35,7 +35,7 @@ const ButtonRight = styled.button`
     height:34px;
     cursor: pointer;
     border: none;
-    background-color: #636480;
+    background-color: ${props => props.theme.primary};
     color: #ffffff;
     outline:0;
 

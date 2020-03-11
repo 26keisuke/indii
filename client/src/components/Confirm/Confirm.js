@@ -225,14 +225,14 @@ class Confirm extends Component {
             case "SELF_INTRO":
                 return (
                     <TextArea
-                        value={this.state.value}
+                        value={this.props.update.confirmation.value}
                         handleChange={(e) => this.setState({ value: e.target.value })}
                     />
                 )
             case "SELF_IMAGE":
                 return (
                     <Thumb
-                        value={this.state.value}
+                        value={this.props.update.confirmation.value}
                         handleChange={(img) => this.setState({ value: img })}
                     />
                 )

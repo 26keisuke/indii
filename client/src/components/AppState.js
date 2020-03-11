@@ -56,7 +56,8 @@ class AppState extends Component {
     outsideClick = (e) => {
 
         if(this.props.auth.showForm) {
-            if(this.authRef.current.contains(e.target)) {
+            // 何故だかたまにthis.authRefが関係ない時にundefinedになってエラーになるからthis.authRefを追加
+            if(this.authRef && this.authRef.current.contains(e.target)) {
                 return;
             }
             this.props.hideLogin();
@@ -72,10 +73,12 @@ class AppState extends Component {
     }
 
 
-    // こいつを分離しようと思えばできるが、こっちの方がlookupしやすい（人間的に）
-    postAction = (shouldProceed) => {
+    // shouldProeed => trueで指定されたactionを行う, falseでキャンセル
+    // acion(任意) => reduxに頼らず actionをset
+    // value(任意) => reduxに頼らず actionをset
+    postAction = (shouldProceed, _action, _value) => {
 
-        const {
+        var {
             id,
             action,
             problem1, problem2, problem3, problem4, problem5,
@@ -83,6 +86,9 @@ class AppState extends Component {
             draftId,
             index,
         } = this.props.update.confirmation
+
+        if(_action){ action = _action }
+        if(_value){ value = _value }
 
         // 初期に共通して行うこと
         if(authList.includes(action)){

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 import styled from "styled-components"
 
+import Breakpoint from "../../Breakpoint"
+
 const TopicElement = styled.div`    
     display: flex;
     flex-direction: row;
@@ -77,15 +79,17 @@ class Topic extends Component {
                     <TopicName>
                         {suggestion.topicName}
                     </TopicName>
-                    <TopicInfo>
-                        <div>
-                            {tags}
-                        </div>
-                        <div>
-                            <p>{suggestion.postCount.toLocaleString()} Posts</p>
-                            <p>{suggestion.likes.toLocaleString()} Favorites</p>
-                        </div>
-                    </TopicInfo>
+                    <Breakpoint name="dablet">
+                        <TopicInfo>
+                            <div>
+                                {tags}
+                            </div>
+                            <div>
+                                <p>ポスト数 {suggestion.postCount.toLocaleString()}</p>
+                                <p>お気に入り数 {suggestion.likes.toLocaleString()}</p>
+                            </div>
+                        </TopicInfo>
+                    </Breakpoint>
                 </TopicElement>
             </Link>
         )

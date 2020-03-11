@@ -28,8 +28,6 @@ var _mail = _interopRequireDefault(require("@sendgrid/mail"));
 
 var _User = _interopRequireDefault(require("./models/User"));
 
-var _Post = _interopRequireDefault(require("./models/Post"));
-
 var _Token = _interopRequireDefault(require("./models/Token"));
 
 var _auth = _interopRequireDefault(require("./routes/auth"));
@@ -41,6 +39,8 @@ var _profile = _interopRequireDefault(require("./routes/profile"));
 var _topic = _interopRequireDefault(require("./routes/topic"));
 
 var _post = _interopRequireDefault(require("./routes/post"));
+
+var _feed = _interopRequireDefault(require("./routes/feed"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -93,13 +93,7 @@ _passport["default"].use(new _passportLocal.Strategy({
   passReqToCallback: true
 }, function (req, email, password, done) {
   _User["default"].findOne({
-    email: email,
-    facebookId: {
-      $exists: false
-    },
-    googleId: {
-      $exists: false
-    }
+    email: email
   }).then(function (user) {
     if (user) {
       if (user.facebookId || user.googleId) {
@@ -155,7 +149,7 @@ _passport["default"].use(new _passportLocal.Strategy({
 
               _mail["default"].send(msg).then(function () {
                 console.log("Email has been sent");
-                done(null, user);
+                return done(null, user);
               });
             });
           });
@@ -193,20 +187,29 @@ _passport["default"].use(new _passportFacebook.Strategy({
           givenName = profile.givenName,
           emails = profile.emails,
           photos = profile.photos;
-      var value = {
-        facebookId: id,
-        userName: displayName,
-        name: {
-          familyName: familyName,
-          givenName: givenName
-        },
-        email: emails[0].value,
-        photo: photos[0].value,
-        isVerified: true,
-        verifiedDate: Date.now()
-      };
-      new _User["default"](value).save().then(function (user) {
-        done(null, user);
+
+      _User["default"].findOne({
+        email: emails[0].value
+      }).then(function (user) {
+        if (user) {
+          return done(null, false);
+        }
+
+        var value = {
+          facebookId: id,
+          userName: displayName,
+          name: {
+            familyName: familyName,
+            givenName: givenName
+          },
+          email: emails[0].value,
+          photo: photos[0].value,
+          isVerified: true,
+          verifiedDate: Date.now()
+        };
+        new _User["default"](value).save().then(function (user) {
+          return done(null, user);
+        });
       });
     }
   })["catch"](function (err) {
@@ -238,20 +241,29 @@ _passport["default"].use(new _passportGoogleOauth.Strategy({
           name = profile.name,
           emails = profile.emails,
           photos = profile.photos;
-      var value = {
-        googleId: id || "",
-        userName: displayName,
-        name: {
-          familyName: name.familyName || "",
-          givenName: name.givenName || ""
-        },
-        email: emails[0].value,
-        photo: photos[0].value || "",
-        isVerified: true,
-        verifiedDate: Date.now()
-      };
-      new _User["default"](value).save().then(function (user) {
-        done(null, user);
+
+      _User["default"].findOne({
+        email: emails[0].value
+      }).then(function (user) {
+        if (user) {
+          return done(null, false);
+        }
+
+        var value = {
+          googleId: id || "",
+          userName: displayName,
+          name: {
+            familyName: name.familyName || "",
+            givenName: name.givenName || ""
+          },
+          email: emails[0].value,
+          photo: photos[0].value || "",
+          isVerified: true,
+          verifiedDate: Date.now()
+        };
+        new _User["default"](value).save().then(function (user) {
+          return done(null, user);
+        });
       });
     }
   })["catch"](function (err) {
@@ -260,6 +272,7 @@ _passport["default"].use(new _passportGoogleOauth.Strategy({
 }));
 
 app.use("/api", _auth["default"]);
+app.use("/api/feed", _feed["default"]);
 app.use("/api/draft", _draft["default"]);
 app.use("/api/profile", _profile["default"]);
 app.use("/api/topic", _topic["default"]);
@@ -277,28 +290,6 @@ app.get("/auth/facebook/callback", _passport["default"].authenticate("facebook",
   failureRedirect: "/"
 }), function (req, res) {
   res.redirect("/");
-});
-app.get("/api/feed", function (req, res) {
-  // Post.find({contribution: { $exists: true, $ne: [] }}).sort({contribution: 1}).limit(10)
-  _Post["default"].find({
-    lastEdited: {
-      $exists: true
-    }
-  }).sort({
-    lastEdited: -1
-  }).limit(10).populate("creator").then(function (posts) {
-    res.send(posts);
-  })["catch"](function (err) {
-    console.log(err);
-  });
-});
-app.get("/api/search/:term", function (req, res) {
-  console.log("A TERM \"".concat(req.params.term, "\" HAS BEEN SEARCHED"));
-  res.send("");
-});
-app.post("/api/feedback", function (req, res) {
-  console.log("Feedback Received! \n", req.body);
-  res.send("");
 });
 
 if (process.env.NODE_ENV === "production") {

@@ -31,7 +31,7 @@ const RightInsideTitle = styled.div`
     display: flex;
     align-items: center;
     color: white;
-    background-color: #636480;
+    background-color: ${props => props.theme.secondary};
     position: relative;
     cursor: pointer;
     box-shadow: 1px 1px 10px #b2b2b2;

@@ -11,7 +11,7 @@ class Recommend extends Component {
         const flag = this.props.id
 
         return (
-            <TrendElement to={`/post/${this.props.id}`}>
+            <TrendElement to={flag ? "" : `/post/${this.props.id}`}>
                 <div>
                     { flag ? <p>{this.props.title}</p> : <p><Skeleton height={16} width={120}/></p>}
                     { flag ? <p>{BraftEditor.createEditorState(this.props.content).toText().replace(/a\s/g, "").substring(0, 100)}</p> : <p><Skeleton height={12} width={140} count={4}/></p>}

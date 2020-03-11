@@ -2,9 +2,10 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
-import TextField from '@material-ui/core/TextField';
 
 import * as actions from "../../../actions"
+
+import { IoMdMail, IoIosLock } from "react-icons/io"
 
 import Button from "../../Util/Button"
 import { Space } from "../../Theme"
@@ -20,44 +21,52 @@ class LogIn extends Component {
     render () {
         return (
             <form>
-                <TextWrapper>
-                    <TextField 
-                        id="standard-basic" 
-                        label="Eメール" 
+                <Division>
+                    <div/>
+                    <p>OR</p>
+                    <div/>
+                    { this.props.auth.logInError &&
+                    <Message>
+                        <div/>
+                        <p>Emailかパスワードが間違っています。</p>
+                    </Message>
+                    }
+                </Division>
+                <Input>
+                    <Icon1/>
+                    <input 
                         value={this.props.logInStates.email}
                         onChange={(e) => this.props.handleLogInChange(e,"email")} 
+                        placeholder="Eメール" 
                         type="email"
+                        name="email"
                     />
-                    
-                    <TextField 
-                        id="standard-basic" 
-                        label="パスワード" 
+                </Input>
+                <Input>
+                    <Icon2/>
+                    <input 
                         value={this.props.logInStates.password}
                         onChange={(e) => this.props.handleLogInChange(e,"password")} 
+                        placeholder="パスワード" 
                         type="password"
+                        name="password"
                     />
-                </TextWrapper>
-                <Remember onClick={(e) => this.props.setRemember(e)}>
+                </Input>
+                <Remember onClick={this.props.setRemember}>
                     <input 
                         type="checkbox" 
                         id="remember" 
                         name="remember" 
-                        checked={this.props.remember} 
+                        defaultChecked={this.props.remember} 
                     />
                     <label htmlFor="remember">次から入力を省略</label>
                 </Remember>
-                { this.props.error &&
-                <Message>
-                    <div/>
-                    <p>Emailかパスワードが間違っています。</p>
-                </Message>
-                }
                 <BottomWrapper>
                     {   ((this.props.logInStates.email) && (this.props.logInStates.password)) 
                     ?
-                    <Button width={"316px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "logIn")}>ログイン</Button>
+                    <Button width={"360px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "logIn")}>ログイン</Button>
                     :
-                    <Button width={"316px"} disabled={true} type="submit">ログイン</Button>
+                    <Button width={"360px"} disabled={true} type="submit">ログイン</Button>
                     }
                     <Space height={"7px"}/>
                     <Link to={"/verification/change"}>パスワードを忘れた方はこちら</Link>
@@ -68,15 +77,57 @@ class LogIn extends Component {
     }
 }
 
-const TextWrapper = styled.div`
+const Division = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
-
-    & > div {
-        width: 316px;
-        margin-bottom: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    & > p {
+        color: #B3B3C8;
+        font-size: 10px;
     }
+
+    & > div:nth-child(1),
+    & > div:nth-child(3){
+        width: 44%;
+        border: none;
+        border-bottom: 1px solid #eaeaea;
+    }
+`
+
+const Input = styled.div`
+    position: relative;
+    justify-content: center;
+    display: flex;
+    margin: 18px 0px;
+
+    & > input {
+        width: 315px;
+        height: 33px;
+        background-color: #f5f5f5;
+        border: none;
+        padding-left: 45px;
+        font-size: 13px;
+        font-family: ${props => props.theme.font}
+    }
+`
+
+const Icon1 = styled(IoMdMail)`
+    position:absolute;
+    transform: scale(1.6);
+    top: 12px;
+    left: 38px;
+    color: ${props => props.theme.fontColor.lightBlue};
+`
+
+const Icon2 = styled(IoIosLock)`
+    position:absolute;
+    transform: scale(1.6);
+    top: 12px;
+    left: 38px;
+    color: ${props => props.theme.fontColor.lightBlue};
 `
 
 export const BottomWrapper = styled.div`
@@ -102,20 +153,15 @@ export const BottomWrapper = styled.div`
     }
 `
 
-const Remember = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin: 0px 42px;
-    margin-bottom: 30px;
-`
 
 const Message = styled.div`
+    position: absolute;
     display: flex;
     align-items: center;
+    bottom: -20px;
+    left: 22px;
     font-size: 10px;
     color: #333333;
-    margin-left: 42px;
 
     & > div {
         width: 7px;
@@ -123,9 +169,17 @@ const Message = styled.div`
         margin-right: 8px;
         border-radius: 100%;
         background-color: #FF5F5F;
+        
     }
 `
 
+const Remember = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0px 34px;
+    margin-bottom: 18px;
+`
 
 function mapStateToProps({auth}){
     return {

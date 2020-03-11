@@ -3,13 +3,14 @@ import { connect } from "react-redux"
 import styled from "styled-components"
 import { Helmet } from "react-helmet"
 
-import Screen from "../Util/Screen"
+import Button from '@material-ui/core/Button';
+import PublishIcon from '@material-ui/icons/Publish';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 
 import * as actions from "../../actions"
 
-import upload from "../../images/upload.png"
-import { MdDelete } from "react-icons/md"
-
+import Screen from "../Util/Screen"
 import Draft from "./Element/Element"
 import { Border } from "../Theme"
 
@@ -22,49 +23,16 @@ const DraftTop = styled.div`
     }
 `
 
-const DraftDelete = styled.div`
-    position: absolute;
-    width: 90px;
-    border: 1px solid #646380;
-    font-size: 10px;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    padding: 3px;
-    color: #646380;
-    border-radius: 4px;
-    align-items: center;
-    top:2px;
-    right: -380px;
-    cursor: pointer;
-
-    & > svg {
-        width: 15px;
-        height: 15px;
-        margin-left: 2px;
-    }
-`
-
 const DraftUpload = styled.div`
     position: absolute;
-    width: 90px;
-    border: 1px solid #646380;
     font-size: 10px;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    padding: 3px;
-    color: #646380;
-    border-radius: 4px;
-    align-items: center;
-    top:2px;
+    top:-3px;
     right: -500px;
-    cursor: pointer;
+    display: flex;
 
-    & > img {
-        width: 15px;
-        height: 15px;
-        margin-left: 2px;
+    & > button {
+        transform: scale(0.9);
+        margin-right: 5px;
     }
 `
 
@@ -117,13 +85,9 @@ class DraftNavigation extends Component {
         return(
             <DraftTop>
                 <p>下書き</p>
-                <DraftDelete onClick={this.deleteDraft}>
-                    <p>削除</p>
-                    <MdDelete/>
-                </DraftDelete>
-                <DraftUpload　onClick={this.uploadDraft}>
-                    <p>アップロード</p>
-                    <img src={upload} alt={"アップロード画面へと移行するボタン"}/>
+                <DraftUpload>
+                    <Button onClick={this.deleteDraft}　variant="outlined" color="primary" endIcon={<DeleteForeverIcon/>}>削除</Button>
+                    <Button onClick={this.uploadDraft}　variant="outlined" color="primary" endIcon={<PublishIcon/>}>アップロード</Button>
                 </DraftUpload>
             </DraftTop>
         )

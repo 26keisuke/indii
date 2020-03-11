@@ -109,6 +109,7 @@ const BackIcon = styled.img`
     pointer-events: none;
     width: 15px;
     height: 15px;
+    margin-top: 2px;
 `
 
 class Back extends Component {

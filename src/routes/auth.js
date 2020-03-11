@@ -2,6 +2,7 @@ import express from "express"
 import passport from "passport";
 
 import User from "../models/User"
+import Token from "../models/Token"
 
 var router = express.Router();
 
@@ -159,11 +160,13 @@ router.post("/resend", (req, res) => {
         if(!user) { 
             console.log("User not found");
             res.send("FAIL")
+            res.redirect("/")
             return; 
         }
         if(user.isVerified) { 
             console.log("User is already verified");
             res.send("ALREADY")
+            res.redirect("/")
             return; 
         }
 

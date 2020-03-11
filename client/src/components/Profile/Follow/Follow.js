@@ -21,8 +21,6 @@ const BoxWrapper = styled.div`
 `
 
 const Wrapper = styled.div`
-    /* box-shadow: 1px 1px 10px #eaeaea;
-    background-color: #ffffff; */
     width: 300px;
     margin: 10px;
     padding: 12px 20px;

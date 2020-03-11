@@ -10,6 +10,7 @@ import {
 import { 
     FETCH_DRAFT, FETCH_ONE_DRAFT,
     DRAFT_UPDATED, DRAFT_READ, 
+    UPDATE_DRAFT_ONE,
 } from "../types/types";
 
 export const fetchDraft = (nounce) => async (dispatch) => {
@@ -35,6 +36,10 @@ export const draftUpdated = () => (dispatch) => {
 export const draftRead = () => (dispatch) => {
     dispatch({type: DRAFT_READ})
 }
+
+export const updateDraftOne = (obj) => (dispatch) => {
+    dispatch({type: UPDATE_DRAFT_ONE, payload: obj})
+} 
 
 
 export const changeDraftName = (draftId, value, revert) => async (dispatch) => {

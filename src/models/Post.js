@@ -12,6 +12,7 @@ const postSchema = new Schema({
     topicMobileImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"},  // おそらくこいつはいらないと思うが一応
     index: [Number], // 2.1の場合は[2,1]
     postName: String,
+    tags: [String],
     postImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     content: String,
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -27,7 +28,7 @@ const postSchema = new Schema({
     },
     feedback: [{ // report 
         timeStamp: Date,
-        type: { type: String, enum: [""]},
+        type: { type: [String], enum: ["HARD_TO_UNDERSTAND","UNAPPROPRIATE", "WRONG_CONTENT","WRONG_TITLE", "DUPLICATE"]},
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     }],
     rating: [{ // emoji

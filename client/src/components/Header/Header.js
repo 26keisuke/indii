@@ -3,14 +3,13 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components"
 
-import "./Profile/Profile";
 import * as actions from "../../actions"
-
-import indii from "../../images/indii.png";
 
 import Profile from "./Profile/Profile";
 import Navigation from "./Navigation/Navigation"
 import Select from "../Action/Controller/Select"
+
+import indii from "../../images/indii.png";
 
 const NavBar = styled.nav`
     display: flex;
@@ -37,16 +36,14 @@ const Logo = styled(Link)`
     }
 
     & > p {
-        font-family: 'Libre Baskerville', serif;
-        text-shadow: 1px 2px 4px #eaeaea;
+        text-shadow: 1px 2px 10px #d2d2d2;
         font-size:24px;
         color: #222222;
-        margin-right:20px;
+        margin-right: 50px;
         letter-spacing: 0px;
 
         @media only screen and (max-width: 670px) {
-            font-size:21px !important;
-            font-family: 'Libre Baskerville', serif !important;
+            display: none;
         }
     }
 
@@ -56,8 +53,7 @@ const Logo = styled(Link)`
         margin-top:-8px;
 
         @media only screen and (max-width: 670px) {
-            width:30px !important;
-            height:40px !important;
+            display: none;
         }
     }
 `

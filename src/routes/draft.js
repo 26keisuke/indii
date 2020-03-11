@@ -65,6 +65,7 @@ router.post("/upload", (req, res) => {
                     if(post.content !== draft.content){post.content = draft.content}
                     if(post.ref !== draft.ref){post.ref = draft.ref}
                     if(post.postName !== draft.postName){post.postName = draft.postName} //まだ何も変更できないが、将来的には変更できるようにしたい
+                    if(!equal(post.tags, draft.tags)){post.tags = draft.tags}
 
                     if(post.postImg !== draft.postImg) {
                         const imgId = mongoose.Types.ObjectId()
@@ -98,7 +99,7 @@ router.post("/upload", (req, res) => {
             const { 
                 topic, topicName,
                 postName, postImg,
-                content, ref,
+                content, ref, tags,
                 config, 
                 topicRectangleImg, topicSquareImg, topicMobileImg } = draft
 
@@ -122,6 +123,7 @@ router.post("/upload", (req, res) => {
                 topicMobileImg: topicMobileImg,
                 postName: postName,
                 postImg: postImg ? imgId : undefined,
+                tags: tags,
                 index: newIndex,
                 content: content,
                 ref: ref,
@@ -166,7 +168,7 @@ router.post("/upload", (req, res) => {
                         }
                         newColumn.posts.push(newPost)
 
-                        topicElem.splice(threshold, 0, newColumn)
+                        topicElem.column.splice(threshold, 0, newColumn)
 
                         // topicElem.column.push(newColumn) <- これだと、順番がそろわない（columnは順番がそろわなくてはいけない）
 
@@ -235,7 +237,7 @@ router.post("/upload", (req, res) => {
 
                             topicElem.postCount++;
                             
-                            topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST"})
+                            topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST", postName: postName})
 
                             topicElem.save()
                         })
@@ -399,6 +401,19 @@ router.post("/:id/config", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
         draft.config[req.body.config] = !draft.config[req.body.config]
+        draft.save()
+        .then(res.send("Success"))
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+router.post("/:id/tag", (req, res) => {
+    console.log(req.body)
+    Draft.findById(req.params.id)
+    .then(draft => {
+        draft.tags = req.body.tags
         draft.save()
         .then(res.send("Success"))
     })

@@ -13,6 +13,7 @@ const draftSchema = new Schema({
 
     postName: String,
     postImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
+    tags: [String],
     creationDate: Date,
     editDate: [Date],
 

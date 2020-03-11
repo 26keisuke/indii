@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { Link } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
 
-import PeopleFollow from "../PeopleFollow"
+import PeopleFollow from "./FollowBtn/FollowBtn"
 
 const PeopleElement = styled.div`
 

@@ -426,6 +426,13 @@ router.post("/:id/config", function (req, res) {
     console.log(err);
   });
 });
+router.post("/:id/tag", function (req, res) {
+  _Draft["default"].findById(req.params.id).then(function (draft) {
+    console.log("CALLED");
+  })["catch"](function (err) {
+    console.log(err);
+  });
+});
 router.post("/:id/image", function (req, res) {
   var imgId = _mongoose["default"].Types.ObjectId();
 

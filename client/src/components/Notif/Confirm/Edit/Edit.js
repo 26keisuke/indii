@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import styled from "styled-components"
 import { ChangeTitle, ChangeUnderline } from "../Confirm"
-import PeopleFollow from "../../../PeopleFollow"
+import PeopleFollow from "../../../People/FollowBtn/FollowBtn"
 import { Space } from "../../../Theme"
 
 import { fmtDate } from "../../../Util/util"

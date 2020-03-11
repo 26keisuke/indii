@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import PropTypes from "prop-types"
 import axios from "axios"
 
-import * as actions from "../actions"
+import * as actions from "../../../actions"
 
 import { TiUserAddOutline } from 'react-icons/ti';
 import { FiCheck } from 'react-icons/fi';
@@ -155,25 +155,25 @@ const Follow = styled.div`
 
     ${props => props.follow 
     ? css`
-        background-color: #9aaee6;
+        background-color: ${props => props.theme.secondary};
         padding: 2px 1px;
         padding-left: 9px;
     `
     : css`
-        border: 1px solid #636480;
+        border: 1px solid ${props => props.theme.primary};
         padding: 1px 0px;
         padding-left: 8px;
 
         &:hover {
-            border:1px solid #9aaee6;
+            border:1px solid ${props => props.theme.secondary};
         }
 
         &:hover > svg{
-            color: #9aaee6;
+            color: ${props => props.theme.secondary};
         }
 
         &:hover > p{
-            color: #9aaee6;
+            color: ${props => props.theme.secondary};
         }
 
     `}

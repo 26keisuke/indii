@@ -46,7 +46,6 @@ const Title = styled.p`
     font-size: 15px;
     color: #1C1C1C;
     margin-bottom: 5px;
-    font-weight: bold;
 `
 
 const Content = styled.p`
