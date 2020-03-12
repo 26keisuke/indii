@@ -51,7 +51,7 @@ class App extends Component {
                                 <Route exact path="/action" component={Action} />
                                 <Route path="/verification/:type" component={Verification}/>
                                 <Route path="/verification/:type/:tokenId" component={Verification}/> 
-                                <Route path="/setting" render={() => (auth.loggedIn ? <Setting/> : <Redirect to="/"/>)}/>
+                                <Route path="/setting" component={Setting}/>
                             </div>
                         </AppState>
                     </GAListener>

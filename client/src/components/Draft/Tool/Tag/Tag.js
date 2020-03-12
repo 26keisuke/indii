@@ -3,10 +3,10 @@ import styled from "styled-components"
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import { connect } from "react-redux"
-import axios from "axios"
 
 import * as actions from "../../../../actions"
 
+import { RevertBtn } from "../Info/Info"
 import { Space } from "../../../Theme"
 
 class Tag extends Component {
@@ -34,7 +34,7 @@ class Tag extends Component {
                 tags: state.tags.filter(tag => tag !== selectedTag)
             }
         }, () => {
-            this.updateTags(this.props.id, this.state.tags)
+            this.props.changeTag(this.props.id, this.state.tags, false)
         })
     }
 
@@ -58,28 +58,24 @@ class Tag extends Component {
         this.setState(state => {
             return {
                 value: "",
+                limit: false,
+                duplicate: false,
+                warning: false,
                 tags: state.tags.concat(this.state.value)
             }
         }, () => {
-            this.updateTags(this.props.id, this.state.tags, true)
+            this.props.changeTag(this.props.id, this.state.tags, false)
         })    
-    }
-
-    updateTags = (draftId, newTags, sendMessage) => {
-        const url = `/api/draft/${draftId}/tag`
-    
-        axios.post(url, {tags: newTags})
-        .then(res => {
-            if(sendMessage){ this.props.updateMessage("success", "タグを追加しました。") }
-        })
-        .catch(err => {
-            console.log(err)
-        })
     }
 
     render () {
         return (
             <Wrapper>
+                { this.props.edit &&
+                <RevertWrapper>
+                    <RevertBtn onClick={this.props.revertClick}>最初の状態に戻す</RevertBtn>
+                </RevertWrapper>
+                }
                 <ChipWrapper>
                     {   
                     this.state.tags.map((tag,index) => 
@@ -122,6 +118,12 @@ class Tag extends Component {
     }
 }
 
+const RevertWrapper = styled.div`
+    position: relative;
+    margin-right: 9px;
+    margin-top: 5px;
+`
+
 const TextWrapper = styled.form`
     padding: 0px 8px;
     width: 100%;
@@ -141,7 +143,7 @@ const ChipWrapper = styled.div`
     display: flex;
     width: 100%;
     flex-wrap: wrap;
-    margin: 15px 0px;
+    margin: 20px 0px;
 
     & > div {
         height: 23px;
@@ -158,7 +160,7 @@ const Message = styled.div`
     align-items: center;
     font-size: 10px;
     color: #333333;
-    margin-right: 8px;
+    margin-left: 8px;
 
     & > div {
         width: 7px;

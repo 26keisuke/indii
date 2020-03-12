@@ -164,6 +164,7 @@ class Reference extends Component {
                 creationDate: undefined,
                 lastEdited: undefined,
                 lastEditedAuthor: undefined,
+                editIndex: [],
                 config: {
                     allowEdit: false,
                 }
@@ -193,8 +194,6 @@ class Reference extends Component {
         if((!this.state.info.postName) && (!this.state.info.author) && (this.props.draft.postName)){
             var author;
             var creationDate;
-            var lastEdited;
-            var lastEditedAuthor;
 
             if(this.props.draft.type === "New") {
                 author = this.props.auth.info
@@ -204,8 +203,9 @@ class Reference extends Component {
                     author = this.props.draft.editCreator
                     creationDate = this.props.draft.editCreationDate
                 }
-                lastEdited = this.props.draft.editLastEdited
-                lastEditedAuthor = this.props.draft.editLastEditedAuthor
+                var lastEdited = this.props.draft.editLastEdited
+                var lastEditedAuthor = this.props.draft.editLastEditedAuthor
+                var editIndex = this.props.draft.editIndex
             }
 
             this.setState({
@@ -218,6 +218,7 @@ class Reference extends Component {
                     creationDate: creationDate,
                     lastEdited: lastEdited,
                     lastEditedAuthor: lastEditedAuthor,
+                    editIndex: editIndex,
                     config: {
                         ...this.state.info.config,
                         allowEdit: this.props.draft.config.allowEdit,
@@ -402,6 +403,17 @@ class Reference extends Component {
         this.props.enableGray();
     }
 
+    revertTagClick = () => {
+        const id = this.props.draft._id;
+        const action = "CHANGE_TAG";
+        const title = "タグを元に戻す";
+        const message = "タグを最初の状態に戻しますか？";
+        const caution = "";
+        const buttonMessage = "元に戻す";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        this.props.enableGray();
+    }
+
     handleChange = (e) => {
         this.setState({
             ...this.state,
@@ -572,8 +584,10 @@ class Reference extends Component {
                 ,
                 <Collapse key={"contentTag"} isOpened={this.state.tagAdd.isOpened}>
                     <Tag
+                        edit={this.props.draft.type === "Edit"}
                         id={this.props.draft._id}
                         tags={this.props.draft.tags}
+                        revertClick={this.revertTagClick}
                     />
                 </Collapse>
                 ])}   

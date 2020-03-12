@@ -58,6 +58,22 @@ export const changeDraftName = (draftId, value, revert) => async (dispatch) => {
     })
 }
 
+export const changeTag = (draftId, tags, revert) => async (dispatch) => {
+    const url = `/api/draft/${draftId}/tag`
+    axios.post(url, {tags, revert})
+    .then(res => {
+        dispatch(draftUpdated())
+        if(revert){
+            dispatch(updateMessage("success", "タグを元に戻しました。"))
+            return
+        }
+        dispatch(updateMessage("success", "タグを変更しました。"))
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
 export const changeDraftConfig = (draftId, value) => async (dispatch) => {
     const url = `/api/draft/${draftId}/config`
     axios.post(url, {config: value})
@@ -79,6 +95,7 @@ export const deleteDraft = (id) => async (dispatch) => {
             dispatch(endFetching())
             dispatch(disableGray())
             dispatch(fetchDraft(id)) // this certainly isnt the optimal because req is sent to server again
+            dispatch(draftUpdated())
             dispatch(updateMessage("success", "下書きを削除しました。"))
             return
         })

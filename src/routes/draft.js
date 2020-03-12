@@ -11,6 +11,8 @@ import Image from "../models/Image"
 const router = express.Router()
 
 router.get("/", (req, res) => {
+    console.log("HERE1")
+    console.log(req.user.id)
     User.findById(req.user.id)
         .then(user => {
             Draft.find({_id: {$in: user.draft}, isDeleted: false, isUploaded: false})
@@ -25,6 +27,9 @@ router.get("/", (req, res) => {
 })
 
 router.get("/:draftId", (req, res) => {
+    console.log("HERE")
+    console.log(req.params.draftId)
+    // if(req.params.draftId){ return }
     Draft.findById(req.params.draftId).populate("editCreator").populate("editLastEditedAuthor").exec()
     .then(draft => {
         res.send(draft)
@@ -43,11 +48,12 @@ router.post("/upload", (req, res) => {
 
             const now = Date.now()
 
-            if(draft.type !== "New") {
-                if((draft.config.allowEdit === false) && (draft.editCreator._id !== req.user.id)){
-                    User.findById(draft.editCreator)
-                    .then(user => {
+            User.findById(draft.editCreator)
+            .then(user => {
 
+                if(draft.type !== "New") {
+                    // allowEditがfalseの時
+                    if((draft.config.allowEdit === false) && (draft.editCreator._id !== req.user.id)){
                         draft.editUploadedDate = now
 
                         user.notif.push({timeStamp: now, type: "POST_EDIT", user: req.user.id, post: draft.editPostId, draft: draft._id})
@@ -56,43 +62,46 @@ router.post("/upload", (req, res) => {
                         user.save()
                         res.send("Success")
                         return
+                    }
+
+                    // allowEditがtrueの時
+                    Post.findById(draft.editPostId)
+                    .then(post => {
+
+                        if(post.content !== draft.content){post.content = draft.content}
+                        if(post.ref !== draft.ref){post.ref = draft.ref}
+                        if(post.postName !== draft.postName){post.postName = draft.postName} //まだ何も変更できないが、将来的には変更できるようにしたい
+                        if(!equal(post.tags, draft.tags)){post.tags = draft.tags}
+
+                        if(post.postImg !== draft.postImg) {
+                            const imgId = mongoose.Types.ObjectId()
+                            new Image({_id: imgId, image: draft.postImg.image}).save()
+                            post.postImg = imgId
+                        }
+
+                        post.contribution.push({user: req.user.id, timeStamp: now})
+
+                        draft.isUploaded = true
+
+                        user.notif.push({timeStamp: now, type: "POST_EDIT", user: req.user.id, post: draft.editPostId, draft: draft._id})
+
+                        Topic.findById(post.topic)
+                        .then(topicElem => {
+
+                            topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST", postName: draft.postName})
+
+                            topicElem.save()
+                            post.save()
+                            draft.save()
+
+                            res.send("Success")
+                            return
+                        })
                     })
                     return
                 }
-                Post.findById(draft.editPostId)
-                .then(post => {
-
-                    if(post.content !== draft.content){post.content = draft.content}
-                    if(post.ref !== draft.ref){post.ref = draft.ref}
-                    if(post.postName !== draft.postName){post.postName = draft.postName} //まだ何も変更できないが、将来的には変更できるようにしたい
-                    if(!equal(post.tags, draft.tags)){post.tags = draft.tags}
-
-                    if(post.postImg !== draft.postImg) {
-                        const imgId = mongoose.Types.ObjectId()
-                        new Image({_id: imgId, image: draft.postImg.image}).save()
-                        post.postImg = imgId
-                    }
-
-                    post.contribution.push({user: req.user.id, timeStamp: now})
-
-                    draft.isUploaded = true
-
-                    Topic.findById(post.topic)
-                    .then(topicElem => {
-
-                        topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST", postName: draft.postName})
-
-                        topicElem.save()
-                        post.save()
-                        draft.save()
-
-                        res.send("Success")
-                        return
-                    })
-                })
+            })
             
-                return
-            }
             
             const imgId = mongoose.Types.ObjectId();
 
@@ -376,16 +385,13 @@ router.post("/:id", (req, res) => {
 router.post("/:id/name", (req, res) => {
     Draft.findById(req.params.id)
     .then(draft => {
-        if(req.body.revert){
-            if(draft.type === "Edit") {
-                Post.findById(draft.editPostId)
-                .then(post => {
-                    console.log(post.postName)
-                    draft.postName = post.postName
-                    draft.save()
-                    .then(res.send("Success"))
-                })
-            }
+        if(req.body.revert && (draft.type === "Edit")){
+            Post.findById(draft.editPostId)
+            .then(post => {
+                draft.postName = post.postName
+                draft.save()
+                .then(res.send("Success"))
+            })
         } else {
             draft.postName = req.body.value
             draft.save()
@@ -410,12 +416,20 @@ router.post("/:id/config", (req, res) => {
 })
 
 router.post("/:id/tag", (req, res) => {
-    console.log(req.body)
     Draft.findById(req.params.id)
     .then(draft => {
-        draft.tags = req.body.tags
-        draft.save()
-        .then(res.send("Success"))
+        if(req.body.revert && (draft.type === "Edit")){
+            Post.findById(draft.editPostId)
+            .then(post => {
+                draft.tags = post.tags
+                draft.save()
+                .then(res.send("Success"))
+            })
+        } else {
+            draft.tags = req.body.tags
+            draft.save()
+            .then(res.send("Success"))
+        }
     })
     .catch(err => {
         console.log(err)

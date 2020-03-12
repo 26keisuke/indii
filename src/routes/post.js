@@ -39,6 +39,7 @@ router.post("/:postId/edit", isLoggedIn, (req, res) => {
             postName: post.postName,
             postImg: post.postImg,
             content: post.content,
+            tags: post.tags,
             editPostImg: post.postImg,
             editContent: post.content,
             editPostName: post.postName,
@@ -49,6 +50,7 @@ router.post("/:postId/edit", isLoggedIn, (req, res) => {
             editLastEdited: (type !== "New") && lastContribution && lastContribution.timeStamp,
             editLastEditedAuthor: (type !== "New") && lastContribution && lastContribution.user,
             editIndex: post.index,
+            editTags: post.tags,
             ref: post.ref,
             config: {
                 allowEdit: post.config.allowEdit,

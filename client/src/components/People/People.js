@@ -12,10 +12,13 @@ const PeopleElement = styled.div`
     border-radius: 4px;
     cursor: pointer;
 
+    &:hover{
+        background-color: ${props => props.theme.hover};
+    }
+
     & > p {
         font-size: 11px;
         margin: 0px 1px;
-        cursor: default;
         min-height: 51px;
 
         & > span {
@@ -37,12 +40,9 @@ const PeopleElement = styled.div`
             object-fit: cover;
             flex-shrink: 0;
             margin-right: 10px;
-            cursor: pointer;
         }
 
         & > div:nth-child(2) {
-
-            cursor: pointer;
 
             & > p:nth-child(1) {
                 font-size: 12px;

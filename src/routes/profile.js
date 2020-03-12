@@ -20,6 +20,26 @@ router.get("/:userId", (req, res) => {
     })
 })
 
+router.post("/:userId", (req, res) => {
+    User.findById(req.params.userId)
+    .then(user => {
+        if(user.intro !== req.body.intro){
+            user.intro = req.body.intro
+        }
+        if(user.userName !== req.body.userName){
+            user.userName = req.body.userName
+        }
+        if(user.comment !== req.body.comment){
+            user.comment = req.body.comment
+        }
+        user.save()
+        res.send("Success")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
 router.post("/:userId/photo", (req, res) => {
     User.findById(req.params.userId)
     .then(user => {
@@ -32,41 +52,41 @@ router.post("/:userId/photo", (req, res) => {
     })
 })
 
-router.post("/:userId/name", (req, res) => {
-    User.findById(req.params.userId)
-    .then(user => {
-        user.userName= req.body.userName
-        user.save()
-        res.send("Success")
-    })
-    .catch(err => {
-        console.log(err)
-    })
-})
+// router.post("/:userId/name", (req, res) => {
+//     User.findById(req.params.userId)
+//     .then(user => {
+//         user.userName= req.body.userName
+//         user.save()
+//         res.send("Success")
+//     })
+//     .catch(err => {
+//         console.log(err)
+//     })
+// })
 
-router.post("/:userId/comment", (req, res) => {
-    User.findById(req.params.userId)
-    .then(user => {
-        user.comment = req.body.comment
-        user.save()
-        res.send("Success")
-    })
-    .catch(err => {
-        console.log(err)
-    })
-})
+// router.post("/:userId/comment", (req, res) => {
+//     User.findById(req.params.userId)
+//     .then(user => {
+//         user.comment = req.body.comment
+//         user.save()
+//         res.send("Success")
+//     })
+//     .catch(err => {
+//         console.log(err)
+//     })
+// })
 
-router.post("/:userId/intro", (req, res) => {
-    User.findById(req.params.userId)
-    .then(user => {
-        user.intro= req.body.intro
-        user.save()
-        res.send("Success")
-    })
-    .catch(err => {
-        console.log(err)
-    })
-})
+// router.post("/:userId/intro", (req, res) => {
+//     User.findById(req.params.userId)
+//     .then(user => {
+//         user.intro= req.body.intro
+//         user.save()
+//         res.send("Success")
+//     })
+//     .catch(err => {
+//         console.log(err)
+//     })
+// })
 
 router.post("/:userId/follow", (req, res) => {
 

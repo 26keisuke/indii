@@ -3,7 +3,6 @@
 import React, { Component } from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
-// import equal from "deep-equal"
 import update from "immutability-helper"
 import { Transition } from 'react-transition-group';
 
@@ -280,7 +279,26 @@ class Confirm extends Component {
         }
     }
 
+    // value, name => array of values
     setValue = (value, name) => {
+
+        // if array (must have corresponding names)
+        if(Array.isArray(value)){
+            var obj = {};
+
+            for(var i=0; i < value.length; i++){
+                obj[name[i]] = value[i]
+            }
+
+            const newObj = update(this.state.value, {$set: obj})
+
+            this.setState({
+                value: newObj,
+            })
+
+            return
+        }
+
         if(!name) {
             this.setState({ value: value })
         } else {
@@ -304,11 +322,12 @@ class Confirm extends Component {
 
     renderContent = (id, action) => {
         switch(action){
-            case "SELF_INTRO":
+            case "SELF_EDIT":
                 return (
                     <TextArea
                         value={this.props.update.confirmation.value}
-                        handleChange={(e) => this.setState({ value: e.target.value })}
+                        changedValue={this.state.value}
+                        setValue={this.setValue}
                     />
                 )
             case "SELF_IMAGE":
@@ -426,8 +445,11 @@ class Confirm extends Component {
                         ?   next 
                             ?
                                 <button onClick={() => this.parseNext()}>{buttonMessage}</button>
-                            :
+                            : this.state.value 
+                            ?
                                 // <button onClick={() => postAction(action, id, value)}>{buttonMessage}</button>
+                                <button onClick={() => postAction(true, "", this.state.value)}>{buttonMessage}</button>
+                            :
                                 <button onClick={() => postAction(true)}>{buttonMessage}</button>
                         :
                         <button>{buttonMessage}</button>

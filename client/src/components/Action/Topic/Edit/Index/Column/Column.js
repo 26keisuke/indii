@@ -81,7 +81,7 @@ const ShowMoreWrapper = styled.div`
 const DragArea = styled(GiHamburgerMenu)`
     transform: scale(1.3);
     margin-top: -5px;
-    color: #636480;
+    color: ${props => props.theme.secondary};
 
 `
 

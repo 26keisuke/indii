@@ -185,7 +185,7 @@ class ActionTag extends Component {
                         <TagList>
                             {this.renderTags()}
                         </TagList>
-                        <Space height={"27px"}/>
+                        <Space height={"35px"}/>
                         <Autosuggest
                             suggestions={suggestions}
                             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -214,6 +214,7 @@ const TagList = styled.div`
     position: absolute;
     left: 0px;
     top: -2px;
+
 
     & > div {
         height: 23px;

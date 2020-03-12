@@ -1,5 +1,7 @@
 import React, {Component} from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
+
 import { ChangeTitle, ChangeUnderline } from "../Confirm"
 import PeopleFollow from "../../../People/FollowBtn/FollowBtn"
 import { Space } from "../../../Theme"
@@ -14,7 +16,7 @@ class Edit extends Component {
                 <ChangeTitle>{this.props.title}</ChangeTitle>
                 }
                 <p>{!this.props.date ? "-" : fmtDate(this.props.date)}</p>
-                <Editor>
+                <Editor to={`/profile/${this.props.id}`}>
                     <img src={this.props.photo} alt={"前回の編集者の写真"}/>
                     <div>
                         <p>{this.props.userName}</p>
@@ -56,7 +58,7 @@ const Intro = styled.div`
     padding-right: 80px;
 `
 
-const Editor = styled.div`
+const Editor = styled(Link)`
     display: flex;
     flex-direction: row;
     margin-top: 10px;

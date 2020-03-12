@@ -73,6 +73,7 @@ const draftSchema = new Schema({
     editUploadedDate: Date,
     editConfirmedDate: Date,
     editIndex: [Number],
+    editTags: [String],
     editComment: "",
     editRef: [{
         refType: String,

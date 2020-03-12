@@ -262,11 +262,12 @@ router.post("/notif/:notifId", (req, res) => {
         for(var i=0; i < user.notif.length; i++){
             if(String(user.notif[i]._id) === String(req.params.notifId)){
                 user.notif[i].checked = true
+                user.save()
+                res.send("Success")
                 return
             }
         }
-        user.save()
-        res.send("Done")
+        res.send("Failure")
     })
     .catch(err => {
         console.log(err)

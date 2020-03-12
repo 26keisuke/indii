@@ -3,13 +3,11 @@ import { FaPen, FaImage } from "react-icons/fa"
 import styled, { css, keyframes } from "styled-components"
 import Skeleton from "react-loading-skeleton"
 import { connect } from "react-redux"
-import axios from "axios"
 
 import * as actions from "../../../actions"
 
 import account from "../../../images/account.png"
 
-import InputText from "../../Util/InputText"
 import PeopleFollow from "../../People/FollowBtn/FollowBtn"
 
 class ProfileTop extends Component {
@@ -17,10 +15,6 @@ class ProfileTop extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            editName: null,
-            editComment: null,
-            editIntro: null,
-
             userName: "",
             comment: "",
             intro: "",
@@ -74,67 +68,21 @@ class ProfileTop extends Component {
         this.props.enableGray();
     }
 
-    handleTextArea = () => {
-        this.setState({
-            editName: false, 
-            editComment: false, 
-        })
+    handleEditClick = () => {
         const id = this.props.auth.info._id;
-        const action = "SELF_INTRO";
-        const title = "自己紹介";
-        const message = "自己紹介文を編集します";
+        const action = "SELF_EDIT";
+        const title = "プロフィールの編集";
+        const message = "プロフィールを編集します";
         const buttonMessage = "変更する";
-        const value = this.props.auth.info.intro // 本当はvalueで送るのは無駄なのだがこっちの方がわかりやすい
+        const value = {intro: this.props.auth.info.intro, userName: this.props.auth.info.userName, comment: this.props.auth.info.comment}
         this.props.showConfirmation(id, action, title, "", message, buttonMessage, "", value);
         this.props.enableGray();
-    }
-
-    handleUserName = (e) => {
-        e.preventDefault()
-
-        if(this.state.userName.length > 25) {
-            this.props.updateMessage("fail", "入力可能な文字数を超えています")
-            return
-        }
-
-        const url = `/api/profile/${this.props.auth.info._id}/name`
-        axios.post(url, {userName: this.state.userName})
-            .then(() => {
-                this.props.fetchUser();
-                this.props.fetchProfile(this.props.auth.info._id);
-                this.props.updateMessage("success", "ユーザー名を変更しました。")
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
-
-    handleComment = (e) => {
-        e.preventDefault()
-
-        if(this.state.comment.length > 30) {
-            this.props.updateMessage("success", "入力可能な文字数を超えています")
-            return
-        }
-
-        const url = `/api/profile/${this.props.auth.info._id}/comment`
-        axios.post(url, {comment: this.state.comment})
-            .then(() => {
-                this.props.fetchUser();
-                this.props.fetchProfile(this.props.auth.info._id);
-                this.props.updateMessage("success", "一言コメントを変更しました。")
-            })
-            .catch(err => {
-                console.log(err)
-            })
     }
 
     render() {
 
         const { skeleton, profile, setElement, isThisUser } = this.props
         const { editName, editComment } = this.state
-
-        console.log(profile.user._id)
 
         return (
             <Wrapper>
@@ -150,25 +98,10 @@ class ProfileTop extends Component {
                                 <Pen 
                                     marginLeft={20} 
                                     top={3} 
-                                    onClick={() => this.setState({ 
-                                        editName: true, editComment: false,
-                                    })}
+                                    onClick={this.handleEditClick}
                                 /> 
                                 }
                             </Name>  
-                            { editName &&
-                            <InputText 
-                                maxLength={25}
-                                width={250}
-                                placeholder={"ユーザー名"}
-                                value={this.state.userName}
-                                handleChange={(e) => this.handleChange(e, "userName")}
-                                cancelAction={() => this.setState({ editName: false })}
-                                animationCoordinates={[-53, 13]}
-                                animationDuration={500}
-                                onSubmit={(e) => this.handleUserName(e)}
-                            />
-                            }
                         </AnimationWrapper>
                         <AnimationWrapper>
                             <Comment edit={editComment}>
@@ -176,29 +109,7 @@ class ProfileTop extends Component {
                                 ? <Skeleton width={220} height={18}/> 
                                 : profile.user.comment
                                 }
-                                { isThisUser && 
-                                <Pen 
-                                    marginLeft={20} 
-                                    top={2} 
-                                    onClick={() => this.setState({
-                                         editName: false, editComment: true,
-                                    })}
-                                /> 
-                                }
                             </Comment>
-                            { editComment &&
-                            <InputText 
-                                maxLength={30}
-                                width={250}
-                                placeholder={"職業・経歴・一言"}
-                                value={this.state.comment}
-                                handleChange={(e) => this.handleChange(e, "comment")}
-                                cancelAction={() => this.setState({ editComment: false })}
-                                animationCoordinates={[-53, 13]}
-                                animationDuration={500}
-                                onSubmit={(e) => this.handleComment(e)}
-                            />
-                            }
                         </AnimationWrapper>
                         <AnimationWrapper>
                             <Intro>
@@ -207,13 +118,6 @@ class ProfileTop extends Component {
                                     <Skeleton count={3} width={425} height={17}/>
                                 </SkeletonWrapper> 
                                 : profile.user.intro
-                                }
-                                { isThisUser && 
-                                <Pen 
-                                    right={0} 
-                                    bottom={-14} 
-                                    onClick={this.handleTextArea}
-                                />
                                 }
                             </Intro>
                         </AnimationWrapper>

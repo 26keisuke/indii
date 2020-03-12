@@ -213,7 +213,7 @@ const ActionLeft = styled.div`
         max-width: 19px;
         max-height: 19px;
         border-radius: 50%;
-        background-color: red;
+        background-color: ${props => props.theme.secondary};
         display: flex;
         justify-content: center;
         align-items: center;
@@ -259,6 +259,8 @@ const PeopleWrapper = styled.div`
 `
 
 const Content = styled.div`
+    width: 100%;
+    
     & > h3 {
         font-size: 11px !important;
         color: #777777;

@@ -102,14 +102,19 @@ export function renderType(type){
 
 export function getEmoji(emojiNum){
     switch(emojiNum){
+        case "5":
         case 5:
             return <img className="post-feed-response"　alt={"ものすごく良い"} src={love}/>
+        case "4":
         case 4:
             return <img className="post-feed-response"　alt={"とても良い"}src={good}/>
+        case "3":
         case 3:
             return <img className="post-feed-response"　alt={"かなり良い"} src={nerd}/>
+        case "2":
         case 2:
             return <img className="post-feed-response"　alt={"まぁまぁ"} src={hmm}/>
+        case "1":
         case 1:
             return <img className="post-feed-response"　alt={"残念"} src={dissapointed}/>
         default:

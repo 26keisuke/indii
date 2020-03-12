@@ -112,6 +112,9 @@ class AppState extends Component {
     
                 case "CHANGE_DRAFTNAME":
                     this.props.changeDraftName(id, "", true); break 
+                
+                case "CHANGE_TAG":
+                    this.props.changeTag(id, "", true); break
     
                 case "CHANGE_DRAFTCONFIG":
                     this.props.changeDraftConfig(id, value); break
@@ -140,8 +143,8 @@ class AppState extends Component {
                 case "DELETE_REF":
                     this.props.deleteRef(id); break
     
-                case "SELF_INTRO":
-                    this.props.updateIntro(id, value); break
+                case "SELF_EDIT":
+                    this.props.updateProfile(id, value); break
     
                 case "SELF_IMAGE":
                     this.props.updateImage(id, value); break

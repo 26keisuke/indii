@@ -1,5 +1,8 @@
 import React, { Component } from "react"
 import styled, { css, keyframes } from "styled-components"
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 class Carousel extends Component {
 
@@ -22,39 +25,73 @@ class Carousel extends Component {
     }
 
     render() {
+
+        const settings = {
+            infinite: true,
+            speed: 300,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            variableWidth: true
+        };
+
         return (
-            <RefCarousel>
-                <div>
-                    {this.renderCarousel()}
-                </div>
-            </RefCarousel>
+            // <RefCarousel>
+            <SliderWrapper>
+                <Slider {...settings}>
+                    {/* <div> */}
+                        {this.renderCarousel()}
+                    {/* </div> */}
+                </Slider>
+            </SliderWrapper>
+            // </RefCarousel>
         )
     }
 }
 
-const RefCarousel = styled.div`
-    width: 100%;
-    position: relative;
+// const RefCarousel = styled.div`
+//     width: 100%;
+//     position: relative;
 
-    & > div:nth-child(1) {
-        display: flex;
-        flex-direction: row;
-        overflow-x: scroll;
-        padding: 6px 15px;
-        border-bottom: 1px solid #eaeaea;
+//     & > div:nth-child(1) {
+//         display: flex;
+//         flex-direction: row;
+//         overflow-x: scroll;
+//         padding: 6px 15px;
+//         border-bottom: 1px solid #eaeaea;
 
-        &::-webkit-scrollbar{
-            width: 0px !important;
-            height: 0px !important;
-        }
-    }
-`
+//         &::-webkit-scrollbar{
+//             width: 0px !important;
+//             height: 0px !important;
+//         }
+//     }
+// `
 
 const extend = keyframes`
     from {
         width: 0px;
     } to {
-        width: 80%;
+        width: 70%;
+    }
+`
+
+const SliderWrapper = styled.div`
+    padding: 0px 25px;
+    padding-top: 6px;
+
+    & div {
+        outline: none !important;
+    }
+
+    & .slick-prev{
+        &:before{
+            color: ${props => props.theme.primary};
+        }
+    }
+
+    & .slick-next{
+        &:before{
+            color: ${props => props.theme.primary};
+        }
     }
 `
 
@@ -65,6 +102,7 @@ const RefToggle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0px 10px;
 
     & > div {
 

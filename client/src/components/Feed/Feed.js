@@ -76,7 +76,7 @@ class Feed extends Component {
                     ])
                 }
                 <FeedSpace/>
-                <FeedInsideHeader>
+                {/* <FeedInsideHeader>
                     <p>データベース関連のライター</p>
                 </FeedInsideHeader>
                 <PeopleWrapper>
@@ -101,7 +101,7 @@ class Feed extends Component {
                         job={"Chief株式会社 CEO"} 
                         intro={"2011年にLinkedInから公開されたオープンソースの分散メッセージングシステムである．Kafkaはウェブサービスなどから発せられる大容量のデータ（e.g., ログやイベント）を高スループット/低レイテンシに収集/配信することを目的に開発されている．"}
                     />
-                </PeopleWrapper>
+                </PeopleWrapper> */}
                 <FeedSpace/>
                 {/* <PostFeed
                     id={"123"}

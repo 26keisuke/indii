@@ -48,12 +48,21 @@ export const updateImage = (id, value) => async (dispatch) => {
         })
 }
 
-export const updateIntro = (id, value) => async (dispatch) => {
+export const updateProfile = (id, value) => async (dispatch) => {
+    if(value.userName.length > 25) {
+        dispatch(updateMessage("fail", "入力可能な文字数を超えています")); return;
+    }
 
-    if(value.length > 150) { dispatch(updateMessage("fail", "入力可能な文字数を超えています。")); return }
+    if(value.intro.length > 150) { 
+        dispatch(updateMessage("fail", "入力可能な文字数を超えています。")); return 
+    }
 
-    const url = `/api/profile/${id}/intro`
-    axios.post(url, {intro: value})
+    if(value.comment.length > 30) {
+        dispatch(updateMessage("success", "入力可能な文字数を超えています")); return
+    }
+
+    const url = `/api/profile/${id}`
+    axios.post(url, value)
         .then(() => {
             dispatch(disableGray())
             dispatch(fetchProfile(id))

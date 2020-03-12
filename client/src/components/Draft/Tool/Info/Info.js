@@ -16,7 +16,7 @@ class Info extends Component {
     render () {
 
         var id, photo, userName, comment, intro;
-        var editId, editPhoto, editUserName, editComment, editIntro;
+        var editId, editPhoto, editUserName, editComment;
 
         if(this.props.value["author"]){
             id =  this.props.value["author"]._id
@@ -31,7 +31,6 @@ class Info extends Component {
             editPhoto =  this.props.value["lastEditedAuthor"].photo
             editUserName =  this.props.value["lastEditedAuthor"].userName
             editComment =  this.props.value["lastEditedAuthor"].comment
-            editIntro =  this.props.value["lastEditedAuthor"].intro
         }
 
         return (
@@ -56,6 +55,10 @@ class Info extends Component {
                     title={"トピック名"} 
                     content={this.props.value["topicName"]}
                     width={275}
+                />
+                <Section
+                    title={"挿入位置"} 
+                    content={this.props.value["editIndex"].join(".")}
                 />
                 <Section
                     title={"オーナー"} 
@@ -85,13 +88,13 @@ class Info extends Component {
                 />,
                 <Space key={"spaceTop"} height={"20px"}/>,
                 <Edit
+                    id={editId}
                     key={"edit"}
                     date={this.props.value["lastEdited"]}
                     photo={editPhoto || account}
                     userName={editUserName}
                     comment={editComment}
                     followBtn={true}
-                    id={editId}
                 />,
                 <Space key={"spaceBottom"} height={"30px"}/>
                 ])
@@ -101,7 +104,7 @@ class Info extends Component {
     }
 }
 
-const RevertBtn = styled.p`
+export const RevertBtn = styled.p`
     position: absolute;
     right: 0px;
     text-decoration: underline;

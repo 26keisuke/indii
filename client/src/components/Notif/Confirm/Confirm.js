@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet"
 
 import * as actions from "../../../actions"
 
+import Chip from '@material-ui/core/Chip';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -31,7 +32,7 @@ import People from "../../People/People"
 import Ribbon from "../../Util/Ribbon"
 import List from "../../Draft/Tool/List/List"
 
-import { fmtDate } from "../../Util/util"
+import { fmtDate, getEmoji } from "../../Util/util"
 
 const getSteps = () => {
     return ["フィードバックを選択", "編集者へのコメント", "編集リクエストを承認"]
@@ -196,7 +197,7 @@ class Setting extends Component {
         var post = notifId.post || {}
         // var topic = post.topic || {}
 
-        var feedback = draft.comment || "仮のvalueを入力しています。後で消してください。"
+        var feedback = notifId.comment
 
         var { photo, userName, comment, intro } = user
         var { editLastEditedAuthor, isApproved } = draft
@@ -210,7 +211,8 @@ class Setting extends Component {
 
         var editLastEditedAuthor = draft.editLastEditedAuthor || {}
 
-        // var tags = topic.tags || []
+        var beforeTags = draft.editTags || []
+        var afterTags = draft.tags || []
 
         var nowPostImg = post.postImg || {}
         var beforePostImg = draft.editPostImg || {}
@@ -415,11 +417,36 @@ class Setting extends Component {
 
                     <Space height={"25px"}/>
 
+                    <SubTitle>{before ? "前回の" : "編集後の"}タグ一覧</SubTitle>
+
+                    <ChipWrapper>
+                        {!before
+                        ?
+                        afterTags.map((tag,index) => 
+                            <Chip
+                                key={index+tag}
+                                label={tag}
+                            />
+                        )
+                        :
+                        beforeTags.map((tag,index) => 
+                            <Chip
+                                key={index+tag}
+                                label={tag}
+                            />
+                        )
+                        }
+                    </ChipWrapper>
+
+
+                    <Space height={"25px"}/>
+
                     { feedback && 
                     <OwnerComment>
                         <SubTitle>
                             <Document/>
                             オーナーからのコメント
+                            {getEmoji(notifId.emoji)}
                         </SubTitle>
 
                         <TextField
@@ -451,6 +478,22 @@ function findArrObjIndex(arr, lookUp, value){
     }
 }
 
+const ChipWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    margin: 20px 0px;
+
+    & > div {
+        height: 23px;
+        margin: 5px;
+        font-size: 10px;
+        & svg {
+            width: 15px;
+        }
+    }
+`
+
 const OwnerComment = styled.div`
     & > div {
         width: 100%;
@@ -458,7 +501,7 @@ const OwnerComment = styled.div`
 `
 
 const Document = styled(IoIosDocument)`
-    color: #636480;
+    color: ${props => props.theme.secondary};
     margin-right: 8px;
 `
 
@@ -512,6 +555,12 @@ const SubTitle = styled.h3`
     margin-bottom: 12px;
     display: flex;
     align-items: center;
+
+    & > img {
+        width: 17px;
+        height: 17px;
+        margin-left: 10px;
+    }
 `
 
 const StepperFakeWrapper = styled.div`
@@ -530,7 +579,7 @@ const StepperFakeWrapper = styled.div`
         height: 40px;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
-        background-color: #636480;
+        background-color: ${props => props.theme.secondary};
         cursor: pointer;
 
         display: flex;
@@ -567,7 +616,7 @@ const StepperWrapper = styled.div`
         height: 40px;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
-        background-color: #636480;
+        background-color: ${props => props.theme.secondary};
         cursor: pointer;
 
         display: flex;

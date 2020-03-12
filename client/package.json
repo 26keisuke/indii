@@ -36,11 +36,13 @@
     "react-responsive": "^8.0.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.0",
+    "react-slick": "^0.25.2",
     "react-transition-group": "^4.3.0",
     "react-waypoint": "^9.0.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^5.0.0"
   },
   "scripts": {
