@@ -1,8 +1,9 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
-const TopicBox = styled.div`
+const TopicBox = styled(Link)`
     
 `
 
@@ -13,6 +14,7 @@ const TopicChild = styled.div`
     padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;
+    max-width: 340px;
 
     &:hover{
         background-color: ${props => props.theme.hover};
@@ -61,7 +63,7 @@ const TopicLike = styled.p`
 class Topic extends Component {
     render () {
         return (
-            <TopicBox>
+            <TopicBox to={`/topic/${this.props.id}`}>
                 <TopicChild>
                     <img src={this.props.img}/>
                     <div>
@@ -83,6 +85,7 @@ class Topic extends Component {
 }
 
 Topic.propTypes = {
+    id: PropTypes.string,
     img: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
     topicName: PropTypes.string,

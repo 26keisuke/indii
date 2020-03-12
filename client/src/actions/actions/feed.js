@@ -11,6 +11,7 @@ import {
     SEARCH_FETCHING,
     SEARCH_TERM,
     FETCH_FEED,
+    FETCH_RECOMMEND,
 } from "../types/types";
 
 
@@ -25,8 +26,13 @@ export const searchTerm = (term) => async (dispatch) => {
 }
 
 export const fetchFeed = () =>  async (dispatch) => {
-    const res = await axios.get("api/feed")
+    const res = await axios.get("/api/feed")
     dispatch({type: FETCH_FEED, payload: res.data})
+}
+
+export const fetchRecommend = () => async (dispatch) => {
+    const res = await axios.get("/api/feed/recommend")
+    dispatch({type: FETCH_RECOMMEND, payload: res.data})
 }
 
 export const sendFeedBack = (id, problems) => async (dispatch) => {

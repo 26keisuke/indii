@@ -21,6 +21,7 @@ import profile from "./routes/profile"
 import topic from "./routes/topic"
 import post from "./routes/post"
 import feed from "./routes/feed"
+import talk from "./routes/talk"
 
 mongoose.connect(keys.MONGO_URI, {
     useUnifiedTopology: true,
@@ -264,6 +265,7 @@ app.use("/api/draft", draft)
 app.use("/api/profile", profile)
 app.use("/api/topic", topic)
 app.use("/api/post", post)
+app.use("/api/talk", talk)
 
 app.get("/auth/google", passport.authenticate("google", {scope: ["profile", "email"]}))
 

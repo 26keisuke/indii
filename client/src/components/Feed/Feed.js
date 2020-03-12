@@ -40,15 +40,16 @@ class Feed extends Component {
 
     componentDidMount() {
         this.props.fetchFeed()
+        this.props.fetchRecommend()
     }
 
     renderLeft = () => {
         return(
             <div>
                 <div style={{borderBottom: "1px solid #eaeaea"}}/>
-                {Object.keys(this.props.post.feed).length > 0
+                {Object.keys(this.props.feed.feed).length > 0
                 ?
-                    this.props.post.feed.map(elem => 
+                    this.props.feed.feed.map(elem => 
                         <PostFeed
                             key={elem._id}
                             id={elem._id}
@@ -136,9 +137,9 @@ class Feed extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({feed}) {
     return {
-        post: state.post
+        feed
     }
 }
 

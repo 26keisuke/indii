@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { connect } from "react-redux"
 
-import sample from "../../../images/sample0.jpg"
-import sample1 from "../../../images/sample1.png";
+import { fmtDate } from "../../Util/util"
 
 import Recommend from "../../Util/Recommend"
 
@@ -20,7 +20,20 @@ class Trend extends Component {
                     <p>//////////////////////////////////</p>
                 </SlashTitle>
                 {/* {this.renderElement()} */}
-                <Recommend
+                {
+                this.props.feed.recommend.map(recom => 
+                    <Recommend
+                        id={recom._id}
+                        title={recom.postName}
+                        content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
+                        authorImg={recom.creator[0].photo}
+                        author={recom.creator[0].userName}
+                        editDate={fmtDate(recom.lastEdited)}
+                        postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
+                    />
+                )
+                }
+                {/* <Recommend
                     title="タイトルが入ります"
                     content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
                     authorImg={sample}
@@ -51,7 +64,7 @@ class Trend extends Component {
                     author="飯塚啓介"
                     editDate="作成日が入ります"
                     postImg={sample1}
-                />
+                /> */}
             </div>
         )
     }
@@ -75,4 +88,10 @@ export const SlashTitle = styled.div`
     }
 `
 
-export default Trend
+function mapStateToProps({ feed }){
+    return {
+        feed
+    }
+}
+
+export default connect(mapStateToProps)(Trend)

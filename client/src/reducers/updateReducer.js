@@ -32,6 +32,11 @@ export default function updateReducer(state={
         index: {},
         selected: {},
 
+        talkTitle: "",
+        talkContent: "",
+        talkUrl: "",
+        type: "",
+
         // index専用のstate
         selectedId: "",
         selectedTitle: "",

@@ -78,6 +78,8 @@ class AppState extends Component {
     // value(任意) => reduxに頼らず actionをset
     postAction = (shouldProceed, _action, _value) => {
 
+        var conf = this.props.update.confirmation
+
         var {
             id,
             action,
@@ -85,7 +87,7 @@ class AppState extends Component {
             value,
             draftId,
             index,
-        } = this.props.update.confirmation
+        } = conf
 
         if(_action){ action = _action }
         if(_value){ value = _value }
@@ -143,6 +145,9 @@ class AppState extends Component {
     
                 case "SELF_IMAGE":
                     this.props.updateImage(id, value); break
+
+                case "ADD_TALK_CONFIRM":
+                    this.props.createTalk(conf.talkId, conf.type, conf.talkTitle, conf.talkDesc); break
     
                 // ======== logIn系 ==========
     

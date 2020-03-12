@@ -12,6 +12,59 @@ import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
+
+router.get("/:topicId/:type", (req, res) => {
+    const type = req.params.type
+    switch(type){
+        case "ALL":
+            Topic.findById(req.params.topicId)
+                .populate("rectangleImg")
+                .populate("mobileImg")
+                .populate("squareImg")
+                // .populate({path: "column.posts", populate: {path: "postImg"}})
+                .populate({path: "posts", populate: [{path: "postImg"}, {path: "creator"}]})
+                .populate("activity.user")
+                .exec()
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        case "INDEX":
+            Topic.findById(req.params.topicId).populate("column.posts").exec()
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        case "IMAGE":
+            Topic.findById(req.params.topicId)
+                .populate("rectangleImg")
+                .populate("mobileImg")
+                .populate("squareImg")
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        default:
+            Topic.findById(req.params.topicId)
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+    } 
+})
+
 router.post("/", isLoggedIn, (req, res) => {
 
     const columnId = mongoose.Types.ObjectId();
@@ -244,38 +297,6 @@ router.post("/:topicId/post", isLoggedIn, (req, res) => {
     })
 })
 
-router.get("/:topicId/:type", (req, res) => {
-    const type = req.params.type
-    switch(type){
-        case "ALL":
-            Topic.findById(req.params.topicId)
-                .populate("rectangleImg")
-                .populate("mobileImg")
-                .populate("squareImg")
-                // .populate({path: "column.posts", populate: {path: "postImg"}})
-                .populate({path: "posts", populate: [{path: "postImg"}, {path: "creator"}]})
-                .populate("activity.user")
-                .exec()
-                .then(topic => {
-                    res.send(topic)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            return
-        case "INDEX":
-            Topic.findById(req.params.topicId).populate("column.posts").exec()
-                .then(topic => {
-                    res.send(topic)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            return
-        default:
-            return
-    } 
-})
 
 router.get("/search/:type/:term", (req, res) => {
     const type = req.params.type

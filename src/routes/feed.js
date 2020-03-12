@@ -22,6 +22,38 @@ router.get("/", (req, res) => {
     })
 })
 
+router.get("/recommend", (req, res) => {
+    Post.aggregate(
+        [
+            {$match: {"index": {$ne: [0]}}},
+            {$sample: {size: 10}},
+            {$lookup: {
+                "from": "users",
+                "localField": "creator",
+                "foreignField": "_id",
+                "as": "creator"
+            }},
+            {$lookup: {
+                "from": "images",
+                "localField": "postImg",
+                "foreignField": "_id",
+                "as": "postImg"
+            }},
+            {$lookup: {
+                "from": "images",
+                "localField": "topicSquareImg",
+                "foreignField": "_id",
+                "as": "topicSquareImg"
+            }},
+        ]
+    )
+    .exec()
+    .then(posts => res.send(posts))
+    .catch(err => {
+        console.log(err)
+    })
+})
+
 router.get("/search/:term", (req, res) => {
     console.log(`A TERM "${req.params.term}" HAS BEEN SEARCHED`)
     res.send("")

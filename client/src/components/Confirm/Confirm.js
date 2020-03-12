@@ -13,6 +13,8 @@ import Stepper from '@material-ui/core/Stepper';
 
 import * as actions from "../../actions"
 
+import TalkTitle from "../Talk/Confirm/Title"
+import TalkPreview from "../Talk/Confirm/Preview"
 import Report from "../Feed/Action/Report"
 import AddColumn from "../Util/AddColumn"
 import Action from "../Draft/Action/Action"
@@ -47,6 +49,8 @@ class Confirm extends Component {
             currentStep: 0, // 全体のステップ数を把握する。これらは、仮にdynamicにformをつなげる必要がある場合に役立つ。 
             counter: 0,
             skipped: 0,
+
+            value: "", // text field用のvalue
         }
     }
 
@@ -85,12 +89,90 @@ class Confirm extends Component {
     // reduxは一回で全てまとめておくらないといけない。別々に送ったら、sequentialにprocessされるからthis.propsの値がstaleになる
     parseNext = () => {
 
-        var data;
+        const nextAction = this.props.update.confirmation.next
         var newObj;
 
-        newObj = this.extractTrueValues();
+        if((nextAction === "DELETE_DRAFT") || (nextAction === "UPLOAD_DRAFT") || (nextAction === "UPLOAD_DRAFT_1")){
+            var data;
+            newObj = this.extractTrueValues();;
+        }
 
-        switch(this.props.update.confirmation.next) {
+        switch(nextAction) {
+            case "ADD_TALK_REF":
+
+                data = {
+                    action: "ADD_TALK_REF",
+                    message: "関連するポストやトピックのURLを入力してください (任意)",
+                    buttonMessage: "次へ",
+                    next: "ADD_TALK_DESC",
+                    talkTitle: this.state.value,
+                }
+
+                this.setState({
+                    currentStep: 1,
+                    counter: 3,
+                    value: "",
+                })
+
+                newObj = update(this.props.update, {confirmation: {$merge: data}})
+                return this.props.updateConfirmation(newObj)
+
+            case "ADD_TALK_DESC":
+
+                data = {
+                    action: "ADD_TALK_DESC",
+                    message: "トークの目的及び概要を入力してください。",
+                    buttonMessage: "次へ",
+                    next: "ADD_TALK_CONFIRM",
+                    talkUrl: this.state.value,
+                }
+
+                this.setState({
+                    currentStep: this.state.currentStep + 1,
+                    value: "",
+                })
+
+                newObj = update(this.props.update, {confirmation: {$merge: data}})
+                return this.props.updateConfirmation(newObj)
+
+            
+            case "ADD_TALK_CONFIRM":
+
+                var type, id;
+                const url = this.props.update.confirmation.talkUrl
+
+                if(url){
+                    id = url.substring(url.lastIndexOf("/") + 1)
+
+                    const subUrl = url.substring(0, url.lastIndexOf("/"))
+                    type = subUrl.substring(subUrl.lastIndexOf("/") + 1)
+
+                    if(type === "post"){
+                        this.props.fetchPost(id);
+                    } else if(type === "topic"){
+                        this.props.fetchTopic(id, "IMAGE")
+                    }
+                }
+
+                this.setState({
+                    currentStep: this.state.currentStep + 1,
+                    value: "",
+                })
+
+                data = {
+                    action: "ADD_TALK_CONFIRM",
+                    message: "この内容でトークを作成しますか？",
+                    caution: "",
+                    buttonMessage: "作成する",
+                    next: "",
+                    type: type,
+                    talkId: id,
+                    talkDesc: this.state.value,
+                }
+
+                newObj = update(this.props.update, {confirmation: {$merge: data}})
+                return this.props.updateConfirmation(newObj)
+                
             case "DELETE_DRAFT":
 
                 data = {
@@ -283,6 +365,21 @@ class Confirm extends Component {
                         setMessage={this.setMessage}
                     />
                 )
+            case "ADD_TALK_DESC":
+            case "ADD_TALK_REF":
+            case "ADD_TALK":
+                return (
+                    <TalkTitle
+                        title={action === "ADD_TALK" ? "タイトル" : "参照を追加"}
+                        value={this.state.value}
+                        textarea={action === "ADD_TALK_DESC"}
+                        handleChange={(e) => this.setState({value: e.target.value})}
+                    />
+                )
+            case "ADD_TALK_CONFIRM":
+                return (
+                    <TalkPreview/>
+                )
             default:
                 return;
         }
@@ -355,6 +452,11 @@ const getContent = (action, step, currentStep, skipped) => {
         case "DELETE_DRAFT":
         case"DRAFT_DELETE_CHECK":
             return ["下書きを選択", "プレビュー"]
+        case "ADD_TALK":
+        case "ADD_TALK_REF":
+        case "ADD_TALK_DESC":
+        case "ADD_TALK_CONFIRM":
+            return ["タイトルを入力","参照を追加","トークの概要","プレビュー"]
         default:
             return []
     }
@@ -387,8 +489,7 @@ const ConfirmButton = styled.div`
     align-self: flex-end;
 
     & > :nth-child(1){
-        font-family: ${props => props.theme.font};
-        background-color: #636480;
+        background-color: ${props => props.theme.primary};
         color: white;
         border: none;
         height:30px;
@@ -442,7 +543,6 @@ const ConfirmBox = styled.div`
 const Title = styled.h2`
     font-size: 15px;
     margin-bottom: 15px;
-    font-weight: bold;
 `
 
 const Message = styled.h4`

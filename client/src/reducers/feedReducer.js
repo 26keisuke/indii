@@ -1,22 +1,22 @@
 import {
-    SEARCH_POST,
-    FETCH_POST,
+    FETCH_FEED,
+    FETCH_RECOMMEND,
 } from "../actions/types/types"
 
-export default function postReducer(state={
-    search: [],
-    fetched: {},
+export default function feedReducer(state={
+    feed: [],
+    recommend: []
 }, action) {
     switch(action.type) {
-        case SEARCH_POST:
+        case FETCH_FEED:
             return {
                 ...state,
-                search: action.payload.suggestions
+                feed: action.payload
             }
-        case FETCH_POST:
+        case FETCH_RECOMMEND:
             return {
                 ...state,
-                fetched: action.payload
+                recommend: action.payload
             }
         default:
             return state

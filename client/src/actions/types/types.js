@@ -46,8 +46,16 @@ export const SHOW_LOGIN = "SHOW_LOGIN"
 export const HIDE_LOGIN = "HIDE_LOGIN"
 export const LOG_IN_ERROR = "LOG_IN_ERROR"
 
+// TALK 
+
+export const CREATE_TALK = "CREATE_TALK"
+export const FETCH_TALK = "FETCH_TALK"
+export const CREATE_COMMENT = "CREATE_COMMENT"
+export const SELECT_TALK = "SELECT_TALK"
+
 // Feed
 export const FETCH_FEED = "FETCH_FEED"
+export const FETCH_RECOMMEND = "FETCH_RECOMMEND"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"

@@ -61,6 +61,15 @@ const userSchema = new Schema({
         timeStamp: Date,
         topic: { type: mongoose.Schema.Types.ObjectId, ref: "Topic" },
     }],
+    createTalk: [{
+        timeStamp: Date,
+        talk: { type: mongoose.Schema.Types.ObjectId, ref: "Talk" },
+    }],
+    createComment: [{
+        timeStamp: Date,
+        talk: { type: mongoose.Schema.Types.ObjectId, ref: "Talk" },
+        content: String,
+    }],
 
     notif: [{
         timeStamp: Date,

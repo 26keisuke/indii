@@ -11,7 +11,9 @@ const router = express.Router()
 
 
 router.get("/:postId", (req, res) => {
-    Post.findById(req.params.postId).populate({path: "topic", populate:{ path: "rectangleImg"}}).populate("creator").exec()
+    Post.findById(req.params.postId)
+    .populate({path: "topic", populate: [{ path: "rectangleImg"}, { path: "squareImg"}]})
+    .populate("creator").exec()
     .then(post => {
         res.send(post)
     })

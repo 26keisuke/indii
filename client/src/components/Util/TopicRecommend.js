@@ -11,33 +11,35 @@ class TopicRecommend extends Component {
         const { id, img, topicName, tags, content, postCount, likes } = this.props
 
         return(
-            <TopicInfo to={`/topic/${id}`}>
-                <div>
-                    <img src={img}/>
-                    <TopicContent>
-                        {/* タグ */}
-                        <div>
-                            { tags.map(tag => 
-                                <Tag>#<p>{tag}</p></Tag>
-                            )}
-                        </div>
-                        {/* タイトル */}
-                        <h3>{topicName}</h3>
-                        {/* コンテンツ */}
-                        <h4>{content}</h4>
-                        {/* 基礎情報 */}
-                        <div>
-                            <div>ポスト数: <p>{postCount}</p></div>
-                            <div>お気に入り数: <p>{likes}</p></div>
-                        </div>
-                    </TopicContent>
-                </div>
-            </TopicInfo>
+            <Link to={`/topic/${id}`}>
+                <TopicInfo>
+                    <div>
+                        <img src={img}/>
+                        <TopicContent>
+                            {/* タグ */}
+                            <div>
+                                { tags.map((tag,index) => 
+                                    <Tag key={tag+index}>#<p>{tag}</p></Tag>
+                                )}
+                            </div>
+                            {/* タイトル */}
+                            <h3>{topicName}</h3>
+                            {/* コンテンツ */}
+                            <h4>{content}</h4>
+                            {/* 基礎情報 */}
+                            <div>
+                                <div>ポスト数: <p>{postCount}</p></div>
+                                <div>お気に入り数: <p>{likes}</p></div>
+                            </div>
+                        </TopicContent>
+                    </div>
+                </TopicInfo>
+            </Link>
         )
     }
 }
 
-const TopicInfo = styled(Link)`
+const TopicInfo = styled.div`
 
     cursor: pointer;
     box-shadow: 1px 1px 10px #eaeaea;
@@ -45,7 +47,12 @@ const TopicInfo = styled(Link)`
     margin-right: 20px;
     height: 132px;
     box-sizing: border-box;
-    border-radius: 4px;
+    border-radius: 8px;
+    max-width: 440px;
+
+    &:hover{
+        background-color: ${props => props.theme.hover}
+    }
 
     & > h3 {
         margin-bottom: 8px;
@@ -59,7 +66,6 @@ const TopicInfo = styled(Link)`
             max-width: 100px;
             min-height: 100px;
             max-height: 100px;
-            border: 1px solid #eaeaea;
             object-fit: contain;
             margin-right: 10px;
         }
@@ -80,7 +86,8 @@ const TopicContent = styled.div`
     }
 
     & > h3 {
-        font-size: 13px;
+        font-size: 15px;
+        font-weight: bold;
     }
 
     & > h4 {

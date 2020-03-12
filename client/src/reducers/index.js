@@ -6,6 +6,8 @@ import categoryReducer from "./categoryReducer"
 import draftReducer from "./draftReducer"
 import postReducer from "./postReducer"
 import topicReducer from "./topicReducer"
+import talkReducer from "./talkReducer"
+import feedReducer from "./feedReducer"
 
 import { 
     SEARCH_FETCHING,
@@ -26,9 +28,6 @@ const initialState = {
             talk: [],
             people: []
         }
-    },
-    notif: {
-
     },
     index: {
         columnName: "",
@@ -137,4 +136,6 @@ export default combineReducers({
     draft: draftReducer,
     post: postReducer,
     image: imageReducer,
+    talk: talkReducer,
+    feed: feedReducer,
 });

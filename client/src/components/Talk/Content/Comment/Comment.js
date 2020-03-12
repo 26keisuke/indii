@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import TextField from '@material-ui/core/TextField';
-import Button from "../../../../Util/Button"
+import Button from "../../../Util/Button"
 import { IoIosSend } from "react-icons/io"
-import { FiMinus } from "react-icons/fi"
+// import { FiMinus } from "react-icons/fi"
 
 class Comment extends Component {
     render() {
@@ -15,10 +15,12 @@ class Comment extends Component {
                     placeholder="コメントを入力..."
                     rows="3"
                     multiline
+                    value={this.props.value}
+                    onChange={this.props.handleChange}
                     variant="outlined"
                 />
                 <ButtonWrapper>
-                    <Button>追加<SendIcon/></Button>
+                    <Button disabled={!this.props.value} onClick={this.props.handleSubmit}>追加<SendIcon/></Button>
                 </ButtonWrapper>
                 {/* <ShrinkIcon/> */}
             </CommentBox>
@@ -48,9 +50,9 @@ const SendIcon = styled(IoIosSend)`
 const CommentBox = styled.div`
     box-shadow: 1px 1px 10px #d2d2d2;
     background-color: white;
-    position: absolute;
-    bottom: 10px;
-    width: 80%;
+    position: sticky;
+    bottom: 0px;
+    width: 85%;
     left: 41px;
     display: flex;
     align-items: center;

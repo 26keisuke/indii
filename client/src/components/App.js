@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
+import GAListener from "./GA"
 import Feed from "./Feed/Feed";
 import SearchResult from "./SearchResult/SearchResult"
 import Notification from "./Notif/Notif"
@@ -19,6 +20,7 @@ import EditPost from "./Action/Post/Edit/Controller"
 import AppState from "./AppState"
 import Verification from "./Verification/Verification"
 import Setting from "./Setting/Setting"
+import Talk from "./Talk/Talk"
 
 class App extends Component {
 
@@ -29,30 +31,30 @@ class App extends Component {
         return (
             <div className="browser">
                 <BrowserRouter>
-                    <AppState>
-                        <div className="fakebox">
-                            <Route exact path="/" component={Feed} />
-                            <Route exact path="/draft" render={() => (auth.loggedIn ? <Draft/> : <Redirect to="/"/>)} />
-                            <Route path="/draft/edit/:id" component={DraftEditor} />
-                            <Route path="/search" component={SearchResult} />
-                            <Route exact path="/notification" render={() => (auth.loggedIn ? <Notification/> : <Redirect to="/"/>)} />
-                            <Route path="/notification/check/:id" render={() => (auth.loggedIn ? <EditConfirm/> : <Redirect to="/"/>)} />
-                            <Route path="/action/post/create" render={() => (auth.loggedIn ? <CreatePost/> : <Redirect to="/"/>)} />
-                            <Route path="/action/topic/create" render={() => (auth.loggedIn ? <CreateTopic/> : <Redirect to="/"/>)} />
-                            <Route path="/action/post/edit" render={() => (auth.loggedIn ? <EditPost/> : <Redirect to="/"/>)} />
-                            <Route path="/action/topic/edit" render={() => (auth.loggedIn ? <EditTopic/> : <Redirect to="/"/>)} />
-                            <Route path="/topic/:id" component={Topic} />
-                            <Route path="/post/:id" component={Post} />
-                            <Route path="/profile/:id" component={Profile} />
-                            <Route exact path="/action" component={Action} />
-                            <Route path="/verification/:type" component={Verification}/>
-                            <Route path="/verification/:type/:tokenId" component={Verification}/> 
-                            <Route path="/setting" component={Setting}/>
-
-                            <Route path="/temp" component={EditConfirm} />
-
-                        </div>
-                    </AppState>
+                    <GAListener>
+                        <AppState>
+                            <div className="fakebox">
+                                <Route exact path="/" component={Feed} />
+                                <Route exact path="/draft" render={() => (auth.loggedIn ? <Draft/> : <Redirect to="/"/>)} />
+                                <Route path="/draft/edit/:id" component={DraftEditor} />
+                                <Route path="/search" component={SearchResult} />
+                                <Route exact path="/notification" render={() => (auth.loggedIn ? <Notification/> : <Redirect to="/"/>)} />
+                                <Route path="/notification/check/:id" render={() => (auth.loggedIn ? <EditConfirm/> : <Redirect to="/"/>)} />
+                                <Route path="/action/post/create" render={() => (auth.loggedIn ? <CreatePost/> : <Redirect to="/"/>)} />
+                                <Route path="/action/topic/create" render={() => (auth.loggedIn ? <CreateTopic/> : <Redirect to="/"/>)} />
+                                <Route path="/action/post/edit" render={() => (auth.loggedIn ? <EditPost/> : <Redirect to="/"/>)} />
+                                <Route path="/action/topic/edit" render={() => (auth.loggedIn ? <EditTopic/> : <Redirect to="/"/>)} />
+                                <Route path="/topic/:id" component={Topic} />
+                                <Route path="/post/:id" component={Post} />
+                                <Route path="/talk" component={Talk} />
+                                <Route path="/profile/:id" component={Profile} />
+                                <Route exact path="/action" component={Action} />
+                                <Route path="/verification/:type" component={Verification}/>
+                                <Route path="/verification/:type/:tokenId" component={Verification}/> 
+                                <Route path="/setting" render={() => (auth.loggedIn ? <Setting/> : <Redirect to="/"/>)}/>
+                            </div>
+                        </AppState>
+                    </GAListener>
                 </BrowserRouter>
             </div>
         );

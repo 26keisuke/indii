@@ -8,7 +8,6 @@ import { Helmet } from "react-helmet"
 
 import * as actions from "../../actions"
 
-import Talk from "./Talk/Talk"
 import Info from "./Info/Info"
 import Activity from "./Activity/Activity"
 import { Space } from "../Theme"

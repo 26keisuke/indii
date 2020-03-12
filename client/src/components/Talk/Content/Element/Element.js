@@ -1,20 +1,22 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
 class Element extends Component {
     render() {
+
+        const {user, date, content} = this.props
+
         return(
             <Wrapper>
                 <Info>
-                    <div>ユーザー名が入ります</div>
+                    <Link to={`/profile/${user && user._id}`}>{user && user.userName}</Link>
                     <div>・</div>
-                    <div>１日前</div>
+                    <div>{date}</div>
                 </Info>
                 <div>
                     <Connect/>
-                    <Content>
-                    ここにトークのタイトルが入ります。長いことも短いこともあります。ここにトークのタイトルが入ります。長いことも短いこともあります。ここにトークのタイトルが入ります。長いことも短いこともあります。
-                    </Content>
+                    <Content>{content}</Content>
                 </div>
             </Wrapper>
         )
@@ -43,6 +45,14 @@ const Info = styled.div`
     display: flex;
     color: #777777;
     margin-bottom: 6px;
+
+    & > a {
+        color: #767676;
+        
+        &:hover{
+            color: #565656;
+        }
+    }
 
     & > div:nth-child(2){
         margin: 0px 6px;

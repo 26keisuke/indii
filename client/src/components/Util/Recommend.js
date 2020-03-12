@@ -11,7 +11,7 @@ class Recommend extends Component {
         const flag = this.props.id
 
         return (
-            <TrendElement to={flag ? "" : `/post/${this.props.id}`}>
+            <TrendElement to={!flag ? "" : `/post/${this.props.id}`}>
                 <div>
                     { flag ? <p>{this.props.title}</p> : <p><Skeleton height={16} width={120}/></p>}
                     { flag ? <p>{BraftEditor.createEditorState(this.props.content).toText().replace(/a\s/g, "").substring(0, 100)}</p> : <p><Skeleton height={12} width={140} count={4}/></p>}
@@ -42,8 +42,10 @@ class Recommend extends Component {
 }
 
 
-
+// このmax widthはtempの解決策
 const TrendElement = styled(Link)`
+
+    max-width: 335px; 
 
     cursor: pointer;
     display: flex;
@@ -52,7 +54,7 @@ const TrendElement = styled(Link)`
     margin-bottom: 25px;
     box-shadow: 1px 1px 10px #eaeaea;
     padding: 15px;
-    border-radius: 4px;
+    border-radius: 8px;
 
     &:hover{
         background-color: ${props => props.theme.hover};
@@ -64,7 +66,8 @@ const TrendElement = styled(Link)`
         margin-right: 25px;  
 
         & > p:nth-child(1) {
-            font-size: 13px;
+            font-size: 15px;
+            font-weight: bold;
             margin-bottom: 5px;
         }
 
@@ -115,9 +118,6 @@ const TrendAuthor = styled.div`
         font-size: 10px;
         display: flex;
         flex-direction: column;
-
-        /* & > p:nth-child(1) {
-        } */
 
         & > p:nth-child(2) {
             color: #747474;

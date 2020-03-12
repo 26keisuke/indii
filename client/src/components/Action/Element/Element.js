@@ -213,6 +213,8 @@ export const PreviewTitle = styled.p`
     margin-top: 22px;
     margin-bottom: 7px;
     font-size: 14px;
+    max-height: 50px;
+    overflow: scroll;
 `
 
 export const FinalCheck = styled.p`
