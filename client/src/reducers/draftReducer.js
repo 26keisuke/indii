@@ -4,14 +4,16 @@ import {
     FETCH_DRAFT, FETCH_ONE_DRAFT,
     DRAFT_UPDATED, 
     DRAFT_READ,
-    UPDATE_DRAFT_ONE
+    UPDATE_DRAFT_ONE,
+    SELECT_DRAFT
 } from "../actions/types/types"
 
 export default function draftReducer(state={
-    onEdit: [],
+    onEdit: [], // draft複数を保存する
     isUpdated: false,
     nounce: "",
-    fetched: {},
+    fetched: {}, // draft一つだけを保存する
+    selected: {}, // draft一つだけを保存する(Draft edit時に使うから上と一緒にしない方がいい）
 }, action) {
 
     if(action.payload && action.payload.length === 0) {
@@ -19,6 +21,11 @@ export default function draftReducer(state={
     }
 
     switch(action.type) {
+        case SELECT_DRAFT:
+            return {
+                ...state,
+                selected: action.payload,
+            }
         case FETCH_DRAFT:
             return {
                 ...state,

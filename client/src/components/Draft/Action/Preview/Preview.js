@@ -4,12 +4,12 @@ import { connect } from "react-redux"
 import { IoMdCheckmark } from "react-icons/io"
 import { FaUserCheck } from "react-icons/fa"
 
-import * as actions from "../../../actions"
+import * as actions from "../../../../actions"
 
-import { Separator, DraftElement } from "./Action"
-import { IndexPreview } from "./Index"
+import { Separator, DraftElement } from "../Action"
+import { IndexPreview } from "../Index/Index"
 
-import { renderType, fmtDate } from "../../Util/util"
+import { renderType, fmtDate } from "../../../Util/util"
 
 const DraftElementWrapper = styled.div`
     margin-bottom: 20px;

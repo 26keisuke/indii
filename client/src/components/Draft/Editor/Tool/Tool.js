@@ -12,7 +12,7 @@ import { FaGlobe, FaClipboardList, FaImage } from "react-icons/fa"
 import { IoIosInformationCircleOutline, IoIosSettings } from "react-icons/io"
 import { IoIosPricetag } from "react-icons/io"
 
-import * as actions from "../../../actions"
+import * as actions from "../../../../actions"
 
 import {
         nameList,
@@ -29,13 +29,13 @@ import {
 import Tag from "./Tag/Tag"
 import Info from "./Info/Info"
 import Title from "./Title/Title"
-import Button from "../../Util/Button"
+import Button from "../../../Util/Button"
 import Config from "./ConfigBox/ConfigBox"
 import Form from "./Form/Form"
 import List from "./List/List"
 import Carousel from "./Carousel/Carousel"
 import Image from "./Image/Image"
-import { Space } from "../../Theme"
+import { Space } from "../../../Theme"
 
 
 const renderList = (toggle) => {
@@ -182,38 +182,39 @@ class Reference extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        
-        if ((prevState.toggle !== this.state.toggle) || 
-                (!equal(prevState[this.state.toggle], this.state[this.state.toggle]))) {
 
+        const { selected } = this.props.draft
+        const prevSelected = prevProps.draft.selected
+        
+        if ((prevState.toggle !== this.state.toggle) || (!equal(prevState[this.state.toggle], this.state[this.state.toggle]))) {
             const empty = this.checkForRequired()
             empty ? this.setState({ transparent: true }) : this.setState({ transparent: false })
         }
 
-        // userが空欄にした時は、""になる
-        if((!this.state.info.postName) && (!this.state.info.author) && (this.props.draft.postName)){
+        // 初期化(初期化した後でもuserが空欄にした時は、""になるからそれもチェック)
+        if((!this.state.info.postName) && (!this.state.info.author) && (selected.postName)){
             var author;
             var creationDate;
 
-            if(this.props.draft.type === "New") {
+            if(selected.type === "New") {
                 author = this.props.auth.info
-                creationDate = this.props.draft.creationDate
+                creationDate = selected.creationDate
             } else {
-                if(this.props.draft.type === "Edit") {
-                    author = this.props.draft.editCreator
-                    creationDate = this.props.draft.editCreationDate
+                if(selected.type === "Edit") {
+                    author = selected.editCreator
+                    creationDate = selected.editCreationDate
                 }
-                var lastEdited = this.props.draft.editLastEdited
-                var lastEditedAuthor = this.props.draft.editLastEditedAuthor
-                var editIndex = this.props.draft.editIndex
+                var lastEdited = selected.editLastEdited
+                var lastEditedAuthor = selected.editLastEditedAuthor
+                var editIndex = selected.editIndex
             }
 
             this.setState({
                 ...this.state,
                 info: {
                     ...this.state.info,
-                    postName: this.props.draft.postName,
-                    topicName: this.props.draft.topicName,
+                    postName: selected.postName,
+                    topicName: selected.topicName,
                     author: author,
                     creationDate: creationDate,
                     lastEdited: lastEdited,
@@ -221,30 +222,30 @@ class Reference extends Component {
                     editIndex: editIndex,
                     config: {
                         ...this.state.info.config,
-                        allowEdit: this.props.draft.config.allowEdit,
+                        allowEdit: selected.config.allowEdit,
                     }
                 }
             })
         }
 
-        if(prevProps.draft.postName && (prevProps.draft.postName !== this.props.draft.postName)) {
+        if(prevSelected.postName && (prevSelected.postName !== selected.postName)) {
             this.setState({
                 ...this.state,
                 info: {
                     ...this.state.info,
-                    postName: this.props.draft.postName,
+                    postName: selected.postName,
                 }
             })
         }
 
-        if(prevProps.draft.config !== this.props.draft.config) {
+        if(prevSelected.config !== selected.config) {
             this.setState({
                 ...this.state,
                 info: {
                     ...this.state.info,
                     config: {
                         ...this.state.info.config,
-                        allowEdit: this.props.draft.config.allowEdit,
+                        allowEdit: selected.config.allowEdit,
                     }
                 }
             })
@@ -280,9 +281,9 @@ class Reference extends Component {
         })
     }
 
-    setToggle = (name) => {
+    setToggle = (toggle) => {
         this.setState({
-            toggle: name,
+            toggle,
         })
     }
 
@@ -307,9 +308,12 @@ class Reference extends Component {
     }
 
     handleImgClick = () => {
+
+        const { selected } = this.props.draft
+
         this.setState({file: {preview: null}})
 
-        axios.post(`/api/draft/${this.props.draft._id}/image`, {img: this.state.url})
+        axios.post(`/api/draft/${selected._id}/image`, {img: this.state.url})
         .then(
             this.props.updateMessage("success", "メイン画像を保存しました。")
         )
@@ -319,6 +323,8 @@ class Reference extends Component {
     }
 
     handleSubmit = () => {
+
+        const { selected } = this.props.draft
 
         const _id = new ObjectID();
 
@@ -330,11 +336,11 @@ class Reference extends Component {
         const data = Object.assign({}, this.state[this.state.toggle])
         const merged = Object.assign({}, type, data)
 
-        const newObj = update(this.props.draft, {ref: {$push: [merged]}})
+        const newObj = update(selected, {ref: {$push: [merged]}})
 
         this.props.updateDraftOne(newObj)
 
-        axios.post(`/api/draft/${this.props.draft._id}/ref`, {ref: merged})
+        axios.post(`/api/draft/${selected._id}/ref`, {ref: merged})
 
         // 初期化
         Object.keys(data).forEach(key => {
@@ -366,14 +372,16 @@ class Reference extends Component {
 
     handleConfigClick = (name) => {
 
-        if(this.props.draft.type === "Edit") {
-            if(this.props.draft.editCreator._id !== this.props.auth.info._id){
+        const { selected } = this.props.draft
+
+        if(selected.type === "Edit") {
+            if(selected.editCreator._id !== this.props.auth.info._id){
                 this.props.updateMessage("fail", "このポストのオーナーしか設定を変更できません。")
                 return
             }
         }
 
-        const id = this.props.draft._id;
+        const id = selected._id;
         const action = "CHANGE_DRAFTCONFIG";
         const title = "設定の変更";
         const message = "この設定を変更しますか？";
@@ -384,16 +392,22 @@ class Reference extends Component {
     }
 
     handleNameSubmit = (e) => {
+
+        const { selected } = this.props.draft
+
         e.preventDefault()
         if(!this.state.info.postName){
             this.props.updateMessage("fail", "ポスト名が入力されていません。")
             return
         }
-        this.props.changeDraftName(this.props.draft._id, this.state.info.postName, false);
+        this.props.changeDraftName(selected._id, this.state.info.postName, false);
     }
 
     revertClick = () => {
-        const id = this.props.draft._id;
+
+        const { selected } = this.props.draft
+
+        const id = selected._id;
         const action = "CHANGE_DRAFTNAME";
         const title = "ポスト名を元に戻す";
         const message = "ポスト名を最初の状態に戻しますか？";
@@ -404,7 +418,10 @@ class Reference extends Component {
     }
 
     revertTagClick = () => {
-        const id = this.props.draft._id;
+
+        const { selected } = this.props.draft
+
+        const id = selected._id;
         const action = "CHANGE_TAG";
         const title = "タグを元に戻す";
         const message = "タグを最初の状態に戻しますか？";
@@ -444,10 +461,11 @@ class Reference extends Component {
         })
     }
 
-    render () { 
+    render () {
 
+        const { selected } = this.props.draft
         const { file, url } = this.state
-        const initialVal = this.props.draft.postImg && this.props.draft.postImg.image
+        const initialVal = selected.postImg && selected.postImg.image
 
         const display = !url ? initialVal : url
 
@@ -462,7 +480,7 @@ class Reference extends Component {
                 />
                 <Collapse isOpened={this.state.info.isOpened}>
                     <Info
-                        edit={this.props.draft.type === "Edit"}
+                        edit={selected.type === "Edit"}
                         revertClick={this.revertClick}
                         handleSubmit={this.handleNameSubmit}
                         handleChange={this.handleChange}
@@ -526,13 +544,13 @@ class Reference extends Component {
                 />
                 <Collapse isOpened={this.state.refList.isOpened}>
                     <List
-                        id={this.props.draft._id}
-                        reference={this.props.draft.ref || []}
+                        id={selected._id}
+                        reference={selected.ref || []}
                     />
                     <Space height="20px"/>
                 </Collapse>
             
-                { this.props.draft.type !== "Zero" &&
+                { selected.type !== "Zero" &&
                 ([<Title
                     key={"imgTitle"}
                     title="メイン画像を追加"
@@ -572,7 +590,7 @@ class Reference extends Component {
                 </Collapse> 
                 ])}
 
-                { this.props.draft.type !== "Zero" &&
+                { selected.type !== "Zero" &&
                 ([
                 <Title
                     title="タグを追加"
@@ -584,9 +602,9 @@ class Reference extends Component {
                 ,
                 <Collapse key={"contentTag"} isOpened={this.state.tagAdd.isOpened}>
                     <Tag
-                        edit={this.props.draft.type === "Edit"}
-                        id={this.props.draft._id}
-                        tags={this.props.draft.tags}
+                        edit={selected.type === "Edit"}
+                        id={selected._id}
+                        tags={selected.tags}
                         revertClick={this.revertTagClick}
                     />
                 </Collapse>
@@ -632,9 +650,10 @@ const InfoIcon = styled(IoIosInformationCircleOutline)`
     transform: scale(1.2)
 `
 
-function mapStateToProps({auth}) {
+function mapStateToProps({auth, draft}) {
     return {
-        auth
+        auth,
+        draft,
     }
 }
 

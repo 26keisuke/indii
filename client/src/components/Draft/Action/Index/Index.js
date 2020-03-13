@@ -4,9 +4,9 @@ import { connect } from "react-redux"
 import update from "immutability-helper"
 import equal from "deep-equal"
 
-import * as actions from "../../../actions"
+import * as actions from "../../../../actions"
 
-import indent from "../../../images/indent.png"
+import indent from "../../../../images/indent.png"
 
 class Index extends Component {
 

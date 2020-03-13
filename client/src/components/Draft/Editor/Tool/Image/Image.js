@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 
-import Upload from "../../../Util/Upload"
-import Crop from "../../../Util/Crop"
-import Preview from "../../../Util/Preview"
+import Upload from "../../../../Util/Upload"
+import Crop from "../../../../Util/Crop"
+import Preview from "../../../../Util/Preview"
 
 class Image extends Component {
     render () {

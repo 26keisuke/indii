@@ -3,8 +3,9 @@ import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/index.css'
 import { connect } from "react-redux"
 import axios from "axios";
+import equal from "deep-equal"
 
-import * as actions from "../../../actions"
+import * as actions from "../../../../actions"
 
 const controls = [
     "undo",
@@ -47,14 +48,17 @@ class TextArea extends React.Component {
 
         this.autoSave = setInterval(() => {
             this.sendUpdate(false)
-            // this.props.setUpdate()
-        }, 60000)
+        }, 20000)
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.draft !== this.props.draft) {
+
+        const { selected } = this.props.draft
+
+        // 初期化
+        if(!prevProps.draft.selected && selected) {
             this.setState({
-                editorState: BraftEditor.createEditorState(this.props.draft.content)
+                editorState: BraftEditor.createEditorState(selected.content)
             })
         }
     }
@@ -68,7 +72,10 @@ class TextArea extends React.Component {
 
     // このリクエストが受理されてアップデートされる前に次のページのcomponentDidMountがcallされているから、draftUpdatedを呼ばなきゃいけない
     sendUpdate = (timeUpdate) => {
-        const url = "/api/draft/" + this.props.draft._id
+
+        const { selected } = this.props.draft
+
+        const url = "/api/draft/" + selected._id
         axios.post(url, {timeUpdate: timeUpdate, content: JSON.stringify(this.state.editorState.toHTML())})
             .then(() => {
                 if(timeUpdate){
@@ -79,7 +86,8 @@ class TextArea extends React.Component {
     }
 
     handleWindowClose = () => {
-        const url = "/api/draft/" + this.props.draft._id
+        const { selected } = this.props.draft
+        const url = "/api/draft/" + selected._id
         axios.post(url, {timeUpdate: true, content: JSON.stringify(this.state.editorState.toHTML())})
             .then(this.props.draftUpdated())
             .catch(err => console.error(err))
@@ -90,14 +98,16 @@ class TextArea extends React.Component {
     }
 
     render () {
+
         const { editorState } = this.state
+        const { selected } = this.props.draft
 
         return (
             <div>
                 <BraftEditor
                     language="jpn"
                     placeholder="ここに入力してください..."
-                    controls={this.props.draft.type === "Zero" ? zeroControls : controls}
+                    controls={selected.type === "Zero" ? zeroControls : controls}
                     value={editorState}
                     controlBarClassName="draft-area-tools"
                     contentClassName="draft-area-textarea"
@@ -105,9 +115,13 @@ class TextArea extends React.Component {
                 />
             </div>
         )
-
     }
-
 }
 
-export default connect(null, actions)(TextArea)
+function mapStateToProps({draft}){
+    return {
+        draft,
+    }
+}
+
+export default connect(mapStateToProps, actions)(TextArea)

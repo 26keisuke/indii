@@ -57,7 +57,7 @@ class AppState extends Component {
 
         if(this.props.auth.showForm) {
             // 何故だかたまにthis.authRefが関係ない時にundefinedになってエラーになるからthis.authRefを追加
-            if(this.authRef && this.authRef.current.contains(e.target)) {
+            if(this.authRef && this.authRef.current && this.authRef.current.contains(e.target)) {
                 return;
             }
             this.props.hideLogin();

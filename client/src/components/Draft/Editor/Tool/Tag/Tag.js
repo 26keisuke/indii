@@ -4,10 +4,10 @@ import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import { connect } from "react-redux"
 
-import * as actions from "../../../../actions"
+import * as actions from "../../../../../actions"
 
 import { RevertBtn } from "../Info/Info"
-import { Space } from "../../../Theme"
+import { Space } from "../../../../Theme"
 
 class Tag extends Component {
 

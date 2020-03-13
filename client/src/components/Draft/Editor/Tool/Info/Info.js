@@ -1,10 +1,10 @@
 import React, {Component} from "react"
 import styled from "styled-components"
-import Section from "../../../Action/Element/Section"
-import Edit from "../../../Notif/Confirm/Edit/Edit"
-import People from "../../../People/People"
-import account from "../../../../images/account.png"
-import { Space } from "../../../Theme"
+import Section from "../../../../Action/Element/Section"
+import Edit from "../../../../Notif/Confirm/Edit/Edit"
+import People from "../../../../People/People"
+import account from "../../../../../images/account.png"
+import { Space } from "../../../../Theme"
 
 class Info extends Component {
 

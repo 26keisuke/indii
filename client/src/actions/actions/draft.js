@@ -11,7 +11,13 @@ import {
     FETCH_DRAFT, FETCH_ONE_DRAFT,
     DRAFT_UPDATED, DRAFT_READ, 
     UPDATE_DRAFT_ONE,
+    SELECT_DRAFT,
+    DRAFT_ONE_UPDATED, DRAFT_ONE_READ
 } from "../types/types";
+
+export const selectDraft = (draft) => (dispatch) => {
+    dispatch({type: SELECT_DRAFT, payload: draft})
+}
 
 export const fetchDraft = (nounce) => async (dispatch) => {
     const url = "/api/draft"
@@ -37,10 +43,19 @@ export const draftRead = () => (dispatch) => {
     dispatch({type: DRAFT_READ})
 }
 
+export const draftOneUpdated = () => (dispatch) => {
+    dispatch({type: DRAFT_ONE_UPDATED})
+}
+
+export const draftOneRead = () => (dispatch) => {
+    dispatch({type: DRAFT_ONE_READ})
+}
+
 export const updateDraftOne = (obj) => (dispatch) => {
     dispatch({type: UPDATE_DRAFT_ONE, payload: obj})
 } 
 
+//  ============ ここからの範囲のものはdraftOneUpdateに置き換えるべき ============ 
 
 export const changeDraftName = (draftId, value, revert) => async (dispatch) => {
     const url = `/api/draft/${draftId}/name`
@@ -87,6 +102,23 @@ export const changeDraftConfig = (draftId, value) => async (dispatch) => {
     })
 }
 
+export const deleteRef = (id) => async (dispatch) => {
+    const url = `/api/draft/${id.draftId}/ref/${id.refId}`
+    axios.delete(url)
+        .then(res => {
+            dispatch(disableGray())
+            dispatch(draftUpdated())
+            dispatch(updateMessage("success", "参照を削除しました。"))
+            return
+        })
+        .catch(err => {
+            console.log(err)
+            return
+        })
+}
+
+// ============ ここまでの ============ 
+
 export const deleteDraft = (id) => async (dispatch) => {
     dispatch(isFetching())
     const url = "/api/draft/delete"
@@ -127,21 +159,6 @@ export const uploadDraft = (value) => async (dispatch) => {
         console.log(err)
         return
     })
-}
-
-export const deleteRef = (id) => async (dispatch) => {
-    const url = `/api/draft/${id.draftId}/ref/${id.refId}`
-    axios.delete(url)
-        .then(res => {
-            dispatch(disableGray())
-            dispatch(draftUpdated())
-            dispatch(updateMessage("success", "参照を削除しました。"))
-            return
-        })
-        .catch(err => {
-            console.log(err)
-            return
-        })
 }
 
 export const confirmDraft = (value) => async (dispatch) => {

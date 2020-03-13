@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import PublishIcon from '@material-ui/icons/Publish';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-
 import * as actions from "../../actions"
 
 import Screen from "../Util/Screen"
@@ -53,7 +52,6 @@ class DraftNavigation extends Component {
     componentDidUpdate() {
         if(this.props.draft.isUpdated) {
             this.props.fetchDraft(this.state.id)
-            // this.props.draftRead()
         }
     }
 
@@ -131,11 +129,7 @@ class DraftNavigation extends Component {
         )
     }
 
-    renderRightContent() {
-        return (
-            <div></div>
-        )
-    }
+    renderRightContent() {  return (<div></div>)    }
 
     render(){
         return(

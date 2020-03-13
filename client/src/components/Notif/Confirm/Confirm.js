@@ -30,7 +30,7 @@ import Textarea from "../../Post/Textarea/Textarea"
 import SkeletonBox from "../../Post/Skeleton/SkeletonBox"
 import People from "../../People/People"
 import Ribbon from "../../Util/Ribbon"
-import List from "../../Draft/Tool/List/List"
+import List from "../../Draft/Editor/Tool/List/List"
 
 import { fmtDate, getEmoji } from "../../Util/util"
 

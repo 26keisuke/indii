@@ -1,22 +1,36 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
+import Skeleton from "react-loading-skeleton"
 
 class Element extends Component {
     render() {
 
-        const {user, date, content} = this.props
+        const {user, date, content, skeleton} = this.props
 
         return(
             <Wrapper>
                 <Info>
-                    <Link to={`/profile/${user && user._id}`}>{user && user.userName}</Link>
-                    <div>・</div>
-                    <div>{date}</div>
+                    { 
+                    skeleton 
+                    ?
+                    <Skeleton height={18} width={120}/>
+                    :
+                    <div>
+                        <Link to={`/profile/${user && user._id}`}>{user && user.userName}</Link>
+                        <div>・</div>
+                        <div>{date}</div>
+                    </div>
+                    }
                 </Info>
                 <div>
                     <Connect/>
+                    { skeleton 
+                    ?
+                    <Skeleton height={18} width={400}/>
+                    :
                     <Content>{content}</Content>
+                    }
                 </div>
             </Wrapper>
         )
@@ -42,20 +56,24 @@ const Wrapper = styled.div`
 
 const Info = styled.div`
 
-    display: flex;
     color: #777777;
     margin-bottom: 6px;
 
-    & > a {
-        color: #767676;
-        
-        &:hover{
-            color: #565656;
-        }
-    }
+    & > div {
 
-    & > div:nth-child(2){
-        margin: 0px 6px;
+        display: flex;
+
+        & > a {
+            color: #767676;
+            
+            &:hover{
+                color: #565656;
+            }
+        }
+
+        & > div:nth-child(2){
+            margin: 0px 6px;
+        }
     }
 `
 

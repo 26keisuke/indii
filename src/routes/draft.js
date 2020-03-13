@@ -11,8 +11,6 @@ import Image from "../models/Image"
 const router = express.Router()
 
 router.get("/", (req, res) => {
-    console.log("HERE1")
-    console.log(req.user.id)
     User.findById(req.user.id)
         .then(user => {
             Draft.find({_id: {$in: user.draft}, isDeleted: false, isUploaded: false})
@@ -27,9 +25,6 @@ router.get("/", (req, res) => {
 })
 
 router.get("/:draftId", (req, res) => {
-    console.log("HERE")
-    console.log(req.params.draftId)
-    // if(req.params.draftId){ return }
     Draft.findById(req.params.draftId).populate("editCreator").populate("editLastEditedAuthor").exec()
     .then(draft => {
         res.send(draft)

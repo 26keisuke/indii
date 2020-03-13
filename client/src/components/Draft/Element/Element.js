@@ -1,10 +1,9 @@
 import React, { Component } from "react"
-import BraftEditor from 'braft-editor'
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
 
-import { fmtDate, renderType } from "../../Util/util"
+import { fmtDate, renderType, getBraftSummary } from "../../Util/util"
 
 const DraftBox = styled(Link)`
     border-bottom: 1px solid #eaeaea;   
@@ -74,19 +73,18 @@ const Nil = styled.div`
     margin-left: 10px;
 `
 
+const S1Wrapper = styled.div`
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+`
+
+const S2Wrapper = styled.div`
+    margin-right: 5px;
+`
+
+
 class Draft extends Component {
-
-    renderType(type){
-        switch(type){
-            case "Edit":
-                return "編集 "
-            case "Zero":
-                return "編集 "
-            case "New":
-                return "新規作成 "
-        }
-    }
-
     render(){
 
         const { _id, type, postName, topicName, content, editDate, topicSquareImg, postImg } = this.props.draft
@@ -108,23 +106,23 @@ class Draft extends Component {
                     { flag
                     ? (
                     <Content>
-                        {BraftEditor.createEditorState(content).toText().replace(/a\s/g, "").substring(0, 100)}
+                        {getBraftSummary(content, 100)}
                     </Content>
                     )
                     : (
-                        <div style={{marginBottom: "10px", display: "flex", flexDirection: "column"}}>
+                        <S1Wrapper>
                             <Skeleton width={510} height={14}/>
                             <Skeleton width={450} height={14}/>
-                        </div>
+                        </S1Wrapper>
                     )
                     }
                     <div>
                         { flag
                         ? <p>{topicName}</p>
                         : (
-                            <div style={{marginRight: "5px"}}>
+                            <S2Wrapper>
                                 <Skeleton width={150} height={12}/>
-                            </div>
+                            </S2Wrapper>
                         )
                         }
                         { flag && <p>・</p> }

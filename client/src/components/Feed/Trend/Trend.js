@@ -23,6 +23,7 @@ class Trend extends Component {
                 {
                 this.props.feed.recommend.map(recom => 
                     <Recommend
+                        key={recom._id}
                         id={recom._id}
                         title={recom.postName}
                         content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"

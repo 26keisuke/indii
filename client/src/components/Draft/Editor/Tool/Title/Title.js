@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import ArrowSpin from "../../../Util/ArrowSpin"
+import ArrowSpin from "../../../../Util/ArrowSpin"
 import styled from "styled-components"
 
 class Title extends Component {

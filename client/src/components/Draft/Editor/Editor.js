@@ -10,8 +10,8 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import * as actions from "../../../actions"
 
 import Screen from "../../Util/Screen"
-import TextArea from "../TextArea/TextArea"
-import Tool from "../Tool/Tool"
+import TextArea from "./TextArea/TextArea"
+import Tool from "./Tool/Tool"
 import Back from "../../Util/Back"
 
 import { renderType } from "../../Util/util"
@@ -119,24 +119,15 @@ const Hopper = ( props ) => {
 
 class Editor extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            draft: {},
-            updated: false,
-        }
-    }
-
     // retrieve draft and check for ownership
     componentDidMount() {
         this.fetchTargetDraft(true)
     }
 
-
     componentDidUpdate(prevProps) {
         if(this.props.draft.isUpdated) {
+            // これdraft全部を取得しているから時間かかるし無駄
             this.props.fetchDraft(Math.random().toString(36).substring(2, 15))
-            // this.props.draftRead()
         }
 
         if(prevProps.draft.nounce !== this.props.draft.nounce){
@@ -151,15 +142,11 @@ class Editor extends Component {
             if(draft.onEdit[key]._id === this.props.match.params.id) {
                 if(initial){
                     if(draft.onEdit[key].user === auth.info._id) {
-                        this.setState({
-                            draft: draft.onEdit[key]
-                        })
+                        this.props.selectDraft(draft.onEdit[key])
                         return;
                     }
                 } else {
-                    this.setState({
-                        draft: draft.onEdit[key]
-                    })
+                    this.props.selectDraft(draft.onEdit[key])
                     return;
                 }
             }
@@ -168,24 +155,10 @@ class Editor extends Component {
         history.push('/')
     }
 
-    setUpdate = () => {
-        this.setState({ updated: true })
-        setTimeout(() => {
-            this.setState({ updated: false })
-        }, 5000)
-    }
-
-    // renderTitle() {
-    //     return (
-    //         <div>
-    //             <EditorNavi>
-    //                 <Hopper type={renderType(this.state.draft.type)} name={this.state.draft.topicName} link={`/topic/${this.state.draft.topic}`}/>
-    //             </EditorNavi>
-    //         </div>
-    //     )
-    // }
-
     renderLeft() {
+
+        const { selected } = this.props.draft
+
         return (
            
             <EditorTop>
@@ -197,45 +170,42 @@ class Editor extends Component {
                 </BackWrapper>
                 <div>
                     <EditorNavi>
-                        <Hopper type={renderType(this.state.draft.type)} name={this.state.draft.topicName} link={`/topic/${this.state.draft.topic}`}/>
+                        <Hopper type={renderType(selected.type)} name={selected.topicName} link={`/topic/${selected.topic}`}/>
                     </EditorNavi>
                 </div>
                 <div>
                     <div>
-                        <p>{this.state.draft.postName}</p>
-                        { this.state.updated &&
-                        <CheckBox>
-                            <Check/>
-                            <p>編集内容を保存しました。</p>
-                        </CheckBox>
-                        }
+                        <p>{selected.postName}</p>
                     </div>
                 </div>
-                <TextArea draft={this.state.draft} setUpdate={this.setUpdate}/>
+                <TextArea setUpdate={this.setUpdate}/>
             </EditorTop>
         )
     }
 
     renderRight() {
+
+        const { selected } = this.props.draft
+
         return (
             <div>
-                <Tool
-                    draft={this.state.draft}
-                />
+                <Tool/>
             </div>
         )
     }
 
     render() {
+
+        const { selected } = this.props.draft
+
         return(
             <div>
                 <Helmet>
-                    <title>{'"' + this.state.draft.postName + "\"の編集"} | Indii</title>
-                    <meta name="description" content={`"${this.state.draft.postName}"の${renderType(this.state.draft.type)}をします。`}/>
-                    <meta name="keywords" content={`${this.state.draft.postName},${renderType(this.state.draft.type)},ポスト,下書き`}/>
+                    <title>{'"' + selected.postName + "\"の編集"} | Indii</title>
+                    <meta name="description" content={`"${selected.postName}"の${renderType(selected.type)}をします。`}/>
+                    <meta name="keywords" content={`${selected.postName},${renderType(selected.type)},ポスト,下書き`}/>
                 </Helmet>
                 <Screen withBack={true} space={false} post={true} noHeader={true} noHeaderSpace={true} noBorder={true}>
-                    {/* {this.renderTitle()} */}
                     {this.renderLeft()}
                     {this.renderRight()}
                 </Screen>

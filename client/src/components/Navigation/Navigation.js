@@ -47,7 +47,7 @@ class Navigation extends Component {
     }
 
     handleClick = (e, id) => {
-        if((id === "draft") || (id === "notification") || (id === "setting")) {
+        if((id === "draft") || (id === "notification")) {
             const isAuthenticated = checkAuth(e, this.props)
             if(isAuthenticated) {
                 this.toggleIcon(id)

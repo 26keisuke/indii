@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import { IoIosAddCircleOutline } from "react-icons/io"
 import { connect } from "react-redux"
+import { Helmet } from "react-helmet"
 
 import * as actions from "../../actions"
 
@@ -47,6 +48,11 @@ class Talk extends Component {
     render() {
         return (
             <Wrapper>
+                <Helmet>
+                    <title>{"トーク | Indii"}</title>
+                    <meta name="description" content="Indii上のユーザー同士で交流することができます。力を合わして日本一のデータベースを作り上げましょう！"/>
+                    <meta name="keywords" content={"コミュニティー,コンピューターサイエンス,ギーク,オタク"}/>
+                </Helmet>
                 <TalkBox>
                     <Feed>
                         <TalkHeader>

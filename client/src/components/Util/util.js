@@ -1,4 +1,5 @@
 import React from "react"
+import BraftEditor from 'braft-editor'
 
 import response from "../../images/response.png";
 import dissapointed from "../../images/dissapointed.png";
@@ -6,6 +7,10 @@ import love from "../../images/love.png";
 import good from "../../images/good.png";
 import nerd from "../../images/nerd.png";
 import hmm from "../../images/hmm.png";
+
+export function getBraftSummary(content, length){
+    BraftEditor.createEditorState(content).toText().replace(/a\s/g, "").substring(0, length)
+}
 
 export function validateEmail(value){
     // if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)){ <- これだと、長いinputだと死ぬ

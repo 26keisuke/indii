@@ -3,10 +3,10 @@ import styled from "styled-components"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 
-import * as actions from "../../../../actions"
+import * as actions from "../../../../../actions"
 import { jpMapping } from "../Data/data"
 
-import ShowMore from "../../../Util/ShowMore"
+import ShowMore from "../../../../Util/ShowMore"
 
 const ListBox = styled.div`
     display: flex;

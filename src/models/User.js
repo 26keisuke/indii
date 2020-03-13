@@ -9,7 +9,7 @@ const userSchema = new Schema({
     googleId: {type: String, unique: true, sparse: true},
     facebookId: {type: String, unique: true, sparse: true},
 
-    userName: String,
+    userName: {type: String, unique: true, sparse: true},
     email: String,
     password: String,
     name: {

@@ -1,4 +1,4 @@
 node_modules/
-/dist
+dist/
 src/config/dev.js
 .DS_STORE

@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import styled from "styled-components"
 // import { Space } from "../../../Theme"
 
-import Config from "../../../Action/Element/Config"
+import Config from "../../../../Action/Element/Config"
 
 class ConfigBox extends Component {
     render () {

@@ -5,6 +5,7 @@ import BraftEditor from 'braft-editor'
 // import { AiOutlineLike } from "react-icons/ai"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
+import Skeleton from "react-loading-skeleton"
 
 import * as actions from "../../../actions"
 
@@ -66,12 +67,27 @@ class Content extends Component {
             refLikes = topic.likes
         }
 
+        const flag = !!title
+
         return(
             <Wrapper>
                     <Box>
                         <Wrapper>
+                            {
+                            flag
+                            ?
                             <UserName><Link to={`/profile/${creator && creator._id}`}>{creator && creator.userName}</Link> ・　{fmtDate(timeStamp)}</UserName>
+                            :
+                            <UserName><Skeleton width={180} height={15}/></UserName>
+                            }
+                            {
+                            flag
+                            ?
                             <Title>{title}</Title>
+                            :
+                            <Title><Skeleton width={220} height={27}/></Title>
+                            }
+                            
                             { refType === "POST" &&
                                 <Recommend
                                     id={refId}
@@ -94,7 +110,14 @@ class Content extends Component {
                                     likes={refLikes}
                                 />
                             }
+                            {
+                            flag
+                            ?
                             <Description>{description}</Description>
+                            :
+                            <S1Wrapper><Skeleton width={587} count={3} height={16}/></S1Wrapper>
+                            }
+                            { flag &&
                             <Bottom>
                                 <div>
                                     <GoComment/>
@@ -105,18 +128,28 @@ class Content extends Component {
                                     120
                                 </div> */}
                             </Bottom>
+                            }
 
                             <Space height={"30px"}/>
 
                             <div>
                                 { 
-                                comments && comments.map(comment =>
+                                flag 
+                                ? comments.map(comment =>
                                     <Element
                                         user={comment.user}
                                         date={fmtDate(comment.timeStamp)}
                                         content={comment.content}
                                     />
                                 )
+                                :
+                                <div>
+                                    <Element skeleton={true}/>
+                                    <Element skeleton={true}/>
+                                    <Element skeleton={true}/>
+                                    <Element skeleton={true}/>
+                                    <Element skeleton={true}/>
+                                </div>
                                 }
                             </div>
 
@@ -136,6 +169,12 @@ class Content extends Component {
         )
     }
 }
+
+const S1Wrapper = styled.div`
+    & span {
+        margin-bottom: 6px;
+    }
+`
 
 const Wrapper = styled.div`
     position: relative;

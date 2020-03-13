@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet"
 
 import GAListener from "./GA"
 import Feed from "./Feed/Feed";
@@ -30,6 +31,11 @@ class App extends Component {
 
         return (
             <div className="browser">
+                <Helmet>
+                    <title>{"Indii | もっと詳しく。もっと楽しく。"}</title>
+                    <meta name="description" content={"Indiiでは自分の持っている知識を簡単に共有することができます。力を合わして日本一のデータベースを作り上げましょう！"}/>
+                    <meta name="keywords" content={"コミュニティー,コンピューターサイエンス,ギーク,オタク"}/>
+                </Helmet>
                 <BrowserRouter>
                     <GAListener>
                         <AppState>
