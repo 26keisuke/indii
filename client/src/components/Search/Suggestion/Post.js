@@ -9,6 +9,15 @@ import { fmtDate } from "../../Util/util"
 const PostElement = styled.div`
     width: 100%;
     padding: 10px;
+    cursor: pointer;
+    box-sizing: border-box;
+
+    background-color: ${props => props.onHover && "rgb(240,240,240)"};
+
+    &:hover {
+        background-color: rgb(240,240,240);
+    }
+
     & > div {
         display: flex;
         flex-direction: row;
@@ -31,7 +40,7 @@ const PostRight = styled.img`
     max-width: 40px;
     max-height: 40px;
     position: absolute;
-    right: 22px;
+    right: 12px;
 `
 
 const PostMiddle = styled.div`
@@ -98,13 +107,19 @@ class Post extends Component {
         }
     }
 
+    handleClick = () => {
+        const { handleClick, suggestion　} = this.props
+
+        return handleClick(suggestion)
+    }
+
     render () {
 
         const { index, postName, star, config, postImg, topicSquareImg, lastEdited } = this.props.suggestion
 
         return (
-            <div>
-                <PostElement>
+            // <div>
+                <PostElement onClick={this.handleClick}>
                     <div>
                         <PostLeft>
                             <p>
@@ -127,7 +142,7 @@ class Post extends Component {
                         <PostRight src={ postImg ? postImg.image : topicSquareImg.image } alt="ポストの検索結果のメイン画像"/>
                     </div>
                 </PostElement>
-            </div>
+            // </div>
         )
     }
 }

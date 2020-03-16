@@ -4,33 +4,34 @@ import { connect } from "react-redux"
 
 import * as actions from "../../actions"
 
-import sample from "../../images/sample0.jpg"
+// import sample from "../../images/sample0.jpg"
 
 import PostFeed from "./Post/Post";
-import People from "./People/People";
+// import People from "./People/People";
 import Trend from "./Trend/Trend"
+import New from "./New/New"
 
 import Screen, { FeedSpace } from "../Util/Screen"
 import { Space } from "../Theme"
 
-const FeedInsideHeader = styled.div`
-    height: 40px;
-    background-color: #ffffff;
-    display: flex;
-    align-items: center;
-    padding-left: 35px;
-    border-top: 1px solid #eaeaea;
-    border-bottom: 1px solid #eaeaea;
+// const FeedInsideHeader = styled.div`
+//     height: 40px;
+//     background-color: #ffffff;
+//     display: flex;
+//     align-items: center;
+//     padding-left: 35px;
+//     border-top: 1px solid #eaeaea;
+//     border-bottom: 1px solid #eaeaea;
 
-    & > p {
-        font-size: 14px;
-    }
-`
+//     & > p {
+//         font-size: 14px;
+//     }
+// `
 
-const PeopleWrapper = styled.div`
-    border-bottom: 1px solid #eaeaea;
-    background-color: #ffffff;
-`
+// const PeopleWrapper = styled.div`
+//     border-bottom: 1px solid #eaeaea;
+//     background-color: #ffffff;
+// `
 
 const TrendWrapper = styled.div`
     margin-left: 5px;
@@ -41,6 +42,7 @@ class Feed extends Component {
     componentDidMount() {
         this.props.fetchFeed()
         this.props.fetchRecommend()
+        this.props.fetchNewTopic()
     }
 
     renderLeft = () => {
@@ -123,6 +125,7 @@ class Feed extends Component {
                 <TrendWrapper>
                     <Trend/>
                 </TrendWrapper>
+                <New/>
             </div>
         )
     }

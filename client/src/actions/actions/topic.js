@@ -21,6 +21,9 @@ export const clearTopic = () => (dispatch) => {
 }
 
 export const searchTopic = (type, value) => async (dispatch) => {
+    if(type === "RESET") { dispatch({type: SEARCH_TOPIC, payload: {suggestions: []}}) }
+    if(!value) { dispatch({type: SEARCH_TOPIC, payload: {suggestions: []}}); return }
+    
     const url = "/api/topic/search/" + String(type) + "/" + String(value)
     const res = await cancelOnMultipleSearch(url)
     if(!!res){

@@ -70,7 +70,7 @@ const extend = keyframes`
     from {
         width: 0px;
     } to {
-        width: 70%;
+        width: 60%;
     }
 `
 
@@ -129,7 +129,7 @@ const RefToggle = styled.div`
                 width: 80%;
                 height: 1px;
                 animation-name: ${extend};
-                animation-duration: 250ms;
+                animation-duration: 175ms;
                 animation-timing-function: ease-in-out;
             `}
         }

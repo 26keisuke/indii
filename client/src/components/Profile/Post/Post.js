@@ -2,8 +2,6 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 
-import sample from "../../../images/sample1.png"
-
 import Post from "../../Post/Element/Element"
 
 class ProfileHome extends Component {
@@ -11,16 +9,24 @@ class ProfileHome extends Component {
     render() {
         return (
             <Wrapper>
-                <Box>
-                    <Post
-                        topic={"Apache Kafka"}
-                        title={"Stream Processingとの関係"}
-                        content={"とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。とにかく大量のメッセージを扱うことができる. "}
-                        count={202}
-                        date={"August 21, 2013 5:36 AM"}
-                        img={sample}
-                    />
-                </Box>
+                {this.props.posts.map(elem =>{
+
+                    const post = this.props.favorite ? elem.post : elem
+
+                    return (
+                        <Box key={post._id}>
+                            <Post
+                                id={post._id}
+                                topic={post.topicName}
+                                title={post.postName}
+                                content={post.content}
+                                count={post.star.counter}
+                                date={post.lastEdited}
+                                img={post.postImg ? post.postImg.image : post.topicSquareImg.image }
+                            />
+                        </Box>
+                    )
+                })}
             </Wrapper>
         )
     }
@@ -41,10 +47,10 @@ const Box = styled.div`
     margin-bottom: 12px;
 `
 
-function mapStateToProps({auth}) {
-    return {
-        auth
-    }
-}
+// function mapStateToProps({profile}) {
+//     return {
+//         profile
+//     }
+// }
 
-export default connect(mapStateToProps, null)(ProfileHome)
+export default connect(null, null)(ProfileHome)

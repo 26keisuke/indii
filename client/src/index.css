@@ -35,7 +35,7 @@
 html {
     height:100%;
     font-family: serif;
-    font-size: 11px;
+    font-size: 12px;
     line-height: normal;
     color: #212121;
 }
@@ -58,6 +58,7 @@ body {
     height: 100%;
 } */
 
+
 a {
     text-decoration: none;
     color: #212121;
@@ -68,6 +69,21 @@ p {
     margin: 0px;
     font-feature-settings: "palt";
     letter-spacing: 1.0px;
+}
+
+blockquote{
+    border-left: 2px solid #ddd;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 10px;
+    color: #aaa;
+    font-style: italic;
+}
+
+code {
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
 }
 
 h1,
@@ -88,6 +104,10 @@ input {
     margin: 0px;
     font-feature-settings: "palt";
     letter-spacing: 0.7px;
+}
+
+input {
+    font-size: 12px;
 }
 
 input:focus{
@@ -272,24 +292,24 @@ input:focus{
 /*=====search=====*/
 
 @media only screen and (max-width: 670px) {
-    .search-box{
+    /* .search-box{
         display: flex;
         align-items: center;
-    }
+    } */
 
-    .search-box .react-autosuggest__container{
+    /* .search-box .react-autosuggest__container{
         margin-left: 0px !important;
         max-width: 300px !important;
-    }
+    } */
 
     .search-icon{
         display: none !important;
     }
 
-    .search-box .react-autosuggest__input{
+    /* .search-box .react-autosuggest__input{
         padding: 0px 15px !important;
         max-width: 300px !important;
-    }
+    } */
 }
 
 .search-icon{
@@ -305,12 +325,12 @@ input:focus{
     width: auto;
     padding: 10px 20px;
 }
-
+/* 
 .search-box span{
     font-weight: bold;
     margin-left:7px;
-}
-
+} */
+/* ここから
 .search-box .react-autosuggest__input{
     border: none;
     border-radius: 2px;
@@ -362,7 +382,13 @@ input:focus{
     border-top-right-radius: 2px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
-}
+} 
+
+
+ここまでが最新のコメントアウト*/
+
+
+
 
 /* .search-box .react-autosuggest__input--focused {
     border-radius: 2px;

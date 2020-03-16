@@ -110,7 +110,7 @@ const Remember = styled.div`
     flex-direction: row;
     align-items: center;
     margin: 0px 42px;
-    margin-bottom: 37px;
+    margin-bottom: 27px;
 `
 
 const InputWrapper = styled.div`

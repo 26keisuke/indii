@@ -36,6 +36,7 @@ class Thumb extends Component {
             <div>
                 <Wrapper>
                     <Preview
+                        profile={true}
                         display={display}
                         alt="プロフィール画像の画像プレビュー"
                     />

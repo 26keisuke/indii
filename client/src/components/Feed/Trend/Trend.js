@@ -8,10 +8,6 @@ import Recommend from "../../Util/Recommend"
 
 class Trend extends Component {
 
-    renderElement = () => {
-        return
-    }
-
     render () {
         return (
             <div>
@@ -19,53 +15,27 @@ class Trend extends Component {
                     <p>トレンド</p>
                     <p>//////////////////////////////////</p>
                 </SlashTitle>
-                {/* {this.renderElement()} */}
-                {
-                this.props.feed.recommend.map(recom => 
+                { this.props.recommend.length !== 0 
+                ?
+                this.props.recommend.map(recom => 
                     <Recommend
                         key={recom._id}
                         id={recom._id}
                         title={recom.postName}
-                        content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
+                        content={recom.content}
                         authorImg={recom.creator[0].photo}
                         author={recom.creator[0].userName}
                         editDate={fmtDate(recom.lastEdited)}
                         postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
                     />
                 )
+                :
+                <div>
+                    <Recommend/>
+                    <Recommend/>
+                    <Recommend/>
+                </div>
                 }
-                {/* <Recommend
-                    title="タイトルが入ります"
-                    content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
-                    authorImg={sample}
-                    author="飯塚啓介"
-                    editDate="作成日が入ります"
-                    postImg={sample1}
-                />
-                <Recommend
-                    title="タイトルが入ります"
-                    content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
-                    authorImg={sample}
-                    author="飯塚啓介"
-                    editDate="作成日が入ります"
-                    postImg={sample1}
-                />
-                <Recommend
-                    title="タイトルが入ります"
-                    content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
-                    authorImg={sample}
-                    author="飯塚啓介"
-                    editDate="作成日が入ります"
-                    postImg={sample1}
-                />
-                <Recommend
-                    title="タイトルが入ります"
-                    content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
-                    authorImg={sample}
-                    author="飯塚啓介"
-                    editDate="作成日が入ります"
-                    postImg={sample1}
-                /> */}
             </div>
         )
     }
@@ -91,7 +61,7 @@ export const SlashTitle = styled.div`
 
 function mapStateToProps({ feed }){
     return {
-        feed
+        recommend: feed.recommend
     }
 }
 

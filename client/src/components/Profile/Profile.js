@@ -75,7 +75,7 @@ class Profile extends Component {
 
         const { isThisUser, toggle } = this.state
 
-        const titleName = this.props.profile.user || " "
+        const titleName = this.props.profile.user.userName || " "
 
         return (
             <Wrapper>
@@ -99,9 +99,9 @@ class Profile extends Component {
                     toggle={toggle}
                 />
                 }
-                { toggle.owner ? <Post posts={this.props.profile.user.post}/> : "" }
-                { toggle.favoriteTopic ? <Topic topics={this.props.profile.user.likedTopic}/> : "" }
-                { toggle.favoritePost ? <Post posts={this.props.profile.user.likedPost}/> : "" }
+                { toggle.owner ? <Post posts={this.props.profile.user.post || []}/> : "" }
+                { toggle.favoriteTopic ? <Topic topics={this.props.profile.user.likedTopic || []}/> : "" }
+                { toggle.favoritePost ? <Post favorite={true} posts={this.props.profile.user.likedPost || []}/> : "" }
                 { toggle.follows ? <Follow users={this.props.profile.user.follows}/> : "" }
                 { toggle.followers ? <Follow users={this.props.profile.user.followers}/> : "" }
             </Wrapper>

@@ -95,7 +95,7 @@ class Crop extends Component {
             <div>
                 {file.preview && (
                 <div>
-                    <Message>画像のサイズを変更する</Message>
+                    <Message>画像を切り取る</Message>
                     <ReactCrop
                         style={ style || { marginTop: "10px", width: "444px", border: "1px solid #eaeaea", boxSizing: "border-box" }}
                         imageStyle={ imageStyle || { width: "445px" }}

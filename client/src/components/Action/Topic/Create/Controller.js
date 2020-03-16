@@ -4,11 +4,13 @@ import { Helmet } from "react-helmet"
 import CreateFriendsTopic from "./Friend"
 import CreatePreviewTopic from "./Preview"
 
-import Select from "../../Controller/Select"
+// import Select from "../../Controller/Select"
 
 import Image from "../../Controller/Image"
 import Tag from "../../Tag/Tag"
 import Form from "../../Form/Form"
+import Unique from "../../../Search/Controller/Unique"
+import { Box, BoxTransition } from "../../Element/Element"
 
 class CreateTopic extends Component {
 
@@ -33,26 +35,46 @@ class CreateTopic extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return  <Select
-                            placeholder="トピックを入力"
-                            index="1"
-                            title="トピック名を入力してください"
-                            subTitle="トピック名"
-                            type="Unique"
-                            content="Topic"
-                            // data={topics}
-                            searchByVariable="topicName"
-                            storage="createTopicName"
-                            back={this.state.back} 
-                            setBackward={this.setBackward} 
-                            setValue={this.setTopicName} 
-                            setStep={this.setStep}
-                        />
+                // return  <Select
+                //             placeholder="トピックを入力"
+                //             index="1"
+                //             title="トピック名を入力してください"
+                //             subTitle="トピック名"
+                //             type="Unique"
+                //             content="Topic"
+                //             // data={topics}
+                //             searchByVariable="topicName"
+                //             storage="createTopicName"
+                //             back={this.state.back} 
+                //             setBackward={this.setBackward} 
+                //             setValue={this.setTopicName} 
+                //             setStep={this.setStep}
+                //         />
+
+                const postAction = (topicName) => {
+                    this.setBackward(false);
+                    this.setStep(1);
+                    this.setTopicName(topicName);
+                }
+
+                return (
+                    <Box>
+                        <BoxTransition back={this.state.back} transition={false}>
+                            <Unique
+                                title="1. トピック名を入力してください"
+                                message="トピック名"
+                                theme="TOPIC"
+                                placeholder="トピックを入力..."
+                                postAction={postAction}
+                                storageId="createTopicName"
+                            />
+                        </BoxTransition>
+                    </Box>
+                )
             case 1:
                 return <Image
                         back={this.state.back} 
                         setBackward={this.setBackward} 
-                        // initialVal={indii}
                         storage1="createTopicImage1"
                         storage2="createTopicImage2"
                         storage3="createTopicImage3"
@@ -151,32 +173,6 @@ class CreateTopic extends Component {
                     {this.renderStep()}
                 </Form>
             </div>
-            // <FormWrapper>
-            //     <div>
-            //         <BackWrapper>
-            //             <Back
-            //                 url="/action"
-            //                 name="編集・作成一覧に戻る"
-            //             />
-            //         </BackWrapper>
-            //         <p>新しいトピックを作成する</p>
-            //         <FormMount/>
-            //         <ActionProgress
-            //             step={this.state.step}
-            //             stepName={
-            //                 [
-            //                     "トピック名を決定",
-            //                     "写真を選択",
-            //                     "タグを追加",
-            //                     "友達を招待する",
-            //                     "プレビュー"
-            //                 ]
-            //             }
-            //         />
-                    
-            //         {this.renderStep()}
-            //     </div>
-            // </FormWrapper>
         )
     }
 }

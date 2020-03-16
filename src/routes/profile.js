@@ -9,8 +9,8 @@ router.get("/:userId", (req, res) => {
     .populate("post")
     .populate("followers.user")
     .populate("follows.user")
-    .populate({path: "likedPost.post", populate: {path: "postImg"}})
-    .populate({path: "likedTopic.topic", populate: {path: "squareImg"}})
+    .populate({path: "likedPost.post", populate: [{path: "postImg"}, {path: "topicSquareImg"}]})
+    .populate({path: "likedTopic.topic", populate: [{path: "squareImg"}, {path: "posts", options: {limit: 1}}]})
     .exec()
     .then(user => {
         res.send(user)

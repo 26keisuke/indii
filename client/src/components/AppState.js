@@ -151,7 +151,13 @@ class AppState extends Component {
 
                 case "ADD_TALK_CONFIRM":
                     this.props.createTalk(conf.talkId, conf.type, conf.talkTitle, conf.talkDesc); break
-    
+                
+                case "DRAFT_ADD_URL":
+                    this.props.draftAddUrl(value); break;
+
+                case "DRAFT_ADD_KATEX":
+                    this.props.draftAddKatex(value); break;
+
                 // ======== logIn系 ==========
     
                 case "SIGN_UP":

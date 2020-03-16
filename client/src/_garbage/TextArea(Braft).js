@@ -3,7 +3,6 @@ import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/index.css'
 import { connect } from "react-redux"
 import axios from "axios";
-import equal from "deep-equal"
 
 import * as actions from "../../../../actions"
 

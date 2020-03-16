@@ -108,7 +108,7 @@ router.post("/", isLoggedIn, (req, res) => {
                 posts: [post.id]
             }
             const now = Date.now()
-            var topic = new Topic(Object.assign({_id: topicId}, newBody))
+            var topic = new Topic(Object.assign({_id: topicId, creator: req.user.id}, newBody))
             topic.column.push(desc)
             topic.order.push(columnId)
             topic.posts.push(post.id)
@@ -297,15 +297,59 @@ router.post("/:topicId/post", isLoggedIn, (req, res) => {
     })
 })
 
+router.post("/:topicId/like", (req, res) => {
+
+    const now = Date.now()
+
+    Topic.findById(req.params.topicId)
+    .then(topic => {
+        if(req.body.like){
+            const res = topic.likes.user.filter(user => user === req.user._id)
+            if(!res[0]){
+                topic.likes.counter++;
+                topic.likes.user.push(req.user.id)
+            }
+        } else {
+            topic.likes.user.map((user,index) => {
+                if(String(user) === String(req.user.id)) {
+                    topic.likes.user.splice(index, 1)
+                    topic.likes.counter--;
+                }
+            })
+        }
+
+        User.findById(req.user.id)
+        .then(user => {
+            if(req.body.like){
+                user.likedTopic.push({timeStamp: now, topic: topic._id})
+            } else {
+                user.likedTopic.map((elem, index) => {
+                    if(String(elem.topic) === String(topic._id)){
+                        user.likedTopic.splice(index, 1)
+                    }
+                })
+            }
+
+            user.save();
+            topic.save();
+
+            res.send("Success")
+
+        })
+    })
+    .catch(err => console.log(err))
+})
+
 
 router.get("/search/:type/:term", (req, res) => {
     const type = req.params.type
-    const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
+    const value = type === "MATCH" ? '^' + req.params.term : '^' + req.params.term + '$' 
+
     Topic.find({"topicName": {$regex: value, $options: 'i'}}).populate("squareImg")
         .exec()
         .then(topic => {
             if(topic.length === 0){
-                const result = type === "Match" ? [] : [{added: true}]
+                const result = [req.params.term]
                 res.send(result)
             } else {
                 res.send(topic)

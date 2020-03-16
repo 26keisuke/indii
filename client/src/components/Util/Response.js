@@ -169,6 +169,7 @@ class Response extends Component {
     handleStarClick = (e) => {
         e.preventDefault()
 
+        // わかりやすければtertiaryに
         if (!this.state.showStar) {
             this.setState({
                 showStar: true,

@@ -2,8 +2,13 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
+import equal from "deep-equal"
+import axios from "axios"
+import { connect } from "react-redux"
 
-import { fmtDate, renderType, getBraftSummary } from "../../Util/util"
+import * as actions from "../../../actions"
+
+import { fmtDate, renderType, getEditorContent } from "../../Util/util"
 
 const DraftBox = styled(Link)`
     border-bottom: 1px solid #eaeaea;   
@@ -85,8 +90,32 @@ const S2Wrapper = styled.div`
 
 
 class Draft extends Component {
-    render(){
 
+    constructor(props){
+        super(props)
+        // もしskeletonじゃない場合
+        if(this.props.draft){
+            this.diffChecker()
+        }
+    }
+
+    diffChecker = () => {
+        const id = this.props.draft._id
+        const obj = JSON.parse(localStorage.getItem(this.props.draft._id))
+
+        const url = "/api/draft/" + id
+
+        // 戻るボタンを押した時やwindow closeした時はsaveされないのでここでaxiosでsaveする
+        if(obj && !equal(this.props.draft.content, obj.value)){
+            axios.post(url, {timeUpdate: obj.timeStamp, content: JSON.stringify(obj.value)})
+                .then(this.props.draftUpdated())
+                .catch(err => console.error(err))
+
+            localStorage.setItem(this.props.draft._id, null)
+        }
+    }
+
+    render(){
         const { _id, type, postName, topicName, content, editDate, topicSquareImg, postImg } = this.props.draft
         const flag = this.props.draft._id
         const lastEdited = flag ? editDate[editDate.length-1] : undefined
@@ -106,7 +135,7 @@ class Draft extends Component {
                     { flag
                     ? (
                     <Content>
-                        {getBraftSummary(content, 100)}
+                        {getEditorContent(content, 100)}
                     </Content>
                     )
                     : (
@@ -141,4 +170,4 @@ class Draft extends Component {
     }
 }
 
-export default Draft
+export default connect(null, actions)(Draft)

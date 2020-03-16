@@ -2,12 +2,9 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import { Helmet } from "react-helmet"
-import BraftEditor from "braft-editor"
 
 import * as actions from "../../actions"
 
-import sample from "../../images/sample1.png"
-import sample0 from "../../images/sample0.jpg"
 import account from "../../images/account.png"
 
 import Textarea from "./Textarea/Textarea"
@@ -22,10 +19,13 @@ import Image from "./Image/Image"
 import Slider from "./Slider/Slider"
 // import Navigation from "./Navigation/Navigation"
 
+import { getEditorContent, fmtDate, } from "../Util/util"
+
 class Post extends Component {
     
     componentDidMount() {
         this.props.fetchPost(this.props.match.params.id)
+
     }
 
     renderLeft = () => {
@@ -41,7 +41,7 @@ class Post extends Component {
                 :      
                 <SkeletonBox/>
                 }   
-                <Space height={"300px"}/>
+                <Space height={"100px"}/>
             </LeftWrapper>
         )
     }
@@ -91,30 +91,21 @@ class Post extends Component {
                         <p>{"///////////////////////"}</p>
                     </SlashTitle>
                 </TitleWrapper>
-                <Recommend
-                    title="タイトルが入ります"
-                    content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
-                    authorImg={sample0}
-                    author="飯塚啓介"
-                    editDate="作成日が入ります"
-                    postImg={sample}
-                />
-                <Recommend
-                    title="タイトルが入ります"
-                    content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
-                    authorImg={sample0}
-                    author="飯塚啓介"
-                    editDate="作成日が入ります"
-                    postImg={sample}
-                />
-                <Recommend
-                    title="タイトルが入ります"
-                    content="radio buttonのcssを一括する。ポストのconfigurationを変えるところ。Not Authenticated。"
-                    authorImg={sample0}
-                    author="飯塚啓介"
-                    editDate="作成日が入ります"
-                    postImg={sample}
-                />
+                {
+                this.props.feed.recommend.map(recom => 
+                    <Recommend
+                        key={recom._id}
+                        id={recom._id}
+                        title={recom.postName}
+                        content={recom.content}
+                        authorImg={recom.creator[0].photo}
+                        author={recom.creator[0].userName}
+                        editDate={fmtDate(recom.lastEdited)}
+                        postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
+                    />
+                )
+                }
+                <Space height={"200px"}/>
             </div>
         )
     }
@@ -122,7 +113,7 @@ class Post extends Component {
     render() {
 
         const titleName = this.props.post.fetched.postName || ""
-        const description = BraftEditor.createEditorState(this.props.post.fetched.content).toText().replace(/a\s/g, "").substring(0, 30)
+        const description = getEditorContent(this.props.post.fetched.content, 30)
 
         const keywords = this.props.post.fetched.tags ? titleName + "," + this.props.post.fetched.tags.join(",") : ""
 
@@ -161,7 +152,8 @@ const ListWrapper = styled.div`
 function mapStateToProps(state) {
     return {
         post: state.post,
-        auth: state.auth
+        auth: state.auth,
+        feed: state.feed,
     }
 }
 

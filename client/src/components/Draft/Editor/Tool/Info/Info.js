@@ -56,10 +56,12 @@ class Info extends Component {
                     content={this.props.value["topicName"]}
                     width={275}
                 />
+                { this.props.edit &&
                 <Section
                     title={"挿入位置"} 
-                    content={this.props.value["editIndex"].join(".")}
+                    content={this.props.value["editIndex"] && this.props.value["editIndex"].join(".")}
                 />
+                }
                 <Section
                     title={"オーナー"} 
                     hideContent={true}

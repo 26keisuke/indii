@@ -4,7 +4,10 @@ import { Helmet } from "react-helmet"
 import CreateConfigurationPost from "./Configuration"
 import CreatePreviewPost from "./Preview"
 import Form from "../../Form/Form"
-import Select from "../../Controller/Select"
+// import Select from "../../Controller/Select"
+import Unique from "../../../Search/Controller/Unique"
+import Match from "../../../Search/Controller/Match"
+import { Box, BoxTransition } from "../../Element/Element"
 
 class CreatePost extends Component {
 
@@ -28,39 +31,80 @@ class CreatePost extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return  <Select
-                        placeholder="トピックを入力..."
-                        index="1"
-                        title="トピックを選択してください"
-                        subTitle="トピック名"
-                        type="Match"
-                        content="Topic"
-                        // data={topics}
-                        searchByVariable="topicName"
-                        storage="editPostTopic"
-                        back={this.state.back} 
-                        setBackward={this.setBackward} 
-                        setValue={this.setTopic} 
-                        setStep={this.setStep}
-                        />
+                // return  <Select
+                //         placeholder="トピックを入力..."
+                //         index="1"
+                //         title="トピックを選択してください"
+                //         subTitle="トピック名"
+                //         type="Match"
+                //         content="Topic"
+                //         // data={topics}
+                //         searchByVariable="topicName"
+                //         storage="editPostTopic"
+                //         back={this.state.back} 
+                //         setBackward={this.setBackward} 
+                //         setValue={this.setTopic} 
+                //         setStep={this.setStep}
+                //         />
+                const postAction1 = (topic) => {
+                    this.setBackward(false);
+                    this.setStep(1);
+                    this.setTopic(topic);
+                }
+
+                return (
+                    <Box>
+                        <BoxTransition back={this.state.back} transition={false}>
+                            <Match
+                                title="1. トピックを選択してください"
+                                message="トピック名"
+                                theme="TOPIC"
+                                placeholder="トピックを入力..."
+                                postAction={postAction1}
+                                storageId="editPostTopic"
+                            />
+                        </BoxTransition>
+                    </Box>
+                )
             case 1:
-                return  <Select
-                        placeholder="ポスト名を入力..."
-                        index="2"
-                        title="ポスト名を入力してください"
-                        subTitle="ポスト名"
-                        type="Unique"
-                        content="Post"
-                        // data={posts}
-                        transition={true}
-                        searchByVariable="postName"
-                        storage="editPostPost"
-                        back={this.state.back} 
-                        setBackward={this.setBackward} 
-                        setValue={this.setPost} 
-                        setStep={this.setStep}
-                        topicId={this.state.selectedTopic._id}
-                        />
+                // return  <Select
+                //         placeholder="ポスト名を入力..."
+                //         index="2"
+                //         title="ポスト名を入力してください"
+                //         subTitle="ポスト名"
+                //         type="Unique"
+                //         content="Post"
+                //         // data={posts}
+                //         transition={true}
+                //         searchByVariable="postName"
+                //         storage="editPostPost"
+                //         back={this.state.back} 
+                //         setBackward={this.setBackward} 
+                //         setValue={this.setPost} 
+                //         setStep={this.setStep}
+                //         topicId={this.state.selectedTopic._id}
+                //         />
+                const postAction2 = (post) => {
+                    this.setBackward(false);
+                    this.setStep(2);
+                    this.setPost(post);
+                }
+
+                return (
+                    <Box>
+                        <BoxTransition back={this.state.back} transition={true}>
+                            <Unique
+                                title="2. ポスト名を入力してください"
+                                message="ポスト名"
+                                theme="POST"
+                                placeholder="ポスト名を入力..."
+                                postAction={postAction2}
+                                storageId="editPostPost"
+                                topicId={this.state.selectedTopic._id}
+                            />
+                        </BoxTransition>
+                    </Box>
+                )
             case 2:
                 return <CreateConfigurationPost
                         back={this.state.back} 

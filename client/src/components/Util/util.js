@@ -1,5 +1,5 @@
 import React from "react"
-import BraftEditor from 'braft-editor'
+import { Node } from 'slate'
 
 import response from "../../images/response.png";
 import dissapointed from "../../images/dissapointed.png";
@@ -8,8 +8,32 @@ import good from "../../images/good.png";
 import nerd from "../../images/nerd.png";
 import hmm from "../../images/hmm.png";
 
-export function getBraftSummary(content, length){
-    BraftEditor.createEditorState(content).toText().replace(/a\s/g, "").substring(0, length)
+import FormatBoldIcon from '@material-ui/icons/FormatBold';
+import FormatItalicIcon from '@material-ui/icons/FormatItalic';
+import FormatUnderlinedOutlinedIcon from '@material-ui/icons/FormatUnderlinedOutlined';
+import CodeOutlinedIcon from '@material-ui/icons/CodeOutlined';
+import { FaSuperscript } from "react-icons/fa"
+import LooksOneOutlinedIcon from '@material-ui/icons/LooksOneOutlined';
+import LooksTwoOutlinedIcon from '@material-ui/icons/LooksTwoOutlined';
+import FormatQuoteOutlinedIcon from '@material-ui/icons/FormatQuoteOutlined';
+import FormatListNumberedOutlinedIcon from '@material-ui/icons/FormatListNumberedOutlined';
+import FormatListBulletedOutlinedIcon from '@material-ui/icons/FormatListBulletedOutlined';
+import FunctionsOutlinedIcon from '@material-ui/icons/FunctionsOutlined';
+import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
+
+// 明日はここから
+export function getEditorContent(content, length){
+
+    if(!content) return ""
+
+    const nodes = JSON.parse(content).children
+    const text = nodes.map(n => Node.string(n))
+
+    const paragraph = text.join("\t")
+
+    if(length) return paragraph.substring(0, length)
+
+    return paragraph
 }
 
 export function validateEmail(value){
@@ -124,5 +148,64 @@ export function getEmoji(emojiNum){
             return <img className="post-feed-response"　alt={"残念"} src={dissapointed}/>
         default:
             return <img className="post-feed-response"　alt={"フィードバックのアイコンを表示する"} src={response}/>
+    }
+}
+
+export const renderIcon = (icon) => {
+    switch(icon){
+        case "bold":
+            return <FormatBoldIcon/>
+        case "italic":
+            return <FormatItalicIcon/>
+        case "underline":
+            return <FormatUnderlinedOutlinedIcon/>
+        case "code":
+            return <CodeOutlinedIcon/>
+        case "superscript":
+            return <FaSuperscript/>
+        case "heading-one":
+            return <LooksOneOutlinedIcon/>
+        case "heading-two":
+            return <LooksTwoOutlinedIcon/>
+        case "block-quote":
+            return <FormatQuoteOutlinedIcon/>
+        case "numbered-list":
+            return <FormatListNumberedOutlinedIcon/>
+        case "bulleted-list":
+            return <FormatListBulletedOutlinedIcon/>
+        case "katex":
+            return <FunctionsOutlinedIcon/>
+        case "image":
+            return <ImageOutlinedIcon/>
+        default:
+            return ""
+    }
+}
+
+
+export const renderTitle = (format) => {
+    switch(format){
+        case "bold":
+            return "太字"
+        case "italic":
+            return "イタリック体"
+        case "underline":
+            return "下線"
+        case "code":
+            return "コード"
+        case "superscript":
+            return "上付き文字"
+        case "heading-one":
+            return "見出し"
+        case "heading-two":
+            return "小見出し"
+        case "block-quote":
+            return "引用"
+        case "numbered-list":
+            return "順序付きリスト"
+        case "bulleted-list":
+            return "リスト"
+        default:
+            return ""
     }
 }

@@ -1,7 +1,6 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import { GoComment } from "react-icons/go"
-import BraftEditor from 'braft-editor'
 // import { AiOutlineLike } from "react-icons/ai"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
@@ -14,7 +13,7 @@ import Element from "./Element/Element"
 import Recommend from "../../Util/Recommend"
 import TopicRecommend from "../../Util/TopicRecommend"
 
-import { fmtDate } from "../../Util/util"
+import { fmtDate, getEditorContent } from "../../Util/util"
 
 import { Space } from "../../Theme"
 
@@ -64,7 +63,7 @@ class Content extends Component {
             refContent = topic.posts[0].content
             refTitle = topic.topicName
             refCount = topic.postCount
-            refLikes = topic.likes
+            refLikes = topic.likes.counter
         }
 
         const flag = !!title
@@ -92,7 +91,7 @@ class Content extends Component {
                                 <Recommend
                                     id={refId}
                                     title={refTitle}
-                                    content={BraftEditor.createEditorState(refContent).toText().replace(/a\s/g, "").substring(0, 100)}
+                                    content={getEditorContent(refContent, 100)}
                                     authorImg={creator.photo}
                                     author={creator.userName}
                                     editDate={fmtDate(refLastEdited)}
@@ -105,7 +104,7 @@ class Content extends Component {
                                     img={refImg}
                                     topicName={refTitle}
                                     tags={refTags}
-                                    content={BraftEditor.createEditorState(refContent).toText().replace(/a\s/g, "").substring(0, 100)}
+                                    content={getEditorContent(refContent, 100)}
                                     postCount={refCount}
                                     likes={refLikes}
                                 />
@@ -155,7 +154,7 @@ class Content extends Component {
 
                             <Space height={"300px"}/>
 
-                            { this.props.auth.loggedIn &&
+                            { flag && this.props.auth.loggedIn &&
                             <CommentBox
                                 value={this.state.value}
                                 handleChange={(e) => this.setState({ value: e.target.value })}
@@ -207,10 +206,23 @@ const Box = styled.div`
     max-width: 588px;
     padding: 40px;
     position: fixed;
-    overflow: scroll;
+    overflow-y: scroll;
 
     max-height: 73%;
     min-height: 73%;
+
+    &::-webkit-scrollbar-track{
+        background-color: #F5F5F5;
+    }
+
+    &::-webkit-scrollbar{
+        width: 6px;
+        background-color: #F5F5F5;
+    }
+
+    &::-webkit-scrollbar-thumb{
+        background-color: #000000;
+    }
 `
 
 const Title = styled.h1`
@@ -234,6 +246,7 @@ const Bottom = styled.div`
         & > svg {
             transform: scale(1.2);
             margin-right: 6px;
+            margin-top: 2px;
         }
     }
 `

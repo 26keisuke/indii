@@ -21,6 +21,9 @@ export const fetchPost = (id) => async (dispatch) => {
 }
 
 export const searchPost = (type, value, topicId) => async (dispatch) => {
+    if(type === "RESET") { dispatch({type: SEARCH_POST, payload: {suggestions: []}}); return }
+    if(!value) { dispatch({type: SEARCH_POST, payload: {suggestions: []}}); return }
+
     var url = "/api/post/search/" + String(type) + "/" + String(value)
     if(topicId){
         url = url + "/" + String(topicId)

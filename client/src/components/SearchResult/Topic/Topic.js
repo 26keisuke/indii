@@ -2,10 +2,7 @@ import React, { Component } from "react"
 import PropTypes from "prop-types"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
-
-const TopicBox = styled(Link)`
-    
-`
+import Skeleton from "react-loading-skeleton"
 
 const TopicChild = styled.div`
     display: flex;
@@ -59,27 +56,52 @@ const TopicLike = styled.p`
     font-size: 10px;
 `
 
+const S1Wrapper = styled.div`
+    & > span {
+        margin-right: 10px;
+    }
+`
+
 
 class Topic extends Component {
     render () {
+
+        const flag = !!this.props.id
+
         return (
-            <TopicBox to={`/topic/${this.props.id}`}>
+            <Link to={`/topic/${this.props.id}`}>
                 <TopicChild>
-                    <img src={this.props.img}/>
+                    { flag 
+                    ? <img src={this.props.img}/> 
+                    : 
+                    <S1Wrapper>
+                        <Skeleton width={70} height={70}/>
+                    </S1Wrapper>
+                    }
                     <div>
                         <Tag>
-                            {
-                                this.props.tags.map(tag => 
-                                    <p># {tag}</p>    
-                                )
+                            { flag
+                            ? this.props.tags.map(tag => 
+                                <p># {tag}</p>    
+                            )
+                            : <Skeleton width={150} height={14}/>
                             }
                         </Tag>
-                        <TopicTitle>{this.props.topicName}</TopicTitle>
-                        <TopicContent>{this.props.description}</TopicContent>
-                        <TopicLike>お気に入り数： {this.props.likes}</TopicLike>
+                        { flag
+                        ? <TopicTitle>{this.props.topicName}</TopicTitle>
+                        : <Skeleton width={100} height={20}/>
+                        }
+                        { flag
+                        ? <TopicContent>{this.props.description}</TopicContent>
+                        : <Skeleton count={2} width={230} height={14}/>
+                        }
+                        { flag
+                        ? <TopicLike>お気に入り数： {this.props.likes}</TopicLike>
+                        : <Skeleton width={80} height={14}/>
+                        }
                     </div>
                 </TopicChild>
-            </TopicBox>
+            </Link>
         )
     }
 }

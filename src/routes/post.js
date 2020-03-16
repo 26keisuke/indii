@@ -236,8 +236,7 @@ router.post("/delete", (req,res) => {
 // Method 1
 router.get("/search/:type/:term/:topicId", (req, res) => {
     const type = req.params.type
-    const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
-    // ここのpostImgの方はpopulateされない可能性あり
+    const value = type === "MATCH" ? '^' + req.params.term : '^' + req.params.term + '$' 
     Topic.findById(req.params.topicId)
         .populate({path: "posts", populate: [{path: "topicSquareImg"}, {path: "postImg"}]})
         .exec()
@@ -250,7 +249,7 @@ router.get("/search/:type/:term/:topicId", (req, res) => {
                 }
             }
             if(result.length === 0){
-                result = type === "Match" ? [] : [{added: true}]
+                result = [req.params.term]
             }
             res.send(result)
         })
@@ -262,12 +261,13 @@ router.get("/search/:type/:term/:topicId", (req, res) => {
 // Method 2
 router.get("/search/:type/:term", (req, res) => {
     const type = req.params.type
-    const value = type === "Match" ? '^' + req.params.term : '^' + req.params.term + '$' 
+    const value = type === "MATCH" ? '^' + req.params.term : '^' + req.params.term + '$' 
+
     Post.find({"postName": {$regex: value, $options: 'i'}}).populate("postImg").populate("topicSquareImg")
         .exec()
         .then(post => {
             if(post.length === 0){
-                const result = type === "Match" ? [] : [{added: true}]
+                const result = [req.params.term]
                 res.send(result)
             } else {
                 res.send(post)

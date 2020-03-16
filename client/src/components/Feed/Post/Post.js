@@ -2,15 +2,14 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux"
 import { Link } from "react-router-dom";
 import { Collapse } from 'react-collapse';
-import BraftEditor from 'braft-editor'
 import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
 
 import account from "../../../images/account.png"
 
 import Response from "../../Util/Response"
-
 import ArrowSpin from "../../Util/ArrowSpin"
+import TextArea from "../../Util/TextArea/TextArea"
 
 import { fmtDate } from "../../Util/util"
 
@@ -29,46 +28,6 @@ class Post extends PureComponent {
         this.state = {
             isOpened: true, 
             changed: false,
-        }
-    }
-
-    componentDidMount() {
-
-        if(this.props.content) {
-
-            // このように個別でやるか、heightで強制的に区切り、残りはopacityとかでぼやかすか
-
-            // filter out images
-            var images = document.getElementsByClassName("bf-image")
-            if(Object.keys(images).length > 0) {
-                for(var j in images) {
-                    if (images[j].style){
-                        images[j].style.display = "none"
-                    }
-                }
-            }
-
-            // filter out leftovers from images
-            var alignLeft = document.getElementsByClassName("bfa-left")
-            if(Object.keys(alignLeft).length > 0) {
-                for(var k in alignLeft) {
-                    if (alignLeft[k].style){
-                        alignLeft[k].style.display = "none"
-                    }
-                }
-            }
-
-            var alignRight = document.getElementsByClassName("bfa-right")
-            if(Object.keys(alignRight).length > 0) {
-                for(var l in alignRight) {
-                    if (alignRight[l].style){
-                        alignRight[l].style.display = "none"
-                    }
-                }
-            }
-
-            // filter out empty span
-            // => reverse for loopをして、htmlが連続してemptyがだったら削除する
         }
     }
 
@@ -163,12 +122,9 @@ class Post extends PureComponent {
                         <p>{this.props.title}</p>
                         <Collapse isOpened={this.state.isOpened}>
                         <EditorWrapper>
-                            {/* <p>{BraftEditor.createEditorState(this.props.content).toText().replace(/a\s|\s/g, "").substring(0, 500) + "..."}</p> */}
-                            <BraftEditor
-                                controls={[]}
+                            <TextArea
                                 readOnly={true}
-                                value={BraftEditor.createEditorState(this.props.content)}
-                                contentClassName="post-braft"
+                                content={this.props.content}
                             />
                         </EditorWrapper>
                         </Collapse>
@@ -267,7 +223,7 @@ const PostTop = styled.div`
 `
 
 const EditorWrapper = styled.div`
-    & div {
+    & > div {
         padding: 0px !important;
     }
 
@@ -307,6 +263,7 @@ const PostMiddle = styled.div`
 `
 
 const ResponseWrapper = styled.div`
+    & svg,
     & img {
         margin-right:65px;
     }
@@ -314,6 +271,10 @@ const ResponseWrapper = styled.div`
     & > div {
         & > div:last-child {
             margin-right: 65px;
+
+            & > svg {
+                margin-right: 0px;
+            }
         }
     }
 `

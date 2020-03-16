@@ -9,14 +9,19 @@ class ProfileTopic extends Component {
     render() {
         return (
             <Wrapper>
-                <Box>
+                { 
+                this.props.topics.map(elem =>
+                <Box key={elem.topic._id}>
                     <TopicElement
-                        title={"Apache Kafka"}
-                        content={"BrokerはConsumerがメッセージを購読したかに関わらず設定された期間のみ保持してその後削除する．これはKafkaの大きな特徴の1つである．例えば保存期間を2日間に設定すれば配信後2日間のみ。"}
-                        likes={212233}
-                        tags={["Computer Science", "Open Source", "Batch Processing"]}
+                        id={elem.topic._id}
+                        title={elem.topic.topicName}
+                        img={elem.topic.squareImg.image}
+                        content={elem.topic.posts[0].content}
+                        likes={elem.topic.likes.counter}
+                        tags={elem.topic.tags}
                     />
                 </Box>
+                )}
             </Wrapper>
         )
     }
@@ -37,9 +42,9 @@ const Box = styled.div`
     margin-bottom: 12px;
 `
 
-function mapStateToProps({auth}) {
+function mapStateToProps({profile}) {
     return {
-        auth
+        profile
     }
 }
 

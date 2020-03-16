@@ -3,7 +3,7 @@ import express from "express"
 // import equal from "deep-equal"
 
 // import User from "../models/User"
-// import Topic from "../models/Topic"
+import Topic from "../models/Topic"
 import Post from "../models/Post"
 // import Draft from "../models/Draft"
 // import Image from "../models/Image"
@@ -49,9 +49,16 @@ router.get("/recommend", (req, res) => {
     )
     .exec()
     .then(posts => res.send(posts))
-    .catch(err => {
-        console.log(err)
-    })
+    .catch(err => console.log(err))
+})
+
+router.get("/new/topic", (req, res) => {
+    Topic.find().sort({timeStamp: -1}).limit(5)
+    .populate("squareImg")
+    .populate({path: "posts", options: {limit: 1}})
+    .exec()
+    .then(topic => res.send(topic))
+    .catch(err => console.log(err))
 })
 
 router.get("/search/:term", (req, res) => {

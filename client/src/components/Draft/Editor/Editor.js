@@ -1,8 +1,7 @@
 import React, { Component } from "react"
-import styled, { keyframes } from "styled-components"
+import styled from "styled-components"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
-import { MdCheck } from "react-icons/md"
 import { Link } from "react-router-dom"
 import { Helmet } from "react-helmet"
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -10,7 +9,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import * as actions from "../../../actions"
 
 import Screen from "../../Util/Screen"
-import TextArea from "./TextArea/TextArea"
+import TextArea from "../../Util/TextArea/TextArea"
 import Tool from "./Tool/Tool"
 import Back from "../../Util/Back"
 
@@ -37,6 +36,7 @@ const EditorTop = styled.div`
     box-shadow: 1px 1px 10px #d2d2d2;
     padding: 20px 0px;
     margin-top: 13px;
+    margin-bottom: 100px;
 
     & > div:nth-child(1) {
 
@@ -48,7 +48,7 @@ const EditorTop = styled.div`
     }
 
     & > div:nth-child(3) {
-        margin-top: 10px;
+        margin: 10px 0px;
         display: flex;
         justify-content: center;
 
@@ -63,46 +63,6 @@ const EditorTop = styled.div`
             }
         }
     }
-`
-
-const fadeIn = keyframes`
-    0% {
-        opacity: 0;
-        bottom: -10px;
-    } 10% {
-        opacity: 1;
-        bottom: 3px;
-    } 90% {
-        opacity: 1;
-        bottom: 3px;
-    } 100% {
-        opacity: 0;
-        bottom: 3px;
-    }
-`
-
-const CheckBox = styled.div`
-    animation-name: ${fadeIn};
-    animation-duration: 5s;
-    position: absolute;
-    opacity: 0;
-    font-size: 10px;
-    right: -277px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    & > p {
-        color: #767676;
-    }
-`
-
-const Check = styled(MdCheck)`
-    color: #ffffff;
-    padding: 2px;
-    background-color: #4CD964;
-    border-radius: 100%;
-    margin-right: 7px;
 `
 
 const Hopper = ( props ) => {
@@ -122,6 +82,9 @@ class Editor extends Component {
     // retrieve draft and check for ownership
     componentDidMount() {
         this.fetchTargetDraft(true)
+
+        document.documentElement.style.position= "fixed"
+        document.documentElement.style.width= "100vw"
     }
 
     componentDidUpdate(prevProps) {
@@ -129,7 +92,7 @@ class Editor extends Component {
             // これdraft全部を取得しているから時間かかるし無駄
             this.props.fetchDraft(Math.random().toString(36).substring(2, 15))
         }
-
+        // ↑が呼ばれた後に↓が呼ばれる
         if(prevProps.draft.nounce !== this.props.draft.nounce){
             this.fetchTargetDraft()
         }
@@ -178,15 +141,12 @@ class Editor extends Component {
                         <p>{selected.postName}</p>
                     </div>
                 </div>
-                <TextArea setUpdate={this.setUpdate}/>
+                <TextArea/>
             </EditorTop>
         )
     }
 
     renderRight() {
-
-        const { selected } = this.props.draft
-
         return (
             <div>
                 <Tool/>

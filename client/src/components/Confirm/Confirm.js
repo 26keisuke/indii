@@ -21,6 +21,8 @@ import Preview from "../Draft/Action/Preview/Preview"
 import Index from "../Draft/Action/Index/Index"
 import TextArea from "../Profile/Info/TextArea/TextArea"
 import Thumb from "../Profile/Info/Thumb/Thumb"
+import DraftKatex from "../Util/TextArea/Confirm/Katex"
+import DraftImage from "../Util/TextArea/Confirm/Image"
 
 import { IoMdClose } from "react-icons/io"
 
@@ -333,7 +335,7 @@ class Confirm extends Component {
             case "SELF_IMAGE":
                 return (
                     <Thumb
-                        value={this.props.update.confirmation.value}
+                        value={this.state.value}
                         handleChange={(img) => this.setState({ value: img })}
                     />
                 )
@@ -389,7 +391,7 @@ class Confirm extends Component {
             case "ADD_TALK":
                 return (
                     <TalkTitle
-                        title={action === "ADD_TALK" ? "タイトル" : "参照を追加"}
+                        title={action === "ADD_TALK" ? "タイトル" : action === "ADD_TALK_DESC" ? "概要" : "参照を追加"}
                         value={this.state.value}
                         textarea={action === "ADD_TALK_DESC"}
                         handleChange={(e) => this.setState({value: e.target.value})}
@@ -398,6 +400,20 @@ class Confirm extends Component {
             case "ADD_TALK_CONFIRM":
                 return (
                     <TalkPreview/>
+                )
+            case "DRAFT_ADD_KATEX":
+                return (
+                    <DraftKatex
+                        value={this.state.value}
+                        setValue={this.setValue}
+                    />
+                )
+            case "DRAFT_ADD_URL":
+                return (
+                    <DraftImage
+                        value={this.state.value}
+                        handleChange={this.setValue}
+                    />
                 )
             default:
                 return;
@@ -554,6 +570,8 @@ const ConfirmBox = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 11;
+    max-height: 90%;
+    overflow: scroll;
 
     & > div {
         position: relative;

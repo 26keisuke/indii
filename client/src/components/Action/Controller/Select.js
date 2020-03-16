@@ -28,8 +28,6 @@ import { ButtonWrapper, ButtonLeft, } from "../Element/TwoButtons"
 
 import getSuggestions from "../../__Mock__/method/getSuggestions"
 
-
-
 // 将来的には、一定時間Inputがなければ、renderMarkとrenderWarningをするようにする
 class Select extends Component {
 
@@ -218,7 +216,7 @@ class Select extends Component {
         return ""
     };
 
-    // suggestionを上下キーでホバーしている時
+    // suggestionを上下キーでホバーしている時 => キーボードでクリックした時ではないか？
     getSuggestionUniqueValue = suggestion => {
         if (suggestion.added) {
           return this.state.value;

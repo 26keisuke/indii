@@ -6,16 +6,24 @@ import styled from "styled-components"
 import Breakpoint from "../../Breakpoint"
 
 const TopicElement = styled.div`    
+    cursor: pointer;
     display: flex;
     flex-direction: row;
     padding: 10px;
     align-items: center;
     width: auto;
     justify-content: flex-start;
+
     & > img {
         width: 35px;
         height: 35px;
         margin-right: 20px;
+    }
+
+    background-color: ${props => props.onHover && "rgb(240,240,240)"};
+
+    &:hover {
+        background-color: rgb(240,240,240);
     }
 `
 
@@ -66,7 +74,7 @@ class Topic extends Component {
 
     render () {
 
-        const { suggestion, url, } = this.props
+        const { suggestion, url, onHover } = this.props
 
         const tags = suggestion.tags.map(tag => 
             <p key={tag}>#{tag}</p>
@@ -74,7 +82,7 @@ class Topic extends Component {
 
         return (
             <Link key={suggestion._id} to={url} onClick={this.handleClick}>
-                <TopicElement>
+                <TopicElement onHover={onHover}>
                     <img src={suggestion.squareImg.image} alt="検索結果のトピック一覧のメイン画像"/>
                     <TopicName>
                         {suggestion.topicName}
@@ -85,8 +93,8 @@ class Topic extends Component {
                                 {tags}
                             </div>
                             <div>
-                                <p>ポスト数 {suggestion.postCount.toLocaleString()}</p>
-                                <p>お気に入り数 {suggestion.likes.toLocaleString()}</p>
+                                <p>ポスト数 {suggestion.postCount}</p>
+                                <p>お気に入り数 {suggestion.likes.counter}</p>
                             </div>
                         </TopicInfo>
                     </Breakpoint>

@@ -108,6 +108,7 @@ const Bottom = styled.div`
         & > svg {
             transform: scale(1.2);
             margin-right: 6px;
+            margin-top: 2px;
         }
     }
 `

@@ -45,7 +45,7 @@ router.post("/upload", (req, res) => {
 
             User.findById(draft.editCreator)
             .then(user => {
-
+                // 一応New出ないことを確認
                 if(draft.type !== "New") {
                     // allowEditがfalseの時
                     if((draft.config.allowEdit === false) && (draft.editCreator._id !== req.user.id)){
@@ -146,6 +146,15 @@ router.post("/upload", (req, res) => {
 
             post.save()
             .then(newPost => {
+
+
+                User.findById(req.user.id)
+                .then(user => {
+                    user.post.push(newPost._id)
+                    user.save()
+                })
+
+
                 Topic.findById(topic).populate("posts")
                 .then(topicElem => {
 
@@ -361,6 +370,8 @@ router.post("/edit", (req, res) => {
 })
 
 router.post("/:id", (req, res) => {
+    if(!req.params.id) return
+
     Draft.findById(req.params.id)
     .then(draft => {
         draft.content = req.body.content

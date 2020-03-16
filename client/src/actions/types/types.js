@@ -56,6 +56,7 @@ export const SELECT_TALK = "SELECT_TALK"
 // Feed
 export const FETCH_FEED = "FETCH_FEED"
 export const FETCH_RECOMMEND = "FETCH_RECOMMEND"
+export const FETCH_NEW_TOPIC = "FETCH_NEW_TOPIC"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"
@@ -68,6 +69,8 @@ export const CHANGE_DRAFTCONFIG = "CHANGE_DRAFTCONFIG"
 export const FETCH_ONE_DRAFT = "FETCH_ONE_DRAFT"
 export const UPDATE_DRAFT_ONE = "UPDATE_DRAFT_ONE"
 export const SELECT_DRAFT = "SELECT_DRAFT"
+export const DRAFT_ADD_KATEX = "DRAFT_ADD_KATEX"
+export const DRAFT_ADD_URL = "DRAFT_ADD_URL"
 
 // TOPIC
 export const SEARCH_TOPIC = "SEARCH_TOPIC"

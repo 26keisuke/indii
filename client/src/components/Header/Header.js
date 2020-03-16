@@ -7,7 +7,9 @@ import * as actions from "../../actions"
 
 import Profile from "./Profile/Profile";
 import Navigation from "./Navigation/Navigation"
-import Select from "../Action/Controller/Select"
+// import Select from "../Action/Controller/Select"
+import SearchFromFeed from "../Search/Controller/Feed"
+
 
 import indii from "../../images/indii.png";
 
@@ -22,7 +24,7 @@ const NavBar = styled.nav`
     position: absolute;
     top: 0px;
     width: 100%;
-    z-index: 5;
+    z-index: 1000;
     box-shadow: 1px 1px 4px #e2e2e2;
 `
 
@@ -74,13 +76,16 @@ class Header extends Component {
                 <p>Indii</p>
             </Logo>
             <Navigation/>
-            <Select
+            {/* <Select
                 placeholder="Indiiで検索"
                 searchBox={true}
                 type="Unique"
                 content="Topic"
                 // data={topics}
                 searchByVariable="topicName"
+            /> */}
+            <SearchFromFeed
+                placeholder="Indiiで検索"
             />
             <Profile click={this.logInClicked}/>
         </NavBar>

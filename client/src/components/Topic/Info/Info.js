@@ -3,13 +3,106 @@ import styled, { css, keyframes} from "styled-components"
 import { FaHashtag } from "react-icons/fa"
 import Skeleton from "react-loading-skeleton"
 import { withRouter } from "react-router-dom"
+import { connect } from "react-redux"
+import axios from "axios"
 
-import question from "../../../images/question.png"
-import post from "../../../images/post.png"
+import * as actions from "../../../actions"
+
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+
+// import question from "../../../images/question.png"
+// import post from "../../../images/post.png"
 
 import Back from "../../Util/Back"
 
+let ct = 0;
+
 class Info extends Component {
+
+    constructor(props){
+        super(props)
+        this.state = {
+            liked: false,
+            madeLikeAction: false,
+        }
+    }
+
+    componentDidMount() {
+        if(this.props.loggedIn && (ct == 0)) {
+            if(this.props.id){
+                this.checkForFavorite()
+            }
+            this.setUpdater() 
+            ct++
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.loggedIn && !prevProps.id && this.props.id){
+            this.checkForFavorite()
+        }
+    }
+
+    handleWindowClose = () => {
+        if(this.state.madeLikeAction) {
+            axios.post(`/api/topic/${this.props.id}/like`, {like: this.state.liked})
+        }
+    }
+
+    setUpdater = () => {
+
+        window.addEventListener("beforeunload", this.handleWindowClose);
+
+        this.autoUpdate = setInterval(() => {
+            if (this.state.madeLikeAction) {
+                
+                axios.post(`/api/topic/${this.props.id}/like`, {like: this.state.liked})
+                .then(()=>{
+                    this.setState({
+                        madeLikeAction: false,
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
+            }
+        }, 10000)
+    }
+
+    handleLikeClick = (e) => {
+        e.preventDefault()
+
+        this.setState({
+            liked: !this.state.liked,
+            madeLikeAction: true,
+        })
+    }
+
+    componentWillUnmount() {
+
+        ct = 0;
+
+        if (this.props.loggedIn){
+            if(this.state.madeLikeAction) {
+                axios.post(`/api/topic/${this.props.id}/like`, {like: this.state.liked})
+            }
+            window.removeEventListener("beforeunload", this.handleWindowClose);
+        }
+       
+        clearInterval(this.autoUpdate)
+    }
+
+    checkForFavorite = () => {
+        const res = this.props.likedTopic.filter(elem => elem.topic === this.props.id)
+        if(res.length > 0) {
+            this.setState({ liked: true })
+            return 
+        }
+        this.setState({ liked: false })
+        return 
+    }
 
     render() {
 
@@ -53,11 +146,11 @@ class Info extends Component {
                     </TopicContent>
                     <TopicTimeStamp>
                         {flag && <p>ポスト数: {postCount}</p> }
-                        {flag && <p>お気に入り数: {likes}</p>}
+                        {flag && <p>お気に入り数: {likes.counter}</p>}
                         {!flag && <p><Skeleton width={160} height={18}/></p> }
                     </TopicTimeStamp>
-                    {/* <TopicOption>
-                        { flag && 
+                    <TopicOption>
+                        {/* { flag && 
                         <div>
                             <PostRequestIcon src={question} alt="ポストリクエストのボタン"/>
                         </div>
@@ -66,8 +159,15 @@ class Info extends Component {
                         <div>
                             <PostCreateIcon src={post} alt="ポスト作成のボタン"/>
                         </div>
-                        }
-                    </TopicOption> */}
+                        } */}
+                        { 
+                        flag
+                        ?
+                        this.state.liked 
+                        ? <BookmarkIcon onClick={(e) => this.handleLikeClick(e)}/>
+                        : <BookmarkBorderIcon onClick={this.props.loggedIn ? (e) => this.handleLikeClick(e) : this.props.showLogin}/>
+                        : ""}
+                    </TopicOption>
                     { flag &&
                     <TopicToggle>
                         <TopicToggleElement selected={selected["topic"]} onClick={() => handleClick("topic")}>
@@ -143,6 +243,7 @@ const TopicTop = styled.div`
 const TopicTags = styled.div`
     display: flex;
     flex-direction: row;
+    margin-bottom: 5px;
 
     & > div {
 
@@ -152,8 +253,9 @@ const TopicTags = styled.div`
 
         & > p {
             color: #5a5a5a;
-            font-size: 13px;
+            font-size: 12px;
             flex-shrink: 0;
+            margin-top: -1px;
         }
     }    
 
@@ -208,8 +310,18 @@ const TopicOption = styled.div`
     flex-direction: row;
     right:38px;
     bottom: 0px;
+    
+    & > svg {
+        transform: scale(1.2);
+        cursor: pointer;
+        color: ${props => props.theme.primary};
 
-    & > div {
+        &:hover{
+            color: ${props => props.theme.secondary};
+        }
+    }
+
+    /* & > div {
         width:28px;
         height:28px;
         border: 0.5px solid #636480;
@@ -219,18 +331,18 @@ const TopicOption = styled.div`
         border-radius: 3px;
         cursor: pointer;
         margin-left: 30px;
-    }
+    } */
 `
 
-const PostRequestIcon = styled.img`
-    width: 22px;
-    height: 22px;
-`
+// const PostRequestIcon = styled.img`
+//     width: 22px;
+//     height: 22px;
+// `
 
-const PostCreateIcon = styled.img`
-    width: 18px;
-    height: 18px;
-`
+// const PostCreateIcon = styled.img`
+//     width: 18px;
+//     height: 18px;
+// `
 
 const TopicToggle = styled.div`
     display: flex;
@@ -286,4 +398,11 @@ const extend = keyframes`
     }
 `
 
-export default withRouter(Info)
+function mapStateToProps({auth}){
+    return {
+        loggedIn: auth.loggedIn,
+        likedTopic: auth.info.likedTopic
+    }
+}
+
+export default connect(mapStateToProps, actions)(withRouter(Info))

@@ -593,6 +593,7 @@ class Reference extends Component {
                 { selected.type !== "Zero" &&
                 ([
                 <Title
+                    key={"titleTag"}
                     title="タグを追加"
                     icon={<IoIosPricetag/>}
                     isOpened={this.state.tagAdd.isOpened}

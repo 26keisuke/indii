@@ -1,8 +1,10 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 
-import star_pressed from "../../images/star-pressed.png";
-import star from "../../images/star.png";
+// import star_pressed from "../../images/star-pressed.png";
+// import star from "../../images/star.png";
 
 import HoverIcon from "./HoverIcon"
 
@@ -15,7 +17,11 @@ class Star extends Component {
         return (
             <StarHover shadow={shadow}>
                 <p onClick={handleClick}></p>
-                <img className="post-feed-star"　src={show ? star_pressed : star} alt={"星マーク"}/>
+                {/* <img className="post-feed-star"　src={show ? star_pressed : star} alt={"星マーク"}/> */}
+                { show 
+                ? <StarIcon className="post-feed-star"/>
+                : <StarBorderIcon className="post-feed-star"/>
+                }
             </StarHover>
         )   
     }
@@ -28,10 +34,12 @@ const StarHover = styled(HoverIcon)`
         animation-fill-mode: forwards;
     }
 
-    & img {
-        width:17px;
-        height:17px;
+    & svg {
+        width: 20px;
+        height: 20px;
+        color: ${props => props.theme.secondary};
     }
+
 `
 
 export default Star

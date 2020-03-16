@@ -8,8 +8,10 @@ import EditPreviewTopic from "./Preview"
 import Image from "../../Controller/Image"
 import Tag from "../../Tag/Tag"
 import Form from "../../Form/Form"
+import Match from "../../../Search/Controller/Match"
+import { Box, BoxTransition } from "../../Element/Element"
 
-import Select from "../../Controller/Select"
+// import Select from "../../Controller/Select"
 
 class CreatePost extends Component {
 
@@ -47,21 +49,42 @@ class CreatePost extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                return <Select
-                        placeholder="トピックを入力..."
-                        index="1"
-                        title="トピックを選択してください"
-                        subTitle="トピック名"
-                        type="Match"
-                        content="Topic"
-                        // data={topics}
-                        searchByVariable="topicName"
-                        storage="editTopicName"
-                        back={this.state.back} 
-                        setBackward={this.setBackward} 
-                        setValue={this.setTopic} 
-                        setStep={this.setStep}
-                        />
+                // return <Select
+                //         placeholder="トピックを入力..."
+                //         index="1"
+                //         title="トピックを選択してください"
+                //         subTitle="トピック名"
+                //         type="Match"
+                //         content="Topic"
+                //         // data={topics}
+                //         searchByVariable="topicName"
+                //         storage="editTopicName"
+                //         back={this.state.back} 
+                //         setBackward={this.setBackward} 
+                //         setValue={this.setTopic} 
+                //         setStep={this.setStep}
+                //         />
+
+                const postAction = (topic) => {
+                    this.setBackward(false);
+                    this.setStep(1);
+                    this.setTopic(topic);
+                }
+
+                return (
+                    <Box>
+                        <BoxTransition back={this.state.back} transition={false}>
+                            <Match
+                                title="1. トピックを選択してください"
+                                message="トピック名"
+                                theme="TOPIC"
+                                placeholder="トピックを入力..."
+                                postAction={postAction}
+                                storageId="editTopicName"
+                            />
+                        </BoxTransition>
+                    </Box>
+                )
             case 1:
                 return <Image
                         back={this.state.back} 

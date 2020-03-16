@@ -4,11 +4,22 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const SearchBox = styled(Link)`
+    cursor: pointer;
+    
     & > div {
         width: auto;
         padding: 10px 20px;
+        display: flex;
+        align-items: center;
+
+        background-color: ${props => props.onHover && "rgb(240,240,240)"};
+
+        &:hover {
+            background-color: rgb(240,240,240);
+        }
+
         & > span {
-            margin-right: 3px;
+            margin-right: 10px;
         }
     }
 `
@@ -16,12 +27,14 @@ const SearchBox = styled(Link)`
 class New extends Component {
     render() {
 
-        const {url, children, value, text, handleClick } = this.props
+        const { url, value, message, handleClick, icon, onHover } = this.props
 
         return (
-            <SearchBox to={url} onClick={() => handleClick(value)}>
+            <SearchBox to={url} onClick={() => handleClick(value)} onHover={onHover}>
                 <div>
-                    {children}<span/>{text[0]}"{value}"{text[1]}
+                    {icon}
+                    <span/>
+                    {message}
                 </div>
             </SearchBox>
         )
@@ -30,8 +43,8 @@ class New extends Component {
 
 New.propTypes = {
     url: PropTypes.string,
-    text: PropTypes.arrayOf(PropTypes.string).isRequired, // before and after: eg) 新しい[value]を検索
-    children: PropTypes.element,
+    message: PropTypes.string, // before and after: eg) 新しい[value]を検索
+    icon: PropTypes.object,
     value: PropTypes.string.isRequired,
     handleClick: PropTypes.func.isRequired,
 }

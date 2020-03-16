@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import Response from "../../Util/Response"
-import BraftEditor from 'braft-editor'
+import SlateTextArea from "../../Util/TextArea/TextArea"
 
 class Textarea extends Component {
     render() {
@@ -11,12 +11,12 @@ class Textarea extends Component {
                     {this.props.postName}
                 </HeaderTitle>
                 <HeaderUnderline/>
-                <BraftEditor
-                    controls={[]}
-                    readOnly={true}
-                    value={BraftEditor.createEditorState(this.props.content)}
-                    contentClassName="post-braft"
-                />
+                <TextAreaWrapper>
+                    <SlateTextArea
+                        readOnly={true}
+                        content={this.props.content}
+                    />
+                </TextAreaWrapper>
                 { this.props.postId &&
                 <Response
                     postId={this.props.postId}
@@ -27,6 +27,12 @@ class Textarea extends Component {
         )
     }
 }
+
+const TextAreaWrapper = styled.div`
+    & > div {
+        padding: 20px 0px;
+    }
+`
 
 const wrapperStyle= {
     display: "flex",
@@ -45,7 +51,5 @@ const HeaderUnderline = styled.div`
     margin: 0 auto;
     margin-top: 8px;
 `
-
-
 
 export default Textarea

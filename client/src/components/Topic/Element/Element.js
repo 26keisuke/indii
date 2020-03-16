@@ -1,9 +1,10 @@
 import React, { Component } from "react"
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
-import sample from "../../../images/sample1.png"
+import { getEditorContent } from "../../Util/util"
 
-const Box = styled.div`
+const Box = styled(Link)`
     display: flex;
     flex-direction: row;
     background-color: #ffffff;
@@ -29,61 +30,55 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     padding-left:15px;
+    max-width: 440px;
+    min-width: 440px;
 
-    & > p:nth-child(1) {
+    & > p:nth-child(2) {
         color: #333333;
         font-size:16px;
         font-weight: bold;
         margin-bottom: 2px;
     }
 
-    & > p:nth-child(2) {
+    & > p:nth-child(3) {
         margin-bottom: 7px;
         height: 50px;
         overflow: hidden;
     }
 
-    & > div {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+    & > span {
+        color: #5a5a5a;
+        font-size: 11px;
+    }
+`
 
-        & > p {
-            color: #5a5a5a;
-            font-size: 11px;
-            margin-right: 20px;;
-        }
+const Tag = styled.div`
+    display: flex;
+    flex-direction: row;
 
-        & > div {
-            display: flex;
-            flex-direction: row;
-
-            & > p {
-                margin-right: 5px;
-                font-size: 10px;
-                color: #8F8B8B;
-            }
-        }
+    & > p {
+        margin-right: 5px;
+        font-size: 10px;
+        color: #8F8B8B;
+        margin-right: 5px;
     }
 `
 
 class Element extends Component {
     render() {
         return (
-            <Box>
+            <Box to={`/topic/${this.props.id}`}>
                 <Content>
+                    <Tag>
+                        {this.props.tags.map(tag => {
+                            return <p key={tag}>#{tag}</p>
+                        })}
+                    </Tag>
                     <p>{this.props.title}</p>
-                    <p>{this.props.content}</p>
-                    <div>
-                        <p>{this.props.likes.toLocaleString()} Favorites</p>
-                        <div>
-                            {this.props.tags.map(tag => {
-                                return <p key={tag}>#{tag}</p>
-                            })}
-                        </div>
-                    </div>
+                    <p>{getEditorContent(this.props.content, 100)}</p>
+                    <span>お気に入り数： {this.props.likes}</span>
                 </Content>
-                <img src={sample} alt={"トピックを代表する写真"}/>
+                <img src={this.props.img} alt={"トピックを代表する写真"}/>
             </Box>
         )
     }

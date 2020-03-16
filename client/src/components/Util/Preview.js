@@ -4,7 +4,7 @@ import styled, { css } from "styled-components"
 class Preview extends Component {
     render() {
         return (
-            <PreviewElement hide={!this.props.display} topic={this.props.topic} mobile={this.props.mobile} post={this.props.post}>
+            <PreviewElement hide={!this.props.display} profile={this.props.profile} topic={this.props.topic} mobile={this.props.mobile} post={this.props.post}>
                 <p>{this.props.placeholder || "プレビュー"}</p>
                 <div/>
                 <img 
@@ -51,6 +51,11 @@ export const PreviewElement = styled.div`
             width: 292px;
             height: 292px;
         `
+        : props => props.profile
+        ? css`
+            width: 200px;
+            height: 200px;
+        `
         : css`
             width: 380px;
             height: 200px;
@@ -89,6 +94,13 @@ export const PreviewElement = styled.div`
             min-height: 292px;
             max-width: 292px;
             max-height: 292px;
+        `
+        : props => props.profile
+        ? css`
+            min-width: 200px;
+            min-height: 200px;
+            max-width: 200px;
+            max-height: 200px;
         `
         : css`
             min-width: 380px;

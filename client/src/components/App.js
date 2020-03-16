@@ -22,6 +22,9 @@ import AppState from "./AppState"
 import Verification from "./Verification/Verification"
 import Setting from "./Setting/Setting"
 import Talk from "./Talk/Talk"
+import Policy from "./Setting/Policy/Policy"
+import Terms from "./Setting/Terms/Terms"
+import WorkSpace from "./WorkSpace"
 
 class App extends Component {
 
@@ -57,7 +60,10 @@ class App extends Component {
                                 <Route exact path="/action" component={Action} />
                                 <Route path="/verification/:type" component={Verification}/>
                                 <Route path="/verification/:type/:tokenId" component={Verification}/> 
-                                <Route path="/setting" component={Setting}/>
+                                <Route exact path="/setting" component={Setting}/>
+                                <Route path="/setting/policy" component={Policy}/>
+                                <Route path="/setting/terms" component={Terms}/>
+                                <Route path="/workspace" component={WorkSpace}/>
                             </div>
                         </AppState>
                     </GAListener>

@@ -5,15 +5,22 @@ import {
     DRAFT_UPDATED, 
     DRAFT_READ,
     UPDATE_DRAFT_ONE,
-    SELECT_DRAFT
+    SELECT_DRAFT,
+    DRAFT_ADD_KATEX, DRAFT_ADD_URL
 } from "../actions/types/types"
 
 export default function draftReducer(state={
     onEdit: [], // draft複数を保存する
     isUpdated: false,
-    nounce: "",
+    nounce: "",　// nounceはfetchDraftする度に新しい値になる（要するに、databaseで変更がある度）
     fetched: {}, // draft一つだけを保存する
-    selected: {}, // draft一つだけを保存する(Draft edit時に使うから上と一緒にしない方がいい）
+    selected: {
+        content: "", 
+        id: "",
+    }, // draft一つだけを保存する(Draft edit時に使うから上と一緒にしない方がいい）
+
+    katex: null,
+    url: "",
 }, action) {
 
     if(action.payload && action.payload.length === 0) {
@@ -61,6 +68,18 @@ export default function draftReducer(state={
             const newObj = update(state, {onEdit: {[index]: {$set: action.payload}}})
 
             return newObj
+
+        case DRAFT_ADD_KATEX:
+            return {
+                ...state,
+                katex: action.payload
+            }
+            
+        case DRAFT_ADD_URL:
+            return {
+                ...state,
+                url: action.payload
+            }
 
         default:
             return state

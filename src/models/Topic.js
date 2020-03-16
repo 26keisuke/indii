@@ -5,6 +5,8 @@ const { Schema } = mongoose
 const topicSchema = new Schema({
     topicName: String,
     
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    
     squareImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     rectangleImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     mobileImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
@@ -19,7 +21,10 @@ const topicSchema = new Schema({
     order: [mongoose.ObjectId], // Column Order (by Id in "column")
     posts: [{type: mongoose.Schema.Types.ObjectId, ref: "Post"}], // これに関しては、Indexの順番じゃなくていい
 
-    likes: {type: Number, default: 0},
+    likes: {
+        user: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+        counter: {type: Number, default: 0},
+    },
     postCount: {type: Number, default: 0},
     
     activity: [{

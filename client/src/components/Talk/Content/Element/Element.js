@@ -24,18 +24,25 @@ class Element extends Component {
                     }
                 </Info>
                 <div>
-                    <Connect/>
+                    
                     { skeleton 
                     ?
                     <Skeleton height={18} width={400}/>
                     :
-                    <Content>{content}</Content>
+                    <ContentWrapper>
+                        <Connect/>
+                        <Content>{content}</Content>
+                    </ContentWrapper>
                     }
                 </div>
             </Wrapper>
         )
     }
 }
+
+const ContentWrapper = styled.div`
+    display: flex;
+`
 
 const Connect = styled.div`
     display: flex;

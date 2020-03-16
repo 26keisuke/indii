@@ -1,7 +1,6 @@
 import React, { Component, PureComponent } from "react"
 import styled, {css} from "styled-components"
 import { connect } from "react-redux"
-import BraftEditor from 'braft-editor'
 import { Waypoint } from "react-waypoint"
 import { Link } from "react-router-dom"
 import { Helmet } from "react-helmet"
@@ -11,8 +10,9 @@ import * as actions from "../../actions"
 import Info from "./Info/Info"
 import Activity from "./Activity/Activity"
 import { Space } from "../Theme"
+import TextArea from "../Util/TextArea/TextArea"
 
-import { arrObjLookUp } from "../Util/util"
+import { arrObjLookUp, getEditorContent } from "../Util/util"
 
 class ColumnElement extends PureComponent {
     render() {
@@ -37,12 +37,12 @@ class PostElement extends PureComponent {
                             <p>{this.props.index}</p>
                             <h3>{this.props.postName}</h3>
                         </PostTop>
-                        <BraftEditor
-                            controls={[]}
-                            readOnly={true}
-                            value={this.props.content}
-                            contentClassName="post-braft"
-                        />
+                        <TextAreaWrapper>
+                            <TextArea
+                                readOnly={true}
+                                content={this.props.content}
+                            />
+                        </TextAreaWrapper>
                     </Post>
                 </Link>
             </Waypoint>
@@ -162,7 +162,7 @@ class TopicPage extends Component {
                         onLeave={(data) => this.handleEnter(false, data)}
                         index={post.index.join(".")}
                         postName={post.postName}
-                        content={BraftEditor.createEditorState(content)}
+                        content={post.content}
                    />
                 )
 
@@ -199,7 +199,7 @@ class TopicPage extends Component {
         const titleName = topicName || " "
 
         const descriptionPost = posts[0] || {}
-        const description = BraftEditor.createEditorState(descriptionPost.content).toText().replace(/a\s/g, "").substring(0, 30) || `${topicName}に関する情報です。`
+        const description = getEditorContent(descriptionPost.content, 100) || `${topicName}に関する情報です。`
 
         return (
             <TopicBox>
@@ -210,6 +210,7 @@ class TopicPage extends Component {
                 </Helmet>
                 <TopWrapper>
                     <Info
+                        id={_id}
                         flag={flag}
                         tags={tags}
                         topicName={topicName}
@@ -271,6 +272,12 @@ class TopicPage extends Component {
         )
     }
 }
+
+const TextAreaWrapper = styled.div`
+    & > div {
+        padding: 15px;
+    }
+`
 
 const TocWrapper = styled.div`    
 

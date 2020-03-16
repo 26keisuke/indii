@@ -1,10 +1,34 @@
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import styled, {css} from "styled-components"
+import StarIcon from '@material-ui/icons/Star';
 
-import "./Element.css"
+import { fmtDate, getEditorContent } from "../../Util/util"
 
-import star_pressed from "../../../images/star-pressed.png"
+// import star_pressed from "../../../images/star-pressed.png"
+
+class Post extends Component {
+    render() {
+        return (
+            <PostElement search={this.props.search} to={"/post/" + this.props.id}>
+                <div>
+                    <p>{this.props.topic}</p>
+                    <p>{this.props.title}</p>
+                    <p>{getEditorContent(this.props.content, 100)}</p>
+                    <div>
+                        <StarIcon alt={"ポストのいいねボタン"}/>
+                        <p>{this.props.count}</p>
+                        <p>最後の編集: {fmtDate(this.props.date)}</p>
+                    </div>
+                </div>
+                <div>
+                    <img src={this.props.img} alt={"ポストの画像"}/>
+                </div>
+            </PostElement>
+        )
+    }
+}
+
 
 const PostElement = styled(Link)`
     padding: 20px;
@@ -30,6 +54,8 @@ const PostElement = styled(Link)`
         flex-direction: column;
         justify-content: flex-start;
         margin-right:10px;
+        max-width: 440px;
+        min-width: 440px;
 
         & > p:nth-child(1) {
             margin-top: -7px;
@@ -62,10 +88,11 @@ const PostElement = styled(Link)`
             flex-direction: row;
             align-items: center;
 
-            & > img {
+            & > svg {
                 width: 13px;
                 height: 13px;
                 margin-right:6px;
+                color: ${props => props.theme.secondary};
             }
 
             & > p:nth-child(2) {
@@ -88,28 +115,6 @@ const PostElement = styled(Link)`
     }
 
 `
-
-class Post extends Component {
-    render() {
-        return (
-            <PostElement search={this.props.search} to={"/topic/" + this.props.id}>
-                <div>
-                    <p>{this.props.topic}</p>
-                    <p>{this.props.title}</p>
-                    <p>{this.props.content}</p>
-                    <div>
-                        <img src={star_pressed} alt={"ポストのいいねボタン"}/>
-                        <p>{this.props.count}</p>
-                        <p>最後の編集: {this.props.date}</p>
-                    </div>
-                </div>
-                <div>
-                    <img src={this.props.img} alt={"ポストの画像"}/>
-                </div>
-            </PostElement>
-        )
-    }
-}
 
 Post.defaultProps = {
     search: false,

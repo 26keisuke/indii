@@ -12,7 +12,8 @@ import {
     DRAFT_UPDATED, DRAFT_READ, 
     UPDATE_DRAFT_ONE,
     SELECT_DRAFT,
-    DRAFT_ONE_UPDATED, DRAFT_ONE_READ
+    DRAFT_ADD_KATEX, DRAFT_ADD_URL,
+    // DRAFT_ONE_UPDATED, DRAFT_ONE_READ
 } from "../types/types";
 
 export const selectDraft = (draft) => (dispatch) => {
@@ -43,13 +44,13 @@ export const draftRead = () => (dispatch) => {
     dispatch({type: DRAFT_READ})
 }
 
-export const draftOneUpdated = () => (dispatch) => {
-    dispatch({type: DRAFT_ONE_UPDATED})
-}
+// export const draftOneUpdated = () => (dispatch) => {
+//     dispatch({type: DRAFT_ONE_UPDATED})
+// }
 
-export const draftOneRead = () => (dispatch) => {
-    dispatch({type: DRAFT_ONE_READ})
-}
+// export const draftOneRead = () => (dispatch) => {
+//     dispatch({type: DRAFT_ONE_READ})
+// }
 
 export const updateDraftOne = (obj) => (dispatch) => {
     dispatch({type: UPDATE_DRAFT_ONE, payload: obj})
@@ -174,4 +175,12 @@ export const confirmDraft = (value) => async (dispatch) => {
     .catch(err => {
         console.log(err)
     })
+}
+
+export const draftAddKatex = (katex) => (dispatch) => {
+    dispatch({ type: DRAFT_ADD_KATEX, payload: katex})
+}
+
+export const draftAddUrl = (url) => (dispatch) => {
+    dispatch({ type: DRAFT_ADD_URL, payload: url})
 }

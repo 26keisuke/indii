@@ -40,7 +40,6 @@ class SearchResult extends Component {
                         search={true}
                         topic={"Apache Kafka"}
                         title={"Stream Processingとの関係"}
-                        content={"とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。 "}
                         count={202}
                         date={"August 21, 2013 5:36 AM"}
                         img={sample}
@@ -49,7 +48,6 @@ class SearchResult extends Component {
                         search={true}
                         topic={"Apache Kafka"}
                         title={"Stream Processingとの関係"}
-                        content={"とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。 "}
                         count={202}
                         date={"August 21, 2013 5:36 AM"}
                         img={sample}
@@ -58,7 +56,6 @@ class SearchResult extends Component {
                         search={true}
                         topic={"Apache Kafka"}
                         title={"Stream Processingとの関係"}
-                        content={"とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。とにかく大量のメッセージを扱うことができる Scalable Kafkaはシングルクラスタで大規模なメッセージを扱うことができダウンタイムなしでElasticかつ透過的にスケールできる。 "}
                         count={202}
                         date={"August 21, 2013 5:36 AM"}
                         img={sample}
