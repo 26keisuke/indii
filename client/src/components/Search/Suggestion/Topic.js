@@ -17,13 +17,14 @@ const TopicElement = styled.div`
     & > img {
         width: 35px;
         height: 35px;
+        margin-left: 10px;
         margin-right: 20px;
     }
 
-    background-color: ${props => props.onHover && "rgb(240,240,240)"};
+    background-color: ${props => props.hover && "rgb(245,245,245)"};
 
     &:hover {
-        background-color: rgb(240,240,240);
+        background-color: ${props => props.theme.searchHover};
     }
 `
 
@@ -66,23 +67,13 @@ const TopicInfo = styled.div`
 
 class Topic extends Component {
 
-    handleClick = () => {
-        const { handleClick, suggestion　} = this.props
-
-        return handleClick(suggestion)
-    }
-
     render () {
 
-        const { suggestion, url, onHover } = this.props
-
-        const tags = suggestion.tags.map(tag => 
-            <p key={tag}>#{tag}</p>
-        )
+        const { suggestion, url, onHover, handleClick } = this.props
 
         return (
-            <Link key={suggestion._id} to={url} onClick={this.handleClick}>
-                <TopicElement onHover={onHover}>
+            <Link key={suggestion._id} to={url} onClick={() => handleClick(suggestion)}>
+                <TopicElement hover={onHover}>
                     <img src={suggestion.squareImg.image} alt="検索結果のトピック一覧のメイン画像"/>
                     <TopicName>
                         {suggestion.topicName}
@@ -90,7 +81,11 @@ class Topic extends Component {
                     <Breakpoint name="dablet">
                         <TopicInfo>
                             <div>
-                                {tags}
+                                {
+                                suggestion.tags.map((tag,index) => 
+                                    <p key={tag+index}>#{tag}</p>
+                                )
+                                }
                             </div>
                             <div>
                                 <p>ポスト数 {suggestion.postCount}</p>

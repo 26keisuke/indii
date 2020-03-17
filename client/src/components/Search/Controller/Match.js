@@ -1,6 +1,7 @@
 // SearchのHOC
 import React, { Component } from "react"
 import { connect } from "react-redux"
+import PropTypes from "prop-types"
 
 import * as actions from "../../../actions"
 
@@ -9,7 +10,6 @@ import Post from "../Suggestion/Post"
 import Topic from "../Suggestion/Topic"
 import MatchUI from "../UI/Match"
 
-//title, message, theme, placeholder, postAction, storageId, topicId
 class Match extends Component {
         constructor(props){
             super(props)
@@ -18,6 +18,21 @@ class Match extends Component {
                 jpTheme: this.props.theme === "TOPIC" ? "トピック" : this.props.theme === "POST" ? "ポスト" : "",
                 showWarning: false,
                 value: localStorage.getItem(this.props.storageId) || "",
+            }
+        }
+
+        componentDidMount() {
+            alert("CALLED")
+            const initVal = localStorage.getItem(this.props.storageId)
+
+            if(initVal){
+                if(this.props.theme === "TOPIC"){
+                    this.props.searchFetching("ACTION", true)
+                    this.props.searchTopic("MATCH", initVal)  
+                } else if(this.props.theme === "POST"){
+                    this.props.searchFetching("ACTION", true)
+                    this.props.searchPost("MATCH", initVal, this.props.topicId) 
+                }
             }
         }
 
@@ -134,6 +149,16 @@ class Match extends Component {
                 </MatchUI>
             )
         }
+}
+
+Match.propTypes = {
+    title: PropTypes.string,
+    message: PropTypes.string,
+    theme: PropTypes.string,
+    placeholder: PropTypes.string,
+    postAction: PropTypes.func,
+    storageId: PropTypes.string,
+    topicId: PropTypes.string,
 }
 
 const suggestionStyle = {

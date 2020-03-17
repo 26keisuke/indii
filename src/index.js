@@ -62,6 +62,14 @@ passport.deserializeUser((id, done) => {
     })
 })
 
+function isValidEmail(email) {
+   if(/(.+)@(.+){2,}\.(.+){2,}/.test(email)){
+       return true
+   }
+   return false
+}
+
+
 // 参考: https://codemoto.io/coding/nodejs/email-verification-node-express-mongodb
 
 passport.use(new LocalStrategy({
@@ -102,9 +110,9 @@ passport.use(new LocalStrategy({
             } else {
 
                 // signUpとloginをここで分けている。果たしてこれが適切かは疑問
-                if(!req.body.username) {
-                    return done(null, false)
-                }
+                if(!req.body.username) return done(null, false)
+
+                if(!isValidEmail(email)) return done(null, false)
                 
                 bcrypt.genSalt(10)
                     .then(salt => {

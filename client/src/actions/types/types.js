@@ -57,6 +57,7 @@ export const SELECT_TALK = "SELECT_TALK"
 export const FETCH_FEED = "FETCH_FEED"
 export const FETCH_RECOMMEND = "FETCH_RECOMMEND"
 export const FETCH_NEW_TOPIC = "FETCH_NEW_TOPIC"
+export const SEARCH_FEED = "SEARCH_FEED"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"

@@ -10,7 +10,7 @@ const FilterElement = styled.div`
     height: 100%;
     z-index: 100;
     transition: show .2s;
-    z-index: 10;
+    z-index: 12;
 `
 
 class Filter extends Component {

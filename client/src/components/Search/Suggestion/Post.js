@@ -12,10 +12,10 @@ const PostElement = styled.div`
     cursor: pointer;
     box-sizing: border-box;
 
-    background-color: ${props => props.onHover && "rgb(240,240,240)"};
+    background-color: ${props => props.hover && "rgb(245,245,245)"};
 
     &:hover {
-        background-color: rgb(240,240,240);
+        background-color: ${props => props.theme.searchHover};
     }
 
     & > div {
@@ -115,11 +115,11 @@ class Post extends Component {
 
     render () {
 
-        const { index, postName, star, config, postImg, topicSquareImg, lastEdited } = this.props.suggestion
+        const { index, postName, star, config, postImg, topicSquareImg, lastEdited, onHover } = this.props.suggestion
 
         return (
             // <div>
-                <PostElement onClick={this.handleClick}>
+                <PostElement onClick={this.handleClick} hover={onHover}>
                     <div>
                         <PostLeft>
                             <p>

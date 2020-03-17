@@ -21,6 +21,7 @@ const theme = {
     tertiary: "#9EAEE5",
     unselected: "#888888", // 記述はしているが実際にはつかわれていない。参考まで程度。
     hover: "rgba(233, 233, 238, 0.25)",
+    searchHover: "rgba(240, 240, 240, 0.5)",
     borderColor: "#eaeaea",
 
 };

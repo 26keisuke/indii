@@ -9,8 +9,8 @@ const userSchema = new Schema({
     googleId: {type: String, unique: true, sparse: true},
     facebookId: {type: String, unique: true, sparse: true},
 
-    userName: {type: String, unique: true, sparse: true},
-    email: String,
+    userName: String,
+    email: {type: String, unique: true, sparse: true},
     password: String,
     name: {
         familyName: String,
@@ -83,13 +83,6 @@ const userSchema = new Schema({
         comment: String, // これはPOST_EDIT_FEEDBACKの時のみ必要
         isApproved: Boolean, // これはPOST_EDIT_FEEDBACKの時のみ必要
     }],
-
-    // confirm: [{
-    //     timeStamp: Date,
-    //     draft: { type: mongoose.Schema.Types.ObjectId, ref: "Draft" },
-    //     user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
-    //     isConfirmed: Boolean,
-    // }],
 
     activity: [{
         timeStamp: Date,

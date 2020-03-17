@@ -2,8 +2,6 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 
-import { fmtDate } from "../../Util/util"
-
 // import Recommend from "../../Util/Recommend"
 import Topic from "../../SearchResult/Topic/Topic"
 
@@ -20,6 +18,7 @@ class Trend extends Component {
                 ?
                 this.props.topics.map(topic => 
                     <Topic
+                        key={topic._id}
                         id={topic._id}
                         img={topic.squareImg.image}
                         tags={topic.tags}

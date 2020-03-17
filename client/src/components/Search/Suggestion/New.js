@@ -12,10 +12,10 @@ const SearchBox = styled(Link)`
         display: flex;
         align-items: center;
 
-        background-color: ${props => props.onHover && "rgb(240,240,240)"};
+        background-color: ${props => props.hover && "rgb(245,245,245)"};
 
         &:hover {
-            background-color: rgb(240,240,240);
+            background-color: ${props => props.theme.searchHover};
         }
 
         & > span {
@@ -30,7 +30,7 @@ class New extends Component {
         const { url, value, message, handleClick, icon, onHover } = this.props
 
         return (
-            <SearchBox to={url} onClick={() => handleClick(value)} onHover={onHover}>
+            <SearchBox to={url} onClick={() => handleClick(value)} hover={onHover}>
                 <div>
                     {icon}
                     <span/>

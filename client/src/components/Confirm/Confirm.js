@@ -569,7 +569,7 @@ const ConfirmBox = styled.div`
     border-radius: 3px;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 11;
+    z-index: 12;
     max-height: 90%;
     overflow: scroll;
 

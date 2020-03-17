@@ -6,6 +6,7 @@ import Form from "../../Form/Form"
 // import Select from "../../Controller/Select"
 import Match from "../../../Search/Controller/Match"
 import { Box, BoxTransition } from "../../Element/Element"
+import { ButtonWrapper, ButtonLeft, } from "../../Element/TwoButtons"
 
 class EditPost extends Component {
 
@@ -81,6 +82,12 @@ class EditPost extends Component {
                 //         setValue={this.setPost} 
                 //         setStep={this.setStep}
                 //         />
+
+                const handleBack = () => {
+                    this.setBackward()
+                    this.setStep(0)
+                }
+
                 const postAction2 = (post) => {
                     this.setBackward(false);
                     this.setStep(2);
@@ -100,18 +107,21 @@ class EditPost extends Component {
                                 topicId={this.state.selectedTopic._id}
                                 showHelper={true}
                             />
+                            <ButtonWrapper>
+                                <ButtonLeft onClick={handleBack}>戻る</ButtonLeft>
+                            </ButtonWrapper>
                         </BoxTransition>
                     </Box>
                 )
             case 2:
                 return <EditPreviewPost
-                        back={this.state.back} 
-                        setBackward={this.setBackward} 
-                        selectedPost={this.state.selectedPost}
-                        selectedTopic={this.state.selectedTopic}
-                        setTags={this.setTags} 
-                        setStep={this.setStep}
-                        max={6}
+                            back={this.state.back} 
+                            setBackward={this.setBackward} 
+                            selectedPost={this.state.selectedPost}
+                            selectedTopic={this.state.selectedTopic}
+                            setTags={this.setTags} 
+                            setStep={this.setStep}
+                            max={6}
                         />
             default:
                 return;

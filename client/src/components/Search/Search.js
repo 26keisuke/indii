@@ -4,6 +4,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import PropTypes from "prop-types"
 
+// TODO: hoverを変える度に、全てのsuggestionがrerenderされている
 class Search extends Component {
 
     constructor(props){
@@ -15,6 +16,7 @@ class Search extends Component {
         }
 
         this.searchRef = React.createRef()
+        this.inputRef = React.createRef()
     }
 
     componentDidMount() {
@@ -46,13 +48,17 @@ class Search extends Component {
     handleKeyDown = (e) => {
         const { cursor } = this.state
         const suggestionLength = this.props.suggestions.length
+
+        // これはデモ用
+        // const suggestionLength = 12
+
         if(e.keyCode === 38 && cursor > 0){
-            console.log("UP")
+            e.preventDefault(); // cursorを動かさないようにする
             this.setState({
                 cursor: this.state.cursor - 1
             })
         } else if(e.keyCode === 40 && cursor < suggestionLength - 1){
-            console.log("DOWN")
+            e.preventDefault(); // cursorを動かさないようにする
             this.setState({
                 cursor: this.state.cursor + 1
             })
@@ -76,11 +82,16 @@ class Search extends Component {
 
         const { cursor, forceShow } = this.state
 
+        // デモ用　（計12個ある）
+        // const deleteme = suggestions.concat(suggestions.concat(suggestions))
+        // const deleted = deleteme.concat(deleteme.concat(deleteme.concat(deleteme)))
+
         return(
             <Wrapper ref={this.searchRef}>
-                <form onSubmit={(e) => handleSubmit(e)}>
+                <form onSubmit={handleSubmit}>
                     <input 
-                        type="text" 
+                        ref={this.inputRef}
+                        type="text"
                         value={value}
                         onChange={this.handleChange} 
                         placeholder={placeholder} 
@@ -91,7 +102,7 @@ class Search extends Component {
                     />
                 </form>
                 <div style={suggestionStyle}>
-                    { (forceShow || !blur) && suggestions.map((suggestion, index) => 
+                    { (forceShow || !blur) && this.props.suggestions.map((suggestion, index) => 
                         renderSuggestion(suggestion, index, cursor)
                     )}
                 </div>

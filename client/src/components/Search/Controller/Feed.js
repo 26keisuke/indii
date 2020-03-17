@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
+import PropTypes from "prop-types"
 
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 
@@ -10,8 +11,6 @@ import Search from "../Search"
 import Topic from "../Suggestion/Topic"
 import New from "../Suggestion/New"
 import FeedUI from "../UI/Feed"
-
-// placeholder
 
 class Feed extends Component {
 
@@ -23,8 +22,16 @@ class Feed extends Component {
         }
     }
 
+    initialize = () => {
+        this.props.searchFeed("RESET");
+        this.setState({
+            value: "",
+            blur: true,
+        })
+    }
+
     componentWillUnmount(){
-        this.props.searchTopic("RESET");
+        this.props.searchFeed("RESET");
     }
 
     handleChange = (value) => { this.setState({ value: value }) }
@@ -32,20 +39,22 @@ class Feed extends Component {
     handleClick = (suggestion) => {
         if(typeof(suggestion) === "string"){
             this.props.searchTerm(suggestion)
+            this.initialize()
             return
         }
         this.props.searchTerm(suggestion.topicName)
+        this.initialize()
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
         this.handleClick(this.state.value); 
         this.props.history.push("/search/from_form")
+        this.initialize()
     }
 
     getSuggestions = (value) => {
-        this.props.searchFetching("ACTION", true)
-        this.props.searchTopic("TOPIC", value)  
+        this.props.searchFeed("TOPIC", value)  
     }
 
     renderSuggestion = (suggestion, index, cursor) => {
@@ -78,9 +87,7 @@ class Feed extends Component {
 
     render () {
         return(
-            <FeedUI
-                blur={this.state.blur}
-            >
+            <FeedUI>
                 <Search
                     blur={this.state.blur}
                     blurStyle={blurStyle}
@@ -99,6 +106,10 @@ class Feed extends Component {
             </FeedUI>
         )
     }
+}
+
+Feed.propTypes = {
+    placeholder: PropTypes.string,
 }
 
 const focusStyle = {
@@ -130,11 +141,13 @@ const suggestionStyle = {
     borderRadius: "2px",
     width: "100%",
     backgroundColor: "white",
+    maxHeight: "80vh",
+    overflow: "scroll",
 }
 
-function mapStateToProps({ topic }){
+function mapStateToProps({ feed }){
     return  {
-        _topic: topic.search,
+        _topic: feed.search,
     }
 }
 

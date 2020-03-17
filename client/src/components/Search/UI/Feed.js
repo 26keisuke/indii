@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 import PropTypes from "prop-types"
 
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
@@ -7,10 +7,10 @@ import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 class Feed extends Component {
     render() {
 
-        const { blur, children } = this.props
+        const { children } = this.props
 
         return (
-            <SearchFeedWrapper onSearch={blur}>
+            <SearchFeedWrapper>
                 <SearchOutlinedIcon className="search-icon" color="primary"/>
                 { children }
             </SearchFeedWrapper>
@@ -20,14 +20,12 @@ class Feed extends Component {
 
 Feed.propTypes = {
     children: PropTypes.object, // <Search {withEnhancedLogic by controller}/>が入る
-    blur: PropTypes.bool,
 }
 
 const SearchFeedWrapper = styled.div`
     display: flex;
     align-items: center;
     width:100%;
-    z-index: 1000;
     max-width: 550px;
     position: relative;
 

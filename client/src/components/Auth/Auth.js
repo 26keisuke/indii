@@ -307,7 +307,7 @@ const LogInCard = styled.div`
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     background-color: #ffffff;
-    z-index: 20;
+    z-index: 13;
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);

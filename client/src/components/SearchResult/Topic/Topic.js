@@ -12,6 +12,7 @@ const TopicChild = styled.div`
     border-radius: 8px;
     cursor: pointer;
     max-width: 340px;
+    margin-bottom: 20px;
 
     &:hover{
         background-color: ${props => props.theme.hover};
@@ -69,7 +70,7 @@ class Topic extends Component {
         const flag = !!this.props.id
 
         return (
-            <Link to={`/topic/${this.props.id}`}>
+            <Link to={this.props.id ? `/topic/${this.props.id}` : "/"}>
                 <TopicChild>
                     { flag 
                     ? <img src={this.props.img}/> 
@@ -81,8 +82,8 @@ class Topic extends Component {
                     <div>
                         <Tag>
                             { flag
-                            ? this.props.tags.map(tag => 
-                                <p># {tag}</p>    
+                            ? this.props.tags.map((tag,index) => 
+                                <p key={tag+index}># {tag}</p>    
                             )
                             : <Skeleton width={150} height={14}/>
                             }

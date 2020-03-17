@@ -13,8 +13,21 @@ import {
     FETCH_FEED,
     FETCH_RECOMMEND,
     FETCH_NEW_TOPIC,
+    SEARCH_FEED,
 } from "../types/types";
 
+import { cancelOnMultipleSearch } from "../util"
+
+export const searchFeed = (type, value) => async (dispatch) => {
+    if(type === "RESET") { dispatch({type: SEARCH_FEED, payload: {suggestions: []}}) }
+    if(!value) { dispatch({type: SEARCH_FEED, payload: {suggestions: []}}); return }
+    
+    const url = "/api/topic/search/" + String(type) + "/" + String(value)
+    const data = await cancelOnMultipleSearch(url)
+    if(!!data){
+        dispatch({type: SEARCH_FEED, payload: {suggestions: data}})
+    }
+} 
 
 export const searchFetching = (type, onSearch) => (dispatch) => {
     dispatch({type: SEARCH_FETCHING, payload: {type, onSearch}})

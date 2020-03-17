@@ -24,7 +24,7 @@ const NavBar = styled.nav`
     position: absolute;
     top: 0px;
     width: 100%;
-    z-index: 1000;
+    z-index: 11;
     box-shadow: 1px 1px 4px #e2e2e2;
 `
 
