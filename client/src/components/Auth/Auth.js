@@ -165,6 +165,12 @@ class Auth extends PureComponent {
 
             this.props.postAction(true, "SIGN_UP", value)
 
+            this.setState({
+                username: "",
+                email: "",
+                password: "",
+            })
+
         } else if (type === "logIn") {
             value = {
                 email: logIn.email,

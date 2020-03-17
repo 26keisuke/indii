@@ -149,12 +149,12 @@ passport.use(new LocalStrategy({
                                             text: `${req.body.username}さん、Indiiへようこそ！\n\n` + "以下のリンクをクリックして、ご登録いただいたメールアドレスを認証してください。\n\n" + `https://www.indii.jp/api/confirmation/${token.token}` + "\n" 
                                         }
 
-                                        // sgMail.send(msg)
-                                        // .then(() => {
-                                        //     console.log("Email has been sent")
+                                        sgMail.send(msg)
+                                        .then(() => {
+                                            console.log("Email has been sent")
                                             req.pendingUser = user
                                             return done(null, false) // done(null, user)にしてしまうとログイン状態になってしまう
-                                        // })                                        
+                                        })                                        
                                     })
                                 })            
                         })
