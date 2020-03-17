@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-import { IoIosAddCircleOutline } from "react-icons/io"
+import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import { connect } from "react-redux"
 import { Helmet } from "react-helmet"
 
@@ -8,7 +8,6 @@ import * as actions from "../../actions"
 
 import TalkFeed from "./Element/Element"
 import Content from "./Content/Content"
-import { Space } from "../Theme"
 
 import { checkAuth, fmtDate } from "../Util/util"
 
@@ -58,7 +57,7 @@ class Talk extends Component {
                         <TalkHeader>
                             <h2>トーク一覧</h2>
                             <div>
-                                <AddTalk onClick={this.handleClick}/>
+                                <AddBoxOutlinedIcon onClick={this.handleClick}/>
                             </div>
                         </TalkHeader>
                         <div>
@@ -98,20 +97,20 @@ class Talk extends Component {
 
                 </TalkBox>
 
-                <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
+                {/* <Space height={"200px"} backgroundColor={"#f9f9f9"}/> */}
             </Wrapper>
         )
     }
 }
 
 const Wrapper = styled.div`
-    padding: 25px 0px;
+    /* padding: 25px 0px; */
     background-color: #f9f9f9;
 `
 
 const BottomSpace = styled.div`
-    box-shadow: 0px -1px 4px #d2d2d2;
-    height: 30px;
+    /* box-shadow: 0px -1px 4px #d2d2d2; */
+    height: 200px;
 `
 
 const Feed = styled.div`
@@ -127,8 +126,9 @@ const Feed = styled.div`
 const TalkHeader = styled.div`
     display: flex;
     padding: 10px 27px;
+    padding-bottom: 35px;
     position: relative;
-    box-shadow: 0px 1px 4px #d2d2d2;
+    border-bottom: 1px solid #eeeeee;
     
     & > h2 {
         font-size: 14px !important;
@@ -137,22 +137,22 @@ const TalkHeader = styled.div`
     & > div:nth-child(2) {
         position: relative;
         margin-left: auto;
-    }
-`
 
-const AddTalk = styled(IoIosAddCircleOutline)`
-    position: absolute;
-    color: ${props => props.theme.primary};
-    transform: scale(2.2);
-    top: 5px;
-    left: -17px;
-    cursor: pointer;
+        & > svg {
+            position: absolute;
+            color: ${props => props.theme.primary};
+            top: 2px;
+            transform: scale(1.1);
+            left: -17px;
+            cursor: pointer;
+        }
+    }
 `
 
 const TalkBox = styled.div`
     display: flex;
     width:100%;
-    padding: 0px 30px;
+    /* padding: 0px 30px; */
     background-color: #f9f9f9;
 `
 

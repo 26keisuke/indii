@@ -146,7 +146,7 @@ passport.use(new LocalStrategy({
                                             from: 'info@indii.jp',
                                             to: user.email,
                                             subject: '【Indii】Indiiにようこそ！',
-                                            text: `${req.body.username}さん、Indiiへようこそ！\n\n` + "以下のリンクをクリックして、ご登録いただいたメールアドレスを認証してください。\n\n" + `https://www.indii.jp/api/confirmation/${token.token}` + "\n" 
+                                            text: `${req.body.username}さん、Indiiへようこそ！\n\n` + "以下のリンクをクリックして、ご登録いただいたメールアドレスを認証してください。\n\n" + `https://indii.jp/api/confirmation/${token.token}` + "\n" 
                                         }
 
                                         sgMail.send(msg)
@@ -162,6 +162,7 @@ passport.use(new LocalStrategy({
             }
         })
         .catch(err => {
+            console.log(err)
             return done(err)
         })  
 }))

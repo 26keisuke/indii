@@ -98,6 +98,7 @@ export function checkAuth(e, context) {
     const isAuthenticated = context.auth.loggedIn
     if(!isAuthenticated) {
         e.preventDefault()
+        context.enableGray()
         context.showLogin()
         return false
     }

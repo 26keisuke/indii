@@ -198,18 +198,19 @@ const Description = styled.p`
 `
 
 const Box = styled.div`
-    box-shadow: 1px 1px 10px #d2d2d2;
-    background-color: white;
-    width: 100%;
-    margin-right: 60px;
+    /* box-shadow: 1px 1px 10px #d2d2d2;
+    background-color: white; */
+    width: auto;
+    /* margin-right: 60px;
     min-width: 588px;
-    max-width: 588px;
+    max-width: 588px; */
     padding: 40px;
     position: fixed;
     overflow-y: scroll;
 
-    max-height: 73%;
-    min-height: 73%;
+    /* max-height: 73%;
+    min-height: 73%; */
+    height: 81%;
 
     &::-webkit-scrollbar-track{
         background-color: #F5F5F5;
@@ -221,7 +222,7 @@ const Box = styled.div`
     }
 
     &::-webkit-scrollbar-thumb{
-        background-color: #000000;
+        background-color: ${props => props.theme.secondary};
     }
 `
 
