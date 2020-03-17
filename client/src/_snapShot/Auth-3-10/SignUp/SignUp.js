@@ -48,7 +48,9 @@ class SignUp extends Component {
                         onChange={(e) => this.props.handleSignUpChange(e,"userName")} 
                         type="text" 
                         id="userName"
-                        maxlength="25"
+                        inputProps={{
+                            maxLength: 25,
+                        }}    
                     />
                     { this.props.signUpStates.userName &&
                     <Match top={9} right={37}>

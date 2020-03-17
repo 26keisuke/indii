@@ -55,7 +55,7 @@ class LogIn extends Component {
                 <BottomWrapper>
                     {   ((this.props.logInStates.email) && (this.props.logInStates.password)) 
                     ?
-                    <Button width={"316px"} type="submit" onClick={(e) => this.props.handleSubmit(e, "logIn")}>ログイン</Button>
+                    <Button width={"316px"} onClick={(e) => this.props.handleSubmit(e, "logIn")}>ログイン</Button>
                     :
                     <Button width={"316px"} disabled={true} type="submit">ログイン</Button>
                     }

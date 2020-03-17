@@ -133,9 +133,9 @@ class Auth extends PureComponent {
             }
         }, () => {
             const { userName } = this.state.signUp
-            const { uniqueEmail, longPassword } = this.state
+            const { uniqueEmail, longPassword, validEmail } = this.state
             
-            const result = uniqueEmail && userName && longPassword
+            const result = uniqueEmail && userName && longPassword && validEmail
 
             this.setState({ valid: result })
         })   
@@ -144,7 +144,9 @@ class Auth extends PureComponent {
     handleSubmit = (e, type) => {
         e.preventDefault()
 
-        var value, data, newObj;
+        if(type === "signUp" && !this.state.valid) return
+
+        var value;
 
         const { signUp, logIn, remember } = this.state
         

@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import { connect } from "react-redux"
 import styled from "styled-components"
 
 import People from "../../People/People"
@@ -34,7 +33,7 @@ class Follow extends Component {
             <BoxWrapper>
                 <Box>
                     {
-                        this.props.users.map(user => 
+                        this.props.users && this.props.users.map(user => 
                             <Wrapper key={user.user._id}>
                                 <People
                                     id={user.user._id}
@@ -52,10 +51,4 @@ class Follow extends Component {
     }
 }
 
-function mapStateToProps({auth}) {
-    return {
-        auth
-    }
-}
-
-export default connect(mapStateToProps)(Follow)
+export default Follow

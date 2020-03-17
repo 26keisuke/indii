@@ -6,19 +6,37 @@ import Token from "../models/Token"
 
 var router = express.Router();
 
-router.post("/login", passport.authenticate("local", {failureRedirect: "/"}), 
-    (req, res) => {
-        if(req.body.remember) {
-            req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; 
-        } else {
-            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+// 参考: http://www.passportjs.org/docs/authenticate/
+
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if(err) {
+            res.send("ERROR"); 
+            return
         }
-        res.send(req.user)
-    }
-)
+        if(user) {
+            req.logIn(user, (err) => {
+                if(err) return next(err)
+
+                if(req.body.remember) {
+                    req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; 
+                } else {
+                    req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+                }
+    
+                res.send(user); 
+                return
+            })
+        }
+        if(req.pendingUser){
+            res.send(req.pendingUser)
+        } else {
+            res.send("ERROR")
+        }
+    })(req, res, next)
+})
 
 router.get("/logout", (req, res) => {
-
     User.findById(req.user.id)
     .then(user => {
         user.activity.push({timeStamp: Date.now(), type: "LOG_OUT"})
@@ -57,7 +75,10 @@ router.get("/confirmation/:tokenId", (req, res) => {
             user.save()
             .then(user => {
                 console.log("User is now verified")
-                res.redirect("/")
+                req.logIn(user, (err) => {
+                    if(err) return console.log(err)
+                    res.redirect("/")
+                })
             })
         })
     })

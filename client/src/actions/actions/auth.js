@@ -44,6 +44,11 @@ export const signUp = (value) => async (dispatch) => {
         .then(user => {
             dispatch(disableGray())
             dispatch(endFetching())
+            if(user.data === "ERROR"){
+                dispatch(updateMessage("fail", "新規登録に失敗しました。", 7000))
+                dispatch(hideLogin())
+                return
+            }
             dispatch(updateMessage("success", `"${user.data.email}"に確認メールを送信しました。`, 7000))
             dispatch(fetchUser())
             dispatch(hideLogin())

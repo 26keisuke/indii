@@ -21,10 +21,12 @@ class SignUp extends Component {
                         value={this.props.signUpStates.userName}
                         onChange={(e) => this.props.handleSignUpChange(e,"userName")} 
                         type="text"
-                        maxlength="25"
+                        inputProps={{
+                            maxLength: 25,
+                        }}                        
                     />
                     { this.props.signUpStates.userName &&
-                    <Match>
+                    <Match check={true}>
                         <Check/>
                     </Match>
                     }
@@ -39,7 +41,7 @@ class SignUp extends Component {
                     />
                     {   (this.props.valid.validEmail && this.props.valid.uniqueEmail) 
                     ?
-                    <Match>
+                    <Match check={true}>
                         <Check/>
                     </Match>
                     :
@@ -66,11 +68,11 @@ class SignUp extends Component {
                     />
                     {   this.props.valid.longPassword
                     ?
-                    <Match top={9} right={37}>
+                    <Match check={true}>
                         <Check/>
                     </Match>
                     :
-                    <Match top={-18} left={25}>
+                    <Match>
                         { this.props.valid.longPassword === false &&
                         <div/>
                         }
@@ -131,7 +133,7 @@ const Match = styled.div`
     position: absolute;
     display: flex;
     align-items: center;
-    top: 24px;
+    top: ${props => props.check ? "27px" : "0px"};
     right: 47px;
 
     & > div {

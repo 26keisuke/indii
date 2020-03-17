@@ -98,6 +98,12 @@ passport.use(new LocalStrategy({
                                 return done(null, false)
                             }
 
+                            if(req.body.remember) {
+                                req.session.cookie.maxAge = 365 * 24 * 60 * 60 * 1000; 
+                            } else {
+                                req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000;
+                            }
+
                             user.activity.push({timeStamp: Date.now(), type: "LOG_IN"})
                             user.save()
                             .then(() => {
@@ -140,14 +146,15 @@ passport.use(new LocalStrategy({
                                             from: 'info@indii.jp',
                                             to: user.email,
                                             subject: '【Indii】Indiiにようこそ！',
-                                            text: `${req.body.username}さん、Indiiへようこそ！\n\n` + "以下のリンクをクリックして、ご登録いただいたメールアドレスを認証してください。\n\n" + `http://indii.jp/api/confirmation/${token.token}` + "\n" 
+                                            text: `${req.body.username}さん、Indiiへようこそ！\n\n` + "以下のリンクをクリックして、ご登録いただいたメールアドレスを認証してください。\n\n" + `https://www.indii.jp/api/confirmation/${token.token}` + "\n" 
                                         }
 
-                                        sgMail.send(msg)
-                                        .then(() => {
-                                            console.log("Email has been sent")
-                                            return done(null, user)
-                                        })                                        
+                                        // sgMail.send(msg)
+                                        // .then(() => {
+                                        //     console.log("Email has been sent")
+                                            req.pendingUser = user
+                                            return done(null, false) // done(null, user)にしてしまうとログイン状態になってしまう
+                                        // })                                        
                                     })
                                 })            
                         })
