@@ -38,7 +38,7 @@ const theme = createMuiTheme({
 
 const middlewares = [];
 
-// middlewares.push(reduxThunk);
+middlewares.push(reduxThunk);
 
 if (process.env.NODE_ENV !== "production") {
     middlewares.push(logger)
