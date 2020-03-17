@@ -89,7 +89,7 @@ class Tag extends Component {
                 </ChipWrapper>
                 <TextWrapper onSubmit={this.handleSubmit}>
                     <TextField
-                        id="standard-basic" 
+                        id="tag" 
                         label="タグを追加"
                         value={this.state.value}
                         onChange={(e) => this.setState({value: e.target.value, warning: false})}    

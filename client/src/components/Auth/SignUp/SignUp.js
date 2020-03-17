@@ -16,7 +16,7 @@ class SignUp extends Component {
             <Wrapper>
                 <InputWrapper>
                     <TextField 
-                        id="standard-basic" 
+                        id="userName" 
                         label="ユーザー名" 
                         value={this.props.signUpStates.userName}
                         onChange={(e) => this.props.handleSignUpChange(e,"userName")} 
@@ -31,7 +31,7 @@ class SignUp extends Component {
                 </InputWrapper>
                 <InputWrapper>
                     <TextField 
-                        id="standard-basic" 
+                        id="email" 
                         label="Eメール" 
                         value={this.props.signUpStates.email}
                         onChange={(e) => this.props.handleSignUpChange(e,"email")}
@@ -58,7 +58,7 @@ class SignUp extends Component {
                 </InputWrapper>
                 <InputWrapper>
                     <TextField 
-                        id="standard-basic" 
+                        id="passoword" 
                         label="パスワード" 
                         value={this.props.signUpStates.password}
                         onChange={(e) => this.props.handleSignUpChange(e,"password")} 

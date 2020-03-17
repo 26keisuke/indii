@@ -22,7 +22,7 @@ class LogIn extends Component {
             <form>
                 <TextWrapper>
                     <TextField 
-                        id="standard-basic" 
+                        id="email" 
                         label="Eメール" 
                         value={this.props.logInStates.email}
                         onChange={(e) => this.props.handleLogInChange(e,"email")} 
@@ -30,7 +30,7 @@ class LogIn extends Component {
                     />
                     
                     <TextField 
-                        id="standard-basic" 
+                        id="password" 
                         label="パスワード" 
                         value={this.props.logInStates.password}
                         onChange={(e) => this.props.handleLogInChange(e,"password")} 
