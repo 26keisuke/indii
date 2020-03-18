@@ -42,7 +42,7 @@ class LogIn extends Component {
                         type="checkbox" 
                         id="remember" 
                         name="remember" 
-                        checked={this.props.remember} 
+                        defaultChecked={this.props.remember} 
                     />
                     <label htmlFor="remember">次から入力を省略</label>
                 </Remember>

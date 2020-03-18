@@ -124,8 +124,6 @@ class TopicPage extends Component {
 
         var tableArr = []
 
-        const content = "You can use withRouter to accomplish this. Simply wrap your exported classed component inside of withRouter and then you can use this.props.match.params.id to get the parameters instead of using useParams(). You can also get any location, match, or history info by using withRouter. They are all passed in under this.props.You can use withRouter to accomplish this. Simply wrap your exported classed component inside of withRouter and then you can use this.props.match.params.id to get the parameters instead of using useParams(). You can also get any location, match, or history info by using withRouter. They are all passed in under this.props.You can use withRouter to accomplish this. Simply wrap your exported classed component inside of withRouter and then you can use this.props.match.params.id to get the parameters instead of using useParams(). You can also get any location, match, or history info by using withRouter. They are all passed in under this.props.You can use withRouter to accomplish this. Simply wrap your exported classed component inside of withRouter and then you can use this.props.match.params.id to get the parameters instead of using useParams(). You can also get any location, match, or history info by using withRouter. They are all passed in under this.props.You can use withRouter to accomplish this. Simply wrap your exported classed component inside of withRouter and then you can use this.props.match.params.id to get the parameters instead of using useParams(). You can also get any location, match, or history info by using withRouter. They are all passed in under this.props."
-
         tableArr.push(
             <div>コンテンツ一覧</div>
         )

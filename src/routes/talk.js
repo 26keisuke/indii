@@ -42,7 +42,15 @@ router.post("/", isLoggedIn, (req, res) => {
         .then(user => {
             user.createTalk.push({ timeStamp: now, talk: talk })
             user.save()
-            res.send("Success")
+
+            talk.populate("creator")
+                .populate("comments.user")
+                .populate({path: "post", populate: [{path: "postImg"}, {path: "topicSquareImg"}]})
+                .populate({path: "topic", populate: [{path: "squareImg"}, {path: "posts"}]})
+                .execPopulate()
+                .then(talk => {
+                    res.send(talk)
+                })
         })
     })
     .catch(err => {
@@ -62,9 +70,20 @@ router.post("/:talkId", (req, res) => {
         User.findById(req.user.id)
         .then(user => {
             user.createComment.push({ timeStamp: now, talk: talk._id, content: req.body.value })
-            talk.save()
+
             user.save()
-            res.send("Success")
+            talk.save()
+            .then(talk => {
+                
+                talk.populate("creator")
+                    .populate("comments.user")
+                    .populate({path: "post", populate: [{path: "postImg"}, {path: "topicSquareImg"}]})
+                    .populate({path: "topic", populate: [{path: "squareImg"}, {path: "posts"}]})
+                    .execPopulate()
+                    .then(talk => {
+                        res.send(talk)
+                    })
+            })
         })
     })
     .catch(err => {

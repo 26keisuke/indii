@@ -52,8 +52,8 @@ const CommentBox = styled.div`
     background-color: white;
     position: sticky;
     bottom: 0px;
-    width: 85%;
-    left: 41px;
+    width: 100%;
+    /* left: 41px; */
     display: flex;
     align-items: center;
     flex-direction: column;

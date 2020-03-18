@@ -22,7 +22,6 @@ class Match extends Component {
         }
 
         componentDidMount() {
-            alert("CALLED")
             const initVal = localStorage.getItem(this.props.storageId)
 
             if(initVal){
@@ -62,6 +61,11 @@ class Match extends Component {
 
         handleMatchSubmit = (e) => {
             e.preventDefault();
+            if(this.props.theme === "TOPIC"){
+                this.props.postAction(this.props._topic[0])
+            } else if(this.props.theme === "POST"){
+                this.props.postAction(this.props._post[0])
+            }
         }
 
         getTopicSuggestions = (value) => {

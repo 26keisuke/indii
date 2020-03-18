@@ -8,6 +8,7 @@ import Form from "../../Form/Form"
 import Unique from "../../../Search/Controller/Unique"
 import Match from "../../../Search/Controller/Match"
 import { Box, BoxTransition } from "../../Element/Element"
+import { ButtonWrapper, ButtonLeft, } from "../../Element/TwoButtons"
 
 class CreatePost extends Component {
 
@@ -84,6 +85,11 @@ class CreatePost extends Component {
                 //         setStep={this.setStep}
                 //         topicId={this.state.selectedTopic._id}
                 //         />
+                const handleBack = () => {
+                    this.setBackward()
+                    this.setStep(0)
+                }
+
                 const postAction2 = (post) => {
                     this.setBackward(false);
                     this.setStep(2);
@@ -102,6 +108,9 @@ class CreatePost extends Component {
                                 storageId="editPostPost"
                                 topicId={this.state.selectedTopic._id}
                             />
+                            <ButtonWrapper>
+                                <ButtonLeft onClick={handleBack}>戻る</ButtonLeft>
+                            </ButtonWrapper>
                         </BoxTransition>
                     </Box>
                 )

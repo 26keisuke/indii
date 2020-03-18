@@ -8,7 +8,7 @@ const TalkTitle = (props) => {
             <TextField 
                 id="talk_title" 
                 multiline={props.textarea}
-                rows={props.textarea && "5"}
+                rows={props.textarea ? "5" : "1"}
                 label={props.title}
                 value={props.value}
                 onChange={props.handleChange} 

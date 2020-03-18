@@ -14,9 +14,8 @@ const Image = ({ attributes, children, element }) => {
 
     return (
         <div {...attributes}>
-            <div 
+            <Wrapper 
                 contentEditable={false}
-                style={{ userSelect: "none" }}
             >
                 <ImageWrapper float={float}>
                     <img src={element.url}/>
@@ -51,11 +50,21 @@ const Image = ({ attributes, children, element }) => {
                         </IconWrapper> */}
                     </div>
                 </ImageWrapper>
-            </div>
+            </Wrapper>
             {children}
         </div>
     )
 }
+
+const Wrapper = styled.div`
+    user-select: none;
+
+    &:after{
+        content: " ";
+        display: block;
+        clear: both;
+    }
+`
 
 
 const IconWrapper = styled.div`
@@ -71,11 +80,7 @@ const ImageWrapper = styled.div`
     width: fit-content;
 
     ${props => props.float === "middle" && css`
-        margin: 0 auto;
-
-        & > img {
-            margin: 20px;
-        }
+        margin: 20px auto;
     `}
 
     ${props => props.float === "left" && css`
@@ -126,6 +131,10 @@ const ImageWrapper = styled.div`
 
     & div:hover {
         display: flex;
+    }
+
+    & > img {
+        max-width: 100%;
     }
 
     & > img:hover + div {

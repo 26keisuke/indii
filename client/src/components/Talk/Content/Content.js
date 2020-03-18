@@ -114,7 +114,7 @@ class Content extends Component {
                             ?
                             <Description>{description}</Description>
                             :
-                            <S1Wrapper><Skeleton width={587} count={3} height={16}/></S1Wrapper>
+                            <S1Wrapper><Skeleton width={480} count={3} height={16}/></S1Wrapper>
                             }
                             { flag &&
                             <Bottom>
@@ -136,6 +136,7 @@ class Content extends Component {
                                 flag 
                                 ? comments.map(comment =>
                                     <Element
+                                        key={comment._id}
                                         user={comment.user}
                                         date={fmtDate(comment.timeStamp)}
                                         content={comment.content}
@@ -198,32 +199,24 @@ const Description = styled.p`
 `
 
 const Box = styled.div`
-    /* box-shadow: 1px 1px 10px #d2d2d2;
-    background-color: white; */
-    width: auto;
-    /* margin-right: 60px;
-    min-width: 588px;
-    max-width: 588px; */
+    width: 49%;
     padding: 40px;
     position: fixed;
     overflow-y: scroll;
-
-    /* max-height: 73%;
-    min-height: 73%; */
     height: 81%;
 
-    &::-webkit-scrollbar-track{
+    /* &::-webkit-scrollbar-track{
         background-color: #F5F5F5;
-    }
+    } */
 
     &::-webkit-scrollbar{
-        width: 6px;
-        background-color: #F5F5F5;
+        width: 0px !important;
+        /* background-color: #F5F5F5; */
     }
 
-    &::-webkit-scrollbar-thumb{
+    /* &::-webkit-scrollbar-thumb{
         background-color: ${props => props.theme.secondary};
-    }
+    } */
 `
 
 const Title = styled.h1`

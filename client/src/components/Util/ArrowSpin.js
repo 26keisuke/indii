@@ -10,7 +10,7 @@ class ArrowSpin extends Component {
         return (
             <Wrapper size={this.props.size}>
                 <p onClick={this.props.handleClick}></p>
-                <Arrow isOpened={this.props.isOpened} changed={this.props.changed} rotate={this.props.rotate}/>
+                <Arrow isopened={this.props.isOpened} changed={!!this.props.changed} rotate={this.props.rotate}/>
             </Wrapper>
         )
     }
@@ -48,13 +48,13 @@ const Wrapper = styled.div`
     }
 `
 
-
-const Arrow = styled(IoIosArrowDown)`
+// const Arrow = styled(IoIosArrowDown)`
+const Arrow = styled(({ isopened, changed, ...props }) => <IoIosArrowDown {...props}/>)`
     pointer-events: none;
     transform: ${ props => `rotate(${props.rotate + 0}deg)`};
 
     ${props => props.changed // pageがロードした時にアニメーションが発火しないように
-    ? props => !props.isOpened 
+    ? props => !props.isopened 
         ? css `
             animation-name: ${spin(props.rotate)};
             animation-duration: 400ms;

@@ -56,7 +56,7 @@ const Content = styled.p`
     color: #2B2B2b;
     margin-bottom: 10px;
     width: 510px; 
-    height: 32px;
+    height: 33px;
     overflow: hidden;
 `
 

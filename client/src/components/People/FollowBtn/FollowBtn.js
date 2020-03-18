@@ -30,7 +30,7 @@ class FollowBtn extends Component {
         }
     }
 
-    componentWillMount() {
+    componentWillUnmount() {
         ct = 0;
     }
 

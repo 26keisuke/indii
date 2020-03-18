@@ -54,7 +54,7 @@ class Post extends PureComponent {
 
     render() {
         return (
-                <PostBox to={this.props.skeleton ? "" : "/post/" + this.props.id}>
+                <PostBox to={this.props.skeleton ? "/" : "/post/" + this.props.id}>
                     { this.props.skeleton 
                     ?
                     <PostTop>
@@ -107,7 +107,7 @@ class Post extends PureComponent {
                     { this.props.skeleton 
                     ?
                     <PostMiddle>
-                        <Link><Skeleton width={120} height={15}/></Link>
+                        <Link to={"/"}><Skeleton width={120} height={15}/></Link>
                         <p style={{marginBottom: "10px"}}><Skeleton width={200} height={23}/></p>
                         <Collapse isOpened={this.state.isOpened}>
                         <SkeletonWrapper>

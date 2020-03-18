@@ -29,8 +29,10 @@ class TalkConfirm extends Component {
             <Wrapper>
                 <Section title="トーク名" content={confirmation.talkTitle}/>
 
-                <Title title={`参照${type === "post" ? "ポスト" : type === "topic" ? "トピック" : ""}`}/> 
                 { name && 
+                <Title title={`参照${type === "post" ? "ポスト" : type === "topic" ? "トピック" : ""}`}/> 
+                }
+                { name &&
                 <RefPreview>
                     <img src={img || imgSub}/>
                     <h2>{name}</h2>

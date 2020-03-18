@@ -4,9 +4,11 @@ import { Editor, createEditor, Transforms, } from "slate"
 import { 
     Slate, Editable, withReact, useSlate
 } from "slate-react"
+import { withHistory } from 'slate-history'
 import { BlockMath } from "react-katex"
 import { connect } from "react-redux"
 import imageExtensions from 'image-extensions'
+import { Waypoint } from "react-waypoint"
 import isUrl from 'is-url'
 import axios from "axios"
 
@@ -17,6 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import Image from "./Image/Image"
 
+// import { customeBeforeInput } from "./Plugin/Plugin"
 import * as actions from "../../../actions"
 
 import { renderIcon, renderTitle } from "../util"
@@ -30,6 +33,16 @@ const Toolbar = styled.div`
     justify-content: space-evenly;
     padding: 5px 100px;
     background-color: #f5f5f5;
+`
+
+const ToolbarAbs = styled(Toolbar)`
+    position: fixed;
+    top: 66px;
+    box-shadow: 1px 1px 10px #d2d2d2;
+    left: 50%;
+    z-index: 12;
+    transform: translate(-50%, 0);
+    background-color: white;
 `
 
 // vertical alignはplaceholderのズレをなくすためだが、katexにも影響が出るので今はoffにしている
@@ -57,6 +70,13 @@ const ToolWrapper = styled.div`
     }
 `
 
+const onBeforeInput = (event, change, editor) => {
+    console.log("CALLED")
+    console.log(event, "\n", change, "\n", editor)
+    event.preventDefault()
+    return false
+}
+
 
 const TextArea = (props) => {
 
@@ -68,8 +88,9 @@ const TextArea = (props) => {
             children: [{ text: "" },],
         }
     ])
+    const [abs, setAbs] = useState(false)
 
-    const editor = useMemo(() => withImages(withKatex(withReact(createEditor()))), [])
+    const editor = useMemo(() => withHistory(withImages(withKatex(withReact(createEditor())))), [])
 
     const sendUpdate = (timeUpdate) => {
         const url = "/api/draft/" + props.draftId
@@ -139,8 +160,7 @@ const TextArea = (props) => {
         }
 
         if(props.url){
-            alert("CALLED")
-            insertImage(editor, props.url) // img => url
+            insertImage(editor, props.url)
             props.draftAddUrl("")
         }
 
@@ -149,7 +169,10 @@ const TextArea = (props) => {
 
     const renderElement = useCallback(props => <Element {...props}/>, [])
     const renderLeaf = useCallback(props => <Leaf {...props}/>, [])
-    
+
+    const handleLeave = () => { setAbs(true) }
+    const handleEnter = () => { setAbs(false) }
+
     return (
         <Slate 
             editor={editor} 
@@ -159,6 +182,23 @@ const TextArea = (props) => {
                 setValue(value)
             }}
         >
+            { !props.readOnly && <Waypoint onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
+            { !props.readOnly && abs &&
+            <ToolbarAbs>
+                <MarkButton format="bold"/>
+                <MarkButton format="italic"/>
+                <MarkButton format="underline"/>
+                <MarkButton format="code"/>
+                <MarkButton format="superscript"/>
+                <BlockButton format="heading-one"/>
+                <BlockButton format="heading-two"/>
+                <BlockButton format="block-quote"/>
+                <BlockButton format="numbered-list"/>
+                <BlockButton format="bulleted-list"/>
+                <KatexButton handleClick={(e) => katexClick(e)}/>
+                <ImageButton handleClick={(e) => imageClick(e)}/>
+            </ToolbarAbs>
+            }
             { !props.readOnly &&
             <Toolbar>
                 <MarkButton format="bold"/>
@@ -334,6 +374,7 @@ const Leaf = ({ attributes, children, leaf }) => {
     return <span {...attributes}>{children}</span>
 }
 
+
 const toggleBlock = (editor, format) => {
     const isActive = isBlockActive(editor, format)
     const isList = LIST_TYPES.includes(format)
@@ -426,7 +467,6 @@ const isImageUrl = url => {
     const ext = new URL(url).pathname.split('.').pop()
     return imageExtensions.includes(ext)
 }
-
 
 function mapStateToProps({draft}){
     return {

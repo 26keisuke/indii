@@ -4,6 +4,7 @@ import {
 } from "../actions/types/types"
 
 import update from "immutability-helper"
+import { findArrObjIndex } from "./util"
 
 export default function authReducer(state={
 
@@ -36,12 +37,7 @@ export default function authReducer(state={
         case FETCH_CONFIRM:
             const indexOfId = findArrObjIndex(state.info.notif, "_id", action.payload.data._id)
 
-            // if(indexOfId !== undefined){
-                newObj = update(state, {info: {notif: {[indexOfId]: {$merge: action.payload.data}}}})
-            // } else {
-            //     newObj = update(state, {info: {notif: {$push: action.payload.data}}})
-            // }
-
+            newObj = update(state, {info: {notif: {[indexOfId]: {$merge: action.payload.data}}}})
             newObj = update(newObj, {info: {nounce: {$set: action.payload.nounce}}})
 
             return newObj
@@ -62,13 +58,5 @@ export default function authReducer(state={
             }
         default:
             return state;
-    }
-}
-
-function findArrObjIndex(arr, lookUp, value){
-    for(var i=0; i < arr.length; i++){
-        if(arr[i][lookUp] === value){
-            return i
-        }
     }
 }

@@ -96,20 +96,16 @@ class Talk extends Component {
                     />
 
                 </TalkBox>
-
-                {/* <Space height={"200px"} backgroundColor={"#f9f9f9"}/> */}
             </Wrapper>
         )
     }
 }
 
 const Wrapper = styled.div`
-    /* padding: 25px 0px; */
     background-color: #f9f9f9;
 `
 
 const BottomSpace = styled.div`
-    /* box-shadow: 0px -1px 4px #d2d2d2; */
     height: 200px;
 `
 
@@ -152,7 +148,6 @@ const TalkHeader = styled.div`
 const TalkBox = styled.div`
     display: flex;
     width:100%;
-    /* padding: 0px 30px; */
     background-color: #f9f9f9;
 `
 
