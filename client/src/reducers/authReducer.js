@@ -1,6 +1,7 @@
 import {
     FETCH_USER, FETCH_NOTIF, FETCH_CONFIRM,
     SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
+    FETCH_AFTER_TOPIC_LIKE
 } from "../actions/types/types"
 
 import update from "immutability-helper"
@@ -40,6 +41,9 @@ export default function authReducer(state={
             newObj = update(state, {info: {notif: {[indexOfId]: {$merge: action.payload.data}}}})
             newObj = update(newObj, {info: {nounce: {$set: action.payload.nounce}}})
 
+            return newObj
+        case FETCH_AFTER_TOPIC_LIKE:
+            newObj = update(state, {info: {likedTopic: {$set: action.payload}}})
             return newObj
         case SHOW_LOGIN:
             return {

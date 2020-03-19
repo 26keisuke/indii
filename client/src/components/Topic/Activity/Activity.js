@@ -142,6 +142,7 @@ class Activity extends Component {
         for(var i=0; i < activity.length; i++){
             arr.push(
                 <Action
+                    key={i + activity[i].timeStamp}
                     userName={activity[i].user.userName}
                     photo={activity[i].user.photo}
                     timeStamp={activity[i].timeStamp}
@@ -254,6 +255,9 @@ const PeopleWrapper = styled.div`
     & > a {
         & > div {
             padding: 0px;
+            &:hover{
+                background-color: white !important;
+            }
         }
     }
 `

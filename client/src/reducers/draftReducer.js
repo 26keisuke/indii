@@ -4,10 +4,12 @@ import {
     FETCH_DRAFT, FETCH_ONE_DRAFT,
     DRAFT_UPDATED, 
     DRAFT_READ,
-    UPDATE_DRAFT_ONE,
+    DRAFT_ADD_REF,
     SELECT_DRAFT,
     DRAFT_ADD_KATEX, DRAFT_ADD_URL
 } from "../actions/types/types"
+
+import { findArrObjIndex } from "./util"
 
 export default function draftReducer(state={
     onEdit: [], // draft複数を保存する
@@ -26,6 +28,8 @@ export default function draftReducer(state={
     if(action.payload && action.payload.length === 0) {
         return state
     }
+
+    var newObj;
 
     switch(action.type) {
         case SELECT_DRAFT:
@@ -54,18 +58,12 @@ export default function draftReducer(state={
                 ...state,
                 isUpdated: false,
             }
-        case UPDATE_DRAFT_ONE:
+        case DRAFT_ADD_REF:
 
-            var index;
+            const index = findArrObjIndex(state.onEdit, "_id", action.payload.id)
 
-            for(var i=0; i < state.onEdit.length; i++){
-                if(state.onEdit[i]._id === action.payload._id){
-                    index = i
-                    break
-                }
-            }
-
-            const newObj = update(state, {onEdit: {[index]: {$set: action.payload}}})
+            newObj = update(state, {onEdit: {[index]: {ref: {$set: action.payload.ref}}}})
+            newObj = update(newObj, {selected: {ref: {$set: action.payload.ref}}})
 
             return newObj
 

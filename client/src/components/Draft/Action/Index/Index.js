@@ -121,12 +121,13 @@ class Index extends Component {
                 const id = column._id
                 const title = column.title
                 const isFirst = k === "0"
+                const noPosts = column.posts.length === 0
                 result.push(
                     <IndexElement 
                         key={id}
                         indent={false} 
                         selected={selectedId === id} 
-                        onClick={() => this.handleClick(id, [parseInt(k)], title, isFirst, isFirst)}
+                        onClick={() => this.handleClick(id, [parseInt(k)], title, isFirst || noPosts, isFirst)}
                     >
                         <p>{k}</p>
                         <p>{title}</p>
@@ -185,7 +186,7 @@ class Index extends Component {
                     :
                         showBtn
                         ?
-                        <input onChange={this.handleToggle} checked={addColumn} type="checkbox" id="0" name="addColumn"/>
+                        <input onChange={this.handleToggle} defaultChecked={addColumn} type="checkbox" id="0" name="addColumn"/>
                         :
                         <input checked={false} type="checkbox" id="0" name="addColumn"/>
                     }

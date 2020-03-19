@@ -11,6 +11,8 @@ import {
 import { cancelOnMultipleSearch } from "../util"
 
 export const fetchTopic = (id, type) => async (dispatch) => {
+    if(!id) dispatch({type: FETCH_TOPIC, payload: {}})
+
     const url = "/api/topic/" + String(id) + "/" + String(type)
     const res = await axios.get(url)
     dispatch({type: FETCH_TOPIC, payload: res.data})

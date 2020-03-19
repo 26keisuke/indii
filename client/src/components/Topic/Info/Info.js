@@ -1,10 +1,8 @@
 import React, { Component } from "react"
 import styled, { css, keyframes} from "styled-components"
-import { FaHashtag } from "react-icons/fa"
 import Skeleton from "react-loading-skeleton"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
-import axios from "axios"
 
 import * as actions from "../../../actions"
 
@@ -29,7 +27,9 @@ class Info extends Component {
     }
 
     componentDidMount() {
-        if(this.props.loggedIn && (ct == 0)) {
+        this.props.fetchUser()
+
+        if(this.props.loggedIn && (ct === 0)) {
             if(this.props.id){
                 this.checkForFavorite()
             }
@@ -46,7 +46,7 @@ class Info extends Component {
 
     handleWindowClose = () => {
         if(this.state.madeLikeAction) {
-            axios.post(`/api/topic/${this.props.id}/like`, {like: this.state.liked})
+            this.props.fetchAfterTopicLike(this.props.id, this.state.liked)
         }
     }
 
@@ -57,14 +57,9 @@ class Info extends Component {
         this.autoUpdate = setInterval(() => {
             if (this.state.madeLikeAction) {
                 
-                axios.post(`/api/topic/${this.props.id}/like`, {like: this.state.liked})
-                .then(()=>{
-                    this.setState({
-                        madeLikeAction: false,
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
+                this.props.fetchAfterTopicLike(this.props.id, this.state.liked)
+                this.setState({
+                    madeLikeAction: false,
                 })
 
             }
@@ -86,7 +81,7 @@ class Info extends Component {
 
         if (this.props.loggedIn){
             if(this.state.madeLikeAction) {
-                axios.post(`/api/topic/${this.props.id}/like`, {like: this.state.liked})
+                this.props.fetchAfterTopicLike(this.props.id, this.state.liked)
             }
             window.removeEventListener("beforeunload", this.handleWindowClose);
         }
@@ -106,7 +101,7 @@ class Info extends Component {
 
     render() {
 
-        const { flag, tags, topicName, postCount, likes, handleClick, selected, squareImg } = this.props
+        const { content, flag, tags, topicName, postCount, likes, handleClick, selected, squareImg } = this.props
 
         return (
             <TopicTop>
@@ -124,7 +119,7 @@ class Info extends Component {
                         ?
                             tags.map(tag =>
                                 <div key={tag}>
-                                    <Tag/>
+                                    #
                                     <p>{tag}</p>
                                 </div>
                             )
@@ -137,7 +132,7 @@ class Info extends Component {
                         {
                             flag 
                             ?
-                            "You can use withRouter to accomplish this. Simply wrap your exported classed component inside of withRouter and then you can use this.props.match.params.id to get the parameters instead of using useParams(). You can also get any location, match, or history info by using withRouter. They are all passed in under this.props"   
+                            content 
                             :
                             <ContentSkeleton>
                                 <Skeleton count={5} height={18}/>
@@ -264,12 +259,12 @@ const TopicTags = styled.div`
     }
 `
 
-const Tag = styled(FaHashtag)`
-    color: #5a5a5a;
-    transform: scale(0.9);
-    margin-top: -2px;
-    margin-right: 2px;
-`
+// const Tag = styled(FaHashtag)`
+//     color: #5a5a5a;
+//     transform: scale(0.9);
+//     margin-top: -2px;
+//     margin-right: 2px;
+// `
 
 const TopicTitle = styled.h1`
     color: #1C1C1C;

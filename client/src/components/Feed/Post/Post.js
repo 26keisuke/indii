@@ -31,6 +31,17 @@ class Post extends PureComponent {
         }
     }
 
+    truncateContent = (content) => {
+        if(content) {
+            const parsed = JSON.parse(content)
+            parsed.children = parsed.children.slice(0, 8)
+            return parsed
+        }
+        return {
+            children: []
+        }
+    }
+
     handleCollapseClick = (e) => {
         e.preventDefault()
         this.setState({
@@ -124,7 +135,7 @@ class Post extends PureComponent {
                         <EditorWrapper>
                             <TextArea
                                 readOnly={true}
-                                content={this.props.content}
+                                content={this.truncateContent(this.props.content)}
                             />
                         </EditorWrapper>
                         </Collapse>

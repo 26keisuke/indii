@@ -189,8 +189,6 @@ class TopicPage extends Component {
         const posts = this.props.topic.fetched.posts || {}
         const squareImg = this.props.topic.fetched.squareImg || {}
 
-        const overview = flag ? arrObjLookUp(posts, "_id", column[0].posts[0]) : ""
-
         const renderedPosts = flag && this.renderPost()[0]
         const renderedTable = flag && this.renderPost()[1]
 
@@ -211,6 +209,7 @@ class TopicPage extends Component {
                         id={_id}
                         flag={flag}
                         tags={tags}
+                        content={description}
                         topicName={topicName}
                         postCount={postCount}
                         likes={likes}
@@ -228,7 +227,7 @@ class TopicPage extends Component {
                     <Gap/>
                 </Waypoint>
 
-                { this.state.toggle["topic"] &&
+                { this.state.toggle["topic"] && posts.length > 1 &&
                 <TopicBottom>
                     <TopicPostWrapper>
                         { flag && renderedPosts }
@@ -265,6 +264,8 @@ class TopicPage extends Component {
                     <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
                 </div>
                 }
+
+                <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
 
             </TopicBox>
         )
@@ -354,7 +355,7 @@ const Column = styled.div`
     min-width: 725px;
     box-shadow: 1px 1px 10px #d2d2d2;
     margin-bottom: 1px;
-    height: 45px;
+    height: 50px;
     display: flex;
     align-items: center;
     padding-left: 44px;
@@ -368,7 +369,7 @@ const Column = styled.div`
     }
 
     & > h2 {
-        font-size: 18px;
+        font-size: 17px;
     }
 `
 

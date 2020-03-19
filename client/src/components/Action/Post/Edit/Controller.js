@@ -53,6 +53,7 @@ class EditPost extends Component {
                     <Box>
                         <BoxTransition back={this.state.back} transition={false}>
                             <Match
+                                key={"editPostTopic"}
                                 title="1. トピックを選択してください"
                                 message="トピック名"
                                 theme="TOPIC"
@@ -98,6 +99,7 @@ class EditPost extends Component {
                     <Box>
                         <BoxTransition back={this.state.back} transition={true}>
                             <Match
+                                key={"editPostPost"}
                                 title="2. ポストを選択してください"
                                 message="ポスト名"
                                 theme="POST"

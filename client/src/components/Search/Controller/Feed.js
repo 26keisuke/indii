@@ -26,7 +26,6 @@ class Feed extends Component {
         this.props.searchFeed("RESET");
         this.setState({
             value: "",
-            blur: true,
         })
     }
 
@@ -43,6 +42,11 @@ class Feed extends Component {
             return
         }
         this.props.searchTerm(suggestion.topicName)
+        this.initialize()
+    }
+
+    handleDirectClick = (topic) => {
+        this.props.history.push(`/topic/${topic._id}`)
         this.initialize()
     }
 
@@ -75,8 +79,7 @@ class Feed extends Component {
             <Topic
                 key={suggestion._id}
                 onHover={index === cursor}
-                url="/search/from_suggestion"
-                handleClick={this.handleClick}
+                handleClick={this.handleDirectClick}
                 suggestion={suggestion}
             />
         )

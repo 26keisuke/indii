@@ -334,13 +334,9 @@ class Reference extends Component {
         }
 
         const data = Object.assign({}, this.state[this.state.toggle])
-        const merged = Object.assign({}, type, data)
+        const merged = Object.assign(type, data)
 
-        const newObj = update(selected, {ref: {$push: [merged]}})
-
-        this.props.updateDraftOne(newObj)
-
-        axios.post(`/api/draft/${selected._id}/ref`, {ref: merged})
+        this.props.draftAddRef(selected._id, merged)
 
         // 初期化
         Object.keys(data).forEach(key => {
@@ -480,6 +476,7 @@ class Reference extends Component {
                 />
                 <Collapse isOpened={this.state.info.isOpened}>
                     <Info
+                        zero={selected.type === "Zero"}
                         edit={selected.type === "Edit"}
                         revertClick={this.revertClick}
                         handleSubmit={this.handleNameSubmit}
@@ -543,10 +540,7 @@ class Reference extends Component {
                     handleClick={() => this.handleClick("refList")}
                 />
                 <Collapse isOpened={this.state.refList.isOpened}>
-                    <List
-                        id={selected._id}
-                        reference={selected.ref || []}
-                    />
+                    <List id={selected._id} reference={selected.ref}/>
                     <Space height="20px"/>
                 </Collapse>
             
@@ -611,7 +605,7 @@ class Reference extends Component {
                 </Collapse>
                 ])}   
 
-                { (this.props.draft.type !== "Zero") &&
+                { selected.type !== "Zero" &&
                 ([<Title
                     key={"titleConfig"}
                     title="設定一覧"

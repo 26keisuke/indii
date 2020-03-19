@@ -30,7 +30,8 @@ class Textarea extends Component {
 
 const TextAreaWrapper = styled.div`
     & > div {
-        padding: 20px 0px;
+        padding-top: 20px;
+        padding-bottom: 50px;
     }
 `
 

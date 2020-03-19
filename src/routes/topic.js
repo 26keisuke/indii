@@ -22,7 +22,7 @@ router.get("/:topicId/:type", (req, res) => {
                 .populate("mobileImg")
                 .populate("squareImg")
                 // .populate({path: "column.posts", populate: {path: "postImg"}})
-                .populate({path: "posts", populate: [{path: "postImg"}, {path: "creator"}]})
+                .populate({path: "posts", populate: [{path: "postImg"}, {path: "topicSquareImg"}, {path: "creator"}]})
                 .populate("activity.user")
                 .exec()
                 .then(topic => {
@@ -184,8 +184,8 @@ router.post("/:topicId/edit", isLoggedIn, (req, res) => {
         // while converting _id string to OBJID, check if values are changed
         const result = columnCheckModified(columns, topic.column)
 
-        if(result[0]){
-            topic.column = result[1]
+        if(result){
+            topic.column = columns
         }
 
         // POST PHASE
@@ -261,10 +261,11 @@ function columnCheckModified(newColumn, oldColumn) {
         newColumn[j]._id = mongoose.Types.ObjectId(newColumn[j]._id)
         if(oldColumn[j]){
             flag = !equal(newColumn[j]._id, oldColumn[j]._id)
+            flag = !equal(newColumn[j].title, oldColumn[j].title)
         } else {
             flag = true
         }
-        if(flag === true) { break }
+        if(flag) { break }
         for(var k=0; k < newColumn[j].posts.length; k++){
             newColumn[j].posts[k] = mongoose.Types.ObjectId(newColumn[j].posts[k])
             if(oldColumn[j].posts[k]){
@@ -272,11 +273,11 @@ function columnCheckModified(newColumn, oldColumn) {
             } else {
                 flag = true
             }
-            if(flag === true) { break }
+            if(flag) { break }
         }
     }
 
-    return [flag, newColumn]
+    return flag
 }
 
 router.post("/:topicId/post", isLoggedIn, (req, res) => {
@@ -333,7 +334,7 @@ router.post("/:topicId/like", (req, res) => {
             user.save();
             topic.save();
 
-            res.send("Success")
+            res.send(user.likedTopic)
 
         })
     })

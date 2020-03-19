@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
     .populate("creator")
     .populate("comments.user")
     .populate({path: "post", populate: [{path: "postImg"}, {path: "topicSquareImg"}]})
-    .populate({path: "topic", populate: [{path: "squareImg"}, {path: "posts"}]})
+    .populate({path: "topic", populate: [{path: "squareImg"}, {path: "posts", options: {limit: 1}}]})
     .then(talk => {
         res.send(talk)
     })

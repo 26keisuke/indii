@@ -311,7 +311,10 @@ export const IndexBox = styled.div`
         & > div:nth-child(2) {
             font-weight: bold;
             color: #555555;
-            margin-right: -15px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: -12px;
         }
     }
 `

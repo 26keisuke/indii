@@ -117,6 +117,7 @@ const Feed = styled.div`
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
     margin-right: 20px;
+    min-height: 100vh;
 `
 
 const TalkHeader = styled.div`

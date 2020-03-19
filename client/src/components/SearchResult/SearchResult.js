@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import { withRouter } from "react-router-dom"
 import styled from "styled-components"
 import { Helmet } from "react-helmet"
+import { connect } from "react-redux"
 
 import sample from "../../images/sample1.png"
 
@@ -26,55 +27,61 @@ const Wrapper = styled.div`
     padding: 15px 0px;
 `
 
+const NotFound = styled.div`
+    margin-left: 15px;
+    margin-top: 30px;
+    font-size: 13px;
+`
+
 class SearchResult extends Component {
 
     renderLeft = () => {
+
+        const { term, posts } = this.props
+
         return (
             <Wrapper>
                 <Title>
-                    <p>"Neural Networks"</p>
+                    <p>「{term}」</p>
                     <p>の検索結果</p>
                 </Title>
                 <div>
+                    { 
+                    posts.length === 0
+                    ?
+                    <NotFound>「{term}」に関連するポストがありません。</NotFound>
+                    : posts.map(post =>
                     <Post
                         search={true}
-                        topic={"Apache Kafka"}
-                        title={"Stream Processingとの関係"}
-                        count={202}
-                        date={"August 21, 2013 5:36 AM"}
+                        topic={post.topicName}
+                        title={post.postName}
+                        count={post.star.counter}
+                        date={post.creationDate}
                         img={sample}
                     />
-                    <Post
-                        search={true}
-                        topic={"Apache Kafka"}
-                        title={"Stream Processingとの関係"}
-                        count={202}
-                        date={"August 21, 2013 5:36 AM"}
-                        img={sample}
-                    />
-                    <Post
-                        search={true}
-                        topic={"Apache Kafka"}
-                        title={"Stream Processingとの関係"}
-                        count={202}
-                        date={"August 21, 2013 5:36 AM"}
-                        img={sample}
-                    />
+                    )
+                    }
                 </div>
             </Wrapper> 
         )
     }
 
     renderRight = () => {
+        const { topics } = this.props
         return (
             <div>
-                <Topic
-                    img={sample}
-                    tags={["飯塚", "飯塚啓介", "なのか"]}
-                    topicName={"Apache Kafka"}
-                    description={"私はネットワークセキュリティのトレンドについてよく質問を受ける。ネットワークセキュリティを"}
-                    likes={"211,000"}
-                />
+                {
+                topics.map(topic => 
+                    <Topic
+                        id={topic._id}
+                        img={topic.squareImg.image}
+                        tags={topic.tags}
+                        topicName={topic.topicName}
+                        description={topic.posts[0].content}
+                        likes={topic.likes.counter}
+                    />
+                )
+                }
             </div>
         )
     }
@@ -96,5 +103,12 @@ class SearchResult extends Component {
     }
 }
 
+function mapStateToProps({ feed }){
+    return({
+        posts: feed.postsFound,
+        topics: feed.topicsFound,
+        term: feed.searchTerm
+    })
+}
 
-export default withRouter(SearchResult)
+export default connect(mapStateToProps)(withRouter(SearchResult))

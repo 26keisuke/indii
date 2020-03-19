@@ -42,7 +42,7 @@ const Content = styled.div`
 
     & > p:nth-child(3) {
         margin-bottom: 7px;
-        height: 50px;
+        height: 51px;
         overflow: hidden;
     }
 

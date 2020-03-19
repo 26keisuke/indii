@@ -3,6 +3,9 @@ import PropTypes from "prop-types"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
+import { FaHashtag } from "react-icons/fa"
+
+import { getEditorContent } from "../../Util/util"
 
 const TopicChild = styled.div`
     display: flex;
@@ -48,8 +51,15 @@ const Tag = styled.div`
 
     & > p {
         color: #767676;
-        font-size: 11px;
-        margin-right: 8px;
+        font-size: 10px;
+        margin-right: 3px;
+        display: flex;
+        align-items: center;
+
+        /* & > svg {
+            transform: scale(0.9);
+            margin-right: 2px;
+        } */
     }
 `
 
@@ -83,7 +93,7 @@ class Topic extends Component {
                         <Tag>
                             { flag
                             ? this.props.tags.map((tag,index) => 
-                                <p key={tag+index}># {tag}</p>    
+                                <p key={tag+index}>#{tag}</p>    
                             )
                             : <Skeleton width={150} height={14}/>
                             }
@@ -93,7 +103,7 @@ class Topic extends Component {
                         : <Skeleton width={100} height={20}/>
                         }
                         { flag
-                        ? <TopicContent>{this.props.description}</TopicContent>
+                        ? <TopicContent>{getEditorContent(this.props.description)}</TopicContent>
                         : <Skeleton count={2} width={230} height={14}/>
                         }
                         { flag

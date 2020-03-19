@@ -68,7 +68,7 @@ export const DRAFT_ONE_READ = "DRAFT_ONE_READ"
 export const CHANGE_DRAFTNAME = "CHANGE_DRAFTNAME"
 export const CHANGE_DRAFTCONFIG = "CHANGE_DRAFTCONFIG"
 export const FETCH_ONE_DRAFT = "FETCH_ONE_DRAFT"
-export const UPDATE_DRAFT_ONE = "UPDATE_DRAFT_ONE"
+export const DRAFT_ADD_REF = "DRAFT_ADD_REF"
 export const SELECT_DRAFT = "SELECT_DRAFT"
 export const DRAFT_ADD_KATEX = "DRAFT_ADD_KATEX"
 export const DRAFT_ADD_URL = "DRAFT_ADD_URL"
@@ -77,6 +77,7 @@ export const DRAFT_ADD_URL = "DRAFT_ADD_URL"
 export const SEARCH_TOPIC = "SEARCH_TOPIC"
 export const FETCH_TOPIC = "FETCH_TOPIC"
 export const CLEAR_TOPIC = "CLEAR_TOPIC"
+export const FETCH_AFTER_TOPIC_LIKE = "FETCH_AFTER_TOPIC_LIKE" // こいつはauthに行く
 
 // POST
 export const SEARCH_POST = "SEARCH_POST"

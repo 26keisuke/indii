@@ -8,18 +8,18 @@ import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
 import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
 import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
 
-const Image = ({ attributes, children, element }) => {
+const Image = ({ readOnly, attributes, children, element }) => {
 
-    const [float, setFloat] = useState("left")
+    const [float, setFloat] = useState("middle")
 
     return (
         <div {...attributes}>
             <Wrapper 
                 contentEditable={false}
             >
-                <ImageWrapper float={float}>
+                <ImageWrapper float={float} readOnly={readOnly}>
                     <img src={element.url}/>
-                    <div>
+                    {/* <div>
                         <IconWrapper selected={float === "left"}>
                             <Tooltip title="左寄せ">
                                 <IconButton aria-label="insert" size="small" onClick={() => setFloat("left")}>
@@ -40,7 +40,7 @@ const Image = ({ attributes, children, element }) => {
                                     <FormatAlignRightIcon/>
                                 </IconButton>
                             </Tooltip>
-                        </IconWrapper>
+                        </IconWrapper> */}
                         {/* <IconWrapper>
                             <Tooltip title="サイズ変更">
                                 <IconButton aria-label="insert" size="small">
@@ -48,7 +48,7 @@ const Image = ({ attributes, children, element }) => {
                                 </IconButton>
                             </Tooltip>
                         </IconWrapper> */}
-                    </div>
+                    {/* </div> */}
                 </ImageWrapper>
             </Wrapper>
             {children}
@@ -63,6 +63,7 @@ const Wrapper = styled.div`
         content: " ";
         display: block;
         clear: both;
+        height: 0px;
     }
 `
 
@@ -142,7 +143,7 @@ const ImageWrapper = styled.div`
     }
 
     & > img:hover {
-        outline: -webkit-focus-ring-color auto 5px;
+        outline: ${props => props.readOnly && "-webkit-focus-ring-color auto 5px"};
     }
 `
 

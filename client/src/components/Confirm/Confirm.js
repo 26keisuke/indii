@@ -56,6 +56,7 @@ class Confirm extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        // 初期化
         if(prevProps.update.confirmation.on === true && this.props.update.confirmation.on === false){
             
             setTimeout(() => {
@@ -64,6 +65,7 @@ class Confirm extends Component {
                     currentStep: 0,
                     counter: 0,
                     skipped: 0,
+                    value: "",
                 })
             }, 200)
         }
@@ -322,7 +324,7 @@ class Confirm extends Component {
         this.setState({ message: name })
     }
 
-    renderContent = (id, action) => {
+    renderContent = (action) => {
         switch(action){
             case "SELF_EDIT":
                 return (
@@ -346,7 +348,6 @@ class Confirm extends Component {
             case "ADD_COLUMN":
                 return (
                     <AddColumn
-                        id={id}
                         action={action}
                         postAction={this.props.postAction}
                         setValue={this.setValue}
@@ -455,7 +456,7 @@ class Confirm extends Component {
                     <Title>{title}</Title>
                     <Message>{message}</Message>
                     <Caution>{caution}</Caution>
-                    {this.renderContent(id, action)}
+                    {this.renderContent(action)}
                     <ConfirmButton transparent={transparent}>
                         {!transparent
                         ?   next 
@@ -463,14 +464,12 @@ class Confirm extends Component {
                                 <button onClick={() => this.parseNext()}>{buttonMessage}</button>
                             : this.state.value 
                             ?
-                                // <button onClick={() => postAction(action, id, value)}>{buttonMessage}</button>
                                 <button onClick={() => postAction(true, "", this.state.value)}>{buttonMessage}</button>
                             :
                                 <button onClick={() => postAction(true)}>{buttonMessage}</button>
                         :
                         <button>{buttonMessage}</button>
                         }
-                        {/* <button onClick={() => postAction(action)}>キャンセル</button> */}
                         <button onClick={() => postAction(false)}>キャンセル</button>
                     </ConfirmButton>
                 </div>

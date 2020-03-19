@@ -74,6 +74,9 @@ class CreatePreviewTopic extends Component {
         localStorage.clear();
         this.props.setCategory("home");
         this.props.updateMessage("success", `トピック「${this.props.topicName}」を編集しました。`)
+
+        // もしreduxにfetchされているtopicがあったらstale valueになるのでリセットする
+        this.props.fetchTopic();
     }
 
     renderTags = () => {
@@ -253,7 +256,6 @@ const IconWrapper = styled.div`
 
     ${props => props.right && css`
         margin-right: -17px;
-        float: right;
     `}
     
 `

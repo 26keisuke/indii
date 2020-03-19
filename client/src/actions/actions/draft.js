@@ -7,10 +7,14 @@ import {
     updateMessage,
 } from "./update"
 
+import {
+    fetchTopic
+} from "./topic"
+
 import { 
     FETCH_DRAFT, FETCH_ONE_DRAFT,
     DRAFT_UPDATED, DRAFT_READ, 
-    UPDATE_DRAFT_ONE,
+    DRAFT_ADD_REF,
     SELECT_DRAFT,
     DRAFT_ADD_KATEX, DRAFT_ADD_URL,
     // DRAFT_ONE_UPDATED, DRAFT_ONE_READ
@@ -52,8 +56,10 @@ export const draftRead = () => (dispatch) => {
 //     dispatch({type: DRAFT_ONE_READ})
 // }
 
-export const updateDraftOne = (obj) => (dispatch) => {
-    dispatch({type: UPDATE_DRAFT_ONE, payload: obj})
+export const draftAddRef = (id, data) => async (dispatch) => {
+    const url = `/api/draft/${id}/ref`
+    const res = await axios.post(url, {ref: data})
+    dispatch({type: DRAFT_ADD_REF, payload: res.data})
 } 
 
 //  ============ ここからの範囲のものはdraftOneUpdateに置き換えるべき ============ 
@@ -153,6 +159,10 @@ export const uploadDraft = (value) => async (dispatch) => {
         dispatch(disableGray())
         dispatch(endFetching())
         dispatch(draftUpdated())
+        
+        // もしreduxにfetchされているtopicがあったらstale valueになるのでリセットする
+        dispatch(fetchTopic())
+
         dispatch(updateMessage("success", "ポストをアップロードしました。"))
         return
     })

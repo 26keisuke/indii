@@ -41,9 +41,9 @@ class EditIndexTopic extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            posts: this.props.initialVal1,
-            columns: this.props.initialVal2,
-            order: this.props.initialVal3,
+            posts: deepCopyArrOfObj(this.props.initialVal1),
+            columns: deepCopyArrOfObj(this.props.initialVal2),
+            order: deepCopyArrOfObj(this.props.initialVal3),
         }
 
         // draggableをページの下までもっていきすぎるとDOMが崩れるのでそれを防ぐ
@@ -60,9 +60,9 @@ class EditIndexTopic extends Component {
 
         if((prevProps.index.revert === false) && (this.props.index.revert === true)){
             this.setState({
-                posts: this.props.initialVal1,
-                columns: this.props.initialVal2,
-                order: this.props.initialVal3,
+                posts: deepCopyArrOfObj(this.props.initialVal1),
+                columns: deepCopyArrOfObj(this.props.initialVal2),
+                order: deepCopyArrOfObj(this.props.initialVal3),
             })
             this.props.revertColumn(false)
             this.props.updateMessage("success", "変更を元に戻しました。")
@@ -214,6 +214,8 @@ class EditIndexTopic extends Component {
         }
     }
 
+    // newList = [{_id: _, ...}, {_id: _, ...}]
+    // oldList = [{_id: _, ...}, {_id: _, ...}]
     replaceOldWithModified = (newList, oldList) => {
         var found = {}
         for (var i=0; i < oldList.length; i++) {
@@ -263,7 +265,7 @@ class EditIndexTopic extends Component {
             var postId = ""
 
             if (destination.index > source.index) {
-                // 2{soure.index}を4{destination.index}の位置に持っていく場合は、前半（2~3）が-1され、4が3の値+1される
+                // 2{source.index}を4{destination.index}の位置に持っていく場合は、前半（2~3）が-1され、4が3の値+1される
 
                 this.findPostsAndIncrement(source.index, destination.index, postIds, -1, newPosts)
                 
@@ -271,8 +273,7 @@ class EditIndexTopic extends Component {
                 this.findPostsAndIncrement(0, 1, postId, destination.index - source.index, newPosts)
 
             } else if (destination.index < source.index) {
-                // 4{soure.index}を2{destination.index}の位置に持っていく場合は、前半（2~3）が+1され、4が3の値+1される
-
+                // 4{source.index}を2{destination.index}の位置に持っていく場合は、前半（2~3）が+1され、4が3の値+1される
                 postId = [draggableId]
                 this.findPostsAndIncrement(0, 1, postId, destination.index - source.index, newPosts)
 
@@ -302,10 +303,8 @@ class EditIndexTopic extends Component {
 
             var combinedColumns = deepCopyArrOfObj(this.state.columns)
             var combinedPosts = deepCopyArrOfObj(this.state.posts)
-            // var found = {}
 
-            combinedColumns[source.droppableId] = newColumn
-
+            this.replaceOldWithModified([newColumn], combinedColumns)
             this.replaceOldWithModified(newPosts, combinedPosts)
 
             this.setState({
@@ -325,7 +324,6 @@ class EditIndexTopic extends Component {
         const sourcePosts = deepCopyArrOfObj(origin.posts); // 始めのColumn
         sourcePosts.splice(source.index, 1) 
 
-        var found = {}
         var changed = []
 
         this.findPostsAndIncrement(source.index, sourcePosts.length, sourcePosts, -1, changed)
@@ -351,7 +349,6 @@ class EditIndexTopic extends Component {
         targetPosts.splice(destination.index, 0, draggableId);
 
         this.findPostsAndIncrement(destination.index+1, targetPosts.length, targetPosts, 1, changed) // ここもしかたら最初のargの値違うかも
-
 
         // ここから先は、setStateのための前準備
         var combinedColumns = deepCopyArrOfObj(this.state.columns)
@@ -456,7 +453,7 @@ class EditIndexTopic extends Component {
         const id = columnId;
         const action = "DELETE_COLUMN";
         const title = "コラムの削除";
-        const message = `コラム"${columnTitle}"を削除しますか？`;
+        const message = `コラム 「${columnTitle}」 を削除しますか？`;
         const caution = "";
         const buttonMessage = "削除する";
         this.props.showConfirmation(id, action, title, caution, message, buttonMessage);

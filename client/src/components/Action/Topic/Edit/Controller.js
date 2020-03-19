@@ -49,26 +49,14 @@ class CreatePost extends Component {
     renderStep = () => {
         switch (this.state.step) {
             case 0:
-                // return <Select
-                //         placeholder="トピックを入力..."
-                //         index="1"
-                //         title="トピックを選択してください"
-                //         subTitle="トピック名"
-                //         type="Match"
-                //         content="Topic"
-                //         // data={topics}
-                //         searchByVariable="topicName"
-                //         storage="editTopicName"
-                //         back={this.state.back} 
-                //         setBackward={this.setBackward} 
-                //         setValue={this.setTopic} 
-                //         setStep={this.setStep}
-                //         />
 
                 const postAction = (topic) => {
-                    this.setBackward(false);
-                    this.setStep(1);
-                    this.setTopic(topic);
+                    // めっちゃ早くsuggestionを押した場合はtopicがundefinedになる
+                    if(topic){
+                        this.setBackward(false);
+                        this.setStep(1);
+                        this.setTopic(topic);
+                    }
                 }
 
                 return (
@@ -113,7 +101,6 @@ class CreatePost extends Component {
                         max={6}
                         />
             case 3:
-
                 return <Index
                         back={this.state.back} 
                         setBackward={this.setBackward} 

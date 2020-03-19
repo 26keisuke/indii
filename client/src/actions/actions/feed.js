@@ -34,9 +34,11 @@ export const searchFetching = (type, onSearch) => (dispatch) => {
 }
 
 export const searchTerm = (term) => async (dispatch) => {
+    if(!term) dispatch({type: SEARCH_TERM, payload: {term: "", posts: [], topics: []}})
+
     const url = "/api/feed/search/" + String(term)
     const res = await axios.get(url)
-    dispatch({type: SEARCH_TERM, payload: res.data})
+    dispatch({type: SEARCH_TERM, payload: {...res.data, term}})
 }
 
 export const fetchFeed = () =>  async (dispatch) => {

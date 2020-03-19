@@ -55,6 +55,7 @@ class Content extends Component {
             refImg = post.postImg && post.postImg.image
             if(!refImg){ refImg = post.topicSquareImg.image }
             refTitle = post.postName
+            refContent = post.content
             refLastEdited = post.lastEdited
         } else if((refType === "TOPIC") && (topic.topicName)){
             refId = topic._id
@@ -91,7 +92,7 @@ class Content extends Component {
                                 <Recommend
                                     id={refId}
                                     title={refTitle}
-                                    content={getEditorContent(refContent, 100)}
+                                    content={refContent}
                                     authorImg={creator.photo}
                                     author={creator.userName}
                                     editDate={fmtDate(refLastEdited)}
@@ -104,7 +105,7 @@ class Content extends Component {
                                     img={refImg}
                                     topicName={refTitle}
                                     tags={refTags}
-                                    content={getEditorContent(refContent, 100)}
+                                    content={refContent}
                                     postCount={refCount}
                                     likes={refLikes}
                                 />

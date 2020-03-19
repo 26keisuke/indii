@@ -59,7 +59,7 @@ class Post extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <img src={this.props.post.postImg && this.props.post.postImg.image} style={{
+                            <img src={this.props.post.postImg ? this.props.post.postImg.image : this.props.post.topicSquareImg.image} style={{
                                 width: `38px`,
                                 height: `38px`, 
                                 position: `absolute`, 

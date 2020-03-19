@@ -70,14 +70,6 @@ const ToolWrapper = styled.div`
     }
 `
 
-const onBeforeInput = (event, change, editor) => {
-    console.log("CALLED")
-    console.log(event, "\n", change, "\n", editor)
-    event.preventDefault()
-    return false
-}
-
-
 const TextArea = (props) => {
 
     var autoSave;
@@ -131,8 +123,16 @@ const TextArea = (props) => {
 
     useEffect(() => {
         if(props.content){
+            if(typeof(props.content) === "object"){
+                setValue(props.content.children)
+                return
+            }
             setValue(JSON.parse(props.content).children)
         } else if(props.draftContent){
+            if(typeof(props.draftContent) === "object"){
+                setValue(props.draftContent.children)
+                return
+            }
             setValue(JSON.parse(props.draftContent).children)
         }
 
@@ -167,7 +167,7 @@ const TextArea = (props) => {
     }, [props.readOnly, props.katex, props.url])
 
 
-    const renderElement = useCallback(props => <Element {...props}/>, [])
+    const renderElement = useCallback(props => <Element readOnly={props.readOnly} {...props}/>, [])
     const renderLeaf = useCallback(props => <Leaf {...props}/>, [])
 
     const handleLeave = () => { setAbs(true) }
@@ -185,13 +185,14 @@ const TextArea = (props) => {
             { !props.readOnly && <Waypoint onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
             { !props.readOnly && abs &&
             <ToolbarAbs>
-                <MarkButton format="bold"/>
+                {/* <MarkButton format="bold"/>
                 <MarkButton format="italic"/>
                 <MarkButton format="underline"/>
                 <MarkButton format="code"/>
-                <MarkButton format="superscript"/>
+                <MarkButton format="superscript"/> */}
                 <BlockButton format="heading-one"/>
                 <BlockButton format="heading-two"/>
+                <BlockButton format="code"/>
                 <BlockButton format="block-quote"/>
                 <BlockButton format="numbered-list"/>
                 <BlockButton format="bulleted-list"/>
@@ -201,13 +202,14 @@ const TextArea = (props) => {
             }
             { !props.readOnly &&
             <Toolbar>
-                <MarkButton format="bold"/>
+                {/* <MarkButton format="bold"/>
                 <MarkButton format="italic"/>
                 <MarkButton format="underline"/>
                 <MarkButton format="code"/>
-                <MarkButton format="superscript"/>
+                <MarkButton format="superscript"/> */}
                 <BlockButton format="heading-one"/>
                 <BlockButton format="heading-two"/>
+                <BlockButton format="code"/>
                 <BlockButton format="block-quote"/>
                 <BlockButton format="numbered-list"/>
                 <BlockButton format="bulleted-list"/>
@@ -220,7 +222,7 @@ const TextArea = (props) => {
                     readOnly={props.readOnly ? true : false}
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
-                    placeholder={"ここに入力してください..."}
+                    placeholder={props.readOnly ? "" : "ここに入力してください..."}
                 />
             </EditableWrapper>
         </Slate>
@@ -279,7 +281,7 @@ const insertKatex = (editor, katex) => {
 }
 
 const insertImage = (editor, url) => {
-    Transforms.insertNodes(editor, { type: "image", url, children: [{ text: "" }]})
+    Transforms.insertNodes(editor, { type: "image", url, position: "left", children: [{ text: "" }]})
     Transforms.insertNodes(editor, { type: "paragraph", children: [{ text: "" }]})
 }
 
@@ -309,11 +311,20 @@ const ImageButton = ({handleClick}) => {
     )
 }
 
+const Code = styled.div`
+    width: 100%;
+    font-family: monospace;
+    background-color: #eee;
+    padding: 3px;
+`
+
 const Element = props => {
 
-    const { attributes, children, element } = props
+    const { readOnly, attributes, children, element } = props
 
     switch(element.type){
+        case "code":
+            return <Code {...attributes}>{children}</Code>
         case "block-quote":
             return <blockquote {...attributes}>{children}</blockquote>
         case "bulleted-list":
@@ -329,7 +340,7 @@ const Element = props => {
         case "katex":
             return <Katex {...props}/>
         case "image":
-            return <Image {...props} />
+            return <Image readOnly={readOnly} {...props} />
         default:
             return <p {...attributes}>{children}</p>
     }
@@ -401,6 +412,7 @@ const toggleMark = (editor, format) => {
     if(isActive) {
         Editor.removeMark(editor, format)
     } else {
+        console.log(editor)
         Editor.addMark(editor, format, true)
     }
 }

@@ -62,25 +62,30 @@ class Info extends Component {
                     content={this.props.value["editIndex"] && this.props.value["editIndex"].join(".")}
                 />
                 }
-                <Section
+                { !this.props.zero && 
+                ([<Section
+                    key={"owner"}
                     title={"オーナー"} 
                     hideContent={true}
-                />
-                <Space height={"20px"}/>
+                />,
+                <Space key={"ownerSpace"} height={"20px"}/>,
                 <People
+                    key={"people"}
                     id={id}
                     photo={photo || account}
                     name={userName} 
                     job={comment} 
                     intro={intro}
                     skeleton={!this.props.value["author"]}
-                />
-                <Space height={"30px"}/>
+                />,
+                <Space key={"peopleSpace"} height={"30px"}/>,
                 <Section
+                    key={"date"}
                     title={"作成日"} 
                     content={this.getDate(this.props.value["creationDate"])}
                     width={275}
-                />
+                />])
+                }
                 { this.props.value["lastEdited"] && 
                 ([
                 <Section

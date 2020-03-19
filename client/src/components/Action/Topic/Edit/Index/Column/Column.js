@@ -2,8 +2,11 @@ import React, { Component, } from "react"
 import styled from "styled-components"
 import Post from "../Post/Post"
 import { Droppable, Draggable } from "react-beautiful-dnd"
-import ShowMore from "../../../../../Util/ShowMore"
+
 import { GiHamburgerMenu } from "react-icons/gi"
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+
+// import ShowMore from "../../../../../Util/ShowMore"
 import { Space } from "../../../../../Theme" 
 
 const Container = styled.div`
@@ -44,7 +47,8 @@ const Title = styled.div`
         width: 130px;
         box-sizing: border-box;
         height: 26px;
-        border: none;
+        border: 1px solid #d2d2d2;
+        padding: 0px 3px;
         resize: none;
         text-overflow: ellipsis;
         margin-top: -5px;
@@ -54,7 +58,6 @@ const Title = styled.div`
             outline: none;
             cursor: text;
             overflow: hidden;
-            margin-top: -2px;
         }
         
     }
@@ -72,10 +75,17 @@ const PostList = styled.div`
     }
 `
 
-const ShowMoreWrapper = styled.div`
-    z-index: 1;
-    transform: scale(0.8);
-    margin-right: 18px;
+// const ShowMoreWrapper = styled.div`
+//     z-index: 1;
+//     transform: scale(0.8);
+//     margin-right: 18px;
+// `
+
+const Delete = styled(DeleteOutlineIcon)`
+    margin-left: -1px;
+    margin-right: 10px;
+    margin-top: -5px;
+    cursor: pointer;
 `
 
 const DragArea = styled(GiHamburgerMenu)`
@@ -96,41 +106,41 @@ class InnerList extends Component {
 
 class Column extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            isOpened: false,
-        }
-        this.columnRef = React.createRef()
-    }
+    // constructor(props) {
+    //     super(props)
+    //     this.state = {
+    //         isOpened: false,
+    //     }
+    //     this.columnRef = React.createRef()
+    // }
 
-    componentDidUpdate() {
-        if (this.state.isOpened) {
-            document.addEventListener("mousedown", this.outsideClick)
-        } else {
-            document.removeEventListener("mousedown", this.outsideClick)
-        }
-    }
+    // componentDidUpdate() {
+    //     if (this.state.isOpened) {
+    //         document.addEventListener("mousedown", this.outsideClick)
+    //     } else {
+    //         document.removeEventListener("mousedown", this.outsideClick)
+    //     }
+    // }
 
-    componentWillUnmount() {
-        document.removeEventListener("mousedown", this.outsideClick)
-    }
+    // componentWillUnmount() {
+    //     document.removeEventListener("mousedown", this.outsideClick)
+    // }
 
-    outsideClick = (e) => {
-        if (this.columnRef.current.contains(e.target)) {
-            return
-        }
+    // outsideClick = (e) => {
+    //     if (this.columnRef.current.contains(e.target)) {
+    //         return
+    //     }
 
-        this.setState({
-            isOpened: false,
-        })
-    }
+    //     this.setState({
+    //         isOpened: false,
+    //     })
+    // }
 
-    handleClick = () => {
-        this.setState({
-            isOpened: !this.state.isOpened,
-        })
-    }
+    // handleClick = () => {
+    //     this.setState({
+    //         isOpened: !this.state.isOpened,
+    //     })
+    // }
 
     render() {
         return (
@@ -151,19 +161,20 @@ class Column extends Component {
                         />
                         { this.props.posts.length === 0 
                         ?
-                        <ShowMoreWrapper>
-                            <ShowMore
-                                ref={this.columnRef}
-                                hover={false}
-                                handleClick={this.handleClick}
-                                show={this.state.isOpened}
-                                shadow={false}
-                                left="-157px"
-                                bottom="-38px"
-                                actionName={["このコラムを削除する"]}
-                                action={[() => this.props.handleDelete(this.props.column._id, this.props.column.title)]}
-                            />
-                        </ShowMoreWrapper>
+                        // <ShowMoreWrapper>
+                        //     <ShowMore
+                        //         ref={this.columnRef}
+                        //         hover={false}
+                        //         handleClick={this.handleClick}
+                        //         show={this.state.isOpened}
+                        //         shadow={false}
+                        //         left="-157px"
+                        //         bottom="-38px"
+                        //         actionName={["このコラムを削除する"]}
+                        //         action={[() => this.props.handleDelete(this.props.column._id, this.props.column.title)]}
+                        //     />
+                        // </ShowMoreWrapper>
+                        <Delete onClick={() => this.props.handleDelete(this.props.column._id, this.props.column.title)}/>
                         :
                         <Space width={30}/>
                         }

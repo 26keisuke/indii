@@ -84,12 +84,14 @@ const SliderWrapper = styled.div`
 
     & .slick-prev{
         &:before{
+            font-size: 15px;
             color: ${props => props.theme.primary};
         }
     }
 
     & .slick-next{
         &:before{
+            font-size: 15px;
             color: ${props => props.theme.primary};
         }
     }

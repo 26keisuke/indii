@@ -61,12 +61,6 @@ router.get("/new/topic", (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.get("/search/:term", (req, res) => {
-    console.log(`A TERM "${req.params.term}" HAS BEEN SEARCHED`)
-    res.send("")
-})
-
-
 router.post("/feedback", (req, res) => {
     Post.findById(req.body.id)
     .then(post => {
@@ -97,6 +91,22 @@ router.post("/feedback", (req, res) => {
     .catch(err => {
         console.log(err)
     })
+})
+
+router.get("/search/:term", (req, res) => {
+    const { term } = req.params
+    Post.find({"postName": {$regex: term, $options: "i"}})
+    .sort({"star.counter": -1})
+    .populate("postImg")
+    .then(posts => {
+        Topic.find({"topicName": {$regex: term, $options: "i"}})
+        .populate("squareImg")
+        .populate({path: "posts", options: {limit: 1}})
+        .then(topics => {
+            res.send({posts, topics})
+        })
+    })
+    .catch(err => console.log(err))
 })
 
 

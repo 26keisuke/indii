@@ -51,7 +51,7 @@ class Image extends Component {
 
                 <Preview
                     placeholder={"トピック画面での表示"}
-                    mobile={true}
+                    topic={true}
                     display={squareImg}
                     alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
                 />
@@ -63,7 +63,7 @@ class Image extends Component {
 
                 <Preview
                     placeholder={"トピック画面での表示"}
-                    mobile={true}
+                    topic={true}
                     display={originalSquareImg}
                     alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
                 />
@@ -76,7 +76,6 @@ class Image extends Component {
 
                 <Preview
                     placeholder={"ポスト画面での表示"}
-                    mobile={true}
                     display={rectangleImg}
                     alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
                 />
@@ -88,7 +87,6 @@ class Image extends Component {
 
                 <Preview
                     placeholder={"ポスト画面での表示"}
-                    mobile={true}
                     display={originalRectangleImg}
                     alt="変更が適用された後のウェブ用のトピックの画像プレビュー"
                 />

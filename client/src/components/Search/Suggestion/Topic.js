@@ -72,7 +72,8 @@ class Topic extends Component {
         const { suggestion, url, onHover, handleClick } = this.props
 
         return (
-            <Link key={suggestion._id} to={url} onClick={() => handleClick(suggestion)}>
+            // <Link to={url} onClick={(e) => handleClick(e, suggestion)}>
+            <div onClick={() => handleClick(suggestion)}>
                 <TopicElement hover={onHover}>
                     <img src={suggestion.squareImg.image} alt="検索結果のトピック一覧のメイン画像"/>
                     <TopicName>
@@ -94,7 +95,8 @@ class Topic extends Component {
                         </TopicInfo>
                     </Breakpoint>
                 </TopicElement>
-            </Link>
+            </div>
+            // </Link>
         )
     }
 }

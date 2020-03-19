@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
 
+import { getEditorContent } from "./util"
 
 class TopicRecommend extends Component {
     
@@ -25,7 +25,7 @@ class TopicRecommend extends Component {
                             {/* タイトル */}
                             <h3>{topicName}</h3>
                             {/* コンテンツ */}
-                            <h4>{content}</h4>
+                            <h4>{getEditorContent(content, 100)}</h4>
                             {/* 基礎情報 */}
                             <div>
                                 <div>ポスト数: <p>{postCount}</p></div>
@@ -49,6 +49,7 @@ const TopicInfo = styled.div`
     box-sizing: border-box;
     border-radius: 8px;
     max-width: 440px;
+    background-color: white;
 
     &:hover{
         background-color: ${props => props.theme.hover}

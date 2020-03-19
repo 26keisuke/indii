@@ -9,6 +9,7 @@ import {
 import { 
     FETCH_USER, FETCH_NOTIF, FETCH_CONFIRM,
     SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
+    FETCH_AFTER_TOPIC_LIKE
 } from "../types/types";
 
 export const fetchUser = () => async dispatch => {
@@ -19,6 +20,11 @@ export const fetchUser = () => async dispatch => {
 export const fetchNotif = () => async dispatch => {
     const res = await axios.get("/api/notif");
     dispatch({type: FETCH_NOTIF, payload: res.data})
+}
+
+export const fetchAfterTopicLike = (id, liked) => async dispatch => {
+    const res = await axios.post(`/api/topic/${id}/like`, {like: liked})
+    dispatch({ type: FETCH_AFTER_TOPIC_LIKE, payload: res.data})
 }
 
 export const fetchConfirm = (id, nounce) => async (dispatch) => {

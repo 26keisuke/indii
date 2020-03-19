@@ -184,7 +184,7 @@ class CreatePost extends Component {
                         "初期設定",
                         "プレビュー"
                     ]}
-                    title="既存のポストを編集する"
+                    title="新しいポストを作成する"
                 >
                     {this.renderStep()}
                 </Form>

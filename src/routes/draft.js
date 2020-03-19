@@ -43,10 +43,9 @@ router.post("/upload", (req, res) => {
 
             const now = Date.now()
 
-            User.findById(draft.editCreator)
-            .then(user => {
-                // 一応New出ないことを確認
-                if(draft.type !== "New") {
+            if(draft.type !== "New") {
+                User.findById(draft.editCreator)
+                .then(user => {                
                     // allowEditがfalseの時
                     if((draft.config.allowEdit === false) && (draft.editCreator._id !== req.user.id)){
                         draft.editUploadedDate = now
@@ -63,6 +62,8 @@ router.post("/upload", (req, res) => {
                     Post.findById(draft.editPostId)
                     .then(post => {
 
+                        console.log("HERE")
+
                         if(post.content !== draft.content){post.content = draft.content}
                         if(post.ref !== draft.ref){post.ref = draft.ref}
                         if(post.postName !== draft.postName){post.postName = draft.postName} //まだ何も変更できないが、将来的には変更できるようにしたい
@@ -78,13 +79,16 @@ router.post("/upload", (req, res) => {
 
                         draft.isUploaded = true
 
-                        user.notif.push({timeStamp: now, type: "POST_EDIT", user: req.user.id, post: draft.editPostId, draft: draft._id})
-
                         Topic.findById(post.topic)
                         .then(topicElem => {
 
                             topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST", postName: draft.postName})
-
+                            
+                            if(user){ // type === ZEROの場合はuserがない
+                                user.notif.push({timeStamp: now, type: "POST_EDIT", user: req.user.id, post: draft.editPostId, draft: draft._id})
+                                user.save()
+                            }
+                            
                             topicElem.save()
                             post.save()
                             draft.save()
@@ -94,174 +98,175 @@ router.post("/upload", (req, res) => {
                         })
                     })
                     return
-                }
-            })
-            
-            
-            const imgId = mongoose.Types.ObjectId();
-
-            const { 
-                topic, topicName,
-                postName, postImg,
-                content, ref, tags,
-                config, 
-                topicRectangleImg, topicSquareImg, topicMobileImg } = draft
-
-            if(postImg){
-                new Image({_id: imgId, image: postImg}).save()
-            }
-
-            var newIndex = index.slice()
-            if(addColumn === true) {
-                newIndex[0] = index[0] + 1
-                newIndex[1] = 0
-            } else {
-                newIndex[1] = index[1] + 1
-            }
-
-            const data = {
-                topic: topic,
-                topicName: topicName,
-                topicRectangleImg: topicRectangleImg,
-                topicSquareImg: topicSquareImg,
-                topicMobileImg: topicMobileImg,
-                postName: postName,
-                postImg: postImg ? imgId : undefined,
-                tags: tags,
-                index: newIndex,
-                content: content,
-                ref: ref,
-                creator: req.user.id,
-                creationDate: now,
-                lastEdited: now,
-                config: config,
-            }
-
-            const post = new Post(data)
-
-            post.contribution.push({
-                timeStamp: now,
-                user: req.user.id
-            })
-
-            post.save()
-            .then(newPost => {
-
-
-                User.findById(req.user.id)
-                .then(user => {
-                    user.post.push(newPost._id)
-                    user.save()
                 })
 
+            } else {
+            
+                const imgId = mongoose.Types.ObjectId();
 
-                Topic.findById(topic).populate("posts")
-                .then(topicElem => {
+                const { 
+                    topic, topicName,
+                    postName, postImg,
+                    content, ref, tags,
+                    config, 
+                    topicRectangleImg, topicSquareImg, topicMobileImg } = draft
 
-                    console.log("********UPDATING TOPICS********")
+                // if(postImg){
+                //     new Image({_id: imgId, image: postImg.image}).save()
+                // }
 
-                    if(addColumn) {
+                var newIndex = index.slice()
+                if(addColumn === true) {
+                    newIndex[0] = index[0] + 1
+                    newIndex[1] = 0
+                } else {
+                    newIndex[1] = index[1] + 1
+                }
 
-                        const columnId = mongoose.Types.ObjectId()
-                        const threshold = index[0] + 1
+                const data = {
+                    topic: topic,
+                    topicName: topicName,
+                    topicRectangleImg: topicRectangleImg,
+                    topicSquareImg: topicSquareImg,
+                    topicMobileImg: topicMobileImg,
+                    postName: postName,
+                    postImg: postImg ? imgId : undefined,
+                    tags: tags,
+                    index: newIndex,
+                    content: content,
+                    ref: ref,
+                    creator: req.user.id,
+                    creationDate: now,
+                    lastEdited: now,
+                    config: config,
+                }
 
-                        // topicElem.columnをupdate
-                    
-                        for (var k in topicElem.column) {
-                            if(topicElem.column[k].index >= threshold){
-                                topicElem.column[k].index = topicElem.column[k].index + 1
-                            }
-                        }
+                const post = new Post(data)
 
-                        const newColumn = {
-                            _id: columnId,
-                            index: threshold,
-                            title: postName,
-                            posts: []
-                        }
-                        newColumn.posts.push(newPost)
+                post.contribution.push({
+                    timeStamp: now,
+                    user: req.user.id
+                })
 
-                        topicElem.column.splice(threshold, 0, newColumn)
+                post.save()
+                .then(newPost => {
 
-                        // topicElem.column.push(newColumn) <- これだと、順番がそろわない（columnは順番がそろわなくてはいけない）
 
-                        // topicElem.postsをupdate
+                    User.findById(req.user.id)
+                    .then(user => {
+                        user.post.push(newPost._id)
+                        user.save()
+                    })
 
-                        var promises = []
 
-                        for (var l in topicElem.posts) {
-                            if(topicElem.posts[l].index[0] >= threshold) {
-                                promises.push(
-                                    Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.0": 1}})
-                                )
-                            }
-                        }
+                    Topic.findById(topic).populate("posts")
+                    .then(topicElem => {
 
-                        Promise.all(promises)
-                        .then(() => {
-                            // 注意: このthenの中にこいつらをいれないとupdateは反映されない
+                        console.log("********UPDATING TOPICS********")
 
-                            topicElem.posts.push(newPost)
+                        if(addColumn) {
 
-                            // orderをupdate
+                            const columnId = mongoose.Types.ObjectId()
+                            const threshold = index[0] + 1
 
-                            topicElem.order.splice(threshold, 0, columnId)
-
-                            // postCountをアップデート
-
-                            topicElem.postCount++;
-
-                            topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST"})
-
-                            topicElem.save() 
-                        })
-
-                    } else {
-
-                        const insertColumn = index[0]
-                        const insertIndex = index[1] + 1
-
-                        // topicElem.postsをupdate
-
-                        var promises = []
-
-                        for (var l in topicElem.posts) {
-                            if((topicElem.posts[l].index[0] === insertColumn) && (topicElem.posts[l].index[1] >= insertIndex)) {
-                                // Warning: topicElemから.save()してもできないので、Postをもう一回取ってくるようにしている
-                                promises.push(
-                                    Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.1": 1}})
-                                )   
-                            }
-                        }
-
-                        Promise.all(promises)
-                        .then(() => {
-                            topicElem.posts.push(newPost)
-
-                            // topicElem.column.postsをupdate
-
-                            for (var m in topicElem.column) {
-                                if(topicElem.column[m].index === insertColumn) {
-                                    topicElem.column[m].posts.splice(insertIndex, 0, newPost)
+                            // topicElem.columnをupdate
+                        
+                            for (var k in topicElem.column) {
+                                if(topicElem.column[k].index >= threshold){
+                                    topicElem.column[k].index = topicElem.column[k].index + 1
                                 }
                             }
 
-                            // postCountをアップデート
+                            const newColumn = {
+                                _id: columnId,
+                                index: threshold,
+                                title: postName,
+                                posts: []
+                            }
+                            newColumn.posts.push(newPost)
 
-                            topicElem.postCount++;
-                            
-                            topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST", postName: postName})
+                            topicElem.column.splice(threshold, 0, newColumn)
 
-                            topicElem.save()
-                        })
-                    }
+                            // topicElem.column.push(newColumn) <- これだと、順番がそろわない（columnは順番がそろわなくてはいけない）
 
-                    draft.isUploaded = true
-                    draft.save()
-                    .then(res.send("Success: /api/draft/upload"))
+                            // topicElem.postsをupdate
 
+                            var promises = []
+
+                            for (var l in topicElem.posts) {
+                                if(topicElem.posts[l].index[0] >= threshold) {
+                                    promises.push(
+                                        Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.0": 1}})
+                                    )
+                                }
+                            }
+
+                            Promise.all(promises)
+                            .then(() => {
+                                // 注意: このthenの中にこいつらをいれないとupdateは反映されない
+
+                                topicElem.posts.push(newPost)
+
+                                // orderをupdate
+
+                                topicElem.order.splice(threshold, 0, columnId)
+
+                                // postCountをアップデート
+
+                                topicElem.postCount++;
+
+                                topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST", postName: newPost.postName})
+
+                                topicElem.save() 
+                            })
+
+                        } else {
+
+                            const insertColumn = index[0]
+                            const insertIndex = index[1] + 1
+
+                            // topicElem.postsをupdate
+
+                            var promises = []
+
+                            for (var l in topicElem.posts) {
+                                if((topicElem.posts[l].index[0] === insertColumn) && (topicElem.posts[l].index[1] >= insertIndex)) {
+                                    // Warning: topicElemから.save()してもできないので、Postをもう一回取ってくるようにしている
+                                    promises.push(
+                                        Post.update({_id: topicElem.posts[l]._id}, {$inc: {"index.1": 1}})
+                                    )   
+                                }
+                            }
+
+                            Promise.all(promises)
+                            .then(() => {
+                                topicElem.posts.push(newPost)
+
+                                // topicElem.column.postsをupdate
+
+                                for (var m in topicElem.column) {
+                                    if(topicElem.column[m].index === insertColumn) {
+                                        topicElem.column[m].posts.splice(insertIndex, 0, newPost)
+                                    }
+                                }
+
+                                // postCountをアップデート
+
+                                topicElem.postCount++;
+                                
+                                topicElem.activity.push({timeStamp: now, user: req.user.id, type: "CREATE_POST", postName: postName})
+
+                                topicElem.save()
+                            })
+                        }
+
+                        draft.isUploaded = true
+                        draft.save()
+                        .then(res.send("Success: /api/draft/upload"))
+
+                    })
                 })
-            })
+            }
         })
         .catch(err => {
             console.log(err)
@@ -464,7 +469,7 @@ router.post("/:id/ref", (req, res) => {
     .then(draft => {
         draft.ref.push(req.body.ref)
         draft.save()
-        .then(res.send("Success: /api/draft/:id/ref"))
+        .then(res.send({id: draft._id, ref:draft.ref}))
     })
     .catch(err => {
         console.log(err)

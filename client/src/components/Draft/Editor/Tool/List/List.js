@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
+import PropTypes from "prop-types"
 
 import * as actions from "../../../../../actions"
 import { jpMapping } from "../Data/data"
@@ -144,7 +145,7 @@ class List extends Component {
     }
 
     renderRef = () => {
-        const res = this.props.reference
+        const res = this.props.reference && this.props.reference
             .filter(ref => !ref.isDeleted)
             .map((ref, index) => {
                 return(
@@ -182,6 +183,10 @@ class List extends Component {
             </ListBox>
         )
     }
+}
+
+List.propTypes = {
+    reference: PropTypes.arrayOf(PropTypes.object),
 }
 
 export default connect(null, actions)(withRouter(List))

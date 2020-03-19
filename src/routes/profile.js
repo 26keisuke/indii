@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get("/:userId", (req, res) => {
     User.findById(req.params.userId)
-    .populate("post")
+    .populate({path: "post", populate: [{path: "postImg"},{path: "topicSquareImg"}]})
     .populate("followers.user")
     .populate("follows.user")
     .populate({path: "likedPost.post", populate: [{path: "postImg"}, {path: "topicSquareImg"}]})

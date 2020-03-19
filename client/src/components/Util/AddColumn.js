@@ -18,9 +18,14 @@ class AddColumn extends Component {
         this.props.setValue("")
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.postAction(true, this.props.action, this.props.value)
+    }
+
     render () {
         return (
-            <form onSubmit={(e) => {e.preventDefault(); this.props.postAction(this.props.action, this.props.id, this.props.value)}}>
+            <form onSubmit={(e) => this.handleSubmit(e)}>
                 <AddColumnInput 
                     onChange={(e) => this.props.setValue(e.target.value)}
                     type="text" 

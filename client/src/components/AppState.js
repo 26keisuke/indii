@@ -123,7 +123,7 @@ class AppState extends Component {
                     this.props.revertImg(true); break
     
                 case "ADD_COLUMN":
-                    this.props.addColumn(value); break
+                    this.props.addColumn(value); this.props.updateMessage("success", "コラムを削除しました。"); break
     
                 case "REVERT_COLUMN":
                     this.props.revertColumn(true); break
