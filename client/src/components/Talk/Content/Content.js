@@ -6,6 +6,7 @@ import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import Skeleton from "react-loading-skeleton"
 import * as actions from "../../../actions"
+import TextField from "@material-ui/core/TextField"
 
 import ShowMore from "../../Util/ShowMore"
 import CommentBox from "./Comment/Comment"
@@ -164,7 +165,18 @@ class Content extends Component {
                             {
                             flag
                             ?
-                            <Description>{description}</Description>
+                            // <Description>{description}</Description>
+                            <Description>
+                                <TextField
+                                    id="description"
+                                    multiline
+                                    defaultValue={description}
+                                    variant="outlined"
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Description>
                             :
                             <S1Wrapper><Skeleton width={480} count={3} height={16}/></S1Wrapper>
                             }
@@ -266,6 +278,19 @@ const Description = styled.p`
     color: #555555;
     margin-top: 20px;
     margin-bottom: 20px;
+    cursor: default;
+
+    & > div {
+        width: 100%;
+    }
+
+    & .MuiOutlinedInput-multiline{
+        padding: 0px;
+    }
+
+    & .MuiOutlinedInput-notchedOutline{
+        border: none;
+    }
 `
 
 const Box = styled.div`

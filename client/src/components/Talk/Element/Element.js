@@ -73,7 +73,7 @@ const Text = styled.h3`
     color: #666666;
     margin: 10px 0px;
     max-height: 67px;
-    overflow: scroll;
+    overflow: hidden;
 `
 
 const Box = styled.div`
