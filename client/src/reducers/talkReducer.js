@@ -3,6 +3,8 @@ import {
     SELECT_TALK,
     CREATE_COMMENT,
     CREATE_TALK,
+    EDIT_TALK_DESC,
+    DELETE_TALK
 } from "../actions/types/types"
 
 import update from "immutability-helper"
@@ -13,9 +15,19 @@ export default function talkReducer(state={
     selected: {},
 }, action) {
 
+    var index
     var newObj
 
     switch(action.type) {
+        case EDIT_TALK_DESC:
+            index = findArrObjIndex(state.fetched, "_id", action.payload.id)
+            newObj = update(state, {fetched: {[index]: {description: {$set: action.payload.value}}}})
+            newObj = update(newObj, {selected: {description: {$set: action.payload.value}}})
+            return newObj
+        case DELETE_TALK:
+            index = findArrObjIndex(state.fetched, "_id", action.payload.id)
+            newObj = update(state, {fetched: {$splice: [[index, 1]] }})
+            return newObj
         case CREATE_TALK:
             var newArr = []
             Object.assign(newArr, state.fetched)
@@ -23,7 +35,7 @@ export default function talkReducer(state={
             newObj = update(state, { fetched: { $set: newArr }})
             return newObj
         case CREATE_COMMENT:
-            const index = findArrObjIndex(state.fetched, "_id", action.payload._id)
+            index = findArrObjIndex(state.fetched, "_id", action.payload._id)
             newObj = update(state, {fetched: {[index]: {$merge: action.payload}}})
             // selectedの中身もアップデート
             if(state.selected._id === action.payload._id){

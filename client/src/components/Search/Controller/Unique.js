@@ -78,8 +78,19 @@ class Unique extends Component {
         }
     }
 
+    // これsuggestionが出る前にsubmitしたら仮にduplicateであったとしても許可されてしまう
     handleUniqueSubmit = (e) => {
         e.preventDefault();
+
+        if (
+            this.props.theme === "POST" && 
+            this.state.value !== this.props._post[0]
+        ) return
+
+        if (
+            this.props.theme === "TOPIC" && 
+            this.state.value !== this.props._topic[0]
+        ) return
 
         if(this.state.value) {
             if(this.topicFlag()) {

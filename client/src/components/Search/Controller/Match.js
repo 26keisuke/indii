@@ -63,7 +63,7 @@ class Match extends Component {
             e.preventDefault();
 
             const suggestion = this.props.theme === "TOPIC" ? this.props._topic : this.props._post
-            if(typeof(suggestion[0]) === "string") return
+            if(suggestion.length === 0 || typeof(suggestion[0]) === "string") return
 
             if(this.props.theme === "TOPIC"){
                 this.props.postAction(this.props._topic[0])

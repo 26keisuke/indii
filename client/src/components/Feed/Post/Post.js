@@ -263,7 +263,8 @@ const PostMiddle = styled.div`
 
     /* title */
     & > p {
-        font-size: 16px;
+        font-size: 17px;
+        font-weight: bold;
         color: #1C1C1C;
         margin-bottom: 5px;
     }

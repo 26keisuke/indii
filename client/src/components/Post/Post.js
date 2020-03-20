@@ -25,7 +25,6 @@ class Post extends Component {
     
     componentDidMount() {
         this.props.fetchPost(this.props.match.params.id)
-
     }
 
     renderLeft = () => {
@@ -54,9 +53,7 @@ class Post extends Component {
 
         return(
             <div>
-                <Image
-                    id={this.props.post.fetched.topic && this.props.post.fetched.topic._id}
-                />
+                <Image/>
                 {/* <Navigation/> */}
                 <Slider/>
                 <TitleWrapper>
@@ -101,6 +98,7 @@ class Post extends Component {
                         authorImg={recom.creator[0].photo}
                         author={recom.creator[0].userName}
                         editDate={fmtDate(recom.lastEdited)}
+                        topicName={recom.topicName}
                         postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
                     />
                 )

@@ -4,6 +4,7 @@ const { Schema } = mongoose
 
 const talkSchema = new Schema({
     timeStamp: Date,
+    isDeleted: {type: Boolean, default: false},
     title: String,
     description: String,
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

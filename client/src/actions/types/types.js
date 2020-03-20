@@ -52,6 +52,8 @@ export const CREATE_TALK = "CREATE_TALK"
 export const FETCH_TALK = "FETCH_TALK"
 export const CREATE_COMMENT = "CREATE_COMMENT"
 export const SELECT_TALK = "SELECT_TALK"
+export const EDIT_TALK_DESC = "EDIT_TALK_DESC"
+export const DELETE_TALK = "DELETE_TALK"
 
 // Feed
 export const FETCH_FEED = "FETCH_FEED"

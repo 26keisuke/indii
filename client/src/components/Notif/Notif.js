@@ -40,12 +40,24 @@ class Notif extends Component {
     renderLeftContent() {
         return(
             <div>
-                <Border bottom={true}/>
-                { this.props.auth.info.notif.map(notif => (
-                    <Element 
-                        notif={notif}
-                    />
-                ))
+                
+                { this.props.auth.info.notif.map((notif,index) => {
+                    if(index === 0){
+                        return ([
+                            <Border key={"borderTopNotif"} bottom={true}/>,
+                            <Element 
+                                key={index+notif.timeStamp}
+                                notif={notif}
+                            />
+                        ])
+                    }
+                    return (
+                        <Element 
+                            key={index+notif.timeStamp}
+                            notif={notif}
+                        />
+                    )
+                })
                 }
             </div>
         )

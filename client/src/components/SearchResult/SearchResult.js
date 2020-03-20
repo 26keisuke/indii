@@ -55,6 +55,7 @@ class SearchResult extends Component {
                         search={true}
                         topic={post.topicName}
                         title={post.postName}
+                        content={post.content}
                         count={post.star.counter}
                         date={post.creationDate}
                         img={sample}

@@ -8,8 +8,24 @@ import {
     CREATE_TALK,
     FETCH_TALK,
     CREATE_COMMENT,
-    SELECT_TALK
+    SELECT_TALK,
+    EDIT_TALK_DESC,
+    DELETE_TALK
 } from "../types/types";
+
+export const deleteTalk = (id) => async dispatch => {
+    const url = `/api/talk/${id}/delete`
+    const res = await axios.post(url)
+    dispatch({type: DELETE_TALK, payload: {id}})
+    dispatch(updateMessage("success", "トークを削除しました。"))
+}
+
+export const editTalkDesc = (id, value) => async dispatch => {
+    const url = `/api/talk/${id}/edit`
+    const res = await axios.post(url, {value})
+    dispatch({type: EDIT_TALK_DESC, payload: {id, value}})
+    dispatch(updateMessage("success", "トークを編集しました。"))
+}
 
 export const createTalk = (id, type, title, content) => async (dispatch) => {
     const res = await axios.post("/api/talk", {id, type, title, content})

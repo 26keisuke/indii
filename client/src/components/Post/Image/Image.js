@@ -6,16 +6,18 @@ import { Link } from "react-router-dom"
 
 import { FaHashtag } from "react-icons/fa"
 
+import { getEditorContent } from "../../Util/util"
+
 class Image extends Component {
 
     render () {
 
         if(this.props.post.fetched.topic) {
 
-            const { topicName, tags, rectangleImg } = this.props.post.fetched.topic
+            const { _id, topicName, tags, rectangleImg, posts } = this.props.post.fetched.topic
 
             return (
-                <Link to={`/topic/${this.props.id}`}>
+                <Link to={`/topic/${_id}`}>
                     <ImageBox>
                         <Overlay/>
                         <Container src={rectangleImg.image}/>
@@ -30,7 +32,7 @@ class Image extends Component {
                             }
                         </Tag>
                         <Title>{topicName}</Title>
-                        <Content>桶狭間の戦い（おけはざまのたたかい）は、日本の戦国時代の永禄3年5月19日（1560年6月12日）に尾張国桶狭間で行われた。</Content>
+                        <Content>{getEditorContent(posts[0].content, 100)}</Content>
                     </ImageBox>
                 </Link>
             )

@@ -2,7 +2,6 @@ import React, { Component } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 
-// import Recommend from "../../Util/Recommend"
 import Topic from "../../SearchResult/Topic/Topic"
 
 class Trend extends Component {
@@ -32,9 +31,6 @@ class Trend extends Component {
                     <Topic/>
                     <Topic/>
                     <Topic/>
-                    {/* <Recommend/>
-                    <Recommend/>
-                    <Recommend/> */}
                 </div>
                 }
             </div>

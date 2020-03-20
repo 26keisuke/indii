@@ -195,7 +195,7 @@ class TopicPage extends Component {
         const titleName = topicName || " "
 
         const descriptionPost = posts[0] || {}
-        const description = getEditorContent(descriptionPost.content, 100) || `${topicName}に関する情報です。`
+        const description = getEditorContent(descriptionPost.content) || `${topicName}に関するトピックです。`
 
         return (
             <TopicBox>
@@ -265,7 +265,7 @@ class TopicPage extends Component {
                 </div>
                 }
 
-                <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
+                <Space height={"500px"} backgroundColor={"#f9f9f9"}/>
 
             </TopicBox>
         )

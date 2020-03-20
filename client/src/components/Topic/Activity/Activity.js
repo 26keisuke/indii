@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from "react"
 import styled from "styled-components"
 import { IoMdDocument } from "react-icons/io"
-import { FaHashtag } from "react-icons/fa"
+import StarIcon from '@material-ui/icons/Star';
 
 import People from "../../People/People"
 
@@ -12,7 +12,7 @@ import { arrObjLookUp, fmtDate } from "../../Util/util"
 class Element extends PureComponent {
     render() {
 
-        const { author, index, lastEdited, tags, postName } = this.props
+        const { star, author, index, lastEdited, tags, postName } = this.props
 
         return (
             <Post>
@@ -25,15 +25,21 @@ class Element extends PureComponent {
                 <Content>
                     <h3>
                         { tags.map(tag => 
-                            <div key={tag}><FaHashtag/> {tag}</div>
+                            <div key={tag}>#{tag}</div>
 
                         )}
                     </h3>
                     <h2>{postName}</h2>
-                    <Date>
-                        作成日:
-                        <p>{fmtDate(lastEdited)}</p>
-                    </Date>
+                    <Bottom>
+                        <Star>
+                            <StarIcon/>
+                            {star}
+                        </Star>
+                        <Date>
+                            作成日:
+                            <p>{fmtDate(lastEdited)}</p>
+                        </Date>
+                    </Bottom>
                     <PeopleWrapper>
                         <People
                             id={author._id}
@@ -126,6 +132,7 @@ class Activity extends Component {
                         postName={post.postName}
                         author={post.creator}
                         lastEdited={post.lastEdited}
+                        star={post.star.counter}
                     />
                 )
             }
@@ -239,7 +246,6 @@ const ActionDate = styled.div`
 
 const Date = styled.div`
     display: flex;
-    margin-bottom: 10px;
     color: #555555;
 
     & > p {
@@ -350,6 +356,27 @@ const Right = styled.div`
     & > div:nth-child(1){
         font-size: 14px;
         margin-bottom: 10px;
+    }
+`
+
+const Bottom = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    font-size: 11px;
+    align-items: center;
+`
+
+const Star = styled.div`
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+
+    & > svg {
+        width: 13px;
+        height: 13px;
+        margin-right:3px;
+        color: ${props => props.theme.secondary};
     }
 `
 

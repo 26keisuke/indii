@@ -40,7 +40,7 @@ const ToolbarAbs = styled(Toolbar)`
     top: 66px;
     box-shadow: 1px 1px 10px #d2d2d2;
     left: 50%;
-    z-index: 12;
+    z-index: 11;
     transform: translate(-50%, 0);
     background-color: white;
 `
@@ -173,6 +173,8 @@ const TextArea = (props) => {
     const handleLeave = () => { setAbs(true) }
     const handleEnter = () => { setAbs(false) }
 
+    const isZero = props.type === "Zero"
+
     return (
         <Slate 
             editor={editor} 
@@ -183,7 +185,7 @@ const TextArea = (props) => {
             }}
         >
             { !props.readOnly && <Waypoint onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
-            { !props.readOnly && abs &&
+            { !isZero && !props.readOnly && abs &&
             <ToolbarAbs>
                 {/* <MarkButton format="bold"/>
                 <MarkButton format="italic"/>
@@ -200,7 +202,7 @@ const TextArea = (props) => {
                 <ImageButton handleClick={(e) => imageClick(e)}/>
             </ToolbarAbs>
             }
-            { !props.readOnly &&
+            { !isZero && !props.readOnly &&
             <Toolbar>
                 {/* <MarkButton format="bold"/>
                 <MarkButton format="italic"/>
@@ -482,6 +484,8 @@ const isImageUrl = url => {
 
 function mapStateToProps({draft}){
     return {
+        type: draft.selected.type,
+
         draftId: draft.selected._id,
         draftContent: draft.selected.content,
         

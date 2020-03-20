@@ -72,6 +72,8 @@ const Text = styled.h3`
     font-size: 11px !important;
     color: #666666;
     margin: 10px 0px;
+    max-height: 67px;
+    overflow: scroll;
 `
 
 const Box = styled.div`

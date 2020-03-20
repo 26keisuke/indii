@@ -16,7 +16,7 @@ import {
 import { cancelOnMultipleSearch } from "../util"
 
 export const fetchPost = (id) => async (dispatch) => {
-    const res = await axios.get(`/api/post/${String(id)}`)
+    const res = await axios.get(`/api/post/${id}`)
     dispatch({type: FETCH_POST, payload: res.data})
 }
 

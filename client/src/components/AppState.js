@@ -157,7 +157,12 @@ class AppState extends Component {
 
                 case "DRAFT_ADD_KATEX":
                     this.props.draftAddKatex(value); break;
+                
+                case "TALK_EDIT":
+                    this.props.editTalkDesc(id, value); break
 
+                case "TALK_DELETE":
+                    this.props.deleteTalk(id); break
                 // ======== logIn系 ==========
     
                 case "SIGN_UP":

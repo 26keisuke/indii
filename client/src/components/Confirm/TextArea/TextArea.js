@@ -1,8 +1,15 @@
-import React from "react"
+import React, {useEffect} from "react"
 import TextField from "@material-ui/core/TextField"
 import styled from "styled-components"
 
-const TalkTitle = (props) => {
+const ConfirmTextField = (props) => {
+
+    useEffect(() => {
+        if(props.init){
+            props.init()
+        }
+    }, [])
+
     return (
         <TextWrapper>
             <TextField 
@@ -27,4 +34,4 @@ const TextWrapper = styled.div`
     }
 `
 
-export default TalkTitle
+export default ConfirmTextField

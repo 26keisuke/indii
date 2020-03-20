@@ -5,15 +5,15 @@ import { GoComment } from "react-icons/go"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import Skeleton from "react-loading-skeleton"
-
 import * as actions from "../../../actions"
 
+import ShowMore from "../../Util/ShowMore"
 import CommentBox from "./Comment/Comment"
 import Element from "./Element/Element"
 import Recommend from "../../Util/Recommend"
 import TopicRecommend from "../../Util/TopicRecommend"
 
-import { fmtDate, getEditorContent } from "../../Util/util"
+import { fmtDate } from "../../Util/util"
 
 import { Space } from "../../Theme"
 
@@ -23,7 +23,56 @@ class Content extends Component {
         super(props)
         this.state = {
             value: "",
+            isOpened: false,
         }
+        this.moreRef = React.createRef()
+    }
+
+    componentDidUpdate() {
+        if (this.state.isOpened) {
+            document.addEventListener("mousedown", this.outsideClick)
+        } else {
+            document.removeEventListener("mousedown", this.outsideClick)
+        }
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.outsideClick)
+    }
+
+    outsideClick = (e) => {
+        if(this.moreRef.current.contains(e.target)) {
+            return
+        }
+
+        this.setState({isOpened: false})
+    }
+
+    handleEdit = () => {
+        this.setState({isOpened: false})
+
+        const id = this.props.talk._id;
+        const action = "TALK_EDIT";
+        const title = "トークを編集する"
+        const message = "";
+        const caution = "";
+        const buttonMessage = "変更する";
+        const value = this.props.talk.description
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage, "", value);
+        this.props.enableGray();
+    }
+
+    handleDelete = () => {
+        this.setState({isOpened: false})
+
+        const id = this.props.talk._id;
+        const action = "TALK_DELETE";
+        const title = "トークを削除する"
+        const message = "このトークを削除してよろしいですか";
+        const caution = "";
+        const buttonMessage = "削除する";
+        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        this.props.enableGray();
     }
 
     handleSubmit = (e) => {
@@ -36,7 +85,7 @@ class Content extends Component {
 
     render() {
 
-        var refId, refImg, refTitle, refTags, refContent, refCount, refLikes, refLastEdited;
+        var refId, refImg, refTitle, refTags, refContent, refCount, refLikes, refLastEdited, refTopicName;
 
         const { 
             creator,
@@ -57,6 +106,7 @@ class Content extends Component {
             refTitle = post.postName
             refContent = post.content
             refLastEdited = post.lastEdited
+            refTopicName = post.topicName
         } else if((refType === "TOPIC") && (topic.topicName)){
             refId = topic._id
             refImg = topic.squareImg.image
@@ -97,6 +147,7 @@ class Content extends Component {
                                     author={creator.userName}
                                     editDate={fmtDate(refLastEdited)}
                                     postImg={refImg}
+                                    topicName={refTopicName}
                                 />
                             }
                             { refType === "TOPIC" &&
@@ -127,6 +178,19 @@ class Content extends Component {
                                     <AiOutlineLike/>
                                     120
                                 </div> */}
+                                { this.props.auth.info._id === creator._id &&
+                                <ShowMoreWrapper>
+                                    <ShowMore
+                                        ref={this.moreRef}
+                                        handleClick={() => this.setState({ isOpened: !this.state.isOpened })}
+                                        show={this.state.isOpened} 
+                                        left={"-162px"} 
+                                        bottom={"19px"} 
+                                        actionName={["このトークを編集する", "このトークを削除する"]}
+                                        action={[this.handleEdit, this.handleDelete]}
+                                    />
+                                </ShowMoreWrapper>
+                                }
                             </Bottom>
                             }
 
@@ -171,6 +235,11 @@ class Content extends Component {
     }
 }
 
+const ShowMoreWrapper = styled.div`
+    position: absolute;
+    right: -26px;
+`
+
 const S1Wrapper = styled.div`
     & span {
         margin-bottom: 6px;
@@ -200,7 +269,7 @@ const Description = styled.p`
 `
 
 const Box = styled.div`
-    width: 49%;
+    width: 50%;
     padding: 40px;
     position: fixed;
     overflow-y: scroll;
@@ -231,6 +300,7 @@ const Bottom = styled.div`
     margin-right: 20px;
     margin-left: 3px;
     font-size: 12px;
+    position: relative;
 
     & > div {
 

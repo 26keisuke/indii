@@ -104,7 +104,7 @@ class DraftNavigation extends Component {
                     <meta name="keywords" content="下書き,新規作成,編集,ポスト"/>
                 </Helmet>
 
-                <Border bottom={true}/>
+                
                 { ((this.props.draft.nounce === this.state.id) || (counter > 0)) 
                 ? "" 
                 : 
@@ -116,7 +116,16 @@ class DraftNavigation extends Component {
                 }
                 {
                     this.props.draft.onEdit
-                        .map(elem => {
+                        .map((elem,index) => {
+                            if(index === 0){
+                                return ([
+                                    <Border key={"borderTopDraft"} bottom={true}/>,
+                                    <Draft
+                                        key={elem._id}
+                                        draft={elem}
+                                    />
+                                ])
+                            }
                             return (
                                 <Draft
                                     key={elem._id}

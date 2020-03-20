@@ -12,7 +12,7 @@ import Stepper from '@material-ui/core/Stepper';
 
 import * as actions from "../../actions"
 
-import TalkTitle from "../Talk/Confirm/Title"
+import ConfirmTextArea from "./TextArea/TextArea"
 import TalkPreview from "../Talk/Confirm/Preview"
 import Report from "../Feed/Action/Report"
 import AddColumn from "../Util/AddColumn"
@@ -391,7 +391,7 @@ class Confirm extends Component {
             case "ADD_TALK_REF":
             case "ADD_TALK":
                 return (
-                    <TalkTitle
+                    <ConfirmTextArea
                         title={action === "ADD_TALK" ? "タイトル" : action === "ADD_TALK_DESC" ? "概要" : "参照を追加"}
                         value={this.state.value}
                         textarea={action === "ADD_TALK_DESC"}
@@ -414,6 +414,16 @@ class Confirm extends Component {
                     <DraftImage
                         value={this.state.value}
                         handleChange={this.setValue}
+                    />
+                )
+            case "TALK_EDIT":
+                return (
+                    <ConfirmTextArea
+                        title={"トークの説明"}
+                        init={() => this.setState({value: this.props.update.confirmation.value})}
+                        value={this.state.value}
+                        textarea={true}
+                        handleChange={(e) => this.setState({value: e.target.value})}
                     />
                 )
             default:

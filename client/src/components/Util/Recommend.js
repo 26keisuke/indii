@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton"
 
 import { getEditorContent } from "./util"
 
+// topicnameを小さくすることで、よりpostnameをわかりやすくしようと思う
 class Recommend extends Component {
 
     render () {
@@ -24,7 +25,7 @@ class Recommend extends Component {
                             ? 
                             <div>
                                 <p>{this.props.author}</p>
-                                <p>{this.props.editDate}</p>
+                                <p>{this.props.topicName} ・ {this.props.editDate}</p> 
                             </div>
                             :
                             <div>

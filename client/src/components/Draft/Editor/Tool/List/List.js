@@ -51,6 +51,7 @@ const RefSection = styled.div`
 
         p:nth-child(1) {
             margin-right: 10px;
+            white-space: nowrap;
         }
     }
 `

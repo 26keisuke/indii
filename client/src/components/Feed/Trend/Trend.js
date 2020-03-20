@@ -26,6 +26,7 @@ class Trend extends Component {
                         authorImg={recom.creator[0].photo}
                         author={recom.creator[0].userName}
                         editDate={fmtDate(recom.lastEdited)}
+                        topicName={recom.topicName}
                         postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
                     />
                 )

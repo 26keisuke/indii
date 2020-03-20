@@ -203,7 +203,7 @@ class Setting extends Component {
         var { editLastEditedAuthor, isApproved } = draft
         // var { editLastEdited, editLastEditedAuthor, editUploadedDate } = draft
         // var { topicName, tags, topicContent, postCount, likes } = topic
-        var { lastEdited } = post
+        var { lastEdited, topicName } = post
         var afterReference = draft.ref
         var beforeReference = draft.editRef
 
@@ -355,6 +355,7 @@ class Setting extends Component {
                             authorImg={creator.photo}
                             author={creator.userName}
                             editDate={fmtDate(lastEdited)}
+                            topicName={topicName}
                             postImg={nowPostImg.image || topicSquareImg.image}
                         />
 

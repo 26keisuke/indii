@@ -8,7 +8,7 @@ import User from "../models/User"
 const router = express.Router()
 
 router.get("/", (req, res) => {
-    Talk.find({}).sort({timeStamp: -1}).limit(10)
+    Talk.find({isDeleted: {$ne: true}}).sort({timeStamp: -1}).limit(10)
     .populate("creator")
     .populate("comments.user")
     .populate({path: "post", populate: [{path: "postImg"}, {path: "topicSquareImg"}]})
@@ -91,5 +91,22 @@ router.post("/:talkId", (req, res) => {
     })
 })
 
+router.post("/:talkId/delete", (req, res) => {
+    Talk.findById(req.params.talkId)
+    .then(talk => {
+        talk.isDeleted = true
+        talk.save()
+        res.send("Success")
+    })
+})
+
+router.post("/:talkId/edit", (req, res) => {
+    Talk.findById(req.params.talkId)
+    .then(talk => {
+        talk.description = req.body.value
+        talk.save()
+        res.send("Success")
+    })
+})
 
 export default router
