@@ -72,11 +72,10 @@ p {
 }
 
 blockquote{
-    border-left: 2px solid #ddd;
+    border-left: 2px solid #333A49;
     margin-left: 0;
     margin-right: 0;
     padding-left: 10px;
-    color: #aaa;
     font-style: italic;
 }
 

@@ -5,7 +5,6 @@ import { Collapse } from 'react-collapse';
 import { connect } from "react-redux"
 import axios from "axios"
 import equal from "deep-equal"
-import update from "immutability-helper"
 import { ObjectID } from "bson"
 
 import { FaGlobe, FaClipboardList, FaImage } from "react-icons/fa"

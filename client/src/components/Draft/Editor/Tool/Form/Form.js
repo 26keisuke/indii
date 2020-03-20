@@ -1,10 +1,8 @@
 import React, { Component } from "react"
 import styled from "styled-components"
-
-import DatePicker, { registerLocale } from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css";
-import ja from 'date-fns/locale/ja';
-registerLocale("ja", ja)
+import TextField from '@material-ui/core/TextField';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 class Form extends Component {
 
@@ -15,25 +13,49 @@ class Form extends Component {
         const res = list.map(elem => {
             return(
                 <RefElement key={elem.stateName}>
-                    <p>{elem.name}</p>
-                    {   elem.required &&
-                    <p>* 必須</p>
-                    }
                     {   elem.date 
                     ?
-                    <DatePicker
-                        dateFormat="yyyy/MM/dd"
-                        placeholderText="日付を選択"
-                        selected={getState(toggle)[elem.stateName]}
-                        onChange={(date) => handleDateChange(toggle, elem.stateName, date)}
-                        locale="ja"
-                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="yyyy/MM/dd"
+                            margin="normal"
+                            id={elem.stateName+"date"}
+                            label={
+                                <Label>
+                                    { elem.name }
+                                    { elem.required &&
+                                    <span>
+                                        <Circle/>
+                                        必須
+                                    </span>
+                                    }
+                                </Label>
+                            }
+                            value={getState(toggle)[elem.stateName]}
+                            onChange={(date) => handleDateChange(toggle, elem.stateName, date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                    </MuiPickersUtilsProvider>
                     :
-                    <input 
-                        placeholder={elem.placeholder} 
-                        name={elem.stateName}
+                    <TextField 
+                        id={elem.stateName+elem.placeholder} 
+                        label={
+                            <Label>
+                                {elem.placeholder}
+                                { elem.required &&
+                                <span>
+                                    <Circle/>
+                                    必須
+                                </span>
+                                }
+                            </Label>
+                        }
                         value={getState(toggle)[elem.stateName]}
-                        onChange={(e) => handleTextChange(toggle, elem.stateName, e.target.value)}
+                        onChange={(e) => handleTextChange(toggle, elem.stateName, e.target.value)}                      
                     />
                     }
                 </RefElement>
@@ -51,6 +73,24 @@ class Form extends Component {
     }
 }
 
+const Label = styled.div`
+    display: flex;
+
+    & > span {
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        transform: scale(0.8);
+    }
+`
+
+const Circle = styled.div`
+    width:6px;
+    height:6px;
+    background-color: #FF5F5F;
+    border-radius: 100%;
+    margin-right: 5px;
+`
 
 const RefForm = styled.form`
     padding: 14px;
@@ -75,16 +115,10 @@ const RefElement = styled.div`
         left: 100px;
     }
 
-    & input {
-        width: 97%;
+    & > div {
         font-size: 12px;
-        border: none;
-        border-bottom: 1px solid #eaeaea;
-        padding: 3px 5px;
-
-        &::placeholder{
-            opacity: 0.5;
-        }
+        width: 100%;
+        margin: 0px;
     }
 `
 

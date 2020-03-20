@@ -53,6 +53,10 @@ const RefSection = styled.div`
             margin-right: 10px;
             white-space: nowrap;
         }
+
+        p:nth-child(2){
+            word-break: break-word;
+        }
     }
 `
 

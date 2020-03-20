@@ -17,14 +17,14 @@ class Slider extends Component {
                     <p>基本情報</p>
                     <div/>
                 </Element>
-                <Element selected={this.state.toggle === "topic"} onClick={() => this.setState({ toggle : "topic" })}>
+                {/* <Element selected={this.state.toggle === "topic"} onClick={() => this.setState({ toggle : "topic" })}>
                     <p>トピック</p>
                     <div/>
                 </Element>
                 <Element selected={this.state.toggle === "else"} onClick={() => this.setState({ toggle : "else" })}>
                     <p>その他</p>
                     <div/>
-                </Element>
+                </Element> */}
             </Row>
         )
     }

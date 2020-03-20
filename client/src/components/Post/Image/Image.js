@@ -144,6 +144,8 @@ const Content = styled.p`
     color: white;
     padding-right: 20px;
     transition: 300ms;
+    height: 70px;
+    overflow: hidden;
 `
 
 function mapStateToProps(state) {

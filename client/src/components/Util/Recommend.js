@@ -15,6 +15,7 @@ class Recommend extends Component {
         return (
             <TrendElement to={!flag ? "" : `/post/${this.props.id}`}>
                 <div>
+                    { flag ? <span>{this.props.topicName}</span> : <span><Skeleton height={12} width={80}/></span>}
                     { flag ? <p>{this.props.title}</p> : <p><Skeleton height={16} width={120}/></p>}
                     { flag ? <p>{getEditorContent(this.props.content, 100)}</p> : <p><Skeleton height={12} width={140} count={4}/></p>}
                     <TrendInfo>
@@ -25,7 +26,7 @@ class Recommend extends Component {
                             ? 
                             <div>
                                 <p>{this.props.author}</p>
-                                <p>{this.props.topicName} ・ {this.props.editDate}</p> 
+                                <p>{this.props.editDate}</p> 
                             </div>
                             :
                             <div>
@@ -67,16 +68,23 @@ const TrendElement = styled(Link)`
         width: 225px;
         margin-right: 25px;  
 
-        & > p:nth-child(1) {
-            font-size: 15px;
+        /* topicName */
+        & > span:nth-child(1) {
             font-weight: bold;
-            margin-bottom: 5px;
+            color: #767676;
         }
 
+        /* postName */
         & > p:nth-child(2) {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        & > p:nth-child(3) {
             font-size: 10px;
             margin-bottom: 5px;
-            height: 45px;
+            height: 32px; 
             overflow: hidden;
         }
     }

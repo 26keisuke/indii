@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import styled from "styled-components"
 import { Link } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
-import { FaHashtag } from "react-icons/fa"
 
 import { getEditorContent } from "../../Util/util"
 
@@ -38,10 +37,10 @@ const TopicTitle = styled.div`
 `
 
 const TopicContent = styled.div`
-    font-size: 11px;
     color: #333333;
     margin-bottom: 6px;
-    height: 35px;
+    font-size: 10px;
+    height: 43px;
     overflow: hidden;
 `
 
@@ -52,14 +51,9 @@ const Tag = styled.div`
     & > p {
         color: #767676;
         font-size: 10px;
-        margin-right: 3px;
+        margin-right: 5px;
         display: flex;
         align-items: center;
-
-        /* & > svg {
-            transform: scale(0.9);
-            margin-right: 2px;
-        } */
     }
 `
 

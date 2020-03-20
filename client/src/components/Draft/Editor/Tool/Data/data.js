@@ -24,20 +24,20 @@ export const websiteList = [
     {
         name: "タイトル",
         stateName: "title",
-        placeholder: "タイトルを入力",
+        placeholder: "タイトル",
         required: true,
     },
     {
         name: "URL",
         stateName: "url",
-        placeholder: "URLを入力",
+        placeholder: "URL",
         required: true,
         isValid: null,
     },
     {
         name: "著者",
         stateName: "author",
-        placeholder: "著者名を入力",
+        placeholder: "著者名",
         required: true,
     },
     {
@@ -48,7 +48,7 @@ export const websiteList = [
     {
         name: "サイト名",
         stateName: "website",
-        placeholder: "サイト名を入力",
+        placeholder: "サイト名",
     },
 ]
 
@@ -56,13 +56,13 @@ export const newsList = [
     {
         name: "タイトル",
         stateName: "title",
-        placeholder: "タイトルを入力",
+        placeholder: "タイトル",
         required: true,
     },
     {
         name: "ソース",
         stateName: "source",
-        placeholder: "ソース元の名前を入力",
+        placeholder: "ソース元の名前",
         required: true,
     },
     {
@@ -74,12 +74,12 @@ export const newsList = [
     {
         name: "著者",
         stateName: "author",
-        placeholder: "著者名を入力",
+        placeholder: "著者名",
     },
     {
         name: "URL",
         stateName: "url",
-        placeholder: "URLを入力",
+        placeholder: "URL",
         isValid: null,
     },
 ]
@@ -88,19 +88,19 @@ export const journalList = [
     {
         name: "著者",
         stateName: "author",
-        placeholder: "著者名を入力",
+        placeholder: "著者名",
         required: true,
     },
     {
         name: "タイトル",
         stateName: "title",
-        placeholder: "タイトルを入力",
+        placeholder: "タイトル",
         required: true,
     },
     {
         name: "ソース",
         stateName: "source",
-        placeholder: "ソース元の名前を入力",
+        placeholder: "ソース元の名前",
         required: true,
     },
     {
@@ -113,17 +113,18 @@ export const journalList = [
         name: "ページ",
         stateName: "page",
         required: true,
+        placeholder: "ページ"
     },
     {
         name: "DOI",
         stateName: "doi",
-        placeholder: "DOIを入力",
+        placeholder: "DOI",
         isValid: null,
     },
     {
         name: "URL",
         stateName: "url",
-        placeholder: "URLを入力",
+        placeholder: "URL",
     },
 ]
 
@@ -131,13 +132,13 @@ export const bookList = [
     {
         name: "著者",
         stateName: "author",
-        placeholder: "著者名を入力",
+        placeholder: "著者名",
         required: true,
     },
     {
         name: "タイトル",
         stateName: "title",
-        placeholder: "タイトルを入力",
+        placeholder: "タイトル",
         required: true,
     },
     {
@@ -148,12 +149,12 @@ export const bookList = [
     {
         name: "出版社",
         stateName: "publisher",
-        placeholder: "出版社の名前を入力"
+        placeholder: "出版社の名前"
     },
     {
         name: "ISBNURL",
         stateName: "isbnurl",
-        placeholder: "ISBNURLを入力",
+        placeholder: "ISBNURL",
         isValid: null,
     },
 ]
@@ -162,19 +163,19 @@ export const chapterList = [
     {
         name: "著者",
         stateName: "author",
-        placeholder: "著者名を入力",
+        placeholder: "著者名",
         required: true,
     },
     {
         name: "本のタイトル",
         stateName: "bookTitle",
-        placeholder: "本のタイトルを入力",
+        placeholder: "本のタイトル",
         required: true,
     },
     {
         name: "章のタイトル",
         stateName: "chapterTitle",
-        placeholder: "章のタイトルを入力",
+        placeholder: "章のタイトル",
         required: true,
     },
     {
@@ -187,21 +188,22 @@ export const chapterList = [
         name: "ページ",
         stateName: "page",
         required: true,
+        placeholder: "ページ"
     },
     {
         name: "出版社",
         stateName: "publisher",
-        placeholder: "出版社の名前を入力"
+        placeholder: "出版社の名前"
     },
     {
         name: "編集者",
         stateName: "editor",
-        placeholder: "編集者の名前を入力",
+        placeholder: "編集者の名前",
     },
     {
         name: "URL",
         stateName: "url",
-        placeholder: "URLを入力",
+        placeholder: "URL",
         isValid: null,
     },
 ]
@@ -210,17 +212,17 @@ export const paperList = [
     {
         name: "著者",
         stateName: "author",
-        placeholder: "著者名を入力",
+        placeholder: "著者名",
         required: true,
     },
     {
         name: "タイトル",
         stateName: "title",
-        placeholder: "タイトルを入力",
+        placeholder: "タイトル",
         required: true,
     },
     {
-        name: "開催日",
+        name: "出版日",
         stateName: "heldDate",
         date: true,
         required: true,
@@ -228,18 +230,18 @@ export const paperList = [
     {
         name: "カンファレンスの名前",
         stateName: "conferenceName",
-        placeholder: "カンファレンスの名前を入力",
+        placeholder: "カンファレンスの名前",
     },
     {
         name: "DOI",
         stateName: "doi",
-        placeholder: "DOIを入力",
+        placeholder: "DOI",
         isValid: null,
     },
     {
         name: "URL",
         stateName: "url",
-        placeholder: "URLを入力",
+        placeholder: "URL",
         isValid: null, 
     },
 ]
@@ -248,36 +250,36 @@ export const mediaList = [
     {
         name: "作成者",
         stateName: "creator",
-        placeholder: "作成者の名前を入力",
+        placeholder: "作成者の名前",
         required: true,
     },
     {
         name: "作成者へのURL",
         stateName: "creatorUrl",
-        placeholder: "作成者へのURLを入力",
+        placeholder: "作成者へのURL",
         isValid: null,
     },
     {
         name: "ソースのURL",
         stateName: "sourceUrl",
-        placeholder: "ソースのURLを入力",
+        placeholder: "ソースのURL",
         isValid: null,
     },
     {
         name: "ライセンス名",
         stateName: "licenseName",
-        placeholder: "ライセンス名を入力",
+        placeholder: "ライセンス名",
     },
     {
         name: "ライセンスのURL",
         stateName: "licenseUrl",
-        placeholder: "ライセンスのURLを入力",
+        placeholder: "ライセンスのURL",
         isValid: null,
     },
     {
         name: "ライセンスの保持者",
         stateName: "licenseHolder",
-        placeholder: "ライセンスの保持者の名前を入力",
+        placeholder: "ライセンスの保持者の名前",
     },
     {
         name: "ライセンスの作成日",
@@ -290,24 +292,24 @@ export const generalList = [
     {
         name: "タイトル",
         stateName: "title",
-        placeholder: "タイトルを入力",
+        placeholder: "タイトル",
         required: true,
     },
     {
         name: "作成者",
         stateName: "author",
-        placeholder: "作成者の名前を入力",
+        placeholder: "作成者の名前",
         required: true,
     },
     {
         name: "掲載日",
         stateName: "postDate",
-        placeholder: "掲載日を入力",
+        placeholder: "掲載日",
     },
     {
         name: "URL",
         stateName: "url",
-        placeholder: "URLを入力",
+        placeholder: "URL",
         isValid: null,
     },
 ]

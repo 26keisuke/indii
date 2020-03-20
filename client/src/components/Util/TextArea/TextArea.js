@@ -58,6 +58,10 @@ const EditableWrapper = styled.div`
             padding-bottom: 200px;
         }
     `}
+
+    & h3 {
+        font-weight: bold;
+    }
     
     /* & span {
         vertical-align: unset !important;

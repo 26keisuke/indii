@@ -11,8 +11,8 @@ const Box = styled.div`
 `
 
 const BoxWrapper = styled.div`
-    height: 100%;
     background-color: #fafafa;
+    min-height: 100%;
     padding: 30px 40px;
     display: flex;
     flex-direction: column;

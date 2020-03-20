@@ -28,8 +28,8 @@ class ProfileTopic extends Component {
 }
 
 const Wrapper = styled.div`
-    height: 100%;
     background-color: #fafafa;
+    min-height: 100%;
     padding: 30px 60px;
     display: flex;
     flex-direction: column;

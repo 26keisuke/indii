@@ -1,15 +1,12 @@
-import React, { Component } from "react"
+import React from "react"
 import styled, { css, keyframes } from "styled-components"
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-class Carousel extends Component {
+const Carousel = ({ list, getState, state, setToggle }) => {
 
-    renderCarousel = () => {
-
-        const { list, getState, state, setToggle } = this.props
-
+    const renderCarousel = () => {
         const res = list.map((name,index) => {
             return (
                 <RefToggle key={name} selected={getState("toggle") === state[index]} onClick={() => setToggle(state[index])}>
@@ -24,55 +21,22 @@ class Carousel extends Component {
         return res
     }
 
-    render() {
+    const settings = {
+        infinite: true,
+        speed: 200,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        variableWidth: true
+    };
 
-        const settings = {
-            infinite: true,
-            speed: 300,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            variableWidth: true
-        };
-
-        return (
-            // <RefCarousel>
-            <SliderWrapper>
-                <Slider {...settings}>
-                    {/* <div> */}
-                        {this.renderCarousel()}
-                    {/* </div> */}
-                </Slider>
-            </SliderWrapper>
-            // </RefCarousel>
-        )
-    }
+    return (
+        <SliderWrapper>
+            <Slider beforeChange={(_, newIndex) => setToggle(state[newIndex])} {...settings}>
+                {renderCarousel()}
+            </Slider>
+        </SliderWrapper>
+    )
 }
-
-// const RefCarousel = styled.div`
-//     width: 100%;
-//     position: relative;
-
-//     & > div:nth-child(1) {
-//         display: flex;
-//         flex-direction: row;
-//         overflow-x: scroll;
-//         padding: 6px 15px;
-//         border-bottom: 1px solid #eaeaea;
-
-//         &::-webkit-scrollbar{
-//             width: 0px !important;
-//             height: 0px !important;
-//         }
-//     }
-// `
-
-const extend = keyframes`
-    from {
-        width: 0px;
-    } to {
-        width: 60%;
-    }
-`
 
 const SliderWrapper = styled.div`
     padding: 0px 25px;
@@ -111,14 +75,17 @@ const RefToggle = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
 
         & > p {
             white-space: nowrap;
             text-align: center;
+            font-size: 11px;
+            z-index: 1;
 
             ${props => props.selected 
             ? css`
-                color: #000000;
+                color: white;
             `
             : css`
                 color: #8D8D8D;
@@ -127,9 +94,12 @@ const RefToggle = styled.div`
 
         & > div {
             ${props => props.selected && css`
-                background-color: #636480;
-                width: 80%;
-                height: 1px;
+                background-color: ${props => props.theme.secondary};
+                opacity: 0.6;
+                border-radius: 8px;
+                position: absolute;
+                width: 100%;
+                height: 17px;
                 animation-name: ${extend};
                 animation-duration: 175ms;
                 animation-timing-function: ease-in-out;
@@ -139,6 +109,14 @@ const RefToggle = styled.div`
     }
 `
 
-
+const extend = keyframes`
+    from {
+        width: 10px;
+        opacity: 0;
+    } to {
+        width: 100%;
+        opacity: 0.6;
+    }
+`
 
 export default Carousel
