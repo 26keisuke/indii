@@ -3,6 +3,7 @@ border: #eaeaea
 light blue: #9EAEE5
 dark purple: #626480
 
+"sitemap": "concurrently \"babel-node src/index.js\"  \"npm run sitemap --prefix client\""
 
 2020/1/26 braft => "block is not a blocknode"の問題が出た。他のライブラリを消して言ったらなんかうまく行った。おそらく競合していた。
 

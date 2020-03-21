@@ -15,6 +15,7 @@ import sgMail from "@sendgrid/mail"
 import User from "./models/User"
 import Token from "./models/Token";
 
+import sitemap from "./routes/sitemap"
 import auth from "./routes/auth"
 import draft from "./routes/draft"
 import profile from "./routes/profile"
@@ -27,11 +28,10 @@ mongoose.connect(keys.MONGO_URI, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
 }, err => {
-    if (err){
-        console.error(err)
-    } else {
-        console.log("DB CONNECTED!")
-    }
+    if(err) { console.error(err); return }
+
+    console.log("****** CONNECTED TO DATABASE *****")
+    
 }).catch(err => {
     console.error(err)
 })
@@ -68,7 +68,6 @@ function isValidEmail(email) {
    }
    return false
 }
-
 
 // 参考: https://codemoto.io/coding/nodejs/email-verification-node-express-mongodb
 
@@ -274,6 +273,8 @@ passport.use(new GoogleStrategy({
         })
     }
 ));
+
+app.use("/sitemap", sitemap)
 
 app.use("/api", auth)
 app.use("/api/feed", feed)
