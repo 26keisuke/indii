@@ -20,6 +20,7 @@ import FormatListNumberedOutlinedIcon from '@material-ui/icons/FormatListNumbere
 import FormatListBulletedOutlinedIcon from '@material-ui/icons/FormatListBulletedOutlined';
 import FunctionsOutlinedIcon from '@material-ui/icons/FunctionsOutlined';
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
+import TableChartOutlinedIcon from '@material-ui/icons/TableChartOutlined';
 
 // 明日はここから
 export function getEditorContent(content, length){
@@ -178,6 +179,8 @@ export const renderIcon = (icon) => {
             return <FunctionsOutlinedIcon/>
         case "image":
             return <ImageOutlinedIcon/>
+        case "table":
+            return <TableChartOutlinedIcon/>
         default:
             return ""
     }

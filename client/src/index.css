@@ -65,6 +65,7 @@ a {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
+span,
 p {
     margin: 0px;
     font-feature-settings: "palt";
@@ -102,7 +103,9 @@ input {
     outline: none;
     margin: 0px;
     font-feature-settings: "palt";
-    letter-spacing: 0.7px;
+    /* letter-spacing: 0.7px; */
+    letter-spacing: 1.0px;
+    line-height: normal;
 }
 
 input {

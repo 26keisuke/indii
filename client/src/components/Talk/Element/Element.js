@@ -70,7 +70,7 @@ const UserName = styled.h5`
 
 const Text = styled.h3`
     font-size: 11px !important;
-    color: #666666;
+    font-weight: normal;
     margin: 10px 0px;
     max-height: 67px;
     overflow: hidden;
@@ -92,10 +92,8 @@ const Box = styled.div`
 `
 
 const Title = styled.h2`
-
     display: flex;
     font-size: 15px;
-
 `
 
 const Bottom = styled.div`
