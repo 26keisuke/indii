@@ -96,10 +96,10 @@ const RefToggle = styled.div`
             ${props => props.selected && css`
                 background-color: ${props => props.theme.secondary};
                 opacity: 0.6;
-                border-radius: 8px;
+                border-radius: 2px;
                 position: absolute;
-                width: 100%;
-                height: 17px;
+                width: 85%;
+                height: 16px;
                 animation-name: ${extend};
                 animation-duration: 175ms;
                 animation-timing-function: ease-in-out;

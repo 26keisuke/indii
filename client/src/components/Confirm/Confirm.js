@@ -559,6 +559,7 @@ const ConfirmButton = styled.div`
         border: 0.5px solid #838383;
         height:30px;
         width: 80px;
+        background-color: white;
         border-radius: 3px;
         cursor: pointer;
 

@@ -170,7 +170,7 @@ class Content extends Component {
                                 <TextField
                                     id="description"
                                     multiline
-                                    defaultValue={description}
+                                    value={description}
                                     variant="outlined"
                                     InputProps={{
                                         readOnly: true,

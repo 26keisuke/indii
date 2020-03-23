@@ -6,17 +6,18 @@ import reduxThunk from "redux-thunk";
 import logger from "redux-logger"
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 
 import App from "./components/App";
 import Theme from "./components/Theme";
 import reducers from "./reducers";
 
+import "./reset.css";
+import "./font.css";
 import "./index.css";
 
 const theme = createMuiTheme({
     typography: {
-        fontFamily: "serif",
+        fontFamily: "\"Noto Serif JP\", serif",
     },
     palette: {
         primary: {

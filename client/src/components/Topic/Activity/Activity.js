@@ -25,7 +25,7 @@ class Element extends PureComponent {
                 <Content>
                     <h3>
                         { tags.map(tag => 
-                            <div key={tag}>#{tag}</div>
+                            <div key={tag}># {tag}</div>
 
                         )}
                     </h3>

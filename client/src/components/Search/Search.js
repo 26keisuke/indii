@@ -101,11 +101,13 @@ class Search extends Component {
                         onBlur={handleBlur}
                     />
                 </form>
+                { (forceShow || !blur) && this.props.suggestions[0] &&
                 <div style={suggestionStyle}>
-                    { (forceShow || !blur) && this.props.suggestions.map((suggestion, index) => 
+                    { this.props.suggestions.map((suggestion, index) => 
                         renderSuggestion(suggestion, index, cursor)
                     )}
                 </div>
+                }
             </Wrapper>
         )
     }

@@ -37,14 +37,15 @@ class LogIn extends Component {
                         type="password"
                     />
                 </TextWrapper>
-                <Remember onClick={(e) => this.props.setRemember(e)}>
+                <Remember >
                     <input 
                         type="checkbox" 
                         id="remember" 
                         name="remember" 
-                        defaultChecked={this.props.remember} 
+                        checked={this.props.remember} 
+                        onChange={(e) => this.props.setRemember(e)}
                     />
-                    <label htmlFor="remember">次から入力を省略</label>
+                    <label htmlFor="remember" onClick={(e) => this.props.setRemember(e)}>次から入力を省略</label>
                 </Remember>
                 { this.props.error &&
                 <Message>

@@ -119,7 +119,7 @@ const BorderBottom = styled.div`
     left: -1px;
     bottom: -1px;
     position: absolute;
-    background-color: #626480;
+    background-color: ${props => props.theme.secondary};
     height: 11px;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;

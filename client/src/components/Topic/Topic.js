@@ -104,11 +104,11 @@ class TopicPage extends Component {
 
         if(isEnter){
            if((prev === "below") && (now === "inside")){
-                this.setState({ enter: this.state.enter + 28})
+                this.setState({ enter: this.state.enter + 27})
            }
         } else {
             if((prev === "inside") && (now === "below")){
-                this.setState({ enter: this.state.enter - 28})
+                this.setState({ enter: this.state.enter - 27})
             }
         }
     }

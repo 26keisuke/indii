@@ -7,6 +7,7 @@ export const Wrapper = styled.div`
 
     & > h1 {
         margin-bottom: 5px;
+        font-size: 19px;
     }
 
     & > p:last-child{
@@ -18,7 +19,8 @@ const Segment = styled.div`
     padding: 10px 0px;
 
     & > h2 {
-        margin-bottom: 5px;
+        margin-bottom: 8px;
+        font-size: 16px;
     }
 `
 
@@ -109,7 +111,7 @@ class Policy extends Component {
                 <Section
                     index="10"
                     title="お問い合わせ窓口"
-                    paragraph={["本ポリシーに関するお問い合わせは，下記の窓口までお願いいたします。", "社名： Chief株式会社", "Eメールアドレス： 26keisuke@indii.jp"]}
+                    paragraph={["本ポリシーに関するお問い合わせは，下記の窓口までお願いいたします。", "社名： Chief株式会社", "Eメールアドレス： info@indii.jp"]}
                 />
                 <p>以上</p>
             </Wrapper>

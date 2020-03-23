@@ -19,7 +19,7 @@ class TopicRecommend extends Component {
                             {/* タグ */}
                             <div>
                                 { tags.map((tag,index) => 
-                                    <Tag key={tag+index}>#<p>{tag}</p></Tag>
+                                    <Tag key={tag+index}>#<p>{" "+tag}</p></Tag>
                                 )}
                             </div>
                             {/* タイトル */}

@@ -38,7 +38,7 @@ const Logo = styled(Link)`
     }
 
     & > p {
-        text-shadow: 1px 2px 10px #d2d2d2;
+        text-shadow: 1px 1px 2px #a2a2a2;
         font-size:24px;
         color: #222222;
         margin-right: 50px;
@@ -76,14 +76,6 @@ class Header extends Component {
                 <p>Indii</p>
             </Logo>
             <Navigation/>
-            {/* <Select
-                placeholder="Indiiで検索"
-                searchBox={true}
-                type="Unique"
-                content="Topic"
-                // data={topics}
-                searchByVariable="topicName"
-            /> */}
             <SearchFromFeed
                 placeholder="Indiiで検索"
             />

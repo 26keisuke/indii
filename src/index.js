@@ -62,13 +62,6 @@ passport.deserializeUser((id, done) => {
     })
 })
 
-function isValidEmail(email) {
-   if(/(.+)@(.+){2,}\.(.+){2,}/.test(email)){
-       return true
-   }
-   return false
-}
-
 // 参考: https://codemoto.io/coding/nodejs/email-verification-node-express-mongodb
 
 passport.use(new LocalStrategy({
@@ -300,8 +293,16 @@ app.get("/auth/facebook/callback", passport.authenticate("facebook", {failureRed
     }
 )
 
-if (process.env.NODE_ENV === "production") {
+if(process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
+
+    app.use((req, res, next) => {
+        if(req.header("x-forwarded-proto") !== "https") {
+            res.redirect("https://" + req.hostname + req.originalUrl)
+        } else {
+            next();
+        }
+    })
 
     app.get("*", (req,res) => {
         res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
@@ -310,9 +311,16 @@ if (process.env.NODE_ENV === "production") {
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, err => {
-    if (err) {
+    if(err){
         throw new Error(err)
     } else {
         console.log(`LISTENING ON PORT ${PORT}`)
     }
 });
+
+function isValidEmail(email) {
+    if(/(.+)@(.+){2,}\.(.+){2,}/.test(email)){
+        return true
+    }
+    return false
+ }

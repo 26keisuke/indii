@@ -118,10 +118,7 @@ class Info extends Component {
                         { flag 
                         ?
                             tags.map(tag =>
-                                <div key={tag}>
-                                    #
-                                    <p>{tag}</p>
-                                </div>
+                                <div key={tag}># {tag}</div>
                             )
                         :
                             <div><Skeleton count={3} width={50} height={22}/></div>

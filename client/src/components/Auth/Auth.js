@@ -42,7 +42,7 @@ class Auth extends PureComponent {
                 password: ""
             },
 
-            remember: false,
+            remember: true,
             policy: false,
 
             // signUpに関するもの
@@ -198,6 +198,7 @@ class Auth extends PureComponent {
                 postAction={this.props.postAction}
                 handleLogInChange={this.handleLogInChange}
                 handleSubmit={this.handleSubmit}
+                remember={this.state.remember}
                 setRemember={this.handleRemember}
                 logInStates={this.state.logIn}
                 remember={this.state.remember}
@@ -369,7 +370,7 @@ const ThirdPartyButton = styled.div`
         & > button {
             background-color: rgba(0,0,0,0);
             border: 1px solid #eaeaea;
-            width: 155px;
+            width: 170px;
             height: 36px;
             border-radius: 5px;
             padding-left: 32px;

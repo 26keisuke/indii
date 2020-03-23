@@ -56,7 +56,7 @@ export const SlashTitle = styled.div`
     & > p:nth-child(2) {
         color: #eaeaea;
         font-size: 14px;
-        letter-spacing: 2.5px;
+        letter-spacing: 4.0px;
     }
 `
 

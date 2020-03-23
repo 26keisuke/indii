@@ -42,6 +42,7 @@ const TopicContent = styled.div`
     font-size: 10px;
     height: 43px;
     overflow: hidden;
+    margin-top: 5px;
 `
 
 const Tag = styled.div`
@@ -87,7 +88,7 @@ class Topic extends Component {
                         <Tag>
                             { flag
                             ? this.props.tags.map((tag,index) => 
-                                <p key={tag+index}>#{tag}</p>    
+                                <p key={tag+index}># {tag}</p>    
                             )
                             : <Skeleton width={150} height={14}/>
                             }
@@ -117,7 +118,7 @@ Topic.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string),
     topicName: PropTypes.string,
     description: PropTypes.string,
-    likes: PropTypes.string,
+    likes: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 }
 
 export default Topic
