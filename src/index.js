@@ -267,6 +267,16 @@ passport.use(new GoogleStrategy({
     }
 ));
 
+if(process.env.NODE_ENV === "production"){
+    app.use((req, res, next) => {
+        if(req.header("x-forwarded-proto") !== "https") {
+            res.redirect("https://" + req.hostname + req.originalUrl)
+        } else {
+            next();
+        }
+    })
+}
+
 app.use("/sitemap", sitemap)
 
 app.use("/api", auth)
@@ -295,14 +305,6 @@ app.get("/auth/facebook/callback", passport.authenticate("facebook", {failureRed
 
 if(process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
-
-    app.use((req, res, next) => {
-        if(req.header("x-forwarded-proto") !== "https") {
-            res.redirect("https://" + req.hostname + req.originalUrl)
-        } else {
-            next();
-        }
-    })
 
     app.get("*", (req,res) => {
         res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
