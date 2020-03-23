@@ -135,7 +135,7 @@ class Draft extends Component {
                     { flag
                     ? (
                     <Content>
-                        {getEditorContent(content, 100)}
+                        {getEditorContent(content, 150)}
                     </Content>
                     )
                     : (

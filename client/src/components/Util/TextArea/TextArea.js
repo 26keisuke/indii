@@ -59,13 +59,32 @@ const EditableWrapper = styled.div`
         }
     `}
 
+    & h2 {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
     & h3 {
         font-weight: bold;
+        font-size: 15px;
     }
     
     /* & span {
         vertical-align: unset !important;
     } */
+    & ol,
+    & ul{
+        padding-left: 30px;
+        margin: 12px 0px;
+    }
+
+    & ul {
+        list-style: outside;
+    }
+
+    & ol {
+        list-style: decimal;
+    }
 `
 
 const ToolWrapper = styled.div`
