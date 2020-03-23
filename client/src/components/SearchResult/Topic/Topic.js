@@ -87,7 +87,7 @@ class Topic extends Component {
                     <div>
                         <Tag>
                             { flag
-                            ? this.props.tags.map((tag,index) => 
+                            ? this.props.tags.slice(0,2).map((tag,index) => 
                                 <p key={tag+index}># {tag}</p>    
                             )
                             : <Skeleton width={150} height={14}/>

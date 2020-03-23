@@ -22,7 +22,7 @@ class Trend extends Component {
                         img={topic.squareImg.image}
                         tags={topic.tags}
                         topicName={topic.topicName}
-                        description={topic.posts[0].content}
+                        description={topic.posts[0] && topic.posts[0].content}
                         likes={topic.likes.counter}
                     />
                 )
