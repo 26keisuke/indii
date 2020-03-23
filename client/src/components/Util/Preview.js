@@ -80,6 +80,7 @@ export const PreviewElement = styled.div`
             border-bottom-right-radius: 45px;
             border-bottom-left-radius: 45px;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            display: block;
         `
         : props => props.topic 
         ? css`
@@ -87,6 +88,7 @@ export const PreviewElement = styled.div`
             min-height: 250px;
             max-width: 250px;
             max-height: 250px;
+            display: block;
         ` 
         : props => props.post 
         ? css`
@@ -94,6 +96,7 @@ export const PreviewElement = styled.div`
             min-height: 292px;
             max-width: 292px;
             max-height: 292px;
+            display: block;
         `
         : props => props.profile
         ? css`
@@ -101,12 +104,14 @@ export const PreviewElement = styled.div`
             min-height: 200px;
             max-width: 200px;
             max-height: 200px;
+            display: block;
         `
         : css`
             min-width: 380px;
             min-height: 200px;
             max-width: 380px;
             max-height: 200px;
+            display: block;
         `}
 
         ${props => props.hide && css`

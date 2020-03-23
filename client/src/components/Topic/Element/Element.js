@@ -71,7 +71,7 @@ class Element extends Component {
                 <Content>
                     <Tag>
                         {this.props.tags.map(tag => {
-                            return <p key={tag}>#{tag}</p>
+                            return <p key={tag}># {tag}</p>
                         })}
                     </Tag>
                     <p>{this.props.title}</p>
