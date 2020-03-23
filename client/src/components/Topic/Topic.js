@@ -195,7 +195,7 @@ class TopicPage extends Component {
         const titleName = topicName || " "
 
         const descriptionPost = posts[0] || {}
-        const description = getEditorContent(descriptionPost.content) || `${topicName}に関するトピックです。`
+        const description = getEditorContent(descriptionPost.content, 150) || `${topicName}に関するトピックです。`
 
         return (
             <TopicBox>

@@ -111,7 +111,7 @@ class Post extends Component {
     render() {
 
         const titleName = this.props.post.fetched.postName || ""
-        const description = getEditorContent(this.props.post.fetched.content, 30)
+        const description = getEditorContent(this.props.post.fetched.content, 150)
 
         const keywords = this.props.post.fetched.tags ? titleName + "," + this.props.post.fetched.tags.join(",") : ""
 

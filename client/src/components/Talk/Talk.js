@@ -49,7 +49,7 @@ class Talk extends Component {
             <Wrapper>
                 <Helmet>
                     <title>{"トーク | Indii"}</title>
-                    <meta name="description" content="Indii上のユーザー同士で交流することができます。力を合わして日本一のデータベースを作り上げましょう！"/>
+                    <meta name="description" content="Indiiでは、似たような仲間と交流することができます。力を合わして日本一のデータベースを作り上げましょう！"/>
                     <meta name="keywords" content={"コミュニティー,コンピューターサイエンス,ギーク,オタク"}/>
                 </Helmet>
                 <TalkBox>
