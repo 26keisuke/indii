@@ -14,7 +14,7 @@ class Post extends Component {
                 <div>
                     <p>{this.props.topic}</p>
                     <p>{this.props.title}</p>
-                    <p>{getEditorContent(this.props.content, 100)}</p>
+                    <p>{getEditorContent(this.props.content, 150)}</p>
                     <div>
                         <StarIcon alt={"ポストのいいねボタン"}/>
                         <p>{this.props.count}</p>
@@ -76,7 +76,7 @@ const PostElement = styled(Link)`
         }
 
         & > p:nth-child(3) {
-            font-size: 11px;
+            font-size: 12px;
             margin-bottom: 6px;
             color: #1c1c1c;
             height: 50px;

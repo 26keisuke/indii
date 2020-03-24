@@ -62,8 +62,6 @@ router.post("/upload", (req, res) => {
                     Post.findById(draft.editPostId)
                     .then(post => {
 
-                        console.log("HERE")
-
                         if(post.content !== draft.content){post.content = draft.content}
                         if(post.ref !== draft.ref){post.ref = draft.ref}
                         if(post.postName !== draft.postName){post.postName = draft.postName} //まだ何も変更できないが、将来的には変更できるようにしたい
@@ -85,7 +83,7 @@ router.post("/upload", (req, res) => {
                             topicElem.activity.push({timeStamp: now, user: req.user.id, type: "EDIT_POST", postName: draft.postName})
                             
                             if(user){ // type === ZEROの場合はuserがない
-                                user.notif.push({timeStamp: now, type: "POST_EDIT", user: req.user.id, post: draft.editPostId, draft: draft._id})
+                                user.notif.push({timeStamp: now, type: "POST_EDIT_OK", user: req.user.id, post: draft.editPostId, draft: draft._id})
                                 user.save()
                             }
                             
@@ -111,13 +109,11 @@ router.post("/upload", (req, res) => {
                     config, 
                     topicRectangleImg, topicSquareImg, topicMobileImg } = draft
 
-                // if(postImg){
-                //     new Image({_id: imgId, image: postImg.image}).save()
-                // }
-
                 var newIndex = index.slice()
                 if(addColumn === true) {
                     newIndex[0] = index[0] + 1
+                    newIndex[1] = 0
+                } else if(!index[1]) {
                     newIndex[1] = 0
                 } else {
                     newIndex[1] = index[1] + 1
@@ -223,7 +219,7 @@ router.post("/upload", (req, res) => {
                         } else {
 
                             const insertColumn = index[0]
-                            const insertIndex = index[1] + 1
+                            const insertIndex = !!index[1] ? index[1] + 1 : 0
 
                             // topicElem.postsをupdate
 

@@ -23,6 +23,15 @@ const Container = styled.div`
     background-color: ${props => (props.isDragging ? "#F8F8F8" : "white")};
 `
 
+const Title = styled.p`
+    font-size: 12px;
+    margin-bottom: 4px;
+    width: 150px;
+    overflow: auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`
+
 class Post extends Component {
     render() {
         return (
@@ -36,11 +45,11 @@ class Post extends Component {
                     >
                         <div style={{display: `flex`, position: `relative`}}>
                             <div>
-                                <p style={{fontSize: `12px`, marginBottom: "4px"}}>
+                                <Title>
                                     {this.props.post.index.join(".")}
                                     <span style={{marginRight: "8px"}}/>
                                     {this.props.post.postName}
-                                </p>
+                                </Title>
                                 <div style={{display: "flex", alignItems: "center", width: "152px"}}>
                                     <div>
                                         <p style={{fontSize: "10px"}}>{this.props.post.lastEdited ? fmtDate(this.props.post.lastEdited) : "-"}</p>

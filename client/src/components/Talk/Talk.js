@@ -44,6 +44,38 @@ class Talk extends Component {
         this.props.selectTalk(talk)
     }
 
+    renderTalkElement = (talk) => {
+        return (
+            <TalkFeed
+                key={"feed"+talk._id}
+                pinned={talk.pinned}
+                creator={talk.creator}
+                date={fmtDate(talk.timeStamp)}
+                title={talk.title}
+                description={talk.description}
+                counter={talk.msgCounter}
+                handleClick={(e) => {this.handleTalkClick(e, talk)}}
+                selected={talk._id === this.props.talk.selected._id}
+            />
+        )
+    }
+
+    renderTalk = () => {
+        var pinned = []
+        var notPinned = []
+
+        this.props.talk.fetched
+        .map(talk => {
+            if(talk.pinned){
+                pinned.push(this.renderTalkElement(talk))
+            } else {
+                notPinned.push(this.renderTalkElement(talk))
+            }
+        })
+
+        return pinned.concat(notPinned)
+    }
+
     render() {
         return (
             <Wrapper>
@@ -64,18 +96,7 @@ class Talk extends Component {
                             {   
                             this.props.talk.fetched[0]
                             ? 
-                            this.props.talk.fetched.map(talk => 
-                                <TalkFeed
-                                    key={"feed"+talk._id}
-                                    creator={talk.creator}
-                                    date={fmtDate(talk.timeStamp)}
-                                    title={talk.title}
-                                    description={talk.description}
-                                    counter={talk.msgCounter}
-                                    handleClick={(e) => {this.handleTalkClick(e, talk)}}
-                                    selected={talk._id === this.props.talk.selected._id}
-                                />
-                            )
+                            this.renderTalk()
                             :
                             <div>
                                 <TalkFeed/>

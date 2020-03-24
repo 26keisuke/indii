@@ -38,7 +38,7 @@ class Setting extends Component {
         return(
             <Box>
                 { this.props.loggedIn && 
-                <a href="/api/logout">
+                <a href="/auth/logout">
                     <AccountCircleOutlinedIcon/>
                     ログアウト
                 </a>

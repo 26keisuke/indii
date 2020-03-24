@@ -12,7 +12,6 @@ import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
-
 router.get("/:topicId/:type", (req, res) => {
     const type = req.params.type
     switch(type){

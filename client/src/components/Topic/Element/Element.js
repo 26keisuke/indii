@@ -75,7 +75,7 @@ class Element extends Component {
                         })}
                     </Tag>
                     <p>{this.props.title}</p>
-                    <p>{getEditorContent(this.props.content, 100)}</p>
+                    <p>{getEditorContent(this.props.content, 150)}</p>
                     <span>お気に入り数： {this.props.likes}</span>
                 </Content>
                 <img src={this.props.img} alt={"トピックを代表する写真"}/>

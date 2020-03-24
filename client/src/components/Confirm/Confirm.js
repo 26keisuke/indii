@@ -41,7 +41,7 @@ const transitionStyle = {
     exited:  { top: "60%", opacity: 0, pointerEvents: "none" },
 }
 
-class Confirm extends Component {
+export class Confirm extends Component {
 
     constructor(props) {
         super(props)
@@ -192,7 +192,7 @@ class Confirm extends Component {
 
             case "UPLOAD_DRAFT":
 
-                this.props.clearTopic()
+                this.props.fetchTopic()
 
                 var next = "";
                 var obj = arrObjLookUp(this.props.draft.onEdit, "_id", newObj.confirmation.draftId[this.state.currentStep])
@@ -272,7 +272,6 @@ class Confirm extends Component {
                     buttonMessage: "完了する",
                     next: "",
                 }
-
 
                 newObj = update(newObj, {confirmation: {$merge: data}})
 
@@ -439,13 +438,9 @@ class Confirm extends Component {
         
         const steps = getContent(action, this.state.counter, this.state.currentStep, this.state.skipped)
 
-        //
-        //  postActionもtrueかfalseだけかにして、valueは全部reduxでとってくればいい（後でやる優先順位的には後）
         //  reduxで全部管理するようになったからbackボタンも将来的に追加できる
-        //
 
         return (
-            //本来はonExitedでresetConfirmationをしたいところだが、なぜかexitingの時に呼ばれてしまう
             <Fade in={update ? confirmation.on : false} onExited={this.props.resetConfirmation}> 
                 <div ref={innerRef}>
 
@@ -461,7 +456,6 @@ class Confirm extends Component {
                     </StepperWrapper>
                     }
 
-                    {/* <ConfirmIcon onClick={() => postAction(action)}/> */}
                     <ConfirmIcon onClick={() => postAction(false)}/>
                     <Title>{title}</Title>
                     <Message>{message}</Message>

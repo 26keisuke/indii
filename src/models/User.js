@@ -73,7 +73,7 @@ const userSchema = new Schema({
 
     notif: [{
         timeStamp: Date,
-        type: {type: String, enum: ["POST_EMOJI", "POST_LIKE", "FOLLOWED", "POST_EDIT", "POST_EDIT_FEEDBACK"]},
+        type: {type: String, enum: ["POST_EMOJI", "POST_LIKE", "FOLLOWED", "POST_EDIT", "POST_EDIT_OK", "POST_EDIT_FEEDBACK"]},
         user: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
         checked: {type: Boolean, default: false},
 

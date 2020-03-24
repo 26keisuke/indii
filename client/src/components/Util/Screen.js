@@ -72,10 +72,8 @@ class Screen extends Component {
 
 
 export const FeedBox = styled.div`
-    /* height: 100%; */
     display: flex;
     flex-direction: row;
-    /* overflow-x: hidden; */
 `
 
 export const FeedLeft = styled.div`
@@ -85,17 +83,10 @@ export const FeedLeft = styled.div`
     height:100%;
     position: relative;
     border-right: ${props => props.noBorder ? "none" : "1px solid #eaeaea"};
-    /* overflow: scroll; */
-
-    /* &::-webkit-scrollbar {
-        width: 0 !important;
-    } */
 `
 
 export const FeedRight = styled.div`
     width:100%;
-    /* margin: 0px 15px;
-    margin-top: 20px; */
 
     & > div {
         width: ${props => props.post ? "295px" : "340px"};
@@ -142,7 +133,6 @@ const FeedBackHeader = styled.div`
         color: #878787;
     }
 `
-
 
 Screen.defaultProps = {
     space: true,

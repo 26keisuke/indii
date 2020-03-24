@@ -192,6 +192,8 @@ class Setting extends Component {
 
         var notifId = this.props.auth.info.notif[this.state.notifId] || {}
 
+        var type = notifId.type
+
         var user = notifId.user || {}
         var draft = notifId.draft || {}
         var post = notifId.post || {}
@@ -243,7 +245,7 @@ class Setting extends Component {
                     <meta name="keywords" content={`${afterPostName},編集リクエスト`}/>
                 </Helmet>
 
-                { isApproved === "WAIT" && (creator._id === this.props.auth.info._id) &&
+                { type === "POST_EDIT" && isApproved === "WAIT" && (creator._id === this.props.auth.info._id) &&
                 <div>
                     <StepperFakeWrapper isOpened={this.state.isOpened}>
                         <div onClick={() => this.setState({ isOpened: true })}>

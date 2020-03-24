@@ -10,11 +10,8 @@ import indent from "../../../../images/indent.png"
 
 class Index extends Component {
 
-    constructor(props){
-        super(props)
-
-        // idが一致する下書きをとってくる
-        this.fetch();
+    componentDidMount() {
+        this.fetch(); // idが一致する下書きをとってくる
     }
 
     fetch = () => {
@@ -46,6 +43,10 @@ class Index extends Component {
         if (prevProps.counter !== this.props.counter) {
             // ２回以上連続でrenderされた場合はcomponentDidMountが呼ばれない
 
+            const id = this.props.update.confirmation.draftId[this.props.counter]
+
+            if(!id) return; // previewに行く前にもcounterが++されるのでこのbranchが呼ばれる。この時idはundefined
+
             flag = true;
 
             const data = {
@@ -56,8 +57,7 @@ class Index extends Component {
                 forcedOn: false,
                 addColumn: false,
             }
-
-            const id = this.props.update.confirmation.draftId[this.props.counter]
+            
             newObj = update(newObj, {confirmation: {$merge: data}})
             this.props.fetchOneDraft(id)
         }

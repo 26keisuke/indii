@@ -3,7 +3,7 @@ import axios from "axios"
 import { 
     SEARCH_FETCHING,
     SEARCH_TOPIC,
-    FETCH_TOPIC, CLEAR_TOPIC,
+    FETCH_TOPIC,
     ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
     REVERT_IMG,
 } from "../types/types";
@@ -11,20 +11,16 @@ import {
 import { cancelOnMultipleSearch } from "../util"
 
 export const fetchTopic = (id, type) => async (dispatch) => {
-    if(!id) dispatch({type: FETCH_TOPIC, payload: {}})
+    if(!id) { dispatch({type: FETCH_TOPIC, payload: {}}); return;}
 
     const url = "/api/topic/" + String(id) + "/" + String(type)
     const res = await axios.get(url)
     dispatch({type: FETCH_TOPIC, payload: res.data})
 }
 
-export const clearTopic = () => (dispatch) => {
-    dispatch({type: CLEAR_TOPIC})
-}
-
 export const searchTopic = (type, value) => async (dispatch) => {
-    if(type === "RESET") { dispatch({type: SEARCH_TOPIC, payload: {suggestions: []}}) }
-    if(!value) { dispatch({type: SEARCH_TOPIC, payload: {suggestions: []}}); return }
+    if(type === "RESET") { dispatch({type: SEARCH_TOPIC, payload: {suggestions: []}}); return; }
+    if(!value) { dispatch({type: SEARCH_TOPIC, payload: {suggestions: []}}); return; }
     
     const url = "/api/topic/search/" + String(type) + "/" + String(value)
     const res = await cancelOnMultipleSearch(url)

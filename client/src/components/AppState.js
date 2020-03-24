@@ -175,8 +175,8 @@ class AppState extends Component {
             }
         }
 
-        this.props.endFetching(); // 別にisFetchingされていなくても大したperformanceのコストにはならん。いちいちどれがisFetchingしたか考えるのだるいし
-        this.props.disableGray();
+        // this.props.endFetching(); // 別にisFetchingされていなくても大したperformanceのコストにはならん。いちいちどれがisFetchingしたか考えるのだるいし
+        // this.props.disableGray();
     }
 
     renderMessage = () => {
@@ -185,13 +185,9 @@ class AppState extends Component {
 
         switch(type){
             case "success":
-                return (
-                    <Message type={"SUCCESS"} message={message}/>
-                )
+                return <Message type={"SUCCESS"} message={message}/>
             case "fail":
-                return (
-                    <Message type={"FAIL"} message={message}/>
-                )
+                return <Message type={"FAIL"} message={message}/>
             default:
                 return;
         }

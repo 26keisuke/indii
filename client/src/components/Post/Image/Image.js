@@ -23,7 +23,7 @@ class Image extends Component {
                         <Container src={rectangleImg.image}/>
                         <Tag>
                             {
-                                tags.map(tag => 
+                                tags.slice(0,2).map(tag => 
                                     <div key={tag}>
                                         <TagIcon/>
                                         <p>{tag}</p>

@@ -20,6 +20,7 @@ const renderUrl = (notif, type) => {
             url = `/profile/${notif.user._id}`
             return url
         case "POST_EDIT_FEEDBACK":
+        case "POST_EDIT_OK":
         case "POST_EDIT":
             url = `/notification/check/${notif._id}`
             return url
@@ -38,6 +39,8 @@ const renderAction = (notif, type) => {
             return <ActionWrapper>あなたをフォローしました。</ActionWrapper>
         case "POST_EDIT":
             return <ActionWrapper><Link to={`/post/${notif.post}`}>あなたのポスト</Link>に編集リクエストしました。</ActionWrapper>
+        case "POST_EDIT_OK":
+            return <ActionWrapper><Link to={`/post/${notif.post}`}>あなたのポスト</Link>を編集しました。</ActionWrapper>
         case "POST_EDIT_FEEDBACK":
             return <ActionWrapper>あなたの編集リクエストを{notif.isApproved ? "承認" : "拒否"}しました。</ActionWrapper>
         default:

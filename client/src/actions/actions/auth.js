@@ -45,7 +45,7 @@ export const logInError = (error) => (dispatch) => {
 }
 
 export const signUp = (value) => async (dispatch) => {
-    const url = "/api/login"
+    const url = "/auth/login"
     axios.post(url, value)
         .then(user => {
             dispatch(disableGray())
@@ -67,7 +67,7 @@ export const signUp = (value) => async (dispatch) => {
 }
 
 export const logIn = (value) => async (dispatch) => {
-    const url = "/api/login"
+    const url = "/auth/login"
     axios.post(url, value)
         .then(user => {
             if(!user.data.userName) { // if user is not found, return error message

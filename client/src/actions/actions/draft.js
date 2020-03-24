@@ -5,6 +5,7 @@ import {
     endFetching,
     disableGray,
     updateMessage,
+    enableGray,
 } from "./update"
 
 import {
@@ -145,6 +146,9 @@ export const deleteDraft = (id) => async (dispatch) => {
 }
 
 export const uploadDraft = (value) => async (dispatch) => {
+    dispatch(isFetching())
+    dispatch(enableGray())
+    
     const url = "/api/draft/upload"
     const promises = []
 

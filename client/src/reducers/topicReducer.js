@@ -1,7 +1,6 @@
 import {
     SEARCH_TOPIC, 
     FETCH_TOPIC,
-    CLEAR_TOPIC,
 } from "../actions/types/types"
 
 export default function topicReducer(state={
@@ -18,11 +17,6 @@ export default function topicReducer(state={
             return {
                 ...state,
                 fetched: action.payload
-            }
-        case CLEAR_TOPIC:
-            return {
-                ...state,
-                fetched: {},
             }
         default:
             return state

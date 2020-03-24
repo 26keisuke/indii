@@ -36,6 +36,7 @@ const Wrapper = styled.div`
     background-color: #fafafa;
     min-height: 100%;
     padding: 30px 60px;
+    padding-bottom: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;

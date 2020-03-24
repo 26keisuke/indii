@@ -21,6 +21,9 @@ class Form extends Component {
                             variant="inline"
                             format="yyyy/MM/dd"
                             margin="normal"
+                            disableFuture
+                            invalidDateMessage="形式が正しくありません"
+                            maxDateMessage="入力可能な範囲を超えています"
                             id={elem.stateName+"date"}
                             label={
                                 <Label>

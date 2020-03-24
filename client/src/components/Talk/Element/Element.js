@@ -3,12 +3,14 @@ import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
 
 import { GoComment } from "react-icons/go"
+import { TiPin } from "react-icons/ti"
 // import { AiOutlineLike } from "react-icons/ai"
 
 class Element extends Component {
     render() {
 
         const { 
+            pinned,
             creator,
             date,
             title,
@@ -18,28 +20,31 @@ class Element extends Component {
             selected
         } = this.props
 
+        const flag = !!creator
+
         return (
             <Box onClick={handleClick} selected={selected}>
-                { creator
+                { pinned && <Pin/> }
+                { flag
                 ?
                 <UserName>{creator.userName}</UserName>
                 :
                 <UserName><Skeleton width={80} height={16}/></UserName>
                 }
-                { creator
+                { flag
                 ?
                 <Title>{title}</Title>
                 :
                 <Title><Skeleton width={140} height={20}/></Title>
                 }
-                { creator
+                { flag
                 ?
                 <Text>{description}</Text>
                 :
                 <Text><Skeleton width={270} height={16}/></Text>
                 }
                 <Bottom>
-                    { creator
+                    { flag
                     ?
                     <div>
                         <GoComment/>
@@ -54,6 +59,14 @@ class Element extends Component {
         )
     }
 }
+
+const Pin = styled(TiPin)`
+    position: absolute;
+    bottom: 14px;
+    font-size: 15px;
+    right: 22px;
+    color: ${props => props.theme.tertiary};
+`
 
 const Date = styled.div`
     color: #777777;

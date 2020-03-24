@@ -64,7 +64,7 @@ const postSchema = new Schema({
         publishDate: Date,
         publisher: String,
         isbnurl: String,
-        page: Number,
+        page: String,
         doi: String,
         bookTitle: String,
         chapterTitle: String,

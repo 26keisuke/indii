@@ -55,7 +55,7 @@ router.get("/recommend", (req, res) => {
 router.get("/new/topic", (req, res) => {
     Topic.find().sort({timeStamp: -1}).limit(5)
     .populate("squareImg")
-    .populate({path: "posts", options: {limit: 1}})
+    .populate("posts")
     .exec()
     .then(topic => res.send(topic))
     .catch(err => console.log(err))
@@ -101,7 +101,7 @@ router.get("/search/:term", (req, res) => {
     .then(posts => {
         Topic.find({"topicName": {$regex: term, $options: "i"}})
         .populate("squareImg")
-        .populate({path: "posts", options: {limit: 1}})
+        .populate("posts")
         .then(topics => {
             res.send({posts, topics})
         })

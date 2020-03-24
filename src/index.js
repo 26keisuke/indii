@@ -22,6 +22,7 @@ import profile from "./routes/profile"
 import topic from "./routes/topic"
 import post from "./routes/post"
 import feed from "./routes/feed"
+import user from "./routes/user"
 import talk from "./routes/talk"
 
 mongoose.connect(keys.MONGO_URI, {
@@ -279,29 +280,14 @@ if(process.env.NODE_ENV === "production"){
 
 app.use("/sitemap", sitemap)
 
-app.use("/api", auth)
+app.use("/auth", auth)
+app.use("/api", user)
 app.use("/api/feed", feed)
 app.use("/api/draft", draft)
 app.use("/api/profile", profile)
 app.use("/api/topic", topic)
 app.use("/api/post", post)
 app.use("/api/talk", talk)
-
-app.get("/auth/google", passport.authenticate("google", {scope: ["profile", "email"]}))
-
-app.get("/auth/google/callback", passport.authenticate("google", {failureRedirect: "/"}), 
-    (req, res) => {
-        res.redirect("/")
-    }
-)
-
-app.get("/auth/facebook", passport.authenticate("facebook"))
-
-app.get("/auth/facebook/callback", passport.authenticate("facebook", {failureRedirect: "/"}),
-    (req, res) => {
-        res.redirect("/")
-    }
-)
 
 if(process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));

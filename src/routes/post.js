@@ -12,7 +12,7 @@ const router = express.Router()
 
 router.get("/:postId", (req, res) => {
     Post.findById(req.params.postId)
-    .populate({path: "topic", populate: [{ path: "rectangleImg"}, { path: "squareImg"}, {path: "posts", options: {limit: 1}}]})
+    .populate({path: "topic", populate: [{ path: "rectangleImg"}, { path: "squareImg"}, {path: "posts"}]})
     .populate("creator").exec()
     .then(post => {
         res.send(post)
