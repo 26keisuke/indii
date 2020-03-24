@@ -1,19 +1,34 @@
 import axios from "axios";
 
 import { 
-    endFetching,
-    disableGray,
+    endAction,
     updateMessage,
 } from "./update"
 
 import { 
     FETCH_USER, FETCH_NOTIF, FETCH_CONFIRM,
     SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
-    FETCH_AFTER_TOPIC_LIKE
+    FETCH_AFTER_TOPIC_LIKE,
+    SET_POST_EMOJI, SET_POST_STAR, SET_TOPIC_LIKE
 } from "../types/types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
+
+    // initialize localstorage
+    if(res.data.likedPost) {
+        localStorage.setItem("INDII_POST_STAR", JSON.stringify(res.data.likedPost))
+        dispatch({ type: SET_POST_STAR, payload: res.data.likedPost })
+    }
+    if(res.data.postRating) {
+        localStorage.setItem("INDII_POST_EMOJI", JSON.stringify(res.data.postRating))
+        dispatch({ type: SET_POST_EMOJI, payload: res.data.postRating })
+    }
+    if(res.data.likedTopic) {
+        localStorage.setItem("INDII_TOPIC_LIKE", JSON.stringify(res.data.likedTopic))
+        dispatch({ type: SET_TOPIC_LIKE, payload: res.data.likedTopic })
+    }
+
     dispatch({type: FETCH_USER, payload: res.data});
 };
 
@@ -48,8 +63,7 @@ export const signUp = (value) => async (dispatch) => {
     const url = "/auth/login"
     axios.post(url, value)
         .then(user => {
-            dispatch(disableGray())
-            dispatch(endFetching())
+            dispatch(endAction())
             if(user.data === "ERROR"){
                 dispatch(updateMessage("fail", "新規登録に失敗しました。", 7000))
                 dispatch(hideLogin())
@@ -71,13 +85,11 @@ export const logIn = (value) => async (dispatch) => {
     axios.post(url, value)
         .then(user => {
             if(!user.data.userName) { // if user is not found, return error message
-                dispatch(disableGray())
-                dispatch(endFetching())
+                dispatch(endAction())
                 dispatch(logInError(true))
                 return
             }
-            dispatch(disableGray())
-            dispatch(endFetching())
+            dispatch(endAction())
             dispatch(updateMessage("success", `${user.data.userName}さん、お帰りなさい。`))
             dispatch(fetchUser())
             dispatch(hideLogin())

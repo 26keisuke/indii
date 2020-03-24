@@ -6,9 +6,14 @@ import {
     FETCH_TOPIC,
     ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
     REVERT_IMG,
+    SET_TOPIC_LIKE
 } from "../types/types";
 
 import { cancelOnMultipleSearch } from "../util"
+
+export const setTopicLike = (topicLikeArr) => dispatch => {
+    dispatch({ type: SET_TOPIC_LIKE, payload: topicLikeArr })
+}
 
 export const fetchTopic = (id, type) => async (dispatch) => {
     if(!id) { dispatch({type: FETCH_TOPIC, payload: {}}); return;}

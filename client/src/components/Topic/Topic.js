@@ -152,8 +152,6 @@ class TopicPage extends Component {
             for(var j=0; j < column.posts.length; j++){
                 post = arrObjLookUp(posts, "_id", column.posts[j]);
 
-                console.log(column.title)
-
                 sndArr.push(
                     <PostElement
                         key={"post" + String(post.index.join("."))}

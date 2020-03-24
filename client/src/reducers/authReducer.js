@@ -1,7 +1,8 @@
 import {
     FETCH_USER, FETCH_NOTIF, FETCH_CONFIRM,
     SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
-    FETCH_AFTER_TOPIC_LIKE
+    FETCH_AFTER_TOPIC_LIKE,
+    UPDATE_POST_EMOJI, UPDATE_POST_STAR, UPDATE_TOPIC_LIKE
 } from "../actions/types/types"
 
 import update from "immutability-helper"
@@ -22,6 +23,15 @@ export default function authReducer(state={
     var newObj;
 
     switch(action.type) {
+        case UPDATE_TOPIC_LIKE:
+            newObj = update(state, {info: {likedTopic: {$set: action.payload}}})
+            return newObj
+        case UPDATE_POST_STAR:
+            newObj = update(state, {info: {likedPost: {$set: action.payload}}})
+            return newObj
+        case UPDATE_POST_EMOJI:
+            newObj = update(state, {info: {postRating: {$set: action.payload}}})
+            return newObj
         case FETCH_USER:
             if(action.payload) {
                 return {

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { 
-    disableGray,
+    endAction,
     updateMessage,
 } from "./update"
 
@@ -36,7 +36,7 @@ export const updateImage = (id, value) => async (dispatch) => {
     const url = `/api/profile/${id}/photo`
     axios.post(url, {photo: value})
         .then(() => {
-            dispatch(disableGray())
+            dispatch(endAction())
             dispatch(fetchProfile(id))
             dispatch(fetchUser())
             dispatch(updateMessage("success", "プロフィール画像を変更しました。"))
@@ -64,7 +64,7 @@ export const updateProfile = (id, value) => async (dispatch) => {
     const url = `/api/profile/${id}`
     axios.post(url, value)
         .then(() => {
-            dispatch(disableGray())
+            dispatch(endAction())
             dispatch(fetchProfile(id))
             dispatch(fetchUser())
             dispatch(updateMessage("success", "プロフィールの内容を変更しました。"))

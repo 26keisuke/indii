@@ -1,5 +1,7 @@
 import React from "react"
 import { Node } from 'slate'
+import equal from "deep-equal"
+import axios from "axios"
 
 import response from "../../images/response.png";
 import dissapointed from "../../images/dissapointed.png";

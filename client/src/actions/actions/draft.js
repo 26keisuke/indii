@@ -1,11 +1,9 @@
 import axios from "axios";
 
 import { 
-    isFetching,
-    endFetching,
-    disableGray,
+    beginAction,
+    endAction,
     updateMessage,
-    enableGray,
 } from "./update"
 
 import {
@@ -33,12 +31,12 @@ export const fetchDraft = (nounce) => async (dispatch) => {
 }
 
 export const fetchOneDraft = (id) => async (dispatch) => {
-    dispatch(isFetching())
+    dispatch(beginAction())
     const url = `/api/draft/${id}`
     const res = await axios.get(url)
     if(res){ dispatch({ type: DRAFT_READ }) }
     dispatch({type: FETCH_ONE_DRAFT, payload: res.data})
-    dispatch(endFetching())
+    dispatch(endAction())
 }
 
 export const draftUpdated = () => (dispatch) => {
@@ -48,14 +46,6 @@ export const draftUpdated = () => (dispatch) => {
 export const draftRead = () => (dispatch) => {
     dispatch({type: DRAFT_READ})
 }
-
-// export const draftOneUpdated = () => (dispatch) => {
-//     dispatch({type: DRAFT_ONE_UPDATED})
-// }
-
-// export const draftOneRead = () => (dispatch) => {
-//     dispatch({type: DRAFT_ONE_READ})
-// }
 
 export const draftAddRef = (id, data) => async (dispatch) => {
     const url = `/api/draft/${id}/ref`
@@ -98,11 +88,12 @@ export const changeTag = (draftId, tags, revert) => async (dispatch) => {
 }
 
 export const changeDraftConfig = (draftId, value) => async (dispatch) => {
+    dispatch(beginAction())
     const url = `/api/draft/${draftId}/config`
     axios.post(url, {config: value})
     .then(res => {
         dispatch(draftUpdated())
-        dispatch(disableGray())
+        dispatch(endAction())
         dispatch(updateMessage("success", "設定を変更しました。"))
     })
     .catch(err => {
@@ -111,11 +102,12 @@ export const changeDraftConfig = (draftId, value) => async (dispatch) => {
 }
 
 export const deleteRef = (id) => async (dispatch) => {
+    dispatch(beginAction())
     const url = `/api/draft/${id.draftId}/ref/${id.refId}`
     axios.delete(url)
         .then(res => {
-            dispatch(disableGray())
             dispatch(draftUpdated())
+            dispatch(endAction())
             dispatch(updateMessage("success", "参照を削除しました。"))
             return
         })
@@ -128,12 +120,11 @@ export const deleteRef = (id) => async (dispatch) => {
 // ============ ここまでの ============ 
 
 export const deleteDraft = (id) => async (dispatch) => {
-    dispatch(isFetching())
+    dispatch(beginAction())
     const url = "/api/draft/delete"
     axios.post(url, {subject: id})
         .then(res => {
-            dispatch(endFetching())
-            dispatch(disableGray())
+            dispatch(endAction())
             dispatch(fetchDraft(id)) // this certainly isnt the optimal because req is sent to server again
             dispatch(draftUpdated())
             dispatch(updateMessage("success", "下書きを削除しました。"))
@@ -146,8 +137,7 @@ export const deleteDraft = (id) => async (dispatch) => {
 }
 
 export const uploadDraft = (value) => async (dispatch) => {
-    dispatch(isFetching())
-    dispatch(enableGray())
+    dispatch(beginAction())
     
     const url = "/api/draft/upload"
     const promises = []
@@ -160,8 +150,7 @@ export const uploadDraft = (value) => async (dispatch) => {
 
     Promise.all(promises)
     .then(() => {
-        dispatch(disableGray())
-        dispatch(endFetching())
+        dispatch(endAction())
         dispatch(draftUpdated())
         
         // もしreduxにfetchされているtopicがあったらstale valueになるのでリセットする
@@ -177,13 +166,13 @@ export const uploadDraft = (value) => async (dispatch) => {
 }
 
 export const confirmDraft = (value) => async (dispatch) => {
-    dispatch(isFetching())
+    dispatch(beginAction())
     const url = `/api/draft/edit`
     axios.post(url, value)
     .then(res => {
         const msg = res.data === true ? "リクエストを承認しました。" : "リクエストを拒否しました。"
+        dispatch(endAction())
         dispatch(updateMessage("success", msg))
-        dispatch(endFetching())
         return;
     })
     .catch(err => {

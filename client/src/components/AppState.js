@@ -4,9 +4,9 @@ import { connect } from "react-redux"
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from "react-router-dom"
+import equal from "deep-equal"
 
 import Message from "./Util/Message"
-// import Loading from "./Util/Loading"
 import Filter from "./Util/Filter"
 import Header from "./Header/Header";
 import Navigation from "./Navigation/Navigation";
@@ -35,6 +35,90 @@ class AppState extends Component {
 
     componentDidMount() {
         this.props.fetchUser();
+
+        if(this.props.auth.loggedIn && !this.autoUpdate){
+            this.setUpdater()
+        }
+    }
+
+    setUpdater = () => {
+        this.autoUpdate = setInterval(() => {
+    
+            this.sendDiff("POST_STAR", "INDII_POST_STAR", this.props.auth.info.likedPost, "post", ["post"])
+            this.sendDiff("POST_EMOJI", "INDII_POST_EMOJI", this.props.auth.info.postRating, "post", ["post", "rate"])
+            this.sendDiff("TOPIC_LIKE", "INDII_TOPIC_LIKE", this.props.auth.info.likedTopic, "topic", ["topic"])
+
+        }, 5000)
+    }
+
+    sendDiff = (type, storageName, intialVal, idLookUp, lookUpArr) => {
+        var changedArr, diff;
+
+        const changed = localStorage.getItem(storageName)
+
+        try {
+            changedArr = JSON.parse(changed)
+        } catch (e) {
+            console.log(e)
+        }
+
+        if(changed && !equal(intialVal, changedArr)){ // もしtoggleした場合は_idが追加されないので!equalになる
+            diff = this.getDiff(intialVal, changedArr, lookUpArr) 
+            if(diff){ // そのため、diffが本当に揃っているかを確認する分岐が必要
+                this.props.saveAsync(type, diff, idLookUp)
+            }
+        } 
+    }
+
+    // こいつの呼ばれる回数が異常（arr.lengthが2で8msかかる）
+    getDiff = (initial, changed, lookUpArr) => {
+        var i, j;
+
+        var tempInitial = initial.slice();
+        var tempChanged = changed.slice();
+
+        const checkDif = (initial, changed, lookUpArr) => {
+            var isDifferent = false;
+            for(let i=0; i < lookUpArr.length; i++){
+                if(initial[lookUpArr[i]] !== changed[lookUpArr[i]]){
+                    isDifferent = true;
+                    break
+                }
+            }
+            return isDifferent
+        }
+
+        if(initial.length >= changed.length) {
+            for(i=0; i < initial.length; i++){
+                for(j=0; j < changed.length; j++){
+                    if(!(checkDif(initial[i], changed[j], lookUpArr))){
+                        tempInitial[i] = false;
+                        tempChanged[j] = false;
+                        continue
+                    }
+                }
+            }
+        } else {
+            for(i=0; i < changed.length; i++){
+                for(j=0; j < initial.length; j++){
+                    if(!(checkDif(initial[j], changed[i], lookUpArr))){
+                        tempChanged[i] = false;
+                        tempInitial[j] = false;
+                        continue
+                    }
+                }
+            }
+        }
+
+        const removed = tempInitial.filter(temp => temp !== false)
+        const added = tempChanged.filter(temp => temp !== false)
+
+        if(removed.length === 0 && added.length === 0) return null
+
+        return {
+            removed,
+            added,
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -47,17 +131,21 @@ class AppState extends Component {
         if((prevProps.auth.logInError === null) && (this.props.auth.logInError === false)) {
             this.props.hideLogin();
         }
+
+        if(!prevProps.auth.loggedIn && this.props.auth.loggedIn){
+            this.setUpdater()
+        }
     }
 
     componentWillUnmount() {
         document.removeEventListener("mousedown", this.outsideClick)
+        clearInterval(this.autoUpdate)
     }
 
     outsideClick = (e) => {
 
         if(this.props.auth.showForm) {
-            // 何故だかたまにthis.authRefが関係ない時にundefinedになってエラーになるからthis.authRefを追加
-            if(this.authRef && this.authRef.current && this.authRef.current.contains(e.target)) {
+            if(this.authRef && this.authRef.current && this.authRef.current.contains(e.target)) { // 何故だかたまにthis.authRefが関係ない時にundefinedになってエラーになるからthis.authRefを追加
                 return;
             }
             this.props.hideLogin();
@@ -93,9 +181,7 @@ class AppState extends Component {
         if(_value){ value = _value }
 
         // 初期に共通して行うこと
-        if(authList.includes(action)){
-            this.props.isFetching()
-        } else {
+        if(!authList.includes(action)) {
             this.props.hideConfirmation();
         }
 
@@ -105,64 +191,65 @@ class AppState extends Component {
                 // ======== Confirm(PopUp)関係 ==========
     
                 case "POST_DELETE":
-                    this.props.deletePost(id); break
+                    this.props.deletePost(id); return
     
                 case "GIVE_FEEDBACK":
-                    this.props.sendFeedBack(id, {problem1, problem2, problem3, problem4, problem5}); break
+                    this.props.sendFeedBack(id, {problem1, problem2, problem3, problem4, problem5}); return
     
                 case "CHANGE_DRAFTNAME":
-                    this.props.changeDraftName(id, "", true); break 
+                    this.props.changeDraftName(id, "", true); return 
                 
                 case "CHANGE_TAG":
-                    this.props.changeTag(id, "", true); break
+                    this.props.changeTag(id, "", true); return
     
                 case "CHANGE_DRAFTCONFIG":
-                    this.props.changeDraftConfig(id, value); break
+                    this.props.changeDraftConfig(id, value); return
     
                 case "REVERT_IMG":
-                    this.props.revertImg(true); break
+                    this.props.revertImg(true); return
     
                 case "ADD_COLUMN":
-                    this.props.addColumn(value); this.props.updateMessage("success", "コラムを削除しました。"); break
+                    this.props.addColumn(value); this.props.updateMessage("success", "コラムを削除しました。"); return
     
                 case "REVERT_COLUMN":
-                    this.props.revertColumn(true); break
+                    this.props.revertColumn(true); return
     
                 case "DELETE_COLUMN":
-                    this.props.deleteColumn(id); break
+                    this.props.deleteColumn(id); return
     
                 case "DRAFT_DELETE_CHECK":
-                    this.props.deleteDraft(draftId); break
+                    this.props.deleteDraft(draftId); return
     
                 case "DRAFT_UPLOAD_CHECK":
-                    this.props.uploadDraft(index); break
+                    this.props.uploadDraft(index); return
 
                 case "CONFIRM_DRAFT":
-                    this.props.confirmDraft(value); this.props.history.push("/notification"); break
+                    this.props.confirmDraft(value); this.props.history.push("/notification"); return
     
                 case "DELETE_REF":
-                    this.props.deleteRef(id); break
+                    this.props.deleteRef(id); return
     
                 case "SELF_EDIT":
-                    this.props.updateProfile(id, value); break
+                    this.props.updateProfile(id, value); return
     
                 case "SELF_IMAGE":
-                    this.props.updateImage(id, value); break
+                    this.props.updateImage(id, value); return
 
                 case "ADD_TALK_CONFIRM":
-                    this.props.createTalk(conf.talkId, conf.type, conf.talkTitle, conf.talkDesc); break
+                    this.props.createTalk(conf.talkId, conf.type, conf.talkTitle, conf.talkDesc); return
                 
                 case "DRAFT_ADD_URL":
-                    this.props.draftAddUrl(value); break;
+                    this.props.draftAddUrl(value); return;
 
                 case "DRAFT_ADD_KATEX":
-                    this.props.draftAddKatex(value); break;
+                    this.props.draftAddKatex(value); return;
                 
                 case "TALK_EDIT":
-                    this.props.editTalkDesc(id, value); break
+                    this.props.editTalkDesc(id, value); return
 
                 case "TALK_DELETE":
-                    this.props.deleteTalk(id); break
+                    this.props.deleteTalk(id); return
+
                 // ======== logIn系 ==========
     
                 case "SIGN_UP":
@@ -171,12 +258,10 @@ class AppState extends Component {
                 case "LOG_IN":
                     this.props.logIn(value); return
     
-                default: break
+                default: 
+                    this.props.endAction(); return
             }
         }
-
-        // this.props.endFetching(); // 別にisFetchingされていなくても大したperformanceのコストにはならん。いちいちどれがisFetchingしたか考えるのだるいし
-        // this.props.disableGray();
     }
 
     renderMessage = () => {

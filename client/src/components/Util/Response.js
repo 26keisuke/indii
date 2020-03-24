@@ -1,6 +1,5 @@
-import React, { Component } from "react"
+import React, { useMemo, useRef, useState, useEffect } from "react"
 import { connect } from "react-redux"
-import axios from "axios"
 import PropTypes from "prop-types"
 
 import * as actions from "../../actions"
@@ -9,272 +8,192 @@ import ShowMore from "./ShowMore"
 import Emoji from "./Emoji"
 import Star from "./Star"
 
-let ct = 0;
+// localStorageは保存用
+// stateは使用用
+const Response = ({ info, loggedIn, postId, isOpened, postStar, postEmoji, ...props }) => {
 
-class Response extends Component {
+    const [showMore, setMore] = useState(false)
+    const [showEmoji, setEmoji] = useState(false)
+    const emojiRef = useRef()
+    const moreRef = useRef()
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            showEmoji: false,
-            showMore: false,
-            showStar: false,
-            chosenEmoji: null,
-            madeStarAction: false,
-            madeEmojiAction: false,
-        }
-        this.emojiRef = React.createRef();
-        this.actionRef = React.createRef();
+    const find = (type) => {
+        var res;
+        const isStar = type === "STAR"
+        const item = isStar ? postStar : postEmoji
+
+        item.map((obj,index) => {
+            if(obj.post === postId){
+                res = {
+                    data: obj,
+                    index: index,
+                }
+            }
+        })
+
+        if(!!res) return res
+
+        return ""
     }
 
-    componentDidMount() {
-        // こいつが５回もコールされてるから、グローバルカウンターで一回にしてる
-        // もし既にfetchuserがcallされていてこのcomponentに戻ってきた場合はtrueになる => componentDidUpadateが通用しない
-        if(this.props.auth.loggedIn && (ct == 0)) {
-            this.props.fetchUser()
-            this.setUpdater() 
-            ct++
+    useEffect(() => {
+        if(!isOpened){
+            setMore(false)
+            setEmoji(false)
         }
-    }
+    }, [isOpened])
 
-    handleWindowClose = () => {
-        if(this.state.madeStarAction) {
-            axios.post(`/api/post/${this.props.postId}/star`, {like: this.state.showStar})
-        }
-        if(this.state.madeEmojiAction) {
-            axios.post(`/api/post/${this.props.postId}/emoji`, {emoji: this.state.chosenEmoji})
-        }
-    }
-
-    setUpdater = () => {
-
-        window.addEventListener("beforeunload", this.handleWindowClose);
-
-        this.autoUpdate = setInterval(() => {
-            if (this.state.madeStarAction) {
-                
-                axios.post(`/api/post/${this.props.postId}/star`, {like: this.state.showStar})
-                .then(()=>{
-                    this.setState({
-                        madeStarAction: false,
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-
+    useEffect(() => {
+        if (loggedIn){
+            if (showEmoji || showMore) {
+                document.addEventListener("mousedown", outsideClick)
+            } else {
+                document.removeEventListener("mousedown", outsideClick)
             }
 
-            if (this.state.madeEmojiAction) {
-                axios.post(`/api/post/${this.props.postId}/emoji`, {emoji: this.state.chosenEmoji})
-                .then(()=>{
-                    this.setState({
-                        madeEmojiAction: false,
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            return () => {
+                document.removeEventListener("mousedown", outsideClick)
             }
-        }, 5000)
-    }
-
-    componentDidUpdate(prevProps) {
-
-        if(prevProps.isOpened && !this.props.isOpened) {
-            this.setState({
-                showMore: false,
-                showEmoji: false,
-            })
         }
+    }, [loggedIn, showEmoji, showMore])
 
-        if (this.state.showEmoji || this.state.showMore) {
-            document.addEventListener("mousedown", this.outsideClick)
-        } else {
-            document.removeEventListener("mousedown", this.outsideClick)
-        }
-
-        // 初期のfetchUserだとloggedInはfalseからtrueに変わる。
-        // componentDidMountでやれるのではないかと思うが、reduxのためできない => mountまでにpropsがupdateされない
-        if (!prevProps.auth.loggedIn && this.props.auth.loggedIn){
-            this.props.fetchUser()
-            this.setUpdater()
-        }
-
-        if (prevProps.auth.info.likedPost !== this.props.auth.info.likedPost){
-            const ls = this.props.auth.info.likedPost;
-            var liked = false;
-            for(var i = 0; i < ls.length; i++) {
-                if(ls[i].post === this.props.postId) {
-                    liked = true
-                    break
-                };
-            };
-            this.setState({ showStar: liked })
-        }
-
-        if (prevProps.auth.info.postRating !== this.props.auth.info.postRating){
-            const ls = this.props.auth.info.postRating;
-            var rate = null;
-            for(var j = 0; j < ls.length; j++) {
-                if(ls[j].post === this.props.postId) {
-                    rate = ls[j].rate;
-                    break
-                };
-            };
-            this.setState({ chosenEmoji: rate })
-        }
-    }
-
-    componentWillUnmount() {
-
-        ct = 0;
-
-        if (!this.props.skeleton && this.props.auth.loggedIn){
-            if(this.state.madeStarAction) {
-                axios.post(`/api/post/${this.props.postId}/star`, {like: this.state.showStar})
-            }
-            if(this.state.madeEmojiAction) {
-                axios.post(`/api/post/${this.props.postId}/emoji`, {emoji: this.state.chosenEmoji})
-            }
-            window.removeEventListener("beforeunload", this.handleWindowClose);
-        }
-
-        document.removeEventListener("mousedown", this.outsideClick)
-       
-        clearInterval(this.autoUpdate)
-    }
-
-    outsideClick = (e) => {
-        if(this.emojiRef.current.contains(e.target)) {
+    const outsideClick = (e) => {
+        if(emojiRef.current.contains(e.target)) {
             return null;
         }
 
-        if(this.actionRef.current.contains(e.target)) {
+        if(moreRef.current.contains(e.target)) {
             return null;
         }
 
-        this.setState({
-            showEmoji: false,
-            showMore: false,
-        })
+        setEmoji(false)
+        setMore(false)
     }
 
-    handleNoAuthClick = (e) => {
-        e.preventDefault()
-        this.props.showLogin()
-        this.props.enableGray()
-    }
-
-    handleStarClick = (e) => {
+    const handleStarClick = (e) => {
         e.preventDefault()
 
-        // わかりやすければtertiaryに
-        if (!this.state.showStar) {
-            this.setState({
-                showStar: true,
-                madeStarAction: true,
-            })
+        var set = postStar.slice()
+
+        const found = find("STAR")
+        if(!!found){
+            set.splice(found.index, 1)
         } else {
-            this.setState({
-                showStar: false,
-                madeStarAction: true,
-            })
+            set.push({timeStamp: Date.now(), post: postId})
         }
+
+        props.setPostStar(set)
+        localStorage.setItem("INDII_POST_STAR", JSON.stringify(set))
     }
 
-    handleResponseClick = (e) => {
+    const handleResponseClick = (e) => {
         e.preventDefault()
-        this.setState({showMore: false})
-        this.setState({
-            showEmoji: !this.state.showEmoji
-        })
+        setMore(false)
+        setEmoji(!showEmoji)
     }
 
-    handleEmojiClick = (e, id) => {
+    const handleEmojiClick = (e, id) => {
         e.preventDefault()
-        this.setState({
-            chosenEmoji: id,
-            madeEmojiAction: true,
-        })
-        this.setState({
-            showEmoji: false
-        })
+
+        const set = postEmoji.slice()
+
+        const found = find("EMOJI")
+        if(!!found){
+            const { index } = found
+            set[index].timeStamp = Date.now()
+            set[index].rate = id
+        } else {
+            set.push({timeStamp: Date.now(), post: postId, rate: id})
+        }
+
+        props.setPostEmoji(set)
+        localStorage.setItem("INDII_POST_EMOJI", JSON.stringify(set))
+        
+        setEmoji(false)
     }
 
-    handleMoreClick = (e) => {
+    const handleMoreClick = (e) => {
         e.preventDefault()
-        this.setState({showEmoji: false})
-        this.setState({
-            showMore: !this.state.showMore
-        })
+        setEmoji(false)
+        setMore(!showMore)
     }
 
-    deletePost = () => {
-        this.setState({showMore: false})
-        const id = this.props.postId;
+    const handleNoAuthClick = (e) => {
+        e.preventDefault()
+        props.showLogin()
+        props.enableGray()
+    }
+
+    const chosenEmoji = useMemo(() => loggedIn && find("EMOJI").data && find("EMOJI").data.rate, [postEmoji, postId])
+    const showStar = useMemo(() => loggedIn && !!(find("STAR")), [postStar, postId])
+
+    const deletePost = () => {
+        setMore(false)
+
+        const id = postId;
         const action = "POST_DELETE"
         const title = "ポストを削除";
         const caution = ""
         const message = "このポストを削除してもよろしいですか？";
         const buttonMessage = "削除する";
-        this.props.showConfirmation(id, action, title, caution, message, buttonMessage)
-        this.props.enableGray()
+        props.showConfirmation(id, action, title, caution, message, buttonMessage)
+        props.enableGray()
     }
 
-    reportPost = () => {
-        this.setState({showMore: false});
-        const id = this.props.postId;
+    const reportPost = () => {
+        setMore(false)
+
+        const id = postId;
         const action = "GIVE_FEEDBACK";
         const title = "このポストへのフィードバック";
         const message = "このポストについてどう思いましたか？";
         const caution = "（このフィードバックは匿名で保存されます。）";
         const buttonMessage = "送信する";
-        this.props.showConfirmation(id, action, title, caution, message, buttonMessage);
-        this.props.enableGray();
+        props.showConfirmation(id, action, title, caution, message, buttonMessage);
+        props.enableGray();
     };
 
-    render() {
-        return (
-            <div style={this.props.wrapperStyle}>
-                <Star
-                    show={this.state.showStar}
-                    handleClick={this.props.auth.loggedIn ? this.handleStarClick : this.handleNoAuthClick}
-                    shadow={true}
-                />
-                <Emoji
-                    ref={this.emojiRef}
-                    handleResponseClick={this.props.auth.loggedIn ?this.handleResponseClick : this.handleNoAuthClick}
-                    handleEmojiClick={this.handleEmojiClick}
-                    chosenEmoji={this.state.chosenEmoji}
-                    showEmoji={this.state.showEmoji}
-                    shadow={true}
-                />
-                <ShowMore
-                    ref={this.actionRef}
-                    handleClick={this.props.auth.loggedIn ? this.handleMoreClick : this.handleNoAuthClick}
-                    show={this.state.showMore}
-                    left="-110px"
-                    bottom="23px"
-                    actionName={["フィードバックをする", "この投稿を削除する"]}
-                    action={[this.reportPost, this.deletePost]}
-                    shadow={true}
-                />
-            </div>
-        )
-    }
+    return (
+        <div>
+            <Star
+                show={showStar}
+                handleClick={loggedIn ? handleStarClick : handleNoAuthClick}
+                shadow={true}
+            />
+            <Emoji
+                ref={emojiRef}
+                handleResponseClick={loggedIn ? handleResponseClick : handleNoAuthClick}
+                handleEmojiClick={handleEmojiClick}
+                chosenEmoji={chosenEmoji}
+                showEmoji={showEmoji}
+                shadow={true}
+            />
+            <ShowMore
+                ref={moreRef}
+                handleClick={loggedIn ? handleMoreClick : handleNoAuthClick}
+                show={showMore}
+                left="-110px"
+                bottom="23px"
+                actionName={["フィードバックをする", "この投稿を削除する"]}
+                action={[reportPost, deletePost]}
+                shadow={true}
+            />
+        </div>
+    )
 }
-
 
 Response.propTypes = {
     postId: PropTypes.string,
-    wrapperStyle: PropTypes.object,
-
+    isOpened: PropTypes.bool,
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ auth, post }) {
     return {
-        auth: state.auth
+        loggedIn: auth.loggedIn,
+        info: auth.info,
+
+        postStar: post.postStar,
+        postEmoji: post.postEmoji
     }
 }
 

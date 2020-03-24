@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { useMemo, useRef, useState, useEffect } from "react"
 import styled, { css, keyframes} from "styled-components"
 import Skeleton from "react-loading-skeleton"
 import { withRouter } from "react-router-dom"
@@ -14,176 +14,129 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 import Back from "../../Util/Back"
 
-let ct = 0;
+const Info = ({ 
 
-class Info extends Component {
+    history, loggedIn, topicLike,
+    id, content, flag, tags, topicName, postCount, likes, handleClick, selected, squareImg,
+    ...props
 
-    constructor(props){
-        super(props)
-        this.state = {
-            liked: false,
-            madeLikeAction: false,
-        }
-    }
+}) => {
 
-    componentDidMount() {
-        this.props.fetchUser()
+    const find = () => {
+        var res;
 
-        if(this.props.loggedIn && (ct === 0)) {
-            if(this.props.id){
-                this.checkForFavorite()
+        topicLike.map((obj,index) => {
+            if(obj.topic === id){
+                res = {
+                    data: obj,
+                    index: index,
+                }
             }
-            this.setUpdater() 
-            ct++
-        }
+        })
+
+        if(!!res) return res
+
+        return ""
     }
 
-    componentDidUpdate(prevProps) {
-        if(this.props.loggedIn && !prevProps.id && this.props.id){
-            this.checkForFavorite()
-        }
-    }
-
-    handleWindowClose = () => {
-        if(this.state.madeLikeAction) {
-            this.props.fetchAfterTopicLike(this.props.id, this.state.liked)
-        }
-    }
-
-    setUpdater = () => {
-
-        window.addEventListener("beforeunload", this.handleWindowClose);
-
-        this.autoUpdate = setInterval(() => {
-            if (this.state.madeLikeAction) {
-                
-                this.props.fetchAfterTopicLike(this.props.id, this.state.liked)
-                this.setState({
-                    madeLikeAction: false,
-                })
-
-            }
-        }, 10000)
-    }
-
-    handleLikeClick = (e) => {
+    const handleLikeClick = (e) => {
         e.preventDefault()
 
-        this.setState({
-            liked: !this.state.liked,
-            madeLikeAction: true,
-        })
-    }
+        var set = topicLike.slice()
 
-    componentWillUnmount() {
-
-        ct = 0;
-
-        if (this.props.loggedIn){
-            if(this.state.madeLikeAction) {
-                this.props.fetchAfterTopicLike(this.props.id, this.state.liked)
-            }
-            window.removeEventListener("beforeunload", this.handleWindowClose);
+        const found = find()
+        if(!!found){
+            set.splice(found.index, 1)
+        } else {
+            set.push({timeStamp: Date.now(), topic: id})
         }
-       
-        clearInterval(this.autoUpdate)
+
+        props.setTopicLike(set)
+        localStorage.setItem("INDII_TOPIC_LIKE", JSON.stringify(set))
     }
 
-    checkForFavorite = () => {
-        const res = this.props.likedTopic.filter(elem => elem.topic === this.props.id)
-        if(res.length > 0) {
-            this.setState({ liked: true })
-            return 
-        }
-        this.setState({ liked: false })
-        return 
-    }
+    const isLiked = useMemo(() => loggedIn && !!(find()), [topicLike, id])
 
-    render() {
-
-        const { content, flag, tags, topicName, postCount, likes, handleClick, selected, squareImg } = this.props
-
-        return (
-            <TopicTop>
-                <div>
-                    <BackWrapper>
-                        <div>
-                            <Back
-                                back={() => this.props.history.goBack()}
-                                name="戻る"
-                            />
-                        </div>
-                    </BackWrapper>
-                    <TopicTags>
-                        { flag 
-                        ?
-                            tags.map(tag =>
-                                <div key={tag}># {tag}</div>
-                            )
-                        :
-                            <div><Skeleton count={3} width={50} height={22}/></div>
-                        }
-                    </TopicTags>
-                    <TopicTitle>{flag ? topicName : <Skeleton width={300} height={28}/>}</TopicTitle>
-                    <TopicContent>
-                        {
-                            flag 
-                            ?
-                            content 
-                            :
-                            <ContentSkeleton>
-                                <Skeleton count={5} height={18}/>
-                            </ContentSkeleton>
-                        }
-                    </TopicContent>
-                    <TopicTimeStamp>
-                        {flag && <p>ポスト数: {postCount}</p> }
-                        {flag && <p>お気に入り数: {likes.counter}</p>}
-                        {!flag && <p><Skeleton width={160} height={18}/></p> }
-                    </TopicTimeStamp>
-                    <TopicOption>
-                        {/* { flag && 
-                        <div>
-                            <PostRequestIcon src={question} alt="ポストリクエストのボタン"/>
-                        </div>
-                        }
-                        { flag && 
-                        <div>
-                            <PostCreateIcon src={post} alt="ポスト作成のボタン"/>
-                        </div>
-                        } */}
-                        { 
-                        flag
-                        ?
-                        this.state.liked 
-                        ? <BookmarkIcon onClick={(e) => this.handleLikeClick(e)}/>
-                        : <BookmarkBorderIcon onClick={this.props.loggedIn ? (e) => this.handleLikeClick(e) : this.props.showLogin}/>
-                        : ""}
-                    </TopicOption>
-                    { flag &&
-                    <TopicToggle>
-                        <TopicToggleElement selected={selected["topic"]} onClick={() => handleClick("topic")}>
-                            <p>トピック</p>
-                            <div/>
-                        </TopicToggleElement>
-                        {/* <TopicToggleElement selected={selected["talk"]} onClick={() => handleClick("talk")}>
-                            <p>フリートーク</p>
-                            <div/>
-                        </TopicToggleElement> */}
-                        <TopicToggleElement selected={selected["activity"]} onClick={() => this.props.handleClick("activity")}> 
-                            <p>アクティビティー </p>
-                            <div/>
-                        </TopicToggleElement>
-                    </TopicToggle>
+    return (
+        <TopicTop>
+            <div>
+                <BackWrapper>
+                    <div>
+                        <Back
+                            back={history.goBack}
+                            name="戻る"
+                        />
+                    </div>
+                </BackWrapper>
+                <TopicTags>
+                    { flag 
+                    ?
+                        tags.map(tag =>
+                            <div key={tag}># {tag}</div>
+                        )
+                    :
+                        <div><Skeleton count={3} width={50} height={22}/></div>
                     }
-                </div>
-                { flag 
-                ? <img src={squareImg.image} alt="トピックを代表する写真"/>
-                : <section><Skeleton width={250} height={250}/></section>
+                </TopicTags>
+                <TopicTitle>{flag ? topicName : <Skeleton width={300} height={28}/>}</TopicTitle>
+                <TopicContent>
+                    {
+                        flag 
+                        ?
+                        content 
+                        :
+                        <ContentSkeleton>
+                            <Skeleton count={5} height={18}/>
+                        </ContentSkeleton>
+                    }
+                </TopicContent>
+                <TopicTimeStamp>
+                    {flag && <p>ポスト数: {postCount}</p> }
+                    {flag && <p>お気に入り数: {likes.counter}</p>}
+                    {!flag && <p><Skeleton width={160} height={18}/></p> }
+                </TopicTimeStamp>
+                <TopicOption>
+                    {/* { flag && 
+                    <div>
+                        <PostRequestIcon src={question} alt="ポストリクエストのボタン"/>
+                    </div>
+                    }
+                    { flag && 
+                    <div>
+                        <PostCreateIcon src={post} alt="ポスト作成のボタン"/>
+                    </div>
+                    } */}
+                    { 
+                    flag
+                    ?
+                    isLiked
+                    ? <BookmarkIcon onClick={handleLikeClick}/>
+                    : <BookmarkBorderIcon onClick={loggedIn ? handleLikeClick : props.showLogin}/>
+                    : ""}
+                </TopicOption>
+                { flag &&
+                <TopicToggle>
+                    <TopicToggleElement selected={selected["topic"]} onClick={() => handleClick("topic")}>
+                        <p>トピック</p>
+                        <div/>
+                    </TopicToggleElement>
+                    {/* <TopicToggleElement selected={selected["talk"]} onClick={() => handleClick("talk")}>
+                        <p>フリートーク</p>
+                        <div/>
+                    </TopicToggleElement> */}
+                    <TopicToggleElement selected={selected["activity"]} onClick={() => handleClick("activity")}> 
+                        <p>アクティビティー </p>
+                        <div/>
+                    </TopicToggleElement>
+                </TopicToggle>
                 }
-            </TopicTop>
-        )
-    }
+            </div>
+            { flag 
+            ? <img src={squareImg.image} alt="トピックを代表する写真"/>
+            : <section><Skeleton width={250} height={250}/></section>
+            }
+        </TopicTop>
+    )
 }
 
 
@@ -192,7 +145,6 @@ const ContentSkeleton = styled.div`
         width: 100%;
     }
 `
-
 
 const TopicTop = styled.div`
     background-color: white;
@@ -221,13 +173,11 @@ const TopicTop = styled.div`
         min-width: 250px;
         max-height: 250px;
         max-width: 250px;
-        /* padding-right: 30px; */
         object-fit: contain;
         flex-shrink: 0;
     }
 
     & > section {
-        /* padding-right: 30px; */
         flex-shrink: 0;
     }
 `
@@ -255,13 +205,6 @@ const TopicTags = styled.div`
         margin-right: 7px;
     }
 `
-
-// const Tag = styled(FaHashtag)`
-//     color: #5a5a5a;
-//     transform: scale(0.9);
-//     margin-top: -2px;
-//     margin-right: 2px;
-// `
 
 const TopicTitle = styled.h1`
     color: #1C1C1C;
@@ -390,10 +333,10 @@ const extend = keyframes`
     }
 `
 
-function mapStateToProps({auth}){
+function mapStateToProps({ auth, topic }){
     return {
         loggedIn: auth.loggedIn,
-        likedTopic: auth.info.likedTopic
+        topicLike: topic.topicLike
     }
 }
 

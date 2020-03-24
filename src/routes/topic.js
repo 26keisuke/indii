@@ -297,48 +297,105 @@ router.post("/:topicId/post", isLoggedIn, (req, res) => {
     })
 })
 
-router.post("/:topicId/like", (req, res) => {
 
-    const now = Date.now()
-
+router.post("/:topicId/like/removed", (req, res) => {
     Topic.findById(req.params.topicId)
     .then(topic => {
-        if(req.body.like){
-            const res = topic.likes.user.filter(user => user === req.user._id)
-            if(!res[0]){
-                topic.likes.counter++;
-                topic.likes.user.push(req.user.id)
+        topic.likes.user.map((user,index) => {
+            if(String(user) === String(req.user.id)) {
+                topic.likes.user.splice(index, 1)
+                topic.likes.counter--;
             }
-        } else {
-            topic.likes.user.map((user,index) => {
-                if(String(user) === String(req.user.id)) {
-                    topic.likes.user.splice(index, 1)
-                    topic.likes.counter--;
-                }
-            })
-        }
+        })
 
         User.findById(req.user.id)
         .then(user => {
-            if(req.body.like){
-                user.likedTopic.push({timeStamp: now, topic: topic._id})
-            } else {
-                user.likedTopic.map((elem, index) => {
-                    if(String(elem.topic) === String(topic._id)){
-                        user.likedTopic.splice(index, 1)
-                    }
-                })
-            }
+            user.likedTopic.map((elem, index) => {
+                if(String(elem.topic) === String(topic._id)){
+                    user.likedTopic.splice(index, 1)
+                }
+            })
 
             user.save();
             topic.save();
 
             res.send(user.likedTopic)
-
         })
     })
     .catch(err => console.log(err))
 })
+
+router.post("/:topicId/like/added", (req, res) => {
+    var result;
+    const { subject } = req.body
+
+    Topic.findById(req.params.topicId)
+    .then(topic => {
+        result = topic.likes.user.filter(user => user === req.user._id)
+        if(!result[0]){
+            topic.likes.counter++;
+            topic.likes.user.push(req.user.id)
+        }
+
+        User.findById(req.user.id)
+        .then(user => {
+            result = user.likedTopic.filter(elem => String(elem.topic) === String(topic._id))
+
+            if(!result[0]){
+                user.likedTopic.push(subject)
+            }
+            
+            user.save();
+            topic.save();
+
+            res.send(user.likedTopic)
+        })
+    })
+    .catch(err => console.log(err))
+})
+
+// router.post("/:topicId/like", (req, res) => {
+
+//     const now = Date.now()
+
+//     Topic.findById(req.params.topicId)
+//     .then(topic => {
+//         if(req.body.like){
+//             const res = topic.likes.user.filter(user => user === req.user._id)
+//             if(!res[0]){
+//                 topic.likes.counter++;
+//                 topic.likes.user.push(req.user.id)
+//             }
+//         } else {
+//             topic.likes.user.map((user,index) => {
+//                 if(String(user) === String(req.user.id)) {
+//                     topic.likes.user.splice(index, 1)
+//                     topic.likes.counter--;
+//                 }
+//             })
+//         }
+
+//         User.findById(req.user.id)
+//         .then(user => {
+//             if(req.body.like){
+//                 user.likedTopic.push({timeStamp: now, topic: topic._id})
+//             } else {
+//                 user.likedTopic.map((elem, index) => {
+//                     if(String(elem.topic) === String(topic._id)){
+//                         user.likedTopic.splice(index, 1)
+//                     }
+//                 })
+//             }
+
+//             user.save();
+//             topic.save();
+
+//             res.send(user.likedTopic)
+
+//         })
+//     })
+//     .catch(err => console.log(err))
+// })
 
 
 router.get("/search/:type/:term", (req, res) => {

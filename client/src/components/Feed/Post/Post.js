@@ -146,20 +146,19 @@ class Post extends PureComponent {
                     ?
                     <Collapse isOpened={this.state.isOpened}>
                     <div style={{marginRight: "5px"}}>
-                        <div style={wrapperStyle}>
+                        <S1Wrapper>
                             <Skeleton width={250} height={20}/>
-                        </div>
+                        </S1Wrapper>
                     </div>
                     </Collapse>
                     :
                     <Collapse isOpened={this.state.isOpened}>
-                    <ResponseWrapper>
-                        <Response
-                            postId={this.props.id}
-                            wrapperStyle={wrapperStyle}
-                            isOpened={this.state.isOpened}
-                        />
-                    </ResponseWrapper>
+                        <ResponseWrapper>
+                            <Response
+                                postId={this.props.id}
+                                isOpened={this.state.isOpened}
+                            />
+                        </ResponseWrapper>
                     </Collapse>
                     }
                 </PostBox>
@@ -167,12 +166,36 @@ class Post extends PureComponent {
     }
 }
 
-const wrapperStyle = {
-    display: "flex",
-    justifyContent: "flex-end",
-    zIndex:2,
-    paddingTop:"13px",
-}
+const S1Wrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    z-index:2;
+    padding-top: 13px;
+`
+
+const ResponseWrapper = styled.div`
+    & svg,
+    & img {
+        margin-right:65px;
+    }
+
+    & > div {
+
+        display: flex;
+        justify-content: flex-end;
+        z-index:2;
+        padding-top: 13px;
+
+        & > div:last-child {
+            margin-right: 65px;
+
+            & > svg {
+                margin-right: 0px;
+            }
+        }
+    }
+`
+
 
 const PostBox = styled(Link)`
     display: flex;
@@ -271,23 +294,6 @@ const PostMiddle = styled.div`
 
     & > div p{
         line-height: 20px;
-    }
-`
-
-const ResponseWrapper = styled.div`
-    & svg,
-    & img {
-        margin-right:65px;
-    }
-
-    & > div {
-        & > div:last-child {
-            margin-right: 65px;
-
-            & > svg {
-                margin-right: 0px;
-            }
-        }
     }
 `
 

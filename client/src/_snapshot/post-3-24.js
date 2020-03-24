@@ -106,152 +106,194 @@ router.post("/:postId/star/removed", isLoggedIn, (req, res) => {
             post.save()
             user.save()
 
-            res.send(user.likedPost)
+            res.send("DONE")
         })
     })
-    .catch(err => console.log(err))
 })
 
 router.post("/:postId/star/added", isLoggedIn, (req, res) => {
-
-    var result;
-
-    const { subject } = req.body
-    const { timeStamp } = subject
-
     Post.findById(req.params.postId)
     .then(post => {
-        result = post.star.action.filter(elem => String(elem.user) === String(req.user.id))
+        const res = post.star.action.filter(elem => String(elem.user) === String(req.user.id))
 
-        if(!result[0]){
+        if(!res[0]){
             post.star.counter++
-            post.star.action.push({timeStamp: timeStamp, user: req.user.id})
+            post.star.action.push({timeStamp: now, user: req.user.id})
         }
 
         User.findById(post.creator)
         .then(user => {
-            user.notif.push({timeStamp: timeStamp, type: "POST_LIKE", user: req.user.id, post: post._id})
+            user.notif.push({timeStamp: now, type: "POST_LIKE", user: req.user.id, post: post._id})
         })
 
         User.findById(req.user.id)
         .then(user => {
-            result = user.likedPost.filter(elem => String(elem.post) === String(post.id))
+            const res = user.likedPost.filter(elem => String(elem.post) === String(post.id))
 
-            if(!result[0]){
-                user.likedPost.push(subject)
+            if(!res[0]){
+                user.likedPost.push({timeStamp: now, post: post.id})
             }
 
             post.save()
             user.save()
 
-            res.send(user.likedPost)
+            res.send("DONE")
         })
     })
-    .catch(err => console.log(err))
 })
 
-router.post("/:postId/emoji/added", isLoggedIn, (req, res) => {
+// ここからは前のやつ
 
-    var result;
+//　通知
+router.post("/:postId/star", isLoggedIn, (req, res) => {
 
-    const { subject } = req.body
-    const { timeStamp, rate } = subject
+    const now = Date.now()
 
     Post.findById(req.params.postId)
     .then(post => {
 
-        result = post.rating.map(elem => {
-            if(String(elem.user) === String(req.user.id)) {
-                elem.rate = rate
-                elem.timeStamp = timeStamp
-                return true
+        // postの変更
+        if(!req.body.like){
+            post.star.action.map((elem, index) => {
+                if(String(elem.user) === String(req.user.id)) {
+                    post.star.action.splice(index, 1)
+                    post.star.counter--
+                }
+            })
+        } else {
+            const res = post.star.action.filter(elem => String(elem.user) === String(req.user.id))
+
+            if(!res[0]){
+                post.star.counter++
+                post.star.action.push({timeStamp: now, user: req.user.id})
+            }
+        }
+
+        // post ownerの変更
+        User.findById(post.creator)
+        .then(user => {
+            if(!req.body.like){
+                user.notif.push({timeStamp: now, type: "POST_LIKE", user: req.user.id, post: post._id})
+            } else {
+                user.notif.map((elem, index) => {
+                    if((elem.type === "POST_LIKE") && (elem.post === post._id)){
+                        user.notif.splice(index, 1)
+                    }
+                })
             }
         })
-        
-        if(!result[0]){ 
-            post.rating.push({timeStamp: timeStamp, user: req.user.id, rate: rate})
+
+        // req.userの変更
+        User.findById(req.user.id)
+        .then(user => {
+            if(!req.body.like){
+                user.likedPost.map((elem,index) => {
+                    if(String(elem.post) === String(post.id)) {
+                        user.likedPost.splice(index, 1)
+                    }
+                })
+            } else {
+                const res = user.likedPost.filter(elem => String(elem.post) === String(post.id))
+
+                if(!res[0]){
+                    user.likedPost.push({timeStamp: now, post: post.id})
+                }
+            }
+            post.save()
+            user.save()
+
+            res.send("DONE")
+        })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+//　通知
+router.post("/:postId/emoji", isLoggedIn, (req, res) => {
+
+    const now = Date.now()
+
+    Post.findById(req.params.postId)
+    .then(post => {
+
+        // postの変更
+        if(!req.body.emoji){
+            post.rating.map((elem, index) => {
+                if(String(elem.user) === String(req.user.id)) {
+                    post.rating.splice(index, 1)
+                }
+            })
+        } else {
+            const res = post.rating.map(elem => {
+                if(String(elem.user) === String(req.user.id)) {
+                    elem.rate = req.body.emoji
+                    elem.timeStamp = now
+                    return true
+                }
+            })
+            if(!res[0]){ 
+                post.rating.push({timeStamp: now, user: req.user.id, rate: req.body.emoji})
+            }
         }
 
         // post ownerの変更
         User.findById(post.creator)
         .then(owner => {
-
-            result = owner.notif.map(elem => {
-                if(String(elem.post) === String(post.id)) {
-                    elem.emoji = rate
-                    elem.timeStamp = timeStamp
-                    return true
-                }
-            })
-            if(!result[0]){
-                owner.notif.push({timeStamp: timeStamp, type: "POST_EMOJI", user: req.user.id, post: post._id, emoji: rate})
-            }
-
-
-            // req.userの変更
-            User.findById(req.user.id)
-            .then(user => {
-                result = user.postRating.map(elem => {
+            if(!req.body.emoji){
+                owner.notif.map((elem, index) => {
+                    if((elem.type === "POST_EMOJI") && (elem.post === post._id)){
+                        owner.notif.splice(index, 1)
+                    }
+                })
+            } else {
+                const res = owner.notif.map(elem => {
                     if(String(elem.post) === String(post.id)) {
-                        elem.rate = rate
-                        elem.timeStamp = timeStamp
+                        elem.emoji = req.body.emoji
+                        elem.timeStamp = now
                         return true
                     }
                 })
-                if(!result[0]){
-                    user.postRating.push(subject)
+                if(!res[0]){
+                    owner.notif.push({timeStamp: now, type: "POST_EMOJI", user: req.user.id, post: post._id, emoji: req.body.emoji})
                 }
-
-                owner.save();
-                post.save();
-                user.save();
-
-                res.send(user.postRating);
-            })
-        })
-    })
-    .catch(err => console.log(err))
-})
-
-router.post("/:postId/emoji/removed", isLoggedIn, (req, res) => {
-    Post.findById(req.params.postId)
-    .then(post => {
-
-        // postの変更
-        post.rating.map((elem, index) => {
-            if(String(elem.user) === String(req.user.id)) {
-                post.rating.splice(index, 1)
             }
-        })
-
-        // post ownerの変更
-        User.findById(post.creator)
-        .then(owner => {
-            owner.notif.map((elem, index) => {
-                if((elem.type === "POST_EMOJI") && (elem.post === post._id)){
-                    owner.notif.splice(index, 1)
-                }
-            })
 
             // req.userの変更
             User.findById(req.user.id)
             .then(user => {
-                user.postRating.map((elem,index) => {
-                    if(String(elem.post) === String(post.id)) {
-                        user.postRating.splice(index, 1)
+                if(!req.body.emoji){
+                    user.postRating.map((elem,index) => {
+                        if(String(elem.post) === String(post.id)) {
+                            user.postRating.splice(index, 1)
+                        }
+                    })
+                } else {
+                    const res = user.postRating.map(elem => {
+                        if(String(elem.post) === String(post.id)) {
+                            elem.rate = req.body.emoji
+                            elem.timeStamp = now
+                            return true
+                        }
+                    })
+                    if(!res[0]){
+                        user.postRating.push({timeStamp: now, post: post.id, rate: req.body.emoji})
                     }
-                })
+                }
 
                 owner.save();
                 post.save();
                 user.save();
 
-                res.send(user.postRating);
+                res.send("DONE");
             })
 
         })
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+        console.log(err)
+    })
 })
 
 router.post("/delete", (req,res) => {

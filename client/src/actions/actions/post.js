@@ -1,9 +1,8 @@
 import axios from "axios"
 
 import { 
-    disableGray,
-    endFetching,
-    isFetching,
+    beginAction,
+    endAction,
     updateMessage,
 } from "./update"
 
@@ -11,9 +10,18 @@ import {
     SEARCH_FETCHING,
     SEARCH_POST, 
     FETCH_POST,
+    SET_POST_STAR, SET_POST_EMOJI,
 } from "../types/types";
 
 import { cancelOnMultipleSearch } from "../util"
+
+export const setPostStar = (starArr) => dispatch => {
+    dispatch({ type: SET_POST_STAR, payload: starArr })
+}
+
+export const setPostEmoji = (emojiArr) => dispatch => {
+    dispatch({ type: SET_POST_EMOJI, payload: emojiArr })
+}
 
 export const fetchPost = (id) => async (dispatch) => {
     const res = await axios.get(`/api/post/${id}`)
@@ -35,13 +43,12 @@ export const searchPost = (type, value, topicId) => async (dispatch) => {
     }
 }
 
-export const deletePost = (id) => async (dispatch) => {
-    dispatch(isFetching())
+export const deletePost = (id) => (dispatch) => {
+    dispatch(beginAction())
     const url = "/api/post/delete";
     axios.post(url, {id})
         .then(()=> {
-            dispatch(endFetching())
-            dispatch(disableGray())
+            dispatch(endAction())
             dispatch(updateMessage("success", "ポストを削除しました"))
             return
         })

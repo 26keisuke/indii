@@ -1,9 +1,8 @@
 import axios from "axios";
 
 import { 
-    isFetching,
-    endFetching,
-    disableGray,
+    beginAction,
+    endAction,
     updateMessage,
 } from "./update"
 
@@ -57,12 +56,11 @@ export const fetchNewTopic = () => async (dispatch) => {
 }
 
 export const sendFeedBack = (id, problems) => async (dispatch) => {
-    dispatch(isFetching())
+    dispatch(beginAction())
     const url = "/api/feed/feedback"
     axios.post(url, {id, problems})
         .then(()=> {
-            dispatch(endFetching())
-            dispatch(disableGray())
+            dispatch(endAction())
             dispatch(updateMessage("success", "フィードバックを受け取りました。"))
             return
         })

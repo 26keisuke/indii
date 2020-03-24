@@ -80,10 +80,16 @@ export const SEARCH_TOPIC = "SEARCH_TOPIC"
 export const FETCH_TOPIC = "FETCH_TOPIC"
 export const CLEAR_TOPIC = "CLEAR_TOPIC"
 export const FETCH_AFTER_TOPIC_LIKE = "FETCH_AFTER_TOPIC_LIKE" // こいつはauthに行く
+export const UPDATE_TOPIC_LIKE = "UPDATE_TOPIC_LIKE" // こいつはauthに行く
+export const SET_TOPIC_LIKE = "SET_TOPIC_LIKE" 
 
 // POST
 export const SEARCH_POST = "SEARCH_POST"
 export const FETCH_POST = "FETCH_POST"
+export const SET_POST_STAR = "SET_POST_STAR" 
+export const SET_POST_EMOJI = "SET_POST_EMOJI" 
+export const UPDATE_POST_STAR = "UPDATE_POST_STAR" // こいつはauthに行く
+export const UPDATE_POST_EMOJI = "UPDATE_POST_EMOJI" // こいつはauthに行く
 
 // PROFILE
 export const FETCH_PROFILE = "FETCH_PROFILE"

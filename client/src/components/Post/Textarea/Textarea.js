@@ -18,15 +18,23 @@ class Textarea extends Component {
                     />
                 </TextAreaWrapper>
                 { this.props.postId &&
-                <Response
-                    postId={this.props.postId}
-                    wrapperStyle={wrapperStyle}
-                />
+                <ResponseWrapper>
+                    <Response
+                        postId={this.props.postId}
+                    />
+                </ResponseWrapper>
                 }
             </div>
         )
     }
 }
+
+const ResponseWrapper = styled.div`
+    & > div {
+        display: flex;
+        justify-content: space-around;
+    }
+`
 
 const TextAreaWrapper = styled.div`
     & > div {
@@ -34,11 +42,6 @@ const TextAreaWrapper = styled.div`
         padding-bottom: 50px;
     }
 `
-
-const wrapperStyle= {
-    display: "flex",
-    justifyContent: "space-around",
-}
 
 const HeaderTitle = styled.h1`
     color: #222222;

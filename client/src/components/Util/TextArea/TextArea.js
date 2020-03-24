@@ -60,12 +60,10 @@ const EditableWrapper = styled.div`
     `}
 
     & h2 {
-        font-size: 18px;
-        font-weight: bold;
+        font-size: 17px;
     }
 
     & h3 {
-        font-weight: bold;
         font-size: 15px;
     }
     
