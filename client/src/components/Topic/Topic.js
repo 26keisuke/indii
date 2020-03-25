@@ -196,7 +196,6 @@ class TopicPage extends Component {
 
         const descriptionPost = posts[0] || {}
         const description = getEditorContent(descriptionPost.content, 150) || `${topicName}に関するトピックです。`
-        const content = getEditorContent(descriptionPost.content)
 
         return (
             <TopicBox>
@@ -210,7 +209,7 @@ class TopicPage extends Component {
                         id={_id}
                         flag={flag}
                         tags={tags}
-                        content={content}
+                        content={descriptionPost.content}
                         topicName={topicName}
                         postCount={postCount}
                         likes={likes}

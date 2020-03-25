@@ -91,7 +91,7 @@ const ToolWrapper = styled.div`
     }
 `
 
-const TextArea = (props) => {
+const TextArea = ({ readOnly, content, ...props }) => {
 
     var autoSave;
 
@@ -143,12 +143,12 @@ const TextArea = (props) => {
     }
 
     useEffect(() => {
-        if(props.content){
-            if(typeof(props.content) === "object"){
-                setValue(props.content.children)
+        if(content){
+            if(typeof(content) === "object"){
+                setValue(content.children)
                 return
             }
-            setValue(JSON.parse(props.content).children)
+            setValue(JSON.parse(content).children)
         } else if(props.draftContent){
             if(typeof(props.draftContent) === "object"){
                 setValue(props.draftContent.children)
@@ -157,10 +157,10 @@ const TextArea = (props) => {
             setValue(JSON.parse(props.draftContent).children)
         }
 
-    }, [props.content, props.draftContent])
+    }, [content, props.draftContent])
 
     useEffect(() => {
-        if(props.readOnly) return
+        if(readOnly) return
 
         autoSave = setInterval(() => {
             sendUpdate(false)
@@ -169,11 +169,11 @@ const TextArea = (props) => {
         return () => {
             clearInterval(autoSave)
         }
-    }, [props.readOnly, props.draftId])
+    }, [readOnly, props.draftId])
 
     useEffect(() => {
 
-        if(props.readOnly) return
+        if(readOnly) return
 
         if(props.katex){
             insertKatex(editor, props.katex)
@@ -185,10 +185,10 @@ const TextArea = (props) => {
             props.draftAddUrl("")
         }
 
-    }, [props.readOnly, props.katex, props.url])
+    }, [readOnly, props.katex, props.url])
 
 
-    const renderElement = useCallback(props => <Element readOnly={props.readOnly} {...props}/>, [])
+    const renderElement = useCallback(props => <Element readOnly={readOnly} {...props}/>, [])
     const renderLeaf = useCallback(props => <Leaf {...props}/>, [])
 
     const handleLeave = () => { setAbs(true) }
@@ -205,8 +205,8 @@ const TextArea = (props) => {
                 setValue(value)
             }}
         >
-            { !props.readOnly && <Waypoint onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
-            { !isZero && !props.readOnly && abs &&
+            { !readOnly && <Waypoint onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
+            { !isZero && !readOnly && abs &&
             <ToolbarAbs>
                 {/* <MarkButton format="bold"/>
                 <MarkButton format="italic"/>
@@ -223,7 +223,7 @@ const TextArea = (props) => {
                 <ImageButton handleClick={(e) => imageClick(e)}/>
             </ToolbarAbs>
             }
-            { !isZero && !props.readOnly &&
+            { !isZero && !readOnly &&
             <Toolbar>
                 {/* <MarkButton format="bold"/>
                 <MarkButton format="italic"/>
@@ -240,12 +240,12 @@ const TextArea = (props) => {
                 <ImageButton handleClick={(e) => imageClick(e)}/>
             </Toolbar>
             }
-            <EditableWrapper readOnly={props.readOnly}>
+            <EditableWrapper readOnly={readOnly}>
                 <Editable
-                    readOnly={props.readOnly ? true : false}
+                    readOnly={readOnly ? true : false}
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
-                    placeholder={props.readOnly ? "" : "ここに入力してください..."}
+                    placeholder={readOnly ? "" : "ここに入力してください..."}
                 />
             </EditableWrapper>
         </Slate>

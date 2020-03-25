@@ -58,7 +58,6 @@ export class Confirm extends Component {
     componentDidUpdate(prevProps) {
         // 初期化
         if(prevProps.update.confirmation.on === true && this.props.update.confirmation.on === false){
-            
             setTimeout(() => {
                 this.props.resetConfirmation()
                 this.setState({
@@ -192,7 +191,8 @@ export class Confirm extends Component {
 
             case "UPLOAD_DRAFT":
 
-                this.props.fetchTopic()
+                this.props.fetchTopic() // RESET
+                this.props.fetchOneDraft() // RESET
 
                 var next = "";
                 var obj = arrObjLookUp(this.props.draft.onEdit, "_id", newObj.confirmation.draftId[this.state.currentStep])

@@ -3,7 +3,7 @@ html {
     font-family: "Noto Serif JP", serif;
     font-size: 12px;
     line-height: normal;
-    color: #212121;
+    color: hsl(0, 0%, 13%);
 }
 
 body {

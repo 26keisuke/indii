@@ -300,13 +300,15 @@ const Box = styled.div`
     overflow-y: scroll;
     height: 81%;
 
+    scrollbar-color: transparent transparent;
+
     /* &::-webkit-scrollbar-track{
         background-color: #F5F5F5;
     } */
 
     &::-webkit-scrollbar{
         width: 0px !important;
-        /* background-color: #F5F5F5; */
+        background-color: transparent;
     }
 
     /* &::-webkit-scrollbar-thumb{

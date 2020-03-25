@@ -31,6 +31,8 @@ export const fetchDraft = (nounce) => async (dispatch) => {
 }
 
 export const fetchOneDraft = (id) => async (dispatch) => {
+    if(!id) dispatch({type: FETCH_ONE_DRAFT, payload: {}})
+
     dispatch(beginAction())
     const url = `/api/draft/${id}`
     const res = await axios.get(url)

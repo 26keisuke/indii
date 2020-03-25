@@ -16,7 +16,6 @@ class Index extends Component {
 
     fetch = () => {
         this.props.isFetching()
-
         const newObj = update(this.props.update, {confirmation: {transparent: {$set: true}}})
         this.props.updateConfirmation(newObj)
         this.props.fetchOneDraft(this.props.update.confirmation.draftId[this.props.counter])
@@ -62,7 +61,7 @@ class Index extends Component {
             this.props.fetchOneDraft(id)
         }
 
-        if(flag){this.props.updateConfirmation(newObj)}
+        if(flag) this.props.updateConfirmation(newObj)
     }
 
     handleClick = (id, idx, title, isLastIdx, forcedOn) => {
@@ -105,6 +104,7 @@ class Index extends Component {
 
         const newIdx = {addColumn: !addColumn}
         newObj = update(this.props.update, {confirmation: {addColumn: {$set: !addColumn}}})
+        console.log(newIdx)
         newObj = update(newObj, {confirmation: {index: {[id]: {$merge: newIdx}}}})
 
         this.props.updateConfirmation(newObj)
@@ -182,15 +182,15 @@ class Index extends Component {
                 <AddColumn show={showBtn}>
                     { forcedOn
                     ?
-                        <input checked={true} type="checkbox" id="0" name="addColumn"/>
+                        <input checked={true} type="checkbox" id="addColumn0" name="addColumn0"/>
                     :
                         showBtn
                         ?
-                        <input onChange={this.handleToggle} defaultChecked={addColumn} type="checkbox" id="0" name="addColumn"/>
+                        <input checked={addColumn} type="checkbox" id="addColumn1" name="addColumn1"/>
                         :
-                        <input checked={false} type="checkbox" id="0" name="addColumn"/>
+                        <input checked={false} type="checkbox" id="addColumn2" name="addColumn2"/>
                     }
-                    <label htmlFor="0">新しいコラムを追加する</label>
+                    <label htmlFor="0" onClick={!forcedOn && showBtn ? this.handleToggle : () => {}}>新しいコラムを追加する</label>
                 </AddColumn>
             </IndexBox>
         )
@@ -225,7 +225,7 @@ const IndexElement = styled.div`
     transition: 100ms;
 
     ${ props => props.selected && css`
-        border-left: 2px solid #636480;
+        border-left: 2px solid ${props => props.theme.secondary};
         background-color: #f5f5f5;
     `}
 

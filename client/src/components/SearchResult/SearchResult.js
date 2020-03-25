@@ -4,8 +4,6 @@ import styled from "styled-components"
 import { Helmet } from "react-helmet"
 import { connect } from "react-redux"
 
-import sample from "../../images/sample1.png"
-
 import Post from "../Post/Element/Element"
 import Screen from "../Util/Screen"
 import Topic from "./Topic/Topic"
@@ -52,13 +50,14 @@ class SearchResult extends Component {
                     <NotFound>「{term}」に関連するポストがありません。</NotFound>
                     : posts.map(post =>
                     <Post
+                        id={post._id}
                         search={true}
                         topic={post.topicName}
                         title={post.postName}
                         content={post.content}
                         count={post.star.counter}
                         date={post.creationDate}
-                        img={sample}
+                        img={post.postImg ? post.postImg.image : post.topicSquareImg.image}
                     />
                     )
                     }

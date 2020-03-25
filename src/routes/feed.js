@@ -98,6 +98,7 @@ router.get("/search/:term", (req, res) => {
     Post.find({"postName": {$regex: term, $options: "i"}})
     .sort({"star.counter": -1})
     .populate("postImg")
+    .populate("topicSquareImg")
     .then(posts => {
         Topic.find({"topicName": {$regex: term, $options: "i"}})
         .populate("squareImg")

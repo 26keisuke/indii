@@ -30,6 +30,7 @@ const Title = styled.p`
     overflow: auto;
     white-space: nowrap;
     text-overflow: ellipsis;
+    overflow: hidden;
 `
 
 class Post extends Component {

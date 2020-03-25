@@ -6,6 +6,8 @@ import { connect } from "react-redux"
 
 import * as actions from "../../../actions"
 
+import TextArea from "../../Util/TextArea/TextArea"
+
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
@@ -83,7 +85,10 @@ const Info = ({
                     {
                         flag 
                         ?
-                        content 
+                        <TextArea
+                            content={content}
+                            readOnly={true}
+                        />
                         :
                         <ContentSkeleton>
                             <Skeleton count={5} height={18}/>

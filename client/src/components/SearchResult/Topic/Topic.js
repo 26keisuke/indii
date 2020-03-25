@@ -63,7 +63,7 @@ const TopicLike = styled.p`
 `
 
 const S1Wrapper = styled.div`
-    & > span {
+    & .react-loading-skeleton {
         margin-right: 10px;
     }
 `

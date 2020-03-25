@@ -262,6 +262,7 @@ class AppState extends Component {
                     this.props.endAction(); return
             }
         }
+        this.props.endAction();
     }
 
     renderMessage = () => {

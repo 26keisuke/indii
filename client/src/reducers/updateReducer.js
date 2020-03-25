@@ -145,6 +145,13 @@ export default function updateReducer(state={
                     index: {},
                     selected: {},
 
+                    selectedId: "",
+                    selectedTitle: "",
+                    selectedIndex: "",
+                    showBtn: false,
+                    forcedOn: false,
+                    addColumn: false,
+
                     problem1: false,
                     problem2: false,
                     problem3: false,

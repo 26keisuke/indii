@@ -18,6 +18,7 @@ import SkeletonBox from "./Skeleton/SkeletonBox"
 import Image from "./Image/Image"
 import Slider from "./Slider/Slider"
 // import Navigation from "./Navigation/Navigation"
+import Scroll from "../Util/Scroll"
 
 import { getEditorContent, fmtDate, } from "../Util/util"
 
@@ -122,6 +123,7 @@ class Post extends Component {
                     <meta name="description" content={description}/>
                     <meta name="keywords" content={keywords}/>
                 </Helmet>
+                <Scroll/>
                 <Screen space={false} noHeader={true} post={true} noBorder={true}>
                     {this.renderLeft()}
                     {this.renderRight()}
