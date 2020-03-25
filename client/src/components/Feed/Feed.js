@@ -122,10 +122,10 @@ class Feed extends Component {
     renderRight = () => {
         return (
             <div>
+                <New/>
                 <TrendWrapper>
                     <Trend/>
                 </TrendWrapper>
-                <New/>
             </div>
         )
     }

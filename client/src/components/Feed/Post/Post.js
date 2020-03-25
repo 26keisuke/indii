@@ -287,7 +287,7 @@ const PostMiddle = styled.div`
     /* title */
     & > p {
         font-size: 17px;
-        font-weight: bold;
+        text-shadow: 1px 1px 1px #e2e2e2;
         color: #1C1C1C;
         margin-bottom: 5px;
     }
