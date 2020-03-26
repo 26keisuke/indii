@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 import PropTypes from "prop-types"
 import styled from "styled-components"
 
@@ -83,7 +83,7 @@ class Topic extends Component {
                         <TopicInfo>
                             <div>
                                 {
-                                suggestion.tags.map((tag,index) => 
+                                suggestion.tags.slice(0,2).map((tag,index) => 
                                     <p key={tag+index}>#{tag}</p>
                                 )
                                 }

@@ -22,17 +22,21 @@ router.get("/", (req, res) => {
 })
 
 router.get("/user", (req, res) => {
-    const query = req.user
-    ? 
-    [
-        {$match: {"_id": {$ne: req.user._id}}},
-        {$sample: {size: 10}}
-    ]
-    :
-    [
-        {$sample: {size: 10}}
-    ]
+    var match = [];
 
+    if(req.user) match.push({_id: {$ne: req.user._id}})
+
+    match = match.concat([
+        {post: { $exists: true }}
+    ])
+
+    const query = [
+        {$match: {
+            $and: match
+        }},
+        {$sample: {size: 10}}
+    ]
+    
     User.aggregate(query)
     .exec()
     .then(users => res.send(users))

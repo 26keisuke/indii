@@ -37,7 +37,7 @@ class TextArea extends Component {
                 <TextField
                     id="userName" 
                     label="ユーザー名" 
-                    value={changed.userName}
+                    value={changed.userName || ""}
                     onChange={(e) => this.props.setValue(e.target.value, "userName")} 
                     inputProps={{
                         maxLength: 25,
@@ -46,7 +46,7 @@ class TextArea extends Component {
                 <TextField
                     id="comment" 
                     label="職業・経歴・一言" 
-                    value={changed.comment}
+                    value={changed.comment || ""}
                     onChange={(e) => this.props.setValue(e.target.value, "comment")} 
                     inputProps={{
                         maxLength: 30,
@@ -57,7 +57,7 @@ class TextArea extends Component {
                     label="自己紹介" 
                     multiline
                     rows={5}
-                    value={changed.intro}
+                    value={changed.intro || ""}
                     onChange={(e) => this.props.setValue(e.target.value, "intro")}
                     inputProps={{
                         maxLength: 150,

@@ -77,14 +77,14 @@ export const saveAsync = (type, diff, idLookUp) => async (dispatch) => {
     const { baseUrl, dispatchType } = getType(type)
 
     if(removed){
-        for(var i=0; i < removed.length; i++){
+        for(let i=0; i < removed.length; i++){
             subject = removed[i]
             result = await axios.post(baseUrl(subject[idLookUp]) + "/removed", {subject})
         }
     }
 
     if(added){
-        for(var i=0; i < added.length; i++){
+        for(let i=0; i < added.length; i++){
             subject = added[i]
             result = await axios.post(baseUrl(subject[idLookUp]) + "/added", {subject})
         }

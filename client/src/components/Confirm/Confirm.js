@@ -368,6 +368,7 @@ export class Confirm extends Component {
                     <Action
                         type="upload"
                         setCounter={this.setCounter}
+                        setTransparent={this.setTransparent}
                     />
                 )
             case "DRAFT_DELETE_CHECK":

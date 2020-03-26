@@ -49,16 +49,20 @@ export const updateImage = (id, value) => async (dispatch) => {
 }
 
 export const updateProfile = (id, value) => async (dispatch) => {
+    if(!value.userName) {
+        dispatch(updateMessage("fail", "ユーザー名が入力されていません。")); dispatch(endAction()); return;
+    }
+
     if(value.userName.length > 25) {
-        dispatch(updateMessage("fail", "入力可能な文字数を超えています")); return;
+        dispatch(updateMessage("fail", "入力可能な文字数を超えています。")); dispatch(endAction()); return;
     }
 
-    if(value.intro.length > 150) { 
-        dispatch(updateMessage("fail", "入力可能な文字数を超えています。")); return 
+    if(value.intro && value.intro.length > 150) { 
+        dispatch(updateMessage("fail", "入力可能な文字数を超えています。")); dispatch(endAction()); return 
     }
 
-    if(value.comment.length > 30) {
-        dispatch(updateMessage("success", "入力可能な文字数を超えています")); return
+    if(value.comment && value.comment.length > 30) {
+        dispatch(updateMessage("success", "入力可能な文字数を超えています。")); dispatch(endAction()); return
     }
 
     const url = `/api/profile/${id}`
