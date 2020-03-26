@@ -12,6 +12,7 @@ import {
     FETCH_FEED,
     FETCH_RECOMMEND,
     FETCH_NEW_TOPIC,
+    FETCH_FEED_USER,
     SEARCH_FEED,
 } from "../types/types";
 
@@ -53,6 +54,11 @@ export const fetchRecommend = () => async (dispatch) => {
 export const fetchNewTopic = () => async (dispatch) => {
     const res = await axios.get("/api/feed/new/topic")
     dispatch({type: FETCH_NEW_TOPIC, payload: res.data})
+}
+
+export const fetchPeople = () => async (dispatch) => {
+    const res = await axios.get("/api/feed/user")
+    dispatch({type: FETCH_FEED_USER, payload: res.data})
 }
 
 export const sendFeedBack = (id, problems) => async (dispatch) => {

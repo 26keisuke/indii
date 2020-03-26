@@ -499,6 +499,9 @@ class EditIndexTopic extends Component {
     }
 
     render() {
+
+        console.log(this.state.posts)
+
         return (
             <Box scroll={true}>
                 <BoxTransition back={this.props.back} transition={true}>

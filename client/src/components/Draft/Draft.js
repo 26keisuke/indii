@@ -10,6 +10,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import * as actions from "../../actions"
 
 import Screen from "../Util/Screen"
+import Scroll from "../Util/Scroll"
 import Draft from "./Element/Element"
 import { Border } from "../Theme"
 
@@ -97,6 +98,7 @@ class DraftNavigation extends Component {
  
         return (
             <div>
+                <Scroll/>
 
                 <Helmet>
                     <title>下書き一覧 | Indii</title>

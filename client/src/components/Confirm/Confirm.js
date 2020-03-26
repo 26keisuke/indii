@@ -319,8 +319,10 @@ export class Confirm extends Component {
         this.setState({ counter: number })
     }
 
-    setMessage = (name) => {
-        this.setState({ message: name })
+    // これ後でtransparentするやつ全員にpropsとして付け足す
+    setTransparent = (set) => {
+        const newObj = update(this.props.update, {confirmation: {transparent: {$set: set}}})
+        this.props.updateConfirmation(newObj)
     }
 
     renderContent = (action) => {
@@ -358,6 +360,7 @@ export class Confirm extends Component {
                     <Action
                         type="delete"
                         setCounter={this.setCounter}
+                        setTransparent={this.setTransparent}
                     />
                 )
             case "UPLOAD_DRAFT":
@@ -383,7 +386,7 @@ export class Confirm extends Component {
                 return (
                     <Index
                         counter={this.state.currentStep-1}
-                        setMessage={this.setMessage}
+                        setTransparent={this.setTransparent}
                     />
                 )
             case "ADD_TALK_DESC":
@@ -406,6 +409,7 @@ export class Confirm extends Component {
                     <DraftKatex
                         value={this.state.value}
                         setValue={this.setValue}
+                        setTransparent={this.setTransparent}
                     />
                 )
             case "DRAFT_ADD_URL":
@@ -413,6 +417,7 @@ export class Confirm extends Component {
                     <DraftImage
                         value={this.state.value}
                         handleChange={this.setValue}
+                        setTransparent={this.setTransparent}
                     />
                 )
             case "TALK_EDIT":

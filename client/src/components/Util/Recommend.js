@@ -77,7 +77,6 @@ const TrendElement = styled(Link)`
         /* postName */
         & > p:nth-child(2) {
             font-size: 15px;
-            font-weight: bold;
             margin-bottom: 2px;
         }
 

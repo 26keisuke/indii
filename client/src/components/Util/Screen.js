@@ -3,8 +3,6 @@ import { withRouter } from "react-router-dom"
 import styled, { css } from "styled-components"
 import PropTypes from "prop-types"
 
-import Back from "./Back"
-
 import { Space } from "../Theme"
 
 class Screen extends Component {
@@ -42,7 +40,7 @@ class Screen extends Component {
                 <FeedLeft noBorder={this.props.noBorder} post={this.props.post}>
                     {renderHeader()}
                     { !this.props.noHeaderSpace &&
-                    <FeedSpace/>
+                    <Space height={"10px"} backgroundColor={"#F9F9F9"}/>
                     }
                     { this.props.noHeader
                     ?
@@ -99,11 +97,6 @@ export const FeedRight = styled.div`
     ${props => props.post && css`
         padding-left: 2px;
     `}
-`
-
-export const FeedSpace = styled.div`
-    height:10px;
-    background-color: #F9F9F9;
 `
 
 const FeedHeader = styled.div`

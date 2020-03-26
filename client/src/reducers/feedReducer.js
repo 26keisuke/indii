@@ -2,6 +2,7 @@ import {
     FETCH_FEED,
     FETCH_RECOMMEND,
     FETCH_NEW_TOPIC,
+    FETCH_FEED_USER,
     SEARCH_FEED,
     SEARCH_TERM,
 } from "../actions/types/types"
@@ -13,7 +14,8 @@ export default function feedReducer(state={
     topicsFound: [], //検索結果
     feed: [],
     recommend: [],
-    newTopic: []
+    newTopic: [],
+    user: [],
 }, action) {
     switch(action.type) {
         case SEARCH_TERM:
@@ -42,6 +44,11 @@ export default function feedReducer(state={
             return {
                 ...state,
                 recommend: action.payload
+            }
+        case FETCH_FEED_USER:
+            return {
+                ...state,
+                user: action.payload
             }
         default:
             return state

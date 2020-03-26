@@ -65,7 +65,6 @@ class Header extends Component {
     logInClicked = (e) => {
         e.preventDefault()
         this.props.showLogin()
-        this.props.enableGray()
     }
 
     render() {

@@ -32,7 +32,6 @@ const TopicChild = styled.div`
 
 const TopicTitle = styled.div`
     font-size: 15px;
-    font-weight: bold;
     color: #333333;
 `
 

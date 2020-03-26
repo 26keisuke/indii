@@ -2,7 +2,7 @@ import express from "express"
 // import mongoose from "mongoose";
 // import equal from "deep-equal"
 
-// import User from "../models/User"
+import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
 // import Draft from "../models/Draft"
@@ -11,8 +11,7 @@ import Post from "../models/Post"
 const router = express.Router()
 
 router.get("/", (req, res) => {
-    // Post.find({contribution: { $exists: true, $ne: [] }}).sort({contribution: 1}).limit(10)
-    Post.find({lastEdited: { $exists: true }}).sort({lastEdited: -1}).limit(10)
+    Post.find({lastEdited: { $exists: true }}).sort({lastEdited: -1})
     .populate("creator")
     .then(posts => {
         res.send(posts)
@@ -20,6 +19,24 @@ router.get("/", (req, res) => {
     .catch(err => {
         console.log(err)
     })
+})
+
+router.get("/user", (req, res) => {
+    const query = req.user
+    ? 
+    [
+        {$match: {"_id": {$ne: req.user._id}}},
+        {$sample: {size: 10}}
+    ]
+    :
+    [
+        {$sample: {size: 10}}
+    ]
+
+    User.aggregate(query)
+    .exec()
+    .then(users => res.send(users))
+    .catch(err => console.log(err))
 })
 
 router.get("/recommend", (req, res) => {

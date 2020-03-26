@@ -50,7 +50,6 @@ const Title = styled.div`
         border: 1px solid #d2d2d2;
         padding: 0px 3px;
         resize: none;
-        text-overflow: ellipsis;
         margin-top: -5px;
 
         &:focus {

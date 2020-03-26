@@ -1,7 +1,5 @@
 import React from "react"
 import { Node } from 'slate'
-import equal from "deep-equal"
-import axios from "axios"
 
 import response from "../../images/response.png";
 import dissapointed from "../../images/dissapointed.png";
@@ -24,7 +22,6 @@ import FunctionsOutlinedIcon from '@material-ui/icons/FunctionsOutlined';
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import TableChartOutlinedIcon from '@material-ui/icons/TableChartOutlined';
 
-// 明日はここから
 export function getEditorContent(content, length){
 
     if(!content) return ""
@@ -100,8 +97,7 @@ export function fmtDate(time) {
 export function checkAuth(e, context) {
     const isAuthenticated = context.auth.loggedIn
     if(!isAuthenticated) {
-        e.preventDefault()
-        context.enableGray()
+        e.preventDefault() // こいつはこのbranchの中！！
         context.showLogin()
         return false
     }

@@ -3,6 +3,7 @@ import axios from "axios";
 import { 
     endAction,
     updateMessage,
+    enableGray,
 } from "./update"
 
 import { 
@@ -48,10 +49,12 @@ export const fetchConfirm = (id, nounce) => async (dispatch) => {
 }
 
 export const showLogin = () => (dispatch) => {
+    dispatch(enableGray())
     dispatch({type: SHOW_LOGIN})
 }
 
 export const hideLogin = () => (dispatch) => {
+    dispatch(endAction())
     dispatch({type: HIDE_LOGIN})
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 import TextField from '@material-ui/core/TextField';
 import { BlockMath } from "react-katex"
@@ -33,35 +33,46 @@ const MathWrapper = styled.div`
     }
 `
 
-class Katex extends Component {
-    render () {
-        return(
-            <Wrapper>
-                <TextField
-                    id="math" 
-                    label="数式を入力" 
-                    value={this.props.value || ""}
-                    onChange={(e) => this.props.setValue(e.target.value)} 
-                    spellCheck={false}
-                />
-                <MathWrapper>
-                    <div>プレビュー</div>
-                    { this.props.value
-                    ?
-                    <BlockMath
-                        math={this.props.value}
-                        renderError={() => 
-                            <p>数式の形式が正しくありません。</p>
-                        }
-                    />
-                    :
-                    <p>数式が入力されていません。</p>
-                    }
-                </MathWrapper>
-                
-            </Wrapper>
-        )
+const Katex = ({ value, setValue, setTransparent }) =>  {
+
+    useEffect(() => {
+        setTransparent(true)
+    }, []);
+
+    const handleChange = (e) => {
+        setValue(e.target.value)
+        e.target.value ? setTransparent(false) : setTransparent(true)
     }
+
+    return(
+        <Wrapper>
+            <TextField
+                id="math" 
+                label="数式を入力" 
+                value={value || ""}
+                onChange={handleChange} 
+                spellCheck={false}
+            />
+            <MathWrapper>
+                <div>プレビュー</div>
+                { value
+                ?
+                <BlockMath
+                    math={value}
+                    renderError={() => {
+                        setTransparent(true)
+                        return (
+                            <p>数式の形式が正しくありません。</p>
+                        )
+                    }}
+                />
+                :
+                <p>数式が入力されていません。</p>
+                }
+            </MathWrapper>
+            
+        </Wrapper>
+    )
 }
 
 export default Katex

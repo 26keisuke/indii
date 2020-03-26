@@ -30,7 +30,7 @@ class App extends Component {
 
     render() {
 
-        const { auth } = this.props
+        const { loggedIn } = this.props
 
         return (
             <div className="browser">
@@ -44,15 +44,15 @@ class App extends Component {
                         <AppState>
                             <div className="fakebox">
                                 <Route exact path="/" component={Feed} />
-                                <Route exact path="/draft" render={() => (auth.loggedIn ? <Draft/> : <Redirect to="/"/>)} />
+                                <Route exact path="/draft" render={() => (loggedIn ? <Draft/> : <Redirect to="/"/>)} />
                                 <Route path="/draft/edit/:id" component={DraftEditor} />
                                 <Route path="/search" component={SearchResult} />
-                                <Route exact path="/notification" render={() => (auth.loggedIn ? <Notification/> : <Redirect to="/"/>)} />
-                                <Route path="/notification/check/:id" render={() => (auth.loggedIn ? <EditConfirm/> : <Redirect to="/"/>)} />
-                                <Route path="/action/post/create" render={() => (auth.loggedIn ? <CreatePost/> : <Redirect to="/"/>)} />
-                                <Route path="/action/topic/create" render={() => (auth.loggedIn ? <CreateTopic/> : <Redirect to="/"/>)} />
-                                <Route path="/action/post/edit" render={() => (auth.loggedIn ? <EditPost/> : <Redirect to="/"/>)} />
-                                <Route path="/action/topic/edit" render={() => (auth.loggedIn ? <EditTopic/> : <Redirect to="/"/>)} />
+                                <Route exact path="/notification" render={() => (loggedIn ? <Notification/> : <Redirect to="/"/>)} />
+                                <Route path="/notification/check/:id" render={() => (loggedIn ? <EditConfirm/> : <Redirect to="/"/>)} />
+                                <Route path="/action/post/create" render={() => (loggedIn ? <CreatePost/> : <Redirect to="/"/>)} />
+                                <Route path="/action/topic/create" render={() => (loggedIn ? <CreateTopic/> : <Redirect to="/"/>)} />
+                                <Route path="/action/post/edit" render={() => (loggedIn ? <EditPost/> : <Redirect to="/"/>)} />
+                                <Route path="/action/topic/edit" render={() => (loggedIn ? <EditTopic/> : <Redirect to="/"/>)} />
                                 <Route path="/topic/:id" component={Topic} />
                                 <Route path="/post/:id" component={Post} />
                                 <Route path="/talk" component={Talk} />
@@ -75,7 +75,7 @@ class App extends Component {
 
 function mapStateToProps({ auth }){
     return {
-        auth,
+        loggedIn: auth.loggedIn,
     }
 }
 

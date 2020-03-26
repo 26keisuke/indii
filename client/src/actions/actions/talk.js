@@ -2,6 +2,8 @@ import axios from "axios";
 
 import { 
     updateMessage,
+    beginAction,
+    endAction,
 } from "./update"
 
 import { 
@@ -14,9 +16,11 @@ import {
 } from "../types/types";
 
 export const deleteTalk = (id) => async dispatch => {
+    dispatch(beginAction())
     const url = `/api/talk/${id}/delete`
     const res = await axios.post(url)
     dispatch({type: DELETE_TALK, payload: {id}})
+    dispatch(endAction())
     dispatch(updateMessage("success", "トークを削除しました。"))
 }
 
@@ -28,8 +32,10 @@ export const editTalkDesc = (id, value) => async dispatch => {
 }
 
 export const createTalk = (id, type, title, content) => async (dispatch) => {
+    dispatch(beginAction())
     const res = await axios.post("/api/talk", {id, type, title, content})
     dispatch({type: CREATE_TALK, payload: res.data})
+    dispatch(endAction())
     dispatch(updateMessage("success", "トークを作成しました。"))
 }
 

@@ -185,6 +185,7 @@ class AppState extends Component {
             this.props.hideConfirmation();
         }
 
+        // synchronous系はbreak、asynchronous系はreturn
         if (shouldProceed) {
             switch(action){
 
@@ -206,16 +207,16 @@ class AppState extends Component {
                     this.props.changeDraftConfig(id, value); return
     
                 case "REVERT_IMG":
-                    this.props.revertImg(true); return
+                    this.props.revertImg(true); break
     
                 case "ADD_COLUMN":
-                    this.props.addColumn(value); this.props.updateMessage("success", "コラムを削除しました。"); return
+                    this.props.addColumn(value); this.props.updateMessage("success", "コラムを削除しました。"); break
     
                 case "REVERT_COLUMN":
-                    this.props.revertColumn(true); return
+                    this.props.revertColumn(true); break
     
                 case "DELETE_COLUMN":
-                    this.props.deleteColumn(id); return
+                    this.props.deleteColumn(id); break
     
                 case "DRAFT_DELETE_CHECK":
                     this.props.deleteDraft(draftId); return
@@ -227,7 +228,7 @@ class AppState extends Component {
                     this.props.confirmDraft(value); this.props.history.push("/notification"); return
     
                 case "DELETE_REF":
-                    this.props.deleteRef(id); return
+                    this.props.deleteRef(id); break
     
                 case "SELF_EDIT":
                     this.props.updateProfile(id, value); return

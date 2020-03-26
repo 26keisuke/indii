@@ -16,8 +16,7 @@ class Index extends Component {
 
     fetch = () => {
         this.props.isFetching()
-        const newObj = update(this.props.update, {confirmation: {transparent: {$set: true}}})
-        this.props.updateConfirmation(newObj)
+        this.props.setTransparent(true)
         this.props.fetchOneDraft(this.props.update.confirmation.draftId[this.props.counter])
     }
 

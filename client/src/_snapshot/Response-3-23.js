@@ -167,7 +167,6 @@ class Response extends Component {
     handleNoAuthClick = (e) => {
         e.preventDefault()
         this.props.showLogin()
-        this.props.enableGray()
     }
 
     handleStarClick = (e) => {

@@ -111,7 +111,6 @@ class FollowBtn extends Component {
     handleAuthClick = (e) => {
         e.preventDefault()
         this.props.showLogin()
-        this.props.enableGray()
     }
 
     render() {

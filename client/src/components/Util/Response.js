@@ -121,7 +121,6 @@ const Response = ({ info, loggedIn, postId, isOpened, postStar, postEmoji, ...pr
     const handleNoAuthClick = (e) => {
         e.preventDefault()
         props.showLogin()
-        props.enableGray()
     }
 
     const chosenEmoji = useMemo(() => loggedIn && find("EMOJI").data && find("EMOJI").data.rate, [postEmoji, postId])

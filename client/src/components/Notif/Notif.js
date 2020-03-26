@@ -7,7 +7,7 @@ import * as actions from "../../actions"
 
 import Element from "./Element/Element"
 // import Filter from "./Filter/Filter";
-
+import Scroll from "../Util/Scroll"
 import Screen from "../Util/Screen"
 import { Border } from "../Theme"
 
@@ -77,6 +77,7 @@ class Notif extends Component {
     render() {
         return(
             <div>
+                <Scroll/>
                 <Helmet>
                     <title>通知一覧 | Indii</title>
                     <meta name="description" content="あなたへの通知一覧です。フォロワーからのリスポンスや編集リクエストを確認することができます。"/>

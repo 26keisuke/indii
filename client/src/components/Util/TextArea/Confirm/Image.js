@@ -1,13 +1,10 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
-import update from "immutability-helper"
 import TextField from '@material-ui/core/TextField';
 
 import Upload from "../../Upload"
 import Crop from "../../Crop"
-
-import * as actions from "../../../../actions"
 
 class Image extends Component {
     constructor(props) {
@@ -22,15 +19,13 @@ class Image extends Component {
     componentDidMount() {
         // 値を初期化 -> 初期の値は{}なので !{}はfalseになってしまう
         this.props.handleChange("")
-        const newObj = update(this.props.update, {confirmation: {transparent: {$set: true}}})
-        this.props.updateConfirmation(newObj)
+        this.props.setTransparent(true)
     }
 
     // このためだけに、updateしてmapstatetopropsするのはもったいなさすぎる
     componentDidUpdate() {
         if(!!this.props.value){
-            const newObj = update(this.props.update, {confirmation: {transparent: {$set: false}}})
-            this.props.updateConfirmation(newObj)
+            this.props.setTransparent(false)
         }
     }
 
@@ -142,10 +137,4 @@ const rejectStyle = {
     borderColor: '#ff1744'
 };
 
-function mapStateToProps({update}){
-    return {
-        update
-    }
-}
-
-export default connect(mapStateToProps, actions)(Image)
+export default Image

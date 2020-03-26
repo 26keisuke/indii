@@ -60,6 +60,7 @@ export const FETCH_FEED = "FETCH_FEED"
 export const FETCH_RECOMMEND = "FETCH_RECOMMEND"
 export const FETCH_NEW_TOPIC = "FETCH_NEW_TOPIC"
 export const SEARCH_FEED = "SEARCH_FEED"
+export const FETCH_FEED_USER = "FETCH_FEED_USER"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"

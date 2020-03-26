@@ -191,8 +191,8 @@ router.post("/:topicId/edit", isLoggedIn, (req, res) => {
 
         // check if posts are changed(if column is changed, post is always changed) => if yes replace
         var promises = [];
-
-        if(result[0]) {
+        
+        if(result) {
             promises = modifyPostIndex(posts, topic.posts)
         }
 

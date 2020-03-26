@@ -20,8 +20,7 @@ class DraftAction extends Component {
     }
 
     componentDidMount() {
-        const newObj = update(this.props.update, {confirmation: {transparent: {$set: true}}})
-        return  this.props.updateConfirmation(newObj)
+        this.props.setTransparent(true)
     }
 
     renderDraft = () => {
