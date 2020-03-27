@@ -35,6 +35,7 @@ const People = ({ user }) => {
                 {
                     user.map(elem => 
                         <Element
+                            key={elem._id}
                             id={elem._id} 
                             img={elem.photo} 
                             name={elem.userName} 

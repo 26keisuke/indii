@@ -41,36 +41,30 @@ class Navigation extends Component {
         }
     }
 
-    toggleIcon = (id) => {
-        this.props.setCategory(id)
-        this.props.nudgeCheck(id)
-    }
-
-    handleClick = (e, id) => {
-        if((id === "draft") || (id === "notification")) {
-            const isAuthenticated = checkAuth(e, this.props)
-            if(isAuthenticated) {
-                this.toggleIcon(id)
-            }
-            return
-        }
-        this.toggleIcon(id)
-    }
-
     render() {
         return (
             <List
-                handleClick={this.handleClick}
+                handleClick={handleNavClick}
                 category={this.props.category}
             />
         );
     }
 }
 
-function mapStateToProps({auth}) {
-    return{
-        auth,
+export const handleNavClick = (e, id, context) => {
+    const toggleIcon = (id) => {
+        context.setCategory(id)
+        context.nudgeCheck(id)
     }
+
+    if((id === "draft") || (id === "notification")) {
+        const isAuthenticated = checkAuth(e, context)
+        if(isAuthenticated) {
+            toggleIcon(id)
+        }
+        return
+    }
+    toggleIcon(id)
 }
 
-export default connect(mapStateToProps, actions)(withRouter(Navigation));
+export default connect(null, actions)(withRouter(Navigation));

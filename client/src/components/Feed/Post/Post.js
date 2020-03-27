@@ -189,6 +189,10 @@ const ResponseWrapper = styled.div`
         & > div:last-child {
             margin-right: 65px;
 
+            @media only screen and (max-width: 670px) {
+                margin-right: 15px;
+            }
+
             & > svg {
                 margin-right: 0px;
             }

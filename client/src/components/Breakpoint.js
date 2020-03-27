@@ -4,10 +4,10 @@ import PropTypes from "prop-types"
 
 const breakpoints = {
     desktop: "(min-width: 1025px)",
-    dablet: "(min-width: 768px)", // desktop and tablet
+    dablet: "(min-width: 670px)", // desktop and tablet
     phablet: "(max-width: 1024px)", // phone and tablet
-    tablet: "(min-width: 768px) and (max-width: 1024px)",
-    mobile: "(max-width: 768px)", // phone
+    tablet: "(min-width: 670px) and (max-width: 1024px)",
+    mobile: "(max-width: 670px)", // phone
 }
 
 export default function Breakpoint(props) {

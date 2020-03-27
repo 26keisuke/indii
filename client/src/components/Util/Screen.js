@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom"
 import styled, { css } from "styled-components"
 import PropTypes from "prop-types"
 
+import Breakpoint from "../Breakpoint"
 import { Space } from "../Theme"
 
 class Screen extends Component {
@@ -37,44 +38,73 @@ class Screen extends Component {
 
         return (
             <FeedBox>
-                <FeedLeft noBorder={this.props.noBorder} post={this.props.post}>
-                    {renderHeader()}
-                    { !this.props.noHeaderSpace &&
-                    <Space height={"10px"} backgroundColor={"#F9F9F9"}/>
-                    }
-                    { this.props.noHeader
-                    ?
-                    this.props.children[0]
-                    :
-                    this.props.children[1]
-                    }
-                    {!this.props.space 
-                    ? ""
-                    : <Space height="90vh" backgroundColor="#f9f9f9"/>
-                    }
-                </FeedLeft>
-                <FeedRight post={this.props.post}>
-                    <div>
+                <Breakpoint name="dablet">
+                    <FeedLeft noBorder={this.props.noBorder} post={this.props.post}>
+                        {renderHeader()}
+                        { !this.props.noHeaderSpace &&
+                        <Space height={"10px"} backgroundColor={"#F9F9F9"}/>
+                        }
                         { this.props.noHeader
                         ?
-                        this.props.children[1]
+                        this.props.children[0]
                         :
-                        this.props.children[2]
+                        this.props.children[1]
                         }
-                    </div>
-                </FeedRight>
+                        {!this.props.space 
+                        ? ""
+                        : <Space height="90vh" backgroundColor="#f9f9f9"/>
+                        }
+                    </FeedLeft>
+                    <FeedRight post={this.props.post}>
+                        <div>
+                            { this.props.noHeader
+                            ?
+                            this.props.children[1]
+                            :
+                            this.props.children[2]
+                            }
+                        </div>
+                    </FeedRight>
+                </Breakpoint>
+                <Breakpoint name="mobile">
+                    <FeedMobileLeft noBorder={this.props.noBorder} post={this.props.post}>
+                        {renderHeader()}
+                        { !this.props.noHeaderSpace &&
+                        <Space height={"10px"} backgroundColor={"#F9F9F9"}/>
+                        }
+                        { this.props.noHeader
+                        ?
+                        this.props.children[0]
+                        :
+                        this.props.children[1]
+                        }
+                        {!this.props.space 
+                        ? ""
+                        : <Space height="90vh" backgroundColor="#f9f9f9"/>
+                        }
+                    </FeedMobileLeft>
+                </Breakpoint>
             </FeedBox>
         )
     }
 }
 
 
-export const FeedBox = styled.div`
+const FeedBox = styled.div`
     display: flex;
     flex-direction: row;
 `
 
-export const FeedLeft = styled.div`
+const FeedMobileLeft = styled.div`
+    width: 100%;
+    padding: ${props => props.post ? "20px" : "0px"};
+    flex-shrink: 0;
+    height:100%;
+    position: relative;
+    border-right: ${props => props.noBorder ? "none" : "1px solid #eaeaea"};
+`
+
+const FeedLeft = styled.div`
     width: ${props => props.post ? "725px" : "675px"};
     padding: ${props => props.post ? "20px" : "0px"};
     flex-shrink: 0;
@@ -83,7 +113,7 @@ export const FeedLeft = styled.div`
     border-right: ${props => props.noBorder ? "none" : "1px solid #eaeaea"};
 `
 
-export const FeedRight = styled.div`
+const FeedRight = styled.div`
     width:100%;
 
     & > div {

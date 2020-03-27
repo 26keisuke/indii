@@ -55,7 +55,7 @@ const Logo = styled(Link)`
         margin-top:-8px;
 
         @media only screen and (max-width: 670px) {
-            display: none;
+            transform: scale(0.8);
         }
     }
 `

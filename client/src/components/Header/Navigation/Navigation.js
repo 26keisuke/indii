@@ -1,27 +1,20 @@
-import React, { Component } from "react"
+import React from "react"
 import { connect } from "react-redux"
 
 import * as actions from "../../../actions"
 
+import { handleNavClick } from "../../Navigation/Navigation"
 import List from "../../Navigation/List/List"
 
-class Navigation extends Component {
-
-    handleClick = (id) => {
-        this.props.setCategory(id)
-        this.props.nudgeCheck(id)
-    }
-
-    render() {
-        return (
-            <List
-                handleClick={this.handleClick}
-                category={this.props.category}
-                nudge={this.props.nudge}
-                display="header"
-            />
-        )
-    }
+const Navigation = ({ category, nudge }) =>  {
+    return (
+        <List
+            handleClick={handleNavClick}
+            category={category}
+            nudge={nudge}
+            display="header"
+        />
+    )
 }
 
 function mapStateToProps(state) {

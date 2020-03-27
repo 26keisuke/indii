@@ -106,20 +106,20 @@ input:focus{
 
 /*=====search=====*/
 
-@media only screen and (max-width: 670px) {
+/* @media only screen and (max-width: 670px) {
     .search-icon{
         display: none !important;
     }
-}
+} */
 
-.search-icon{
+/* .search-icon{
     height: 17px;
     width: 17px;
     left: 12px;
     position: absolute;
     pointer-events: none;
     z-index:3;
-}
+} */
 
 
 /*== animation ==*/

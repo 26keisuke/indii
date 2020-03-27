@@ -3,6 +3,8 @@ import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import styled, {css} from "styled-components"
 
+import * as actions from "../../../actions"
+
 import Breakpoint from "../../Breakpoint"
 
 import CreateTwoToneIcon from '@material-ui/icons/CreateTwoTone';
@@ -40,11 +42,6 @@ const screenName = ["ホーム", "下書き", "トーク", "編集・作成", "�
 
 class List extends Component {
 
-    renderText = (index, selected) => {
-        const { display } = this.props
-        return display === "header" ? null : <TextSelected selected={selected}>{screenName[index]}</TextSelected>
-    }
-
     renderList = () => {
 
         const cate = this.props.category;
@@ -64,12 +61,14 @@ class List extends Component {
             name !== "home" ? (url = "/" + name) : (url = "/")
 
             return (
-                <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name)}>
-                    {/* <SelectBar selected={cate[name].selected}/> */}
-                    <NudgeMark key={name} nudge={nudge[name]}/>
+                <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name, this.props)}>
+                    <NudgeMark nudge={nudge[name]}/>
                     {renderIcon(name, cate[name].selected)}
                     <Breakpoint name="desktop">
-                        {this.renderText(index, cate[name].selected)}
+                        <TextSelected selected={cate[name].selected}>{screenName[index]}</TextSelected>
+                    </Breakpoint>
+                    <Breakpoint name="mobile">
+                        <TextSelected selected={cate[name].selected}>{screenName[index]}</TextSelected>
                     </Breakpoint>
                 </ListElement>
             )
@@ -98,7 +97,7 @@ const ListWrapper = styled.div`
         top:56px;
         bottom:0px;
         position: fixed;
-        box-shadow: 1px 1px 3px #eaeaea;
+        border-right: 1px solid #eaeaea;
         z-index:1;
     `};
 
@@ -111,6 +110,18 @@ const ListWrapper = styled.div`
 
     @media only screen and (max-width: 670px) {
         display: ${props => props.display === "header" ? "flex" : "none"};
+        position: fixed;
+        background-color: #F8F8F8;
+        border-top: 1px solid #eaeaea;
+        bottom: 0;
+        width: 100%;
+        justify-content: space-evenly;
+        padding-top: 3px;
+        padding-bottom: 21px;
+
+        & > a:last-child {
+            display: none;
+        }
     }
 
 `
@@ -130,12 +141,6 @@ const ListElement = styled(Link)`
     align-items: center;
     padding-top: 8px;
     padding-bottom: 8px;
-
-    & > p {
-        padding-left:15px;
-        cursor: pointer;
-        font-size: 11px;
-    }
 
     &:img {
         cursor: pointer;
@@ -182,13 +187,26 @@ const TextSelected = styled.p`
             color: #888888;
         `
     }
+    padding-left:15px;
+    cursor: pointer;
+    font-size: 11px;
+
+    @media only screen and (max-width: 670px) {
+        font-size: 10px;
+        left:22%;
+        position: absolute;
+        bottom: -8px;
+        white-space: nowrap;
+        transform: translate(-50%, 0);
+    }
 `
 
-function mapStateToProps({ category }) {
+function mapStateToProps({ auth, category }) {
     return{
+        auth,
         category,
     }
 }
 
 
-export default connect(mapStateToProps)(List)
+export default connect(mapStateToProps, actions)(List)

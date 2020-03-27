@@ -7,9 +7,8 @@ import account from "../../../images/account.png";
 
 const ProfileArea = styled.div`
     @media only screen and (max-width: 670px) {
-        padding-left: 15px !important;
+        padding-left: 0px !important;
         margin-right: 70px !important;
-        margin-left: 0px !important;
     }   
 
     display: flex;

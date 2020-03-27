@@ -54,8 +54,9 @@ const PostElement = styled(Link)`
         flex-direction: column;
         justify-content: flex-start;
         margin-right:10px;
-        max-width: 440px;
-        min-width: 440px;
+        /* max-width: 440px;
+        min-width: 440px; バグ起こすかも*/
+        width: 100%;
 
         & > p:nth-child(1) {
             margin-top: -7px;
