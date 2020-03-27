@@ -90,7 +90,7 @@ class Post extends Component {
                     </SlashTitle>
                 </TitleWrapper>
                 {
-                this.props.feed.recommend.map(recom => 
+                this.props.feed.recommend.slice(0,3).map(recom => 
                     <Recommend
                         key={recom._id}
                         id={recom._id}
