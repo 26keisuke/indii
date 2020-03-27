@@ -4,6 +4,8 @@ import { connect } from "react-redux"
 import { Transition } from 'react-transition-group';
 import { MdCheck, MdClose } from "react-icons/md"
 
+import Breakpoint from "../Breakpoint"
+
 import * as actions from "../../actions"
 
 const MessageElement = styled.div`
@@ -15,15 +17,19 @@ const MessageElement = styled.div`
                 };
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
     height: 60px;
-    width: 330px;
+    width: 380px;
     padding: 10px;
     border-radius: 3px;
 
+    @media only screen and (max-width: 670px) {
+        left: 50%;
+        width: 300px;
+        top: 70px;
+    }
+
     position: absolute;
-    /* left: 50%; */
     left: 220px;
     transform: translate(-50%, -50%);
-    /* top: 13%; */
     bottom: -15px;
     z-index: 100;
     padding-left: 30px;
@@ -71,14 +77,17 @@ const defaultStyle = {
 }
 
 const transitionStyle = {
-    // entering: {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
-    // entered:  {opacity: 1, marginTop: "0px",},
-    // exiting:  {opacity: 1, marginTop: "0px",},
-    // exited:  {opacity: 0, marginTop: "-30px", pointerEvents: "none"},
     entering: {opacity: 0, bottom: "-35px", pointerEvents: "none"},
     entered:  {opacity: 1, bottom: "-15px",},
     exiting:  {opacity: 1, bottom: "-15px",},
     exited:  {opacity: 0, bottom: "-35px", pointerEvents: "none"},
+}
+
+const transitionMobileStyle = {
+    entering: {opacity: 0, top: "70px", pointerEvents: "none"},
+    entered:  {opacity: 1, top: "90px",},
+    exiting:  {opacity: 1, top: "90px",},
+    exited:  {opacity: 0, top: "70px", pointerEvents: "none"},
 }
 
 class Message extends Component {
@@ -115,17 +124,32 @@ class Message extends Component {
 const Fade = ({in: inProps, children, type, onExited, ...otherProps}) => {
     return (
         <Transition in={inProps} timeout={100} { ...otherProps } onExited={() => {}}>
-            {(state) => (
-                <MessageElement 
-                    type={type}
-                    style={{
-                        ...defaultStyle,
-                        ...transitionStyle[state]
-                    }}
-                >
-                    { children }
-                </MessageElement>
-            )}
+            {(state) => ([
+                <Breakpoint key="dablet" name="dablet">
+                    <MessageElement 
+                        type={type}
+                        style={{
+                            ...defaultStyle,
+                            ...transitionStyle[state]
+                        }}
+                    >
+                        { children }
+                    </MessageElement>
+                </Breakpoint>,
+
+                <Breakpoint key="mobile" name="mobile">
+                    <MessageElement 
+                        type={type}
+                        style={{
+                            ...defaultStyle,
+                            ...transitionMobileStyle[state]
+                        }}
+                    >
+                        { children }
+                    </MessageElement>     
+                </Breakpoint>
+                
+            ])}
         </Transition>
     )
 }

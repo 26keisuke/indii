@@ -67,7 +67,7 @@ class Screen extends Component {
                     </FeedRight>
                 </Breakpoint>
                 <Breakpoint name="mobile">
-                    <FeedMobileLeft noBorder={this.props.noBorder} post={this.props.post}>
+                    <FeedMobileLeft className="feed-left" noBorder={this.props.noBorder} post={this.props.post}>
                         {renderHeader()}
                         { !this.props.noHeaderSpace &&
                         <Space height={"10px"} backgroundColor={"#F9F9F9"}/>
@@ -88,7 +88,6 @@ class Screen extends Component {
         )
     }
 }
-
 
 const FeedBox = styled.div`
     display: flex;
@@ -162,6 +161,7 @@ Screen.defaultProps = {
     noBorder: false,
 }
 
+/* children意外はすべてのpropsを消すべし */
 Screen.propTypes = {
     noHeaderSpace: PropTypes.bool,
     noHeader: PropTypes.bool,

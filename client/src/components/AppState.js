@@ -12,6 +12,7 @@ import Header from "./Header/Header";
 import Navigation from "./Navigation/Navigation";
 import Auth from "./Auth/Auth"
 import Confirm from "./Confirm/Confirm"
+import Breakpoint from "./Breakpoint"
 
 import * as actions from "../actions"
 
@@ -287,7 +288,9 @@ class AppState extends Component {
 
         return (
             <Box>
-                <Header/>
+                <Breakpoint name="dablet">
+                    <Header/>
+                </Breakpoint>
                 <Navigation/>
                 <Message/>
                 <ConfirmWrapper
@@ -301,7 +304,7 @@ class AppState extends Component {
                     postAction={this.postAction}
                 /> 
                 }
-
+                
                 { update.fetching && <Loading/>}
                 { update.grayBackground && <Filter/>}
 

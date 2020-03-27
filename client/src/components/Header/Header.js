@@ -6,10 +6,10 @@ import styled from "styled-components"
 import * as actions from "../../actions"
 
 import Profile from "./Profile/Profile";
-import Navigation from "./Navigation/Navigation"
-// import Select from "../Action/Controller/Select"
+import List from "../Navigation/List/List"
 import SearchFromFeed from "../Search/Controller/Feed"
 
+import { handleNavClick } from "../Navigation/Navigation"
 
 import indii from "../../images/indii.png";
 
@@ -74,7 +74,12 @@ class Header extends Component {
                 <img src={indii}/>
                 <p>Indii</p>
             </Logo>
-            <Navigation/>
+            <List
+                handleClick={handleNavClick}
+                category={this.props.category}
+                nudge={this.props.nudge}
+                display="header"
+            />
             <SearchFromFeed
                 placeholder="Indiiで検索"
             />
@@ -84,4 +89,11 @@ class Header extends Component {
     }
 }
 
-export default connect(null, actions)(Header);
+function mapStateToProps(state) {
+    return{
+        category: state.category,
+        nudge: state.nudge
+    }
+}
+
+export default connect(mapStateToProps, actions)(Header);

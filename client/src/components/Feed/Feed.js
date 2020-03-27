@@ -9,12 +9,19 @@ import PostFeed from "./Post/Post";
 import Trend from "./Trend/Trend"
 import New from "./New/New"
 import People from "./People/People"
-
+import Header from "../Header/Header"
+import Breakpoint from "../Breakpoint"
 import Screen from "../Util/Screen"
 import { Space } from "../Theme"
 
 const TrendWrapper = styled.div`
     margin-left: 5px;
+`
+
+const HeaderWrapper = styled.div`
+    & > nav {
+        position: relative;
+    }
 `
 
 const numOfUsers = 3;
@@ -126,10 +133,18 @@ class Feed extends Component {
 
     render() {
         return(
-            <Screen noHeader={true}>
-                {this.renderLeft()}
-                {this.renderRight()}
-            </Screen>
+            <div>
+                <Breakpoint name="mobile">
+                    <HeaderWrapper>
+                        <Header/>
+                    </HeaderWrapper>
+                </Breakpoint>
+                <Screen noHeader={true}>
+                    {this.renderLeft()}
+                    {this.renderRight()}
+                </Screen>
+            </div>
+            
         )
     }
 }

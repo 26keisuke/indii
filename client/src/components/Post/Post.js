@@ -1,11 +1,15 @@
-import React, { Component } from "react"
+import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import { Helmet } from "react-helmet"
+import { withRouter } from "react-router-dom"
+import Skeleton from "react-loading-skeleton"
 
 import * as actions from "../../actions"
 
 import account from "../../images/account.png"
+
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import Textarea from "./Textarea/Textarea"
 import { SlashTitle } from "../Feed/Trend/Trend"
@@ -16,42 +20,174 @@ import List from "../Draft/Editor/Tool/List/List"
 import { Space } from "../Theme"
 import SkeletonBox from "./Skeleton/SkeletonBox"
 import Image from "./Image/Image"
+// import MobileInfo from "./Info/Info"
 import Slider from "./Slider/Slider"
 // import Navigation from "./Navigation/Navigation"
 import Scroll from "../Util/Scroll"
+import Breakpoint from "../Breakpoint"
 
 import { getEditorContent, fmtDate, } from "../Util/util"
 
-class Post extends Component {
-    
-    componentDidMount() {
-        this.props.fetchPost(this.props.match.params.id)
+const MobileImg = styled.div`
+    height: 40px;
+    overflow: hidden;
+    & > img {
+        width: 100%;
+        filter: blur(2px) brightness(0.5);
+    }
+`
+
+const ScreenWrapper = styled.div`
+    & .feed-left {
+        padding: 0px;
+    }
+`
+
+const MobileBack = styled.div`
+    background-color: #FAFAFA;
+    position: absolute;
+    z-index: 1;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    top: 8px;
+    left: 11px;
+`
+
+const MobileWrapper = styled.div`
+    padding: 10px 15px;
+    box-shadow: 1px 3px 10px #d2d2d2;
+`
+
+const MobileInfo = styled.div`
+    box-shadow: 1px 3px 10px #d2d2d2;
+    background-color: white;
+    padding: 10px 15px;
+`
+
+const MobileTitle = styled.div`
+    margin: 12px 0px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+
+    & > div {
+        background-color: #9EAEE5;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+`
+
+const S1Wrapper = styled.div`
+    & span {
+        width: 100%;
+    }
+`
+
+const Post = ({ post, recommend, ...props}) => {
+
+    const postId = post.fetched._id
+    const userId = post.fetched.creator
+
+    const { content, postName, topic, topicName, index, tags, creator, ref } = post.fetched
+    if (post.fetched.creator) {
+        var {  userName, photo, comment, intro } = post.fetched.creator 
     }
 
-    renderLeft = () => {
-        return(
-            <LeftWrapper>
-                { this.props.post.fetched.content
-                ? 
-                <Textarea
-                    postName={this.props.post.fetched.postName}
-                    content={this.props.post.fetched.content}
-                    postId={this.props.post.fetched._id}
-                />
-                :      
-                <SkeletonBox/>
-                }   
-                <Space height={"100px"}/>
-            </LeftWrapper>
-        )
-    }
+    const titleName = postName || ""
+    const description = getEditorContent(content, 150)
+    const keywords = tags ? titleName + "," + tags.join(",") : ""
 
-    renderRight = () => {
-        
-        if(this.props.post.fetched.creator) {
-            var { _id, userName, photo, comment, intro } = this.props.post.fetched.creator
+    useEffect(() => {
+        props.fetchPost(props.match.params.id)
+        return () => {
+            props.fetchPost()
         }
+    }, [])
 
+    const renderLeft = () => {
+
+        return([
+            <Breakpoint key="dabletPostLeft" name="dablet">
+                <LeftWrapper>
+                    { content
+                    ? 
+                    <Textarea
+                        postName={postName}
+                        content={content}
+                        postId={postId}
+                    />
+                    :      
+                    <SkeletonBox/>
+                    }   
+                    <Space height={"100px"}/>
+                </LeftWrapper>
+            </Breakpoint>,
+            <Breakpoint key="mobilePostLeft" name="mobile">
+                <MobileImg>
+                    <MobileBack><ArrowBackIcon onClick={props.history.goBack}/></MobileBack>
+                    { !topic
+                    ?
+                    <S1Wrapper>
+                        <Skeleton height={40}/>
+                    </S1Wrapper>
+                    :
+                    <img src={topic.mobileImg.image}/>
+                    }
+                </MobileImg>
+                <MobileWrapper>
+                    <Textarea
+                        topicId={topic && topic._id}
+                        topicName={topicName}
+                        index={index}
+                        postName={postName}
+                        content={content}
+                        postId={postId}
+                    />
+                </MobileWrapper>
+                <Space height={"10px"}/>
+                <MobileInfo>
+                    <MobileTitle><div/><span>このポストの著者</span></MobileTitle>
+                    <People
+                        id={userId}
+                        photo={photo || account}
+                        name={userName} 
+                        job={comment} 
+                        intro={intro}
+                        skeleton={!creator}
+                    />
+                    <MobileTitle><div/><span>参照</span></MobileTitle>
+                    <List
+                        readOnly={true}
+                        reference={ref || []}
+                    />
+                    <MobileTitle><div/><span>関連するポスト</span></MobileTitle>
+                    {
+                    recommend && recommend.slice(0,3).map(recom => 
+                        <Recommend
+                            key={recom._id}
+                            id={recom._id}
+                            title={recom.postName}
+                            content={recom.content}
+                            authorImg={recom.creator[0].photo}
+                            author={recom.creator[0].userName}
+                            editDate={fmtDate(recom.lastEdited)}
+                            topicName={recom.topicName}
+                            postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
+                        />
+                    )
+                    }
+                </MobileInfo>
+            </Breakpoint>
+        ])
+    }
+
+    const renderRight = () => {
         return(
             <div>
                 <Image/>
@@ -64,12 +200,12 @@ class Post extends Component {
                     </SlashTitle>
                 </TitleWrapper>
                 <People
-                    id={_id}
+                    id={userId}
                     photo={photo || account}
                     name={userName} 
                     job={comment} 
                     intro={intro}
-                    skeleton={!this.props.post.fetched.creator}
+                    skeleton={!creator}
                 />
                 <TitleWrapper>
                     <SlashTitle>
@@ -80,7 +216,7 @@ class Post extends Component {
                 <ListWrapper>
                     <List
                         readOnly={true}
-                        reference={this.props.post.fetched.ref || []}
+                        reference={ref || []}
                     />
                 </ListWrapper>
                 <TitleWrapper>
@@ -90,7 +226,7 @@ class Post extends Component {
                     </SlashTitle>
                 </TitleWrapper>
                 {
-                this.props.feed.recommend.slice(0,3).map(recom => 
+                recommend && recommend.slice(0,3).map(recom => 
                     <Recommend
                         key={recom._id}
                         id={recom._id}
@@ -109,28 +245,22 @@ class Post extends Component {
         )
     }
 
-    render() {
-
-        const titleName = this.props.post.fetched.postName || ""
-        const description = getEditorContent(this.props.post.fetched.content, 150)
-
-        const keywords = this.props.post.fetched.tags ? titleName + "," + this.props.post.fetched.tags.join(",") : ""
-
-        return (
-            <div>
-                <Helmet>
-                    <title>{titleName + " | Indii"}</title>
-                    <meta name="description" content={description}/>
-                    <meta name="keywords" content={keywords}/>
-                </Helmet>
-                <Scroll/>
-                <Screen space={false} noHeader={true} post={true} noBorder={true}>
-                    {this.renderLeft()}
-                    {this.renderRight()}
+    return (
+        <div>
+            <Helmet>
+                <title>{titleName + " | Indii"}</title>
+                <meta name="description" content={description}/>
+                <meta name="keywords" content={keywords}/>
+            </Helmet>
+            <Scroll/>
+            <ScreenWrapper>
+                <Screen space={false} noHeaderSpace={true} noHeader={true} post={true} noBorder={true}>
+                    {renderLeft()}
+                    {renderRight()}
                 </Screen>
-            </div>
-        )
-    }
+            </ScreenWrapper>
+        </div>
+    )
 }
 
 const LeftWrapper = styled.div`
@@ -153,8 +283,8 @@ function mapStateToProps(state) {
     return {
         post: state.post,
         auth: state.auth,
-        feed: state.feed,
+        recommend: state.feed.recommend,
     }
 }
 
-export default connect(mapStateToProps, actions)(Post)
+export default connect(mapStateToProps, actions)(withRouter(Post))

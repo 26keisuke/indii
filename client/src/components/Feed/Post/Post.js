@@ -122,9 +122,11 @@ class Post extends PureComponent {
                         <p style={{marginBottom: "10px"}}><Skeleton width={200} height={23}/></p>
                         <Collapse isOpened={this.state.isOpened}>
                         <SkeletonWrapper>
-                            <Skeleton count={5} width={630} height={20}/>
+                            <Skeleton count={5} height={20}/>
                         </SkeletonWrapper>
-                        <Skeleton width={430} height={20}/>
+                        <S2Wrapper>
+                            <Skeleton height={20}/>
+                        </S2Wrapper> 
                         </Collapse>
                     </PostMiddle>
                     :
@@ -171,6 +173,19 @@ const S1Wrapper = styled.div`
     justify-content: flex-end;
     z-index:2;
     padding-top: 13px;
+`
+
+const SkeletonWrapper = styled.div`
+    & span {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+`
+
+const S2Wrapper = styled.div`
+    & span {
+        width: 70%;
+    }
 `
 
 const ResponseWrapper = styled.div`
@@ -298,12 +313,6 @@ const PostMiddle = styled.div`
 
     & > div p{
         line-height: 20px;
-    }
-`
-
-const SkeletonWrapper = styled.div`
-    & span {
-        margin-bottom: 8px;
     }
 `
 

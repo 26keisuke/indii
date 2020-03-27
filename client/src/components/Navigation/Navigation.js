@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 
@@ -7,48 +7,47 @@ import * as actions from "../../actions"
 import { checkAuth } from "../Util/util"
 import List from "./List/List"
 
-class Navigation extends Component {
+const Navigation = ({ display, category, nudge, ...props}) => {
 
-    componentDidMount() {
-        this.setIcon()
-    }
+    useEffect(() => {
+        setIcon()
+    }, [])
 
-    componentDidUpdate(prevProps) {
-        if(prevProps.location.pathname !== this.props.location.pathname) { this.setIcon() }
-    } 
+    useEffect(() => {
+        setIcon()
+    }, [props.location.pathname])
 
-    setIcon = () => {
-        const url = this.props.location.pathname
-
+    const setIcon = () => { // こいつはdisplay noneでも呼ばれるからexportしなくていい
+        const url = props.location.pathname
+    
         if(url.includes("action")){
-            this.props.setCategory("action")
-            this.props.nudgeCheck("action")
+            props.setCategory("action")
+            props.nudgeCheck("action")
         } else if (url.includes("draft")) {
-            this.props.setCategory("draft")
-            this.props.nudgeCheck("draft")
+            props.setCategory("draft")
+            props.nudgeCheck("draft")
         } else if (url.includes("notification")) {
-            this.props.setCategory("notification")
-            this.props.nudgeCheck("notification")
+            props.setCategory("notification")
+            props.nudgeCheck("notification")
         } else if (url.includes("setting")) {
-            this.props.setCategory("setting")
-            this.props.nudgeCheck("setting")
+            props.setCategory("setting")
+            props.nudgeCheck("setting")
         } else if (url.includes("talk")) {
-            this.props.setCategory("talk")
-            this.props.nudgeCheck("talk")
+            props.setCategory("talk")
+            props.nudgeCheck("talk")
         } else {
-            this.props.setCategory("home")
-            this.props.nudgeCheck("home")
+            props.setCategory("home")
+            props.nudgeCheck("home")
         }
     }
 
-    render() {
-        return (
-            <List
-                handleClick={handleNavClick}
-                category={this.props.category}
-            />
-        );
-    }
+    return (
+        <List
+            handleClick={handleNavClick}
+            category={category}
+            nudge={nudge}
+        />
+    );
 }
 
 export const handleNavClick = (e, id, context) => {
@@ -67,4 +66,12 @@ export const handleNavClick = (e, id, context) => {
     toggleIcon(id)
 }
 
-export default connect(null, actions)(withRouter(Navigation));
+function mapStateToProps(state) {
+    return{
+        category: state.category,
+        nudge: state.nudge
+    }
+}
+
+
+export default connect(mapStateToProps, actions)(withRouter(Navigation));

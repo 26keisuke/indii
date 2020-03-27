@@ -19,6 +19,10 @@ const LoadingElement = styled.div`
     left: 50%;
     top: 40%;
     z-index: 100;
+
+    & .makeStyles-root-67 {
+        transform: translate(-50%, 0);
+    }
 `
 
 class Loading extends Component {

@@ -11,6 +11,7 @@ import * as actions from "../../actions"
 
 import SignUp from "./SignUp/SignUp"
 import LogIn from "./LogIn/LogIn"
+import Breakpoint from "../Breakpoint"
 
 import google from "../../images/google-logo.png"
 import facebook from "../../images/facebook-logo.png"
@@ -21,11 +22,24 @@ const defaultStyle = {
     opacity: 0,
 }
 
+const defaultMobileStyle = {
+    transition: "all 100ms ease-in-out",
+    top: "340px",
+    opacity: 0,
+}
+
 const transitionStyle = {
     entering: { top: "370px", opacity: 0, pointerEvents: "none" },
     entered:  { top: "320px", opacity: 1 },
     exiting:  { top: "320px", opacity: 1 },
     exited:  { top: "370px", opacity: 0, pointerEvents: "none" },
+}
+
+const transitionMobileStyle = {
+    entering: { top: "340px", opacity: 0, pointerEvents: "none" },
+    entered:  { top: "290px", opacity: 1 },
+    exiting:  { top: "290px", opacity: 1 },
+    exited:  { top: "340px", opacity: 0, pointerEvents: "none" },
 }
 
 class Auth extends PureComponent {
@@ -276,16 +290,28 @@ class Auth extends PureComponent {
 const Fade = ({in: inProps, children, ...otherProps}) => {
     return (
         <Transition in={inProps} timeout={100} { ...otherProps }>
-            {(state) => (
-                <LogInCard
-                    style={{
-                        ...defaultStyle,
-                        ...transitionStyle[state]
-                    }}
-                >
-                    { children }
-                </LogInCard>
-            )}
+            {(state) => ([
+                <Breakpoint key="dablet" name="dablet">
+                    <LogInCard
+                        style={{
+                            ...defaultStyle,
+                            ...transitionStyle[state]
+                        }}
+                    >
+                        { children }
+                    </LogInCard>
+                </Breakpoint>,
+                <Breakpoint key="mobile" name="mobile">
+                    <LogInCard
+                        style={{
+                            ...defaultMobileStyle,
+                            ...transitionMobileStyle[state]
+                        }}
+                    >
+                        { children }
+                    </LogInCard>
+                </Breakpoint> 
+            ])}
         </Transition>
     )
 }
@@ -311,6 +337,10 @@ const Division = styled.div`
 `
 
 const LogInCard = styled.div`
+    @media only screen and (max-width: 670px) {
+        width: 360px;
+    }
+
     width: 400px;
     height: 480px;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.25);
@@ -370,7 +400,7 @@ const ThirdPartyButton = styled.div`
         & > button {
             background-color: rgba(0,0,0,0);
             border: 1px solid #eaeaea;
-            width: 170px;
+            width: 160px;
             height: 36px;
             border-radius: 5px;
             padding-left: 32px;

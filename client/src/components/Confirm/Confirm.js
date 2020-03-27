@@ -23,6 +23,7 @@ import TextArea from "../Profile/Info/TextArea/TextArea"
 import Thumb from "../Profile/Info/Thumb/Thumb"
 import DraftKatex from "../Util/TextArea/Confirm/Katex"
 import DraftImage from "../Util/TextArea/Confirm/Image"
+import Breakpoint from "../Breakpoint"
 
 import { IoMdClose } from "react-icons/io"
 
@@ -32,6 +33,13 @@ const defaultStyle = {
     transition: "all 100ms ease-in-out",
     top: "50%",
     opacity: 0,
+}
+
+const defaultMobileStyle = {
+    transition: "all 100ms ease-in-out",
+    top: "50%",
+    opacity: 0,
+    width: "80%",
 }
 
 const transitionStyle = {
@@ -512,16 +520,30 @@ const getContent = (action, step, currentStep, skipped) => {
 const Fade = ({in: inProps, children, onExited, ...otherProps}) => {
     return (
         <Transition in={inProps} timeout={100} { ...otherProps }>
-            {(state) => (
-                <ConfirmBox 
-                    style={{
-                        ...defaultStyle,
-                        ...transitionStyle[state]
-                    }}
-                >
-                    { children }
-                </ConfirmBox>
-            )}
+            {(state) => ([
+                <Breakpoint key="dablet" name="dablet">
+                    <ConfirmBox 
+                        style={{
+                            ...defaultStyle,
+                            ...transitionStyle[state]
+                        }}
+                    >
+                        { children }
+                    </ConfirmBox>
+                </Breakpoint>,
+
+                <Breakpoint key="mobile" name="mobile">
+                    <ConfirmBox 
+                        style={{
+                            ...defaultMobileStyle,
+                            ...transitionStyle[state]
+                        }}
+                    >
+                        { children }
+                    </ConfirmBox>
+                </Breakpoint>
+                
+            ])}
         </Transition>
     )
 }

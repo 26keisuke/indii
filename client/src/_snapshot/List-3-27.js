@@ -118,7 +118,6 @@ const ListWrapper = styled.div`
         justify-content: space-evenly;
         padding-top: 3px;
         padding-bottom: 21px;
-        padding-left: 8px;
 
         & > a:last-child {
             display: none;

@@ -83,6 +83,7 @@ input:focus{
 @media only screen and (max-width: 670px) {
     .fakebox{
         margin-left: 0px !important;
+        margin-top: 0px !important;
     }
 }
 

@@ -24,6 +24,7 @@ export const setPostEmoji = (emojiArr) => dispatch => {
 }
 
 export const fetchPost = (id) => async (dispatch) => {
+    if(!id) { dispatch({type: FETCH_POST, payload: {}}); return }
     const res = await axios.get(`/api/post/${id}`)
     dispatch({type: FETCH_POST, payload: res.data})
 }
