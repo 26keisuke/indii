@@ -36,7 +36,6 @@ router.post("/login", (req, res, next) => {
 })
 
 router.get("/logout", (req, res) => {
-    console.log("CALLED")
     User.findById(req.user.id)
     .then(user => {
         user.activity.push({timeStamp: Date.now(), type: "LOG_OUT"})

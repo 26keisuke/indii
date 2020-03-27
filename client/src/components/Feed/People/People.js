@@ -29,7 +29,7 @@ const People = ({ user }) => {
     return (
         <div>
             <FeedInsideHeader>
-                <p>データベース関連のライター</p>
+                <p>おすすめのライター</p>
             </FeedInsideHeader>
             <PeopleWrapper>
                 {

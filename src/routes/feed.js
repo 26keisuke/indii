@@ -27,7 +27,7 @@ router.get("/user", (req, res) => {
     if(req.user) match.push({_id: {$ne: req.user._id}})
 
     match = match.concat([
-        {post: { $exists: true }}
+        {post: { $ne: [] }}
     ])
 
     const query = [
