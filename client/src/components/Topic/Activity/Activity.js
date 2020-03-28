@@ -126,6 +126,7 @@ class Activity extends Component {
                 if(post.index[0] === 0){ continue }
                 arr.push(
                     <Element
+                        key={post.lastEdited}
                         index={String(post.index.join("."))}
                         tags={post.tags}
                         topicName={post.topicName}
@@ -190,6 +191,10 @@ const ActionBox = styled.div`
     display: flex;
     font-size: 10px;
     margin-bottom: 20px;
+
+    @media only screen and (max-width: 670px) {
+        font-size: 11px;
+    }
 `
 
 const ActionUser = styled.div`
@@ -300,6 +305,10 @@ const Post = styled.div`
         flex-direction: column;
         align-items: center;
 
+        @media only screen and (max-width: 670px) {
+            min-width: 40px;
+        }
+
         & > div:first-child {
             min-height: 30px;
             max-height: 30px;
@@ -322,6 +331,10 @@ const Post = styled.div`
 `
 
 const Wrapper = styled.div`
+    @media only screen and (max-width: 670px) {
+        flex-direction: column;
+        padding: 0px;
+    }
     display: flex;
     width: 100%;
     padding: 0px 30px;
@@ -329,10 +342,23 @@ const Wrapper = styled.div`
 `
 
 const Left = styled.div`
+    @media only screen and (max-width: 670px) {
+        width: 100%;
+        padding: 15px;
+        margin-right: 30px;
+        background: #FDFDFD;
+        box-shadow: 0px 1px 1px rgba(0,0,0,0.25);
+        box-sizing: border-box;
+        margin-bottom: 3px;
+    }
+
+    @media only screen and (min-width: 670px) {
+        min-width: 600px;
+        max-width: 600px;
+    }
+
     padding: 25px;
     padding-right: 45px;
-    min-width: 600px;
-    max-width: 600px;
     margin-right: 20px;
     background-color: white;
     box-shadow: 1px 1px 10px #d2d2d2;
@@ -346,11 +372,21 @@ const Left = styled.div`
 `
 
 const Right = styled.div`
+
+    @media only screen and (max-width: 670px) {
+        width: 100%;
+        background: #FDFDFD;
+        box-shadow: 0px 1px 1px rgba(0,0,0,0.25);
+    }
+
+    @media only screen and (min-width: 670px) {
+        min-width: 290px;
+        max-width: 290px;
+    }
+
     background-color: white;
     box-shadow: 1px 1px 10px #d2d2d2;
     border-radius: 3px;
-    min-width: 290px;
-    max-width: 290px;
     padding: 20px;
 
     & > div:nth-child(1){

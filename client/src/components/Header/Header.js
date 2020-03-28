@@ -6,10 +6,7 @@ import styled from "styled-components"
 import * as actions from "../../actions"
 
 import Profile from "./Profile/Profile";
-import List from "../Navigation/List/List"
 import SearchFromFeed from "../Search/Controller/Feed"
-
-import { handleNavClick } from "../Navigation/Navigation"
 
 import indii from "../../images/indii.png";
 
@@ -74,12 +71,6 @@ class Header extends Component {
                 <img src={indii}/>
                 <p>Indii</p>
             </Logo>
-            <List
-                handleClick={handleNavClick}
-                category={this.props.category}
-                nudge={this.props.nudge}
-                display="header"
-            />
             <SearchFromFeed
                 placeholder="Indiiで検索"
             />

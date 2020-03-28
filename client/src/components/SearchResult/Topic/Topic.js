@@ -7,6 +7,12 @@ import Skeleton from "react-loading-skeleton"
 import { getEditorContent } from "../../Util/util"
 
 const TopicChild = styled.div`
+
+    @media only screen and (max-width: 670px) {
+        max-width: 280px;
+        min-width: 280px;
+    }
+
     display: flex;
     align-items: center;
     box-shadow: 1px 1px 10px #eaeaea;

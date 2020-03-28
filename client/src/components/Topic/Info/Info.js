@@ -1,15 +1,11 @@
-import React, { useMemo, useRef, useState, useEffect } from "react"
-import styled, { css, keyframes} from "styled-components"
+import React from "react"
+import styled from "styled-components"
 import Skeleton from "react-loading-skeleton"
 import { withRouter } from "react-router-dom"
-import { connect } from "react-redux"
-
-import * as actions from "../../../actions"
 
 import TextArea from "../../Util/TextArea/TextArea"
-
-import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
+import Like from "../Like/Like"
+import Toggle from "../Toggle/Toggle"
 
 // import question from "../../../images/question.png"
 // import post from "../../../images/post.png"
@@ -18,47 +14,10 @@ import Back from "../../Util/Back"
 
 const Info = ({ 
 
-    history, loggedIn, topicLike,
+    history, 
     id, content, flag, tags, topicName, postCount, likes, handleClick, selected, squareImg,
-    ...props
 
 }) => {
-
-    const find = () => {
-        var res;
-
-        topicLike.map((obj,index) => {
-            if(obj.topic === id){
-                res = {
-                    data: obj,
-                    index: index,
-                }
-            }
-        })
-
-        if(!!res) return res
-
-        return ""
-    }
-
-    const handleLikeClick = (e) => {
-        e.preventDefault()
-
-        var set = topicLike.slice()
-
-        const found = find()
-        if(!!found){
-            set.splice(found.index, 1)
-        } else {
-            set.push({timeStamp: Date.now(), topic: id})
-        }
-
-        props.setTopicLike(set)
-        localStorage.setItem("INDII_TOPIC_LIKE", JSON.stringify(set))
-    }
-
-    const isLiked = useMemo(() => loggedIn && !!(find()), [topicLike, id])
-
     return (
         <TopicTop>
             <div>
@@ -111,29 +70,18 @@ const Info = ({
                         <PostCreateIcon src={post} alt="ポスト作成のボタン"/>
                     </div>
                     } */}
-                    { 
-                    flag
-                    ?
-                    isLiked
-                    ? <BookmarkIcon onClick={handleLikeClick}/>
-                    : <BookmarkBorderIcon onClick={loggedIn ? handleLikeClick : props.showLogin}/>
-                    : ""}
+                    { flag 
+                    &&
+                    <Like
+                        topicId={id}
+                    />
+                    }
                 </TopicOption>
                 { flag &&
-                <TopicToggle>
-                    <TopicToggleElement selected={selected["topic"]} onClick={() => handleClick("topic")}>
-                        <p>トピック</p>
-                        <div/>
-                    </TopicToggleElement>
-                    {/* <TopicToggleElement selected={selected["talk"]} onClick={() => handleClick("talk")}>
-                        <p>フリートーク</p>
-                        <div/>
-                    </TopicToggleElement> */}
-                    <TopicToggleElement selected={selected["activity"]} onClick={() => handleClick("activity")}> 
-                        <p>アクティビティー </p>
-                        <div/>
-                    </TopicToggleElement>
-                </TopicToggle>
+                    <Toggle
+                        selected={selected}
+                        handleClick={handleClick}
+                    />
                 }
             </div>
             { flag 
@@ -251,7 +199,7 @@ const TopicOption = styled.div`
     right:38px;
     bottom: 0px;
     
-    & > svg {
+    & svg {
         transform: scale(1.2);
         cursor: pointer;
         color: ${props => props.theme.primary};
@@ -284,40 +232,6 @@ const TopicOption = styled.div`
 //     height: 18px;
 // `
 
-const TopicToggle = styled.div`
-    display: flex;
-    position: absolute;
-    bottom:-45px;
-`
-
-
-const TopicToggleElement = styled.div`
-    padding: 10px;
-    padding-bottom: 0px;
-    margin-right:70px;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    flex-shrink: 0;
-    align-items: center;
-    position: relative;
-
-    & > p {
-        color: ${props => props.selected ? "#000000" : "#8D8D8D"}
-    }
-
-    & > div {
-        ${props => props.selected && css`
-            background-color: #636480;
-            width:100%;
-            height:1px;
-            animation-name: ${extend};
-            animation-duration: 250ms;
-            animation-timing-function: ease-in-out;
-        `}
-    }
-`
-
 const BackWrapper = styled.div`
     position: relative;
     margin-top: 6px;
@@ -330,19 +244,4 @@ const BackWrapper = styled.div`
     }
 `
 
-const extend = keyframes`
-    from {
-        width: 0px;
-    } to {
-        width: 80%;
-    }
-`
-
-function mapStateToProps({ auth, topic }){
-    return {
-        loggedIn: auth.loggedIn,
-        topicLike: topic.topicLike
-    }
-}
-
-export default connect(mapStateToProps, actions)(withRouter(Info))
+export default withRouter(Info)

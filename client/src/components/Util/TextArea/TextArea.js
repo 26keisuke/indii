@@ -48,7 +48,14 @@ const ToolbarAbs = styled(Toolbar)`
 // vertical alignはplaceholderのズレをなくすためだが、katexにも影響が出るので今はoffにしている
 const EditableWrapper = styled.div`
 
-    font-size: 12px !important;
+    @media only screen and (max-width: 670px) {
+        font-size: 11px !important;
+    }
+
+    @media only screen and (min-width: 670px) {
+        font-size: 12px !important;
+    }
+    
     color: #222222;
 
     ${props => !props.readOnly && css`

@@ -79,7 +79,7 @@ class List extends Component {
 
     render() {
         return (
-            <ListWrapper display={this.props.display}>
+            <ListWrapper>
                 {this.renderList()}
             </ListWrapper>
         )
@@ -88,7 +88,7 @@ class List extends Component {
 
 const ListWrapper = styled.div`
 
-    ${props => props.display !== "header" && css`
+    @media (min-width: 670px) {
         margin: 0px;
         padding-top:20px;
         padding-left:30px;
@@ -99,25 +99,26 @@ const ListWrapper = styled.div`
         position: fixed;
         border-right: 1px solid #eaeaea;
         z-index:1;
-    `};
+    }
 
     @media (min-width: 670px) and (max-width: 1024px) {
         width: 54px !important;
     }
 
-    display: ${props => props.display === "header" ? "none" : "flex"};
-    flex-direction: ${props => props.display === "header" ? "row" : "column"};
+    display: flex;;
+    flex-direction: column;
 
     @media only screen and (max-width: 670px) {
-        display: ${props => props.display === "header" ? "flex" : "none"};
         position: fixed;
+        flex-direction: row;
         background-color: #F8F8F8;
+        z-index: 2;
         border-top: 1px solid #eaeaea;
         bottom: 0;
         width: 100%;
         justify-content: space-evenly;
         padding-top: 3px;
-        padding-bottom: 21px;
+        padding-bottom: 19px;
         padding-left: 8px;
 
         & > a:last-child {

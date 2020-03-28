@@ -7,42 +7,95 @@ import { connect } from "react-redux"
 import Post from "../Post/Element/Element"
 import Screen from "../Util/Screen"
 import Topic from "./Topic/Topic"
+import Breakpoint from "../Breakpoint"
+import Header from "../Header/Header"
 
-const Title = styled.div`
+const MobileTopicWrapper = styled.div`
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-left: 11px;
+    overflow-x: scroll;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: -20px;
+    padding: 0px 10px;
 
-    & p:nth-child(1){
-        color: #464646;
-        font-size: 12px;
-        margin: 0px 10px;
+    & > a {
+        margin-right: 20px;
     }
 `
 
-const Wrapper = styled.div`
-    padding: 15px 0px;
-`
-
-const NotFound = styled.div`
-    margin-left: 15px;
-    margin-top: 30px;
-    font-size: 13px;
+const Space = styled.div`
+    min-width: 10px;
 `
 
 class SearchResult extends Component {
 
     renderLeft = () => {
 
-        const { term, posts } = this.props
+        const { term, posts, topics } = this.props
 
-        return (
-            <Wrapper>
+        return ([
+            <Breakpoint key="searchResultMobile" name="mobile">
+                <HeaderWrapper>
+                    <Header/>
+                </HeaderWrapper>
+            </Breakpoint>,
+            <Wrapper key="searchResultContent">
+                
                 <Title>
                     <p>「{term}」</p>
                     <p>の検索結果</p>
                 </Title>
+                <MobileTopicWrapper>
+                    {
+                    topics.map(topic => 
+                        <Topic
+                            id={topic._id}
+                            img={topic.squareImg.image}
+                            tags={topic.tags}
+                            topicName={topic.topicName}
+                            description={topic.posts[0].content}
+                            likes={topic.likes.counter}
+                        />
+                    )
+                    }
+                    {
+                    topics.map(topic => 
+                        <Topic
+                            id={topic._id}
+                            img={topic.squareImg.image}
+                            tags={topic.tags}
+                            topicName={topic.topicName}
+                            description={topic.posts[0].content}
+                            likes={topic.likes.counter}
+                        />
+                    )
+                    }
+                    {
+                    topics.map(topic => 
+                        <Topic
+                            id={topic._id}
+                            img={topic.squareImg.image}
+                            tags={topic.tags}
+                            topicName={topic.topicName}
+                            description={topic.posts[0].content}
+                            likes={topic.likes.counter}
+                        />
+                    )
+                    }
+                    {
+                    topics.map(topic => 
+                        <Topic
+                            id={topic._id}
+                            img={topic.squareImg.image}
+                            tags={topic.tags}
+                            topicName={topic.topicName}
+                            description={topic.posts[0].content}
+                            likes={topic.likes.counter}
+                        />
+                    )
+                    }
+                    <Space/>
+                </MobileTopicWrapper>
                 <div>
                     { 
                     posts.length === 0
@@ -63,7 +116,7 @@ class SearchResult extends Component {
                     }
                 </div>
             </Wrapper> 
-        )
+        ])
     }
 
     renderRight = () => {
@@ -90,9 +143,9 @@ class SearchResult extends Component {
         return (
             <div>
                 <Helmet>
-                    <title>{"Neural Networks" + "の検索結果 | Indii"}</title>
-                    <meta name="description" content=""/>
-                    <meta name="keywords" content=""/>
+                    <title>{this.props.term + "の検索結果 | Indii"}</title>
+                    <meta name="description" content={`${this.props.term}の検索結果。`}/>
+                    <meta name="keywords" content={`${this.props.term}`}/>
                 </Helmet>
                 <Screen space={false} noHeader={true} noBorder={true} noHeaderSpace={true}>
                     {this.renderLeft()}
@@ -102,6 +155,36 @@ class SearchResult extends Component {
         )
     }
 }
+
+
+const Title = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 11px;
+
+    & p:nth-child(1){
+        color: #464646;
+        font-size: 12px;
+        margin: 0px 10px;
+    }
+`
+
+const Wrapper = styled.div`
+    padding: 15px 0px;
+`
+
+const NotFound = styled.div`
+    margin-left: 15px;
+    margin-top: 30px;
+    font-size: 13px;
+`
+
+const HeaderWrapper = styled.div`
+    & > nav {
+        position: relative;
+    }
+`
 
 function mapStateToProps({ feed }){
     return({

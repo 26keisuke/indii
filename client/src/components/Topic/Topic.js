@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from "react"
+import React, { Component, PureComponent, useMemo } from "react"
 import styled, {css} from "styled-components"
 import { connect } from "react-redux"
 import { Waypoint } from "react-waypoint"
@@ -11,43 +11,66 @@ import Info from "./Info/Info"
 import Activity from "./Activity/Activity"
 import { Space } from "../Theme"
 import TextArea from "../Util/TextArea/TextArea"
+import Breakpoint from "../Breakpoint"
+import Mobile from "./Mobile/Mobile"
 
 import { arrObjLookUp, getEditorContent } from "../Util/util"
 
-class ColumnElement extends PureComponent {
-    render() {
+const ColumnElement = ({ index, title, onEnter, onLeave }) => {
+
+    const children = useMemo(() => {
         return (
-            <Waypoint key={String(this.props.index)} onEnter={(data) => this.props.onEnter(true, data)} onLeave={(data) => this.props.onLeave(false, data)}>
-                <Column>
-                    <p>{this.props.index}</p>
-                    <h2>{this.props.title}</h2>
-                </Column>
-            </Waypoint>
+            <Column>
+                <p>{index}</p>
+                <h2>{title}</h2>
+            </Column>
+            
         )
-    }
+    }, [index, title])
+
+    return ([
+        <Breakpoint key={`columnDablet${index}`} name="dablet">
+            <Waypoint key={String(index)} onEnter={(data) => onEnter(true, data)} onLeave={(data) => onLeave(false, data)}>
+                {children}
+            </Waypoint>
+        </Breakpoint>,
+         <Breakpoint key={`columnMobile${index}`} name="mobile">
+             {children}
+         </Breakpoint>
+    ])
 }
 
-class PostElement extends PureComponent {
-    render() {
+const PostElement = ({ postId, index, postName, content, onEnter, onLeave }) => {
+
+    const children = useMemo(() => {
         return (
-            <Waypoint onEnter={this.props.onEnter} onLeave={this.props.onLeave}>
-                <Link to={`/post/${this.props.postId}`}>
-                    <Post>
-                        <PostTop>
-                            <p>{this.props.index}</p>
-                            <h3>{this.props.postName}</h3>
-                        </PostTop>
-                        <TextAreaWrapper>
-                            <TextArea
-                                readOnly={true}
-                                content={this.props.content}
-                            />
-                        </TextAreaWrapper>
-                    </Post>
-                </Link>
+            <Link to={`/post/${postId}`}>
+                <Post>
+                    <PostTop>
+                        <p>{index}</p>
+                        <h3>{postName}</h3>
+                    </PostTop>
+                    <TextAreaWrapper>
+                        <TextArea
+                            readOnly={true}
+                            content={content}
+                        />
+                    </TextAreaWrapper>
+                </Post>
+            </Link>
+        )  
+    }, [postId, index, postName, content])
+
+    return ([
+        <Breakpoint key={`postDablet${postId + index}`} name="dablet">
+            <Waypoint onEnter={onEnter} onLeave={onLeave}>
+                {children}
             </Waypoint>
-        )
-    }
+        </Breakpoint>,
+        <Breakpoint key={`postMobile${postId + index}`} name="mobile">
+            {children}
+        </Breakpoint>
+    ])
 }
 
 class TOF extends PureComponent {
@@ -61,7 +84,6 @@ class TOF extends PureComponent {
         )
     }
 }
-
 
 class TopicPage extends Component {
 
@@ -125,7 +147,7 @@ class TopicPage extends Component {
         var tableArr = []
 
         tableArr.push(
-            <div>コンテンツ一覧</div>
+            <div key={"contentDiv"}>コンテンツ一覧</div>
         )
 
         for(var i=1; i < order.length; i++){
@@ -183,8 +205,9 @@ class TopicPage extends Component {
     }   
 
     render() {
-        const flag = this.props.topic.fetched._id
-        const { tags, likes, postCount, _id, topicName, order, column, activity } = this.props.topic.fetched
+        const { tags, likes, postCount, _id, topicName, order, column, activity, mobileImg } = this.props.topic.fetched
+
+        const flag = _id
 
         const posts = this.props.topic.fetched.posts || {}
         const squareImg = this.props.topic.fetched.squareImg || {}
@@ -204,69 +227,88 @@ class TopicPage extends Component {
                     <meta name="description" content={description}/>
                     <meta name="keywords" content={`${titleName}`}/>
                 </Helmet>
-                <TopWrapper>
-                    <Info
-                        id={_id}
-                        flag={flag}
-                        tags={tags}
-                        content={descriptionPost.content}
-                        topicName={topicName}
-                        postCount={postCount}
-                        likes={likes}
-                        handleClick={this.toggleState}
+                <Breakpoint name="mobile">
+                    <Mobile
                         selected={this.state.toggle}
-                        squareImg={squareImg}
-                    />
-                </TopWrapper>
-
-                <Waypoint 
-                    onEnter={() => this.setState({ trigger: false　})} 
-                    onLeave={() => this.setState({ trigger: true })}
-                    fireOnRapidScroll
-                >
-                    <Gap/>
-                </Waypoint>
-
-                { this.state.toggle["topic"] && posts.length > 1 &&
-                <TopicBottom>
-                    <TopicPostWrapper>
-                        { flag && renderedPosts }
-                        <Space height={"200px"}/>
-                    </TopicPostWrapper>
-
-                    { flag ?
-                    <TocWrapper className="fake" position={this.state.trigger}>
-                            <TableOfContent>
-                                <FocusBar top={this.state.enter}/>
-                                { flag && renderedTable }
-                            </TableOfContent>
-                    </TocWrapper>
-                    : <div className="fake"/>
-                    }
-                </TopicBottom>
-                }
-
-                {/* { this.state.toggle["talk"] &&
-                <div>
-                    <Talk/>
-                    <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
-                </div>
-                } */}
-                
-                { this.state.toggle["activity"] &&
-                <div>
-                    <Activity
+                        handleClick={this.toggleState}
+                        content={descriptionPost.content}
+                        tags={tags} 
+                        topicName={topicName} 
+                        mobileImg={mobileImg} 
+                        topicId={_id} 
+                        posts={renderedPosts}
+                        // actiivty
                         order={order}
                         columns={column}
-                        posts={posts}
+                        activityPosts={posts}
                         activity={activity}
                     />
-                    <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
-                </div>
-                }
+                </Breakpoint>
 
-                <Space height={"500px"} backgroundColor={"#f9f9f9"}/>
+                <Breakpoint name="dablet">
+                    <TopWrapper>
+                        <Info
+                            id={_id}
+                            flag={flag}
+                            tags={tags}
+                            content={descriptionPost.content}
+                            topicName={topicName}
+                            postCount={postCount}
+                            likes={likes}
+                            handleClick={this.toggleState}
+                            selected={this.state.toggle}
+                            squareImg={squareImg}
+                        />
+                    </TopWrapper>
 
+                    <Waypoint 
+                        onEnter={() => this.setState({ trigger: false　})} 
+                        onLeave={() => this.setState({ trigger: true })}
+                        fireOnRapidScroll
+                    >
+                        <Gap/>
+                    </Waypoint>
+
+                    { this.state.toggle["topic"] && posts.length > 1 &&
+                    <TopicBottom>
+                        <TopicPostWrapper>
+                            { flag && renderedPosts }
+                            <Space height={"200px"}/>
+                        </TopicPostWrapper>
+
+                        { flag ?
+                        <TocWrapper className="fake" position={this.state.trigger}>
+                                <TableOfContent>
+                                    <FocusBar top={this.state.enter}/>
+                                    { flag && renderedTable }
+                                </TableOfContent>
+                        </TocWrapper>
+                        : <div className="fake"/>
+                        }
+                    </TopicBottom>
+                    }
+
+                    {/* { this.state.toggle["talk"] &&
+                    <div>
+                        <Talk/>
+                        <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
+                    </div>
+                    } */}
+                    
+                    { this.state.toggle["activity"] &&
+                    <div>
+                        <Activity
+                            order={order}
+                            columns={column}
+                            posts={posts}
+                            activity={activity}
+                        />
+                        <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
+                    </div>
+                    }
+
+                    <Space height={"500px"} backgroundColor={"#f9f9f9"}/>
+                </Breakpoint>
             </TopicBox>
         )
     }
@@ -347,12 +389,36 @@ const PostWrapper = styled.div`
     margin-bottom: 6px;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
+
+    @media only screen and (max-width: 670px) {
+        background: #FDFDFD;
+        box-shadow: 0px 1px 1px rgba(0,0,0,0.25);
+        padding-top: 10px;
+    }
 `
 
 const Column = styled.div`
+
+    @media only screen and (max-width: 670px) {
+        background: #FDFDFD;
+        box-shadow: 0px 1px 1px rgba(0,0,0,0.25);
+        width: 100%;
+        padding-left: 10px;
+        font-size: 15px;
+        margin-bottom: 2px;
+        height: 38px;
+
+        & > h2 {
+            font-size: 15px !important;
+        }
+    }
+
+    @media only screen and (min-width: 670px) {
+        max-width: 725px;
+        min-width: 725px;
+    }
+
     background-color: white;
-    max-width: 725px;
-    min-width: 725px;
     box-shadow: 1px 1px 10px #d2d2d2;
     margin-bottom: 1px;
     height: 50px;
@@ -374,6 +440,12 @@ const Column = styled.div`
 `
 
 const Post = styled.div`
+
+    @media only screen and (max-width: 670px) {
+        padding: 0px;
+        width: 100%;
+    }
+
     background-color: white;
     min-width: 725px;
     max-width: 725px;
@@ -396,13 +468,8 @@ const PostTop = styled.div`
     font-size: 16px;
 
     & > p {
-        margin-bottom: -5px;
         padding-left: 14px;
         margin-right: 18px;
-    }
-
-    & > h3 {
-        margin-top: -2px;
     }
 `
 

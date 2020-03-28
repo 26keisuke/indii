@@ -339,6 +339,7 @@ const Division = styled.div`
 const LogInCard = styled.div`
     @media only screen and (max-width: 670px) {
         width: 360px;
+        height: 460px;
     }
 
     width: 400px;

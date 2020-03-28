@@ -2,14 +2,11 @@ import React, { useEffect } from "react"
 import { connect } from "react-redux"
 import styled from "styled-components"
 import { Helmet } from "react-helmet"
-import { withRouter } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
 
 import * as actions from "../../actions"
 
 import account from "../../images/account.png"
-
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import Textarea from "./Textarea/Textarea"
 import { SlashTitle } from "../Feed/Trend/Trend"
@@ -25,6 +22,7 @@ import Slider from "./Slider/Slider"
 // import Navigation from "./Navigation/Navigation"
 import Scroll from "../Util/Scroll"
 import Breakpoint from "../Breakpoint"
+import MobileBack from "../Util/MobileBack"
 
 import { getEditorContent, fmtDate, } from "../Util/util"
 
@@ -41,20 +39,6 @@ const ScreenWrapper = styled.div`
     & .feed-left {
         padding: 0px;
     }
-`
-
-const MobileBack = styled.div`
-    background-color: #FAFAFA;
-    position: absolute;
-    z-index: 1;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    top: 8px;
-    left: 11px;
 `
 
 const MobileWrapper = styled.div`
@@ -110,6 +94,11 @@ const Post = ({ post, recommend, ...props}) => {
         }
     }, [])
 
+    useEffect(() => {
+        props.fetchPost(props.match.params.id)
+        document.getElementsByClassName("fakebox")[0].scrollTo(0, 0)
+    }, [props.match.params.id])
+
     const renderLeft = () => {
 
         return([
@@ -130,7 +119,7 @@ const Post = ({ post, recommend, ...props}) => {
             </Breakpoint>,
             <Breakpoint key="mobilePostLeft" name="mobile">
                 <MobileImg>
-                    <MobileBack><ArrowBackIcon onClick={props.history.goBack}/></MobileBack>
+                    <MobileBack/>
                     { !topic
                     ?
                     <S1Wrapper>
@@ -287,4 +276,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, actions)(withRouter(Post))
+export default connect(mapStateToProps, actions)(Post)

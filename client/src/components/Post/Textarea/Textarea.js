@@ -16,7 +16,7 @@ const MobileTopicName = styled.h3`
 
 const MobileTitle = styled.div`
     display: flex;
-    font-size: 20px;
+    font-size: 18px;
     padding-bottom: 5px;
     border-bottom: 1px solid #eaeaea;
     margin-bottom: 12px;
