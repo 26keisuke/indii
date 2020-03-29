@@ -58,42 +58,6 @@ class SearchResult extends Component {
                         />
                     )
                     }
-                    {
-                    topics.map(topic => 
-                        <Topic
-                            id={topic._id}
-                            img={topic.squareImg.image}
-                            tags={topic.tags}
-                            topicName={topic.topicName}
-                            description={topic.posts[0].content}
-                            likes={topic.likes.counter}
-                        />
-                    )
-                    }
-                    {
-                    topics.map(topic => 
-                        <Topic
-                            id={topic._id}
-                            img={topic.squareImg.image}
-                            tags={topic.tags}
-                            topicName={topic.topicName}
-                            description={topic.posts[0].content}
-                            likes={topic.likes.counter}
-                        />
-                    )
-                    }
-                    {
-                    topics.map(topic => 
-                        <Topic
-                            id={topic._id}
-                            img={topic.squareImg.image}
-                            tags={topic.tags}
-                            topicName={topic.topicName}
-                            description={topic.posts[0].content}
-                            likes={topic.likes.counter}
-                        />
-                    )
-                    }
                     <Space/>
                 </MobileTopicWrapper>
                 <div>

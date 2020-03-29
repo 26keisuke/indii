@@ -150,11 +150,6 @@ const Post = ({ post, recommend, ...props}) => {
                         intro={intro}
                         skeleton={!creator}
                     />
-                    <MobileTitle><div/><span>参照</span></MobileTitle>
-                    <List
-                        readOnly={true}
-                        reference={ref || []}
-                    />
                     <MobileTitle><div/><span>関連するポスト</span></MobileTitle>
                     {
                     recommend && recommend.slice(0,3).map(recom => 
@@ -171,6 +166,12 @@ const Post = ({ post, recommend, ...props}) => {
                         />
                     )
                     }
+                    <MobileTitle><div/><span>参照</span></MobileTitle>
+                    <List
+                        readOnly={true}
+                        reference={ref || []}
+                    />
+                    <Space height={"200px"}/>
                 </MobileInfo>
             </Breakpoint>
         ])

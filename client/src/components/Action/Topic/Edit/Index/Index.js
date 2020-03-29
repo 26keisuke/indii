@@ -47,14 +47,14 @@ class EditIndexTopic extends Component {
         }
 
         // draggableをページの下までもっていきすぎるとDOMが崩れるのでそれを防ぐ
-        document.documentElement.style.position= "fixed"
-        document.documentElement.style.width= "100vw"
+        // document.documentElement.style.position= "fixed"
+        // document.documentElement.style.width= "100vw"
     }
 
-    componentWillUnmount() {
-        document.documentElement.style.position= "none"
-        document.documentElement.style.width= "none"
-    }
+    // componentWillUnmount() {
+    //     document.documentElement.style.position= "none"
+    //     document.documentElement.style.width= "none"
+    // }
 
     componentDidUpdate = (prevProps) => {
         if((prevProps.index.columnName !== this.props.index.columnName) && (this.props.index.columnName)){

@@ -26,7 +26,11 @@ const Talk = ({ selected, ...props }) => {
     useEffect(() => {
         if(window.location.pathname === "/talk"){
             setTransition(false) //モバイルの戻るボタンを押した時に戻る用にするため
+            return
         }
+        const id = window.location.pathname.split("/")[2]
+        props.selectTalk(id)
+        setTransition(true)
     }, [window.location.pathname])
 
     return (

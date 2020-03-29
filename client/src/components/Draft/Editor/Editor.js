@@ -83,14 +83,14 @@ class Editor extends Component {
     componentDidMount() {
         this.fetchTargetDraft(true)
 
-        document.documentElement.style.position= "fixed"
-        document.documentElement.style.width= "100vw"
+        // document.documentElement.style.position= "fixed"
+        // document.documentElement.style.width= "100vw"
     }
 
-    componentWillUnmount() {
-        document.documentElement.style.position= "none"
-        document.documentElement.style.width= "none"
-    }
+    // componentWillUnmount() {
+    //     document.documentElement.style.position= "none"
+    //     document.documentElement.style.width= "none"
+    // }
 
     componentDidUpdate(prevProps) {
         if(this.props.draft.isUpdated) {
