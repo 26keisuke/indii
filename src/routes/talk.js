@@ -1,9 +1,9 @@
 import express from "express"
 
-import { isLoggedIn } from "./util/util"
-
 import Talk from "../models/Talk"
 import User from "../models/User"
+
+import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
@@ -58,7 +58,7 @@ router.post("/", isLoggedIn, (req, res) => {
     })
 })
 
-router.post("/:talkId", (req, res) => {
+router.post("/:talkId", isLoggedIn, (req, res) => {
 
     const now = Date.now()
 
@@ -91,7 +91,7 @@ router.post("/:talkId", (req, res) => {
     })
 })
 
-router.post("/:talkId/delete", (req, res) => {
+router.post("/:talkId/delete", isLoggedIn, (req, res) => {
     Talk.findById(req.params.talkId)
     .then(talk => {
         talk.isDeleted = true
@@ -100,7 +100,7 @@ router.post("/:talkId/delete", (req, res) => {
     })
 })
 
-router.post("/:talkId/edit", (req, res) => {
+router.post("/:talkId/edit", isLoggedIn, (req, res) => {
     Talk.findById(req.params.talkId)
     .then(talk => {
         talk.description = req.body.value

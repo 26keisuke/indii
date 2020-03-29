@@ -15,14 +15,11 @@ const LoadingElement = styled.div`
     border-right-color: #646380;
     border-radius: 22px;
     animation: ${rotate} 1s infinite linear;
-    position: absolute;
+    position: fixed;
     left: 50%;
     top: 40%;
     z-index: 100;
-
-    & .makeStyles-root-67 {
-        transform: translate(-50%, 0);
-    }
+    transform: translate(-50%, 0);
 `
 
 class Loading extends Component {

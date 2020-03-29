@@ -1,4 +1,5 @@
 import React from "react"
+import PropType from "prop-types"
 import { withRouter } from "react-router-dom"
 import styled from "styled-components"
 
@@ -14,16 +15,22 @@ const Back = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    top: 8px;
-    left: 11px;
+    top: ${props => props.top ? props.top + "px" : "8px"};
+    left: ${props => props.left ? props.left + "px" : "11px"};
 `
 
-const MobileBack = (props) => {
+const MobileBack = ({ top, left, handleClick, ...props }) => {
     return (
-        <Back>
-            <ArrowBackIcon onClick={() => props.history.push("/")}/>
+        <Back top={top} left={left}>
+            <ArrowBackIcon onClick={!!handleClick ? handleClick : () => props.history.push("/")}/>
         </Back>
     )
+}
+
+MobileBack.propTypes = {
+    top: PropType.number,
+    left: PropType.number,
+    handleClick: PropType.func,
 }
 
 export default withRouter(MobileBack)

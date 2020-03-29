@@ -2,6 +2,8 @@ import express from "express"
 
 import User from "../models/User"
 
+import { isLoggedIn } from "./util/util"
+
 const router = express.Router()
 
 router.get("/:userId", (req, res) => {
@@ -20,7 +22,7 @@ router.get("/:userId", (req, res) => {
     })
 })
 
-router.post("/:userId", (req, res) => {
+router.post("/:userId", isLoggedIn, (req, res) => {
     User.findById(req.params.userId)
     .then(user => {
         if(user.intro !== req.body.intro){
@@ -40,7 +42,7 @@ router.post("/:userId", (req, res) => {
     })
 })
 
-router.post("/:userId/photo", (req, res) => {
+router.post("/:userId/photo", isLoggedIn, (req, res) => {
     User.findById(req.params.userId)
     .then(user => {
         user.photo = req.body.photo
@@ -88,7 +90,7 @@ router.post("/:userId/photo", (req, res) => {
 //     })
 // })
 
-router.post("/:userId/follow", (req, res) => {
+router.post("/:userId/follow", isLoggedIn, (req, res) => {
 
     const now = Date.now()
 

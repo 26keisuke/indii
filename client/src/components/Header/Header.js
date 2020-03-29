@@ -18,7 +18,7 @@ const NavBar = styled.nav`
     align-items: center;
     border-bottom: 1px solid #eaeaea;
     background-color: #ffffff;
-    position: absolute;
+    position: fixed;
     top: 0px;
     width: 100%;
     z-index: 11;
@@ -32,6 +32,8 @@ const Logo = styled(Link)`
 
     @media only screen and (max-width: 670px) {
         margin-bottom:-5px;
+        margin-left: 10px;
+
     }
 
     & > p {

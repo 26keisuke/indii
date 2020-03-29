@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const FilterElement = styled.div`
     background-color: rgba(0,0,0,.1);
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;

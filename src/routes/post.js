@@ -255,7 +255,7 @@ router.post("/:postId/emoji/removed", isLoggedIn, (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.post("/delete", (req,res) => {
+router.post("/delete", isLoggedIn, (req,res) => {
     console.log(`DELETING ${req.body.id}`)
     res.send("")
 })

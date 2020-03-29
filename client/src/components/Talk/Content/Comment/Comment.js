@@ -1,9 +1,10 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import TextField from '@material-ui/core/TextField';
-import Button from "../../../Util/Button"
 import { IoIosSend } from "react-icons/io"
 // import { FiMinus } from "react-icons/fi"
+
+import Button from "../../../Util/Button"
 
 class Comment extends Component {
     render() {
@@ -23,7 +24,7 @@ class Comment extends Component {
                     <Button disabled={!this.props.value} onClick={this.props.handleSubmit}>追加<SendIcon/></Button>
                 </ButtonWrapper>
                 {/* <ShrinkIcon/> */}
-            </CommentBox>
+            </CommentBox>  
         )
     }
 }
@@ -40,6 +41,10 @@ const ButtonWrapper = styled.div`
     width: 88px;
     align-self: flex-end;
     margin-right: 10%;
+
+    & > button {
+        white-space: nowrap;
+    }
 `
 
 const SendIcon = styled(IoIosSend)`
@@ -48,12 +53,12 @@ const SendIcon = styled(IoIosSend)`
 `
 
 const CommentBox = styled.div`
+
     box-shadow: 1px 1px 10px #d2d2d2;
     background-color: white;
     position: sticky;
     bottom: 0px;
     width: 100%;
-    /* left: 41px; */
     display: flex;
     align-items: center;
     flex-direction: column;

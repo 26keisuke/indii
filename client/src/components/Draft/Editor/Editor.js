@@ -87,6 +87,11 @@ class Editor extends Component {
         document.documentElement.style.width= "100vw"
     }
 
+    componentWillUnmount() {
+        document.documentElement.style.position= "none"
+        document.documentElement.style.width= "none"
+    }
+
     componentDidUpdate(prevProps) {
         if(this.props.draft.isUpdated) {
             // これdraft全部を取得しているから時間かかるし無駄

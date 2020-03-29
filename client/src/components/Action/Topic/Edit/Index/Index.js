@@ -51,6 +51,11 @@ class EditIndexTopic extends Component {
         document.documentElement.style.width= "100vw"
     }
 
+    componentWillUnmount() {
+        document.documentElement.style.position= "none"
+        document.documentElement.style.width= "none"
+    }
+
     componentDidUpdate = (prevProps) => {
         if((prevProps.index.columnName !== this.props.index.columnName) && (this.props.index.columnName)){
             this.addNewIndex()

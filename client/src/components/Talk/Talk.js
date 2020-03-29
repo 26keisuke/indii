@@ -1,170 +1,60 @@
-import React, { Component } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import { connect } from "react-redux"
 import { Helmet } from "react-helmet"
+// import Slider from "react-slick";
 
 import * as actions from "../../actions"
 
-import TalkFeed from "./Element/Element"
+import Feed from "./Feed/Feed"
 import Content from "./Content/Content"
 
-import { checkAuth, fmtDate } from "../Util/util"
+const Talk = ({ selected, ...props }) => {
 
-class Talk extends Component {
+    const [transition, setTransition] = useState(false)
 
-    componentDidUpdate(prevProps) {
-        if(!prevProps.talk.fetched[0] && this.props.talk.fetched[0]){
-            this.props.selectTalk(this.props.talk.fetched[0])
+    useEffect(() => {
+        if(window.location.pathname !== "/talk"){
+            const id = window.location.pathname.split("/")[2]
+            props.selectTalk(id)
+            setTransition(true)
         }
-    }
+        
+        props.fetchTalks();
+    },[])
 
-    componentDidMount() {
-        this.props.fetchTalks();
-    }
-
-    handleClick = (e) => {
-
-        const isAuthenticated = checkAuth(e, this.props)
-
-        if(isAuthenticated){
-            const id = "1";
-            const action = "ADD_TALK";
-            const title = "新しいトークを作成"
-            const message = "トークのタイトルを入力してください。";
-            const caution = "";
-            const buttonMessage = "次へ";
-            this.props.enableGray();
-            this.props.showConfirmation(id, action, title, caution, message, buttonMessage, "ADD_TALK_REF");
+    useEffect(() => {
+        if(window.location.pathname === "/talk"){
+            setTransition(false) //モバイルの戻るボタンを押した時に戻る用にするため
         }
-    }
+    }, [window.location.pathname])
 
-    handleTalkClick = (e, talk) => {
-        e.preventDefault();
-        this.props.selectTalk(talk)
-    }
+    return (
+        <Wrapper>
+            <Helmet>
+                <title>{"トーク | Indii"}</title>
+                <meta name="description" content="Indiiでは、似たような仲間と交流することができます。力を合わして日本一のデータベースを作り上げましょう！"/>
+                <meta name="keywords" content={"コミュニティー,コンピューターサイエンス,ギーク,オタク"}/>
+            </Helmet>
+            <TalkBox>
+                <Feed
+                    transition={transition}
+                    setTransition={setTransition}
+                    selectedId={selected._id}
+                />
 
-    renderTalkElement = (talk) => {
-        return (
-            <TalkFeed
-                key={"feed"+talk._id}
-                pinned={talk.pinned}
-                creator={talk.creator}
-                date={fmtDate(talk.timeStamp)}
-                title={talk.title}
-                description={talk.description}
-                counter={talk.msgCounter}
-                handleClick={(e) => {this.handleTalkClick(e, talk)}}
-                selected={talk._id === this.props.talk.selected._id}
-            />
-        )
-    }
-
-    renderTalk = () => {
-        var pinned = []
-        var notPinned = []
-
-        this.props.talk.fetched
-        .map(talk => {
-            if(talk.pinned){
-                pinned.push(this.renderTalkElement(talk))
-            } else {
-                notPinned.push(this.renderTalkElement(talk))
-            }
-        })
-
-        return pinned.concat(notPinned)
-    }
-
-    render() {
-        return (
-            <Wrapper>
-                <Helmet>
-                    <title>{"トーク | Indii"}</title>
-                    <meta name="description" content="Indiiでは、似たような仲間と交流することができます。力を合わして日本一のデータベースを作り上げましょう！"/>
-                    <meta name="keywords" content={"コミュニティー,コンピューターサイエンス,ギーク,オタク"}/>
-                </Helmet>
-                <TalkBox>
-                    <Feed>
-                        <TalkHeader>
-                            <h2>トーク一覧</h2>
-                            <div>
-                                <AddBoxOutlinedIcon onClick={this.handleClick}/>
-                            </div>
-                        </TalkHeader>
-                        <div>
-                            {   
-                            this.props.talk.fetched[0]
-                            ? 
-                            this.renderTalk()
-                            :
-                            <div>
-                                <TalkFeed/>
-                                <TalkFeed/> 
-                                <TalkFeed/>   
-                                <TalkFeed/>
-                                <TalkFeed/> 
-                                <TalkFeed/>   
-                                <TalkFeed/>
-                            </div>
-                            }
-                        </div>
-                        <BottomSpace/>
-                    </Feed>
-
-                    <Content
-                        talk={this.props.talk.selected}
-                    />
-
-                </TalkBox>
-            </Wrapper>
-        )
-    }
+                <Content
+                    transition={transition}
+                    setTransition={setTransition}
+                    talk={selected}
+                />
+            </TalkBox>
+        </Wrapper>
+    )
 }
 
 const Wrapper = styled.div`
     background-color: #f9f9f9;
-`
-
-const BottomSpace = styled.div`
-    height: 200px;
-`
-
-const Feed = styled.div`
-    min-width: 320px;
-    max-width: 320px;
-    background-color: white;
-    box-shadow: 1px 1px 10px #d2d2d2;
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    margin-right: 20px;
-    min-height: 100vh;
-`
-
-const TalkHeader = styled.div`
-    display: flex;
-    padding: 10px 27px;
-    padding-bottom: 35px;
-    position: relative;
-    border-bottom: 1px solid #eeeeee;
-    
-    & > h2 {
-        font-size: 14px !important;
-    }
-
-    & > div:nth-child(2) {
-        position: relative;
-        margin-left: auto;
-
-        & > svg {
-            position: absolute;
-            color: ${props => props.theme.primary};
-            top: 2px;
-            transform: scale(1.1);
-            left: -17px;
-            cursor: pointer;
-        }
-    }
 `
 
 const TalkBox = styled.div`
@@ -176,7 +66,7 @@ const TalkBox = styled.div`
 function mapStateToProps({ auth, talk }){
     return {
         auth,
-        talk,
+        selected: talk.selected,
     }
 }
 

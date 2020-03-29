@@ -63,15 +63,17 @@ const Tag = styled.div`
 `
 
 const TopicName = styled.h1`
-    font-size: 20px;
-    margin-bottom: 6px;
+    font-size: 18px;
+    margin-top: 2px;
+    margin-bottom: 10px;
 `
 
 const Info = styled.div`
     background: #FDFDFD;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
-    padding: 10px;
     margin-bottom: 3px;
+    padding: 15px 10px;
+    padding-top: 10px;
 `
 
 const Top = styled.div`
@@ -93,14 +95,26 @@ const Post = ({ flag, tags, topicName, content, posts }) => {
                         ?
                         tags.map((tag,index) => <span key={index+tag}># {tag}</span>)
                         :
-                        <Skeleton width={100} height={14}/>
+                        <Skeleton width={130} height={16}/>
                         }
                     </Tag>
+                    { flag
+                    ?
                     <TopicName>{topicName}</TopicName>
+                    :
+                    <S3Wrapper>
+                        <Skeleton width={240} height={22}/>
+                    </S3Wrapper>
+                    }
                     <p>
                         { flag 
                         ? <TextArea content={content} readOnly={true}/>
-                        : <Skeleton count={5} width={100} height={14}/>
+                        : 
+                        ([<S2Wrapper key="s2Wrapper">
+                            <Skeleton count={3} height={16}/>
+                        </S2Wrapper>,
+                        <Skeleton key="s2Skeleton" width={100} height={16}/>
+                        ])
                         }
                     </p>
                 </Info>
@@ -156,7 +170,13 @@ const Mobile = ({ order, columns, activity, activityPosts, posts, tags, topicNam
         <div>
             <Top>
                 <MobileBack/>
-                <MobileImg src={mobileImg && mobileImg.image}/>
+                { flag ?
+                <MobileImg src={mobileImg && mobileImg.image} alt="トピックを代表する写真"/>
+                :
+                <S1Wrapper>
+                    <Skeleton width={380} height={200}/>
+                </S1Wrapper>
+                }
                 <LikeWrapper>
                     <Like topicId={topicId}/>
                 </LikeWrapper>
@@ -192,5 +212,28 @@ const Mobile = ({ order, columns, activity, activityPosts, posts, tags, topicNam
         </div>
     )
 }
+
+const S1Wrapper = styled.div`
+    & span {
+        border-bottom-right-radius: 35px;
+        border-bottom-left-radius: 35px;
+        box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+        z-index: 1;
+        position: relative;
+    }
+`
+
+const S2Wrapper = styled.div`
+    & span {
+        width: 100%;
+        margin-bottom: 4px;
+    }
+`
+
+const S3Wrapper = styled.div`
+    & span {
+        margin: 8px 0px;
+    }
+`
 
 export default Mobile

@@ -105,6 +105,10 @@ class TopicPage extends Component {
         this.props.fetchTopic(id, "ALL");
     }
 
+    componentWillUnmount() {
+        this.props.fetchTopic()
+    }
+
     toggleState = (name) => {
         this.setState({
             toggle: {
@@ -379,8 +383,6 @@ const TableRow = styled.div`
     display: flex;
 `
 
-
-
 const PostWrapper = styled.div`
     padding-top: 15px;
     padding-bottom: 20px;
@@ -446,9 +448,12 @@ const Post = styled.div`
         width: 100%;
     }
 
+    @media only screen and (min-width: 670px) {
+        min-width: 725px;
+        max-width: 725px;
+    }
+
     background-color: white;
-    min-width: 725px;
-    max-width: 725px;
     padding: 0px 50px;
     padding-top: 15px;
     box-sizing: border-box;

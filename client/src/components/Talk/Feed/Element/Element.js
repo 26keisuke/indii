@@ -97,11 +97,15 @@ const Box = styled.div`
     position: relative;
     cursor: pointer;
 
-    background-color: ${props => props.selected && "rgba(222,222,222, 0.35)"};
+    @media only screen and (min-width: 670px) {
+        background-color: ${props => props.selected && "rgba(222,222,222, 0.35)"};
 
-    &:hover{
-        background-color: rgba(233, 233, 238, 0.25);
+        &:hover{
+            background-color: rgba(233, 233, 238, 0.25);
+        }
     }
+
+    
 `
 
 const Title = styled.h2`

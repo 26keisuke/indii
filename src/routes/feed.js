@@ -1,12 +1,10 @@
 import express from "express"
-// import mongoose from "mongoose";
-// import equal from "deep-equal"
 
 import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
-// import Draft from "../models/Draft"
-// import Image from "../models/Image"
+
+import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
@@ -82,7 +80,7 @@ router.get("/new/topic", (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.post("/feedback", (req, res) => {
+router.post("/feedback", isLoggedIn, (req, res) => {
     Post.findById(req.body.id)
     .then(post => {
 

@@ -45,6 +45,7 @@ router.get("/logout", (req, res) => {
             res.redirect("/")
         })
     })
+    .catch(err => console.log(err))
 })
 
 
