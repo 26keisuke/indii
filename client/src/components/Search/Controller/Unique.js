@@ -229,8 +229,8 @@ const suggestionStyle = {
     borderRadius: "2px",
     width: "441px",
     backgroundColor: "white",
-    maxHeight: "280px",
-    overflow: "scroll",
+    // maxHeight: "280px", firefoxだとおかしくなる（box-shadowが影響）
+    // overflow: "scroll",
 }
 
 const blurStyle = {

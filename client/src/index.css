@@ -12,6 +12,10 @@ body {
     overflow: scroll;
 }
 
+body::-webkit-scrollbar {
+    width: 0 !important;
+}
+
 #root{
     /* height: 100%; */
     min-height: 100vh;
