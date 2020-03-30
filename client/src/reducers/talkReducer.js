@@ -49,9 +49,10 @@ export default function talkReducer(state={
                 fetched: action.payload
             }
         case SELECT_TALK:
+            index = findArrObjIndex(state.fetched, "_id", action.payload)
             return {
                 ...state,
-                selected: action.payload,
+                selected: state.fetched[index],
             }
         default:
             return state

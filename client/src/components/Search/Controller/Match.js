@@ -174,6 +174,8 @@ const suggestionStyle = {
     borderRadius: "2px",
     width: "441px",
     backgroundColor: "white",
+    maxHeight: "280px",
+    overflow: "scroll",
 }
 
 const blurStyle = {

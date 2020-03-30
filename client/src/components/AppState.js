@@ -1,8 +1,6 @@
 import React, { Component } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from "react-router-dom"
 import equal from "deep-equal"
 
@@ -13,6 +11,7 @@ import Navigation from "./Navigation/Navigation";
 import Auth from "./Auth/Auth"
 import Confirm from "./Confirm/Confirm"
 import Breakpoint from "./Breakpoint"
+import Loading from "./Util/Loading"
 
 import * as actions from "../actions"
 
@@ -281,7 +280,6 @@ class AppState extends Component {
         }
     }
 
-
     render () {
 
         const { update, auth, children } = this.props
@@ -313,26 +311,6 @@ class AppState extends Component {
             </Box>
         )
     }
-}
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: "absolute",
-    left: "50%",
-    top: "40%",
-    zIndex: 100,
-    transform: "translate(-50%, 0)",
-  },
-}));
-
-
-function Loading() {
-    const classes = useStyles();
-    return (
-        <div className={classes.root}>
-            <CircularProgress color="primary"/>
-        </div>
-    )
 }
 
 const Box = styled.div`

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { Helmet } from "react-helmet"
-// import Slider from "react-slick";
 
 import * as actions from "../../actions"
 
@@ -41,17 +40,18 @@ const Talk = ({ selected, ...props }) => {
                 <meta name="keywords" content={"コミュニティー,コンピューターサイエンス,ギーク,オタク"}/>
             </Helmet>
             <TalkBox>
+
                 <Feed
                     transition={transition}
                     setTransition={setTransition}
-                    selectedId={selected._id}
+                    selectedId={selected && selected._id}
                 />
-
                 <Content
                     transition={transition}
                     setTransition={setTransition}
                     talk={selected}
                 />
+
             </TalkBox>
         </Wrapper>
     )

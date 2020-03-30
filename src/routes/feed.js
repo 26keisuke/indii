@@ -72,7 +72,7 @@ router.get("/recommend", (req, res) => {
 })
 
 router.get("/new/topic", (req, res) => {
-    Topic.find().sort({timeStamp: -1}).limit(5)
+    Topic.find().sort({timeStamp: -1})
     .populate("squareImg")
     .populate("posts")
     .exec()

@@ -19,7 +19,7 @@ const Feed = ({ transition, setTransition, selectedId, fetched, ...props}) => {
 
     useEffect(() => {
         if(!!fetched[0] && !init){
-            props.selectTalk(fetched[0])
+            props.selectTalk(fetched[0]._id)
             setInit(true)
         }
     }, [fetched])
@@ -42,13 +42,13 @@ const Feed = ({ transition, setTransition, selectedId, fetched, ...props}) => {
 
     const handleTalkClick = (e, talk) => {
         e.preventDefault();
-        props.selectTalk(talk)
+        props.selectTalk(talk._id)
         props.history.push(`/talk/${talk._id}`)
     }
 
     const handleMobileTalkClick = (e, talk) => {
         e.preventDefault();
-        props.selectTalk(talk)
+        props.selectTalk(talk._id)
         setTransition(true)
         props.history.push(`/talk/${talk._id}`)
     }

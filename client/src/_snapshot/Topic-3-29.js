@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react"
-import styled, { css } from "styled-components"
+import React, { Component, PureComponent, useMemo } from "react"
+import styled, {css} from "styled-components"
 import { connect } from "react-redux"
 import { Waypoint } from "react-waypoint"
 import { Link } from "react-router-dom"
@@ -82,94 +82,90 @@ const PostElement = ({ postId, index, postName, content, onEnter, onLeave }) => 
     ])
 }
 
-const TOF = ({ selected, index, title, indent }) => {
-
-    const row = useMemo(() => {
+class TOF extends PureComponent {
+    render() {
         return (
-            <TableRow selected={selected}>
+            <TableRow>
                 <p/>
                 <p/>
-                { indent && <p/> }
-                <p>{index}</p>
-                <p>{title}</p>
+                { this.props.indent && <p/> }
+                <p>{this.props.index}</p>
+                <p>{this.props.title}</p>
             </TableRow>
         )
-    }, [selected, indent, title, indent])
-
-    return (
-        row
-    )
+    }
 }
 
-const TopicPage = ({ fetched, ...props}) => {
+class TopicPage extends Component {
 
-    const [toggle, setToggle] = useState({
-        topic: true,
-        talk: false,
-        activity: false,
-    })
-    const [trigger, setTrigger] = useState(false)
-    const [currentIdx, setCurrentIdx] = useState("1")
-
-    useEffect(() => {
-        const id = props.match.params.id;
-        props.fetchTopic(id, "ALL");
-        return () => {
-            props.fetchTopic()
+    constructor(props) {
+        super(props)
+        this.state = {
+            toggle: {
+                topic: true,
+                talk: false,
+                activity: false,
+            },
+            trigger: false,
+            current: "1",
         }
-    }, [])
+    }
 
-    const toggleState = (name) => {
-        setToggle({
-            topic: false,
-            talk: false,
-            activity: false,
+    componentDidMount() {
+        const id = this.props.match.params.id;
+        this.props.fetchTopic(id, "ALL");
+    }
+
+    componentWillUnmount() {
+        this.props.fetchTopic()
+    }
+
+    toggleState = (name) => {
+        this.setState({
+            toggle: {
+                topic: false,
+                talk: false,
+                activity: false,
+            } 
         })
-        setToggle({
-            [name]: true,
+        this.setState({
+            toggle: {
+                [name]: true,
+            }
         })
     }
 
-    const handleEnter = (index, isEnter, data) => {
+    handleEnter = (index, isEnter, data) => {
+        console.log(index)
         const prev = data.previousPosition
         const now = data.currentPosition
-        
-        var current;
 
         if(isEnter){
-            if((prev === "above") && (now === "inside")){
-                current = indexArr.indexOf(index)
-                if(!indexArr[current - 1]) return
-                setCurrentIdx(indexArr[current - 1])
+           if((prev === "below") && (now === "inside")){
+                this.setState({ current: this.state.enter + 27})
+           }
+        } else {
+            if((prev === "inside") && (now === "below")){
+                this.setState({ current: this.state.enter - 27})
             }
-         } else {
-             if((prev === "inside") && (now === "above")){
-                 current = indexArr.indexOf(index)
-                 if(!indexArr[current + 1]) return
-                 setCurrentIdx(indexArr[current + 1])
-             }
-         }
+        }
     }
 
-    const renderPost = useMemo(() => {
-
-        console.log(currentIdx)
-
-        if(!fetched.order || !fetched.posts || !fetched.column) return
-
-        const { order, posts } = fetched
-        const columns = fetched.column
+    renderPost = () => {
+        const { order, posts } = this.props.topic.fetched
+        const columns = this.props.topic.fetched.column
 
         var column;
         var post;
-
         var fstArr = [];
         var sndArr = [];
-        var indexArr = [];
-        var tableArr = [];
+
+        const indexArr = [];
+
+        var tableArr = []
 
         tableArr.push(
-            <div key="contentDiv">コンテンツ一覧</div>
+            <div key={"contentDiv"}>コンテンツ一覧</div>
         )
 
         for(var i=1; i < order.length; i++){
@@ -179,15 +175,14 @@ const TopicPage = ({ fetched, ...props}) => {
                     key={"column" + column.index}
                     index={column.index}
                     title={column.title}
-                    onLeave={handleEnter}
-                    onEnter={handleEnter}
+                    onLeave={this.handleEnter}
+                    onEnter={this.handleEnter}
                 />
             )
 
             tableArr.push(
                 <TOF
                     key={"tof" + column.index}
-                    selected={currentIdx === String(column.index)}
                     index={column.index}
                     title={column.title}
                     indent={false}
@@ -203,8 +198,8 @@ const TopicPage = ({ fetched, ...props}) => {
                     <PostElement
                         key={"post" + String(post.index.join("."))}
                         postId={post._id}
-                        onEnter={handleEnter} 
-                        onLeave={handleEnter}
+                        onEnter={this.handleEnter} 
+                        onLeave={this.handleEnter}
                         index={post.index.join(".")}
                         postName={post.postName}
                         content={post.content}
@@ -214,7 +209,6 @@ const TopicPage = ({ fetched, ...props}) => {
                 tableArr.push(
                     <TOF
                         key={"tof" + String(post.index.join("."))}
-                        selected={currentIdx === String(post.index.join("."))}
                         index={post.index.join(".")}
                         title={post.postName}
                         indent={true}
@@ -230,118 +224,118 @@ const TopicPage = ({ fetched, ...props}) => {
         }
 
         return [fstArr, tableArr, indexArr];
+    }   
 
-    }, [currentIdx, fetched.order, fetched.column, fetched.posts])
+    render() {
+        const { tags, likes, postCount, _id, topicName, order, column, activity, mobileImg } = this.props.topic.fetched
 
-    const { tags, likes, postCount, _id, topicName, order, column, activity, mobileImg } = fetched
+        const flag = _id
 
-    const flag = _id
+        const posts = this.props.topic.fetched.posts || {}
+        const squareImg = this.props.topic.fetched.squareImg || {}
 
-    const posts = fetched.posts || {}
-    const squareImg = fetched.squareImg || {}
+        const renderedPosts = flag && this.renderPost()[0]
+        const renderedTable = flag && this.renderPost()[1]
 
-    const rendered = flag ? renderPost : []
+        const titleName = topicName || " "
 
-    const renderedPosts = rendered[0] 
-    const renderedTable = rendered[1]
-    const indexArr = rendered[2]
+        const descriptionPost = posts[0] || {}
+        const description = getEditorContent(descriptionPost.content, 150) || `${topicName}に関するトピックです。`
 
-    const titleName = topicName || " "
-    const descriptionPost = posts[0] || {}
-    const description = getEditorContent(descriptionPost.content, 150) || `${topicName}に関するトピックです。`
-
-    return (
-        <TopicBox>
-            <Helmet>
-                <title>{titleName + " | Indii"}</title>
-                <meta name="description" content={description}/>
-                <meta name="keywords" content={`${titleName}`}/>
-            </Helmet>
-            <Breakpoint name="mobile">
-                <Mobile
-                    selected={toggle}
-                    handleClick={toggleState}
-                    content={descriptionPost.content}
-                    tags={tags} 
-                    topicName={topicName} 
-                    mobileImg={mobileImg} 
-                    topicId={_id} 
-                    posts={renderedPosts}
-                    // actiivty
-                    order={order}
-                    columns={column}
-                    activityPosts={posts}
-                    activity={activity}
-                />
-            </Breakpoint>
-
-            <Breakpoint name="dablet">
-                <TopWrapper>
-                    <Info
-                        id={_id}
-                        flag={flag}
-                        tags={tags}
+        return (
+            <TopicBox>
+                <Helmet>
+                    <title>{titleName + " | Indii"}</title>
+                    <meta name="description" content={description}/>
+                    <meta name="keywords" content={`${titleName}`}/>
+                </Helmet>
+                <Breakpoint name="mobile">
+                    <Mobile
+                        selected={this.state.toggle}
+                        handleClick={this.toggleState}
                         content={descriptionPost.content}
-                        topicName={topicName}
-                        postCount={postCount}
-                        likes={likes}
-                        selected={toggle}
-                        handleClick={toggleState}
-                        squareImg={squareImg}
-                    />
-                </TopWrapper>
-
-                <Waypoint 
-                    scrollableAncestor={window}
-                    onEnter={() => setTrigger(false)}
-                    onLeave={() => setTrigger(true)}
-                    fireOnRapidScroll
-                >
-                    <Trigger/>
-                </Waypoint>
-                <TriggerFill/>
-
-                { toggle["topic"] && posts.length > 1 &&
-                <TopicBottom>
-                    <TopicPostWrapper>
-                        { flag && renderedPosts }
-                        <Space height={"200px"}/>
-                    </TopicPostWrapper>
-
-                    { flag ?
-                    <TocWrapper className="fake" position={trigger}>
-                        <TableOfContent>
-                            { renderedTable }
-                        </TableOfContent>
-                    </TocWrapper>
-                    : <div className="fake"/>
-                    }
-                </TopicBottom>
-                }
-
-                {/* { toggle["talk"] &&
-                <div>
-                    <Talk/>
-                    <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
-                </div>
-                } */}
-                
-                { toggle["activity"] &&
-                <div>
-                    <Activity
+                        tags={tags} 
+                        topicName={topicName} 
+                        mobileImg={mobileImg} 
+                        topicId={_id} 
+                        posts={renderedPosts}
+                        // actiivty
                         order={order}
                         columns={column}
-                        posts={posts}
+                        activityPosts={posts}
                         activity={activity}
                     />
-                    <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
-                </div>
-                }
+                </Breakpoint>
 
-                <Space height={"500px"} backgroundColor={"#f9f9f9"}/>
-            </Breakpoint>
-        </TopicBox>
-    )
+                <Breakpoint name="dablet">
+                    <TopWrapper>
+                        <Info
+                            id={_id}
+                            flag={flag}
+                            tags={tags}
+                            content={descriptionPost.content}
+                            topicName={topicName}
+                            postCount={postCount}
+                            likes={likes}
+                            handleClick={this.toggleState}
+                            selected={this.state.toggle}
+                            squareImg={squareImg}
+                        />
+                    </TopWrapper>
+
+                    <Waypoint 
+                        scrollableAncestor={window}
+                        onEnter={() => this.setState({ trigger: false　})}
+                        onLeave={() => this.setState({ trigger: true })}
+                        fireOnRapidScroll
+                    >
+                        <Trigger/>
+                    </Waypoint>
+                    <TriggerFill/>
+
+                    { this.state.toggle["topic"] && posts.length > 1 &&
+                    <TopicBottom>
+                        <TopicPostWrapper>
+                            { flag && renderedPosts }
+                            <Space height={"200px"}/>
+                        </TopicPostWrapper>
+
+                        { flag ?
+                        <TocWrapper className="fake" position={this.state.trigger}>
+                            <TableOfContent>
+                                {/* <FocusBar top={this.state.enter}/> */}
+                                { renderedTable }
+                            </TableOfContent>
+                        </TocWrapper>
+                        : <div className="fake"/>
+                        }
+                    </TopicBottom>
+                    }
+
+                    {/* { this.state.toggle["talk"] &&
+                    <div>
+                        <Talk/>
+                        <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
+                    </div>
+                    } */}
+                    
+                    { this.state.toggle["activity"] &&
+                    <div>
+                        <Activity
+                            order={order}
+                            columns={column}
+                            posts={posts}
+                            activity={activity}
+                        />
+                        <Space height={"200px"} backgroundColor={"#f9f9f9"}/>
+                    </div>
+                    }
+
+                    <Space height={"500px"} backgroundColor={"#f9f9f9"}/>
+                </Breakpoint>
+            </TopicBox>
+        )
+    }
 }
 
 const TextAreaWrapper = styled.div`
@@ -371,6 +365,17 @@ const TocWrapper = styled.div`
     }
 `
 
+/* const FocusBar = styled.div`
+    transition: 300ms;
+    position: absolute;
+    top: ${props => String(props.top) + "px"};
+    width: 251px;
+    height: 28px;
+    border-radius: 3px;
+    border: 1px solid #636480;
+    left: 10px;
+` */
+
 const TopicPostWrapper = styled.div`
     margin-right: 20px;
 `
@@ -394,17 +399,9 @@ const TableRow = styled.div`
     margin-bottom: 10px;
     display: flex;
 
-    ${props => props.selected && css`
-        transition: 200ms;
-
-        & > p:nth-child(2) {
-            border-left: 1px solid royalblue;
-        }
-
-        & > p {
-            color: royalblue;
-        }
-    `}
+    & > p:nth-child(2) {
+        border-left: 1px solid ${props => props.theme.secondary};
+    }
 
     & > p {
         margin-right: 10px;
@@ -549,7 +546,7 @@ const TriggerFill = styled.div`
 function mapStateToProps({auth, topic}){
     return {
         auth,
-        fetched: topic.fetched,
+        topic,
     }
 }
 

@@ -45,21 +45,23 @@ class SearchResult extends Component {
                     <p>「{term}」</p>
                     <p>の検索結果</p>
                 </Title>
-                <MobileTopicWrapper>
-                    {
-                    topics.map(topic => 
-                        <Topic
-                            id={topic._id}
-                            img={topic.squareImg.image}
-                            tags={topic.tags}
-                            topicName={topic.topicName}
-                            description={topic.posts[0].content}
-                            likes={topic.likes.counter}
-                        />
-                    )
-                    }
-                    <Space/>
-                </MobileTopicWrapper>
+                <Breakpoint name="mobile">
+                    <MobileTopicWrapper>
+                        {
+                        topics.map(topic => 
+                            <Topic
+                                id={topic._id}
+                                img={topic.squareImg.image}
+                                tags={topic.tags}
+                                topicName={topic.topicName}
+                                description={topic.posts[0].content}
+                                likes={topic.likes.counter}
+                            />
+                        )
+                        }
+                        <Space/>
+                    </MobileTopicWrapper>
+                </Breakpoint>
                 <div>
                     { 
                     posts.length === 0

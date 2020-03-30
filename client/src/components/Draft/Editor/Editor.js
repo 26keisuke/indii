@@ -82,15 +82,7 @@ class Editor extends Component {
     // retrieve draft and check for ownership
     componentDidMount() {
         this.fetchTargetDraft(true)
-
-        // document.documentElement.style.position= "fixed"
-        // document.documentElement.style.width= "100vw"
     }
-
-    // componentWillUnmount() {
-    //     document.documentElement.style.position= "none"
-    //     document.documentElement.style.width= "none"
-    // }
 
     componentDidUpdate(prevProps) {
         if(this.props.draft.isUpdated) {

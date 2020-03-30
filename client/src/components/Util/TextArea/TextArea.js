@@ -201,7 +201,7 @@ const TextArea = ({ readOnly, content, ...props }) => {
                 setValue(value)
             }}
         >
-            { !readOnly && <Waypoint onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
+            { !readOnly && <Waypoint scrollableAncestor={window} onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
             { !isZero && !readOnly && abs &&
             <ToolbarAbs>
                 {/* <MarkButton format="bold"/>

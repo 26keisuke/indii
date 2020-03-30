@@ -27,7 +27,7 @@ const MessageElement = styled.div`
         top: 70px;
     }
 
-    position: absolute;
+    position: fixed;
     left: 220px;
     transform: translate(-50%, -50%);
     bottom: -15px;

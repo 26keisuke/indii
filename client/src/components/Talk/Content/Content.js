@@ -96,7 +96,7 @@ const Content = ({ auth, transition, setTransition, talk, ...props}) => {
         description,
         msgCounter,
         comments,
-    } = talk
+    } = talk || {}
 
     if((refType === "POST") && (post.postName)){
         refId = post._id
