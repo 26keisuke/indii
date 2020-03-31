@@ -5,7 +5,12 @@ import {
     FETCH_FEED_USER,
     SEARCH_FEED,
     SEARCH_TERM,
+    RESTORE_SCROLL,
+    SET_PAGE,
+    RENDER_FEED
 } from "../actions/types/types"
+
+import update from "immutability-helper"
 
 export default function feedReducer(state={
     search: [], // suggestions
@@ -16,8 +21,28 @@ export default function feedReducer(state={
     recommend: [],
     newTopic: [],
     user: [],
+    scroll: 0,
+    page: 0,
+    rendered: [],
+    renderedCt: -1,
 }, action) {
     switch(action.type) {
+        case RENDER_FEED:
+            return {
+                ...state,
+                rendered: action.payload.feed,
+                renderedCt: state.renderedCt + 1,
+            }
+        case SET_PAGE:
+            return {
+                ...state,
+                page: action.payload.page,
+            }
+        case RESTORE_SCROLL:
+            return {
+                ...state,
+                scroll: action.payload.scroll
+            }
         case SEARCH_TERM:
             return {
                 ...state,
@@ -36,9 +61,11 @@ export default function feedReducer(state={
                 newTopic: action.payload
             }
         case FETCH_FEED:
+            if(!action.payload[0]) return state
+            const newFeed = update(state.feed, {$push: [action.payload]})
             return {
                 ...state,
-                feed: action.payload
+                feed: newFeed
             }
         case FETCH_RECOMMEND:
             return {

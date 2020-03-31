@@ -13,7 +13,7 @@ import TextArea from "../../Util/TextArea/TextArea"
 
 import { fmtDate } from "../../Util/util"
 
-import * as actions from "../../../actions";
+// import * as actions from "../../../actions";
 
 const message = [
     "さんが、ポストを投稿しました。",
@@ -30,7 +30,7 @@ class Post extends PureComponent {
             changed: false,
         }
     }
-
+    
     truncateContent = (content) => {
         if(content) {
             const parsed = JSON.parse(content)
@@ -316,11 +316,4 @@ const PostMiddle = styled.div`
     }
 `
 
-function mapStateToProps(state) {
-    return {
-        response: state.response,
-        auth: state.auth
-    }
-}
-
-export default connect(mapStateToProps, actions)(Post);
+export default Post

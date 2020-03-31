@@ -47,7 +47,6 @@ export const HIDE_LOGIN = "HIDE_LOGIN"
 export const LOG_IN_ERROR = "LOG_IN_ERROR"
 
 // TALK 
-
 export const CREATE_TALK = "CREATE_TALK"
 export const FETCH_TALK = "FETCH_TALK"
 export const CREATE_COMMENT = "CREATE_COMMENT"
@@ -61,6 +60,9 @@ export const FETCH_RECOMMEND = "FETCH_RECOMMEND"
 export const FETCH_NEW_TOPIC = "FETCH_NEW_TOPIC"
 export const SEARCH_FEED = "SEARCH_FEED"
 export const FETCH_FEED_USER = "FETCH_FEED_USER"
+export const RESTORE_SCROLL = "RESTORE_SCROLL"
+export const SET_PAGE = "SET_PAGE"
+export const RENDER_FEED = "RENDER_FEED"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"

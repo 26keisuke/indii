@@ -21,7 +21,7 @@ import { fmtDate } from "../../Util/util"
 
 import { Space } from "../../Theme"
 
-const Content = ({ auth, transition, setTransition, talk, ...props}) => {
+const Content = ({ loggedIn, userId, transition, setTransition, talk, ...props}) => {
 
     var refId, refImg, refTitle, refTags, refContent, refCount, refLikes, refLastEdited, refTopicName;
 
@@ -186,7 +186,7 @@ const Content = ({ auth, transition, setTransition, talk, ...props}) => {
                             <GoComment/>
                             {msgCounter}
                         </div>
-                        { auth.info._id === creator._id &&
+                        { userId === creator._id &&
                         <ShowMoreWrapper>
                             <ShowMore
                                 ref={moreRef}
@@ -228,7 +228,7 @@ const Content = ({ auth, transition, setTransition, talk, ...props}) => {
 
                     <Space height={"300px"}/>
 
-                    { flag && auth.loggedIn &&
+                    { flag && loggedIn &&
                     <Breakpoint name="dablet">
                         <CommentBox
                             value={value}
@@ -242,7 +242,7 @@ const Content = ({ auth, transition, setTransition, talk, ...props}) => {
             </Box>
         </Wrapper>,
         <Breakpoint name="mobile">
-            { flag && auth.loggedIn && transition &&
+            { flag && loggedIn && transition &&
             <MobileComment 
                 key="mobileCommentTalk" 
                 bottom={64}
@@ -353,7 +353,8 @@ const Bottom = styled.div`
 
 function mapStateToProps({auth}){
     return {
-        auth
+        loggedIn: auth.loggedIn,
+        userId: auth.info._id
     }
 }
 

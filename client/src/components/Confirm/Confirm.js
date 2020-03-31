@@ -439,7 +439,7 @@ export class Confirm extends Component {
                         handleChange={(e) => this.setState({value: e.target.value})}
                     />
                 )
-            default:
+            default: 
                 return;
         }
     }
@@ -475,6 +475,7 @@ export class Confirm extends Component {
                     <Message>{message}</Message>
                     <Caution>{caution}</Caution>
                     {this.renderContent(action)}
+                    { buttonMessage &&
                     <ConfirmButton transparent={transparent}>
                         {!transparent
                         ?   next 
@@ -490,6 +491,7 @@ export class Confirm extends Component {
                         }
                         <button onClick={() => postAction(false)}>キャンセル</button>
                     </ConfirmButton>
+                    }
                 </div>
             </Fade>
             
@@ -640,7 +642,7 @@ const ConfirmIcon = styled(IoMdClose)`
 function mapStateToProps({update, auth, draft}) {
     return {
         update,
-        auth,
+        /* auth, */
         draft,
     }
 }

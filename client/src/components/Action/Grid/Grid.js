@@ -1,8 +1,11 @@
-import React, { Component } from "react"
+import React from "react"
 import styled from "styled-components"
 
 import Card from "../Card/Card"
+import MobileCard from "../Card/Mobile/Mobile"
 import Icon from "./Icon/Icon"
+import Breakpoint from "../../Breakpoint"
+import Header from "../../Header/Header"
 
 export const GridWrapper = styled.div`
     overflow: scroll;
@@ -20,7 +23,7 @@ const GridBox = styled.div`
     flex-direction: column;
 `
 
-const GridTitle = styled.p`
+const GridTitle = styled.h2`
     font-size: 15px;
     color: #1C1C1C;
     margin-bottom: 10px;
@@ -28,32 +31,13 @@ const GridTitle = styled.p`
     z-index:2;
 `
 
-// const GridLabel = styled.div`
+const MobileBox = styled.div`
+    padding: 75px 16px;
+`
 
-//     position: relative;
-
-//     & > div {
-//         position: absolute;
-//         opacity: 0.1;
-//         left: -51px;
-//         background-color: ${props => props.theme.themeColor.lightBlue};
-//         z-index:1;
-//         border-top-right-radius: 100px;
-//         border-bottom-right-radius: 100px;
-//     }
-
-//     & > div:nth-child(1) {
-//         width: 150px;
-//         height: 38px;
-//         top:  -7px;
-//     }
-
-//     & > div:nth-child(2) {
-//         width: 125px;
-//         height: 32px;
-//         top: -22px;
-//     }
-// `
+const MobileTitle = styled.h2`
+    font-size: 15px;
+`
 
 const GridTop = styled.div`
 
@@ -78,12 +62,10 @@ const GridTop = styled.div`
     }
 `
 
-class Grid extends Component {
-    render () {
+const Grid = ({config}) => {
 
-        const {config} = this.props;
-
-        return (
+    return ([
+        <Breakpoint name="dablet">
             <GridBox>
                     <GridTop>
                         <Icon/>
@@ -92,27 +74,44 @@ class Grid extends Component {
                             <h2>{config.headerContent}</h2>
                         </div>
                     </GridTop>
-                    <GridTitle>{config.screenName[0]}</GridTitle>
-                    <Card
-                        category={config.category[0]}
-                        actionList={config.actionList[0]}
-                        title={config.title[0]}
-                        description={config.description[0]}
-                        img={config.img[0]}
-                        color={config.color[0]}
-                    />
-                    <GridTitle>{config.screenName[1]}</GridTitle>
-                    <Card
-                        category={config.category[1]}
-                        actionList={config.actionList[1]}
-                        title={config.title[1]}
-                        description={config.description[1]}
-                        img={config.img[1]}
-                        color={config.color[1]}
-                    />
+                    { 
+                    config.screenName.map((_,index) =>
+                        ([
+                            <GridTitle key={config.screenName[index]}>{config.screenName[index]}</GridTitle>,
+                            <Card
+                                key={"actionCard" + index}
+                                category={config.category[index]}
+                                actionList={config.actionList[index]}
+                                title={config.title[index]}
+                                description={config.description[index]}
+                                img={config.img[index]}
+                            />
+                        ])
+                    )
+                    }
             </GridBox>
-        )
-    }
+        </Breakpoint>,
+        <Breakpoint name="mobile">
+            <Header/>
+            <MobileBox>
+                {
+                config.screenName.map((_,index) =>
+                    ([
+                        <MobileTitle key={"mobile" + config.screenName[index]}>{config.screenName[index]}</MobileTitle>,
+                        <MobileCard
+                            key={"mobileActionCard" + index}
+                            category={config.category[index]}
+                            actionList={config.actionList[index]}
+                            title={config.title[index]}
+                            description={config.description[index]}
+                            img={config.img[index]}
+                        />
+                    ])
+                )
+                }
+            </MobileBox>
+        </Breakpoint>
+    ])
 }
 
 export default Grid

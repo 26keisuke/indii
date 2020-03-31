@@ -143,7 +143,7 @@ const ImageWrapper = styled.div`
     }
 
     & > img:hover {
-        outline: ${props => props.readOnly && "-webkit-focus-ring-color auto 5px"};
+        outline: ${props => !props.readOnly && "-webkit-focus-ring-color auto 5px"};
     }
 `
 

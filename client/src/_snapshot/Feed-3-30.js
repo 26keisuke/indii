@@ -26,26 +26,23 @@ const HeaderWrapper = styled.div`
 
 const numOfUsers = 3;
 
-const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...props }) => {
+const Feed = ({ page, scroll, feed, user, recommend, ...props }) => {
 
-    const [lock, setLock] = useState(1)
+    const initScroll = useScroll(scroll, props.restoreScroll)
 
-    useScroll(scroll, props.restoreScroll)
-    
+    const [fetchArr, setFetchArr] = useState([0])
+    const [page, setPage] = useState(0)
+    const [renderedFeed, setFeed] = useState([])
+
     useEffect(() => {
         props.fetchNewTopic()
+        
         if(!feed.length) props.fetchFeed(0)
         if(!recommend.length) props.fetchRecommend()
         if(!user.length) props.fetchPeople()
-
-        if(scroll > 0){
-            setTimeout(() => {
-                window.scroll(0, scroll)
-            }, 300)
-        }
     }, [])
 
-    const render = () => {
+    const renderFeed = () => {
         var res = [];
 
         for(var i=0; i < feed[page].length; i++){
@@ -81,29 +78,28 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
             ])
         }
 
-        
-        setLock(1)
-
         return res
     }
 
     const handleEnter = () => {
-        if(lock) {
-            setLock(0)
-            props.setPage(page+1)
+        var newArr;
+
+        console.log(page)
+
+        if(fetchArr.indexOf(page+1) === -1){
             props.fetchFeed(page+1)
+            newArr = fetchArr.slice()
+            newArr.push(page+1)
+            setFetchArr(newArr)
+            setPage(page+1)
         }
     }
 
     useEffect(() => {
-        if(
-            !feed[0] || 
-            !feed[page] || 
-            renderedCt >= page
-        ) return
-
-        var temp = rendered.slice()
-        props.renderFeed(temp.concat(render()))
+        if(!feed[0]) { window.scroll(0, initScroll); return; }
+        alert("CALLED")
+        var temp = renderedFeed.slice()
+        setFeed(temp.concat(renderFeed()))
     }, [feed])
 
     const renderLeft = () => {
@@ -112,7 +108,7 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
                 <Border bottom={true}/>
                 {feed.length > 0
                 ?
-                    ([rendered, 
+                    ([renderedFeed, 
                     <Waypoint 
                         key={"waypointFeed"} 
                         scrollableAncestor={window}
@@ -183,8 +179,6 @@ const useScroll = (initVal, postAction) => {
 
 function mapStateToProps({ feed }) {
     return {
-        renderedCt: feed.renderedCt,
-        rendered: feed.rendered,
         page: feed.page,
         scroll: feed.scroll,
         feed: feed.feed,

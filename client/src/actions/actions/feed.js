@@ -14,9 +14,24 @@ import {
     FETCH_NEW_TOPIC,
     FETCH_FEED_USER,
     SEARCH_FEED,
+    RESTORE_SCROLL,
+    SET_PAGE,
+    RENDER_FEED,
 } from "../types/types";
 
 import { cancelOnMultipleSearch } from "../util"
+
+export const renderFeed = (feed) => dispatch => {
+    dispatch({ type: RENDER_FEED, payload: {feed}})
+}
+
+export const setPage = (page) => dispatch => {
+    dispatch({ type: SET_PAGE, payload: {page}})
+}
+
+export const restoreScroll = (scroll) => dispatch => {
+    dispatch({ type: RESTORE_SCROLL, payload: {scroll}})
+}
 
 export const searchFeed = (type, value) => async (dispatch) => {
     if(type === "RESET") { dispatch({type: SEARCH_FEED, payload: {suggestions: []}}) }
@@ -41,8 +56,8 @@ export const searchTerm = (term) => async (dispatch) => {
     dispatch({type: SEARCH_TERM, payload: {...res.data, term}})
 }
 
-export const fetchFeed = () =>  async (dispatch) => {
-    const res = await axios.get("/api/feed")
+export const fetchFeed = (page) =>  async (dispatch) => {
+    const res = await axios.get(`/api/feed/post/${page}`)
     dispatch({type: FETCH_FEED, payload: res.data})
 }
 

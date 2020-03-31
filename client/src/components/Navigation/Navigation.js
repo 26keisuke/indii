@@ -17,6 +17,22 @@ const Navigation = ({ display, category, nudge, ...props}) => {
         setIcon()
     }, [props.location.pathname])
 
+    const handleNavClick = (e, id, loggedIn) => {
+        const toggleIcon = (id) => {
+            props.setCategory(id)
+            props.nudgeCheck(id)
+        }
+    
+        if((id === "draft") || (id === "notification")) {
+            const isAuthenticated = checkAuth(e, props, loggedIn)
+            if(isAuthenticated) {
+                toggleIcon(id)
+            }
+            return
+        }
+        toggleIcon(id)
+    }
+
     const setIcon = () => { // こいつはdisplay noneでも呼ばれるからexportしなくていい
         const url = props.location.pathname
     
@@ -48,22 +64,6 @@ const Navigation = ({ display, category, nudge, ...props}) => {
             nudge={nudge}
         />
     );
-}
-
-export const handleNavClick = (e, id, context) => {
-    const toggleIcon = (id) => {
-        context.setCategory(id)
-        context.nudgeCheck(id)
-    }
-
-    if((id === "draft") || (id === "notification")) {
-        const isAuthenticated = checkAuth(e, context)
-        if(isAuthenticated) {
-            toggleIcon(id)
-        }
-        return
-    }
-    toggleIcon(id)
 }
 
 function mapStateToProps(state) {

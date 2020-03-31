@@ -272,7 +272,7 @@ const ListWrapper = styled.div`
 function mapStateToProps(state) {
     return {
         post: state.post,
-        auth: state.auth,
+        // auth: state.auth,
         recommend: state.feed.recommend,
     }
 }

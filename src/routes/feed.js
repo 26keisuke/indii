@@ -8,8 +8,15 @@ import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
-router.get("/", (req, res) => {
-    Post.find({lastEdited: { $exists: true }}).sort({lastEdited: -1})
+const postsPerReq = 10
+
+router.get("/post/:pageId", (req, res) => {
+    const page = parseInt(req.params.pageId) + 1
+    Post
+    .find({lastEdited: { $exists: true }}) // 概要のポストを省いている
+    .sort({lastEdited: -1})
+    .skip(postsPerReq * page - postsPerReq)
+    .limit(postsPerReq)
     .populate("creator")
     .then(posts => {
         res.send(posts)

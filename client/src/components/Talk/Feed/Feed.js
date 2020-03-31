@@ -13,7 +13,7 @@ import Breakpoint from "../../Breakpoint"
 
 import { checkAuth, fmtDate } from "../../Util/util"
 
-const Feed = ({ transition, setTransition, selectedId, fetched, ...props}) => {
+const Feed = ({ loggedIn, transition, setTransition, selectedId, fetched, ...props}) => {
 
     const [init, setInit] = useState(false)
 
@@ -26,7 +26,7 @@ const Feed = ({ transition, setTransition, selectedId, fetched, ...props}) => {
 
     const handleClick = (e) => {
 
-        const isAuthenticated = checkAuth(e, props)
+        const isAuthenticated = checkAuth(e, props, loggedIn)
 
         if(isAuthenticated){
             const id = "1";
@@ -187,7 +187,7 @@ Feed.propTypes = {
 
 function mapStateToProps({ talk, auth }){
     return {
-        auth,
+        loggedIn: auth.loggedIn,
         fetched: talk.fetched,
     }
 }

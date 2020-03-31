@@ -23,7 +23,7 @@ class FollowBtn extends Component {
 
     componentDidMount() {
         // こいつが５回もコールされてるから、グローバルカウンターで一回にしてる
-        if(this.props.auth.loggedIn && (ct == 0)) {
+        if(this.props.loggedIn && (ct == 0)) {
             this.checkIfFollows()
             this.setUpdater() 
             ct++
@@ -62,7 +62,7 @@ class FollowBtn extends Component {
     }
 
     checkIfFollows = () => {
-        const ls = this.props.auth.info.follows;
+        const ls = this.props.follows;
         var followed = false;
         for(var i = 0; i < ls.length; i++) {
             if(ls[i].user === this.props.id) {
@@ -74,22 +74,22 @@ class FollowBtn extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!prevProps.auth.loggedIn && this.props.auth.loggedIn){
+        if (!prevProps.loggedIn && this.props.loggedIn){
             this.setUpdater()
         }
 
-        if((!prevProps.auth.info.follows || !prevProps.id) && (this.props.id && this.props.auth.info.follows)) {
+        if((!prevProps.follows || !prevProps.id) && (this.props.id && this.props.follows)) {
             this.checkIfFollows()
         }
 
-        if (prevProps.auth.info.follows && (prevProps.auth.info.follows.length !== this.props.auth.info.follows.length)){
+        if (prevProps.follows && (prevProps.follows.length !== this.props.follows.length)){
             this.checkIfFollows()
         }
     }
 
     componentWillUnmount() {
 
-        if (this.props.auth.loggedIn){
+        if (this.props.loggedIn){
             if(this.state.madeFollowAction) {
                 const url = `/api/profile/${this.props.id}/follow`
                 axios.post(url, {follow: this.state.follow})
@@ -116,14 +116,14 @@ class FollowBtn extends Component {
     render() {
 
         const { follow } = this.state
-        const { id, auth, show } = this.props
+        const { id, userId, show } = this.props
 
         return (
             <div>
-                {   ((id !== auth.info._id) && (show === true)) &&
+                {   ((id !== userId) && (show === true)) &&
                 <Follow 
                     follow={follow} 
-                    onClick={!auth.info._id ? this.handleAuthClick : this.handleFollowClick}
+                    onClick={!userId ? this.handleAuthClick : this.handleFollowClick}
                 >
                     {
                         follow 
@@ -214,7 +214,9 @@ FollowBtn.propTypes = {
 
 function mapStateToProps({auth}) {
     return {
-        auth
+        follows: auth.info.follows,
+        userId: auth.info._id,
+        loggedIn: auth.loggedIn
     }
 }
 

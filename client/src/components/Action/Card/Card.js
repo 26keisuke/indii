@@ -14,7 +14,7 @@ const CardWrapper = styled.div`
     margin-bottom: 35px;
 `
 
-const Hexagon = styled.div`
+export const Hexagon = styled.div`
 
     transform: scale(0.6);
     margin-left: -8px;
@@ -133,7 +133,7 @@ class Card extends Component {
             const url = "/action/" + this.props.category + "/" + action
 
             return (
-                <CardElement key={index} to={url} onClick={(e) => checkAuth(e, this.props)}>
+                <CardElement key={index} to={url} onClick={(e) => checkAuth(e, this.props, this.props.loggedIn)}>
                     <div>
                         <Hexagon>
                             <div/>
@@ -171,12 +171,11 @@ Card.propTypes = {
     title: PropTypes.arrayOf(PropTypes.string).isRequired,
     description: PropTypes.arrayOf(PropTypes.string).isRequired,
     img: PropTypes.arrayOf(PropTypes.node).isRequired,
-    color: PropTypes.arrayOf(PropTypes.string),
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ auth }) {
     return {
-        auth: state.auth
+        loggedIn: auth.loggedIn,
     }
 }
 

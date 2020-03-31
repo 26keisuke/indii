@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { Transition } from 'react-transition-group';
@@ -90,40 +90,34 @@ const transitionMobileStyle = {
     exited:  {opacity: 0, top: "70px", pointerEvents: "none"},
 }
 
-class Message extends Component {
-
-    render () {
-
-        const { update, resetMessage } = this.props
-
-        return (
-            <Fade in={update ? update.updateMessage.on : false} type={update.updateMessage.type} onExited={resetMessage}>
-                <div>
-                { update && (update.updateMessage.type === "success")
-                    ?
-                    <SuccessIcon/>
-                    :
-                    <FailIcon/>
-                    }
-                </div>
-                <p>
-                    { update && (update.updateMessage.type === "success")
-                    ?
-                    "完了しました！"
-                    :
-                    "失敗しました。"
-                    }
-                </p>
-                <p>{update && update.updateMessage.message}</p>
-            </Fade>
-        )
-    }
+const Message = ({ message, ...props }) => {
+    return (
+        <Fade in={message ? message.on : false} type={message.type} onExited={props.resetMessage}>
+            <div>
+            { message && (message.type === "success")
+                ?
+                <SuccessIcon/>
+                :
+                <FailIcon/>
+                }
+            </div>
+            <p>
+                { message && (message.type === "success")
+                ?
+                "完了しました！"
+                :
+                "失敗しました。"
+                }
+            </p>
+            <p>{message && message.message}</p>
+        </Fade>
+    )
 }
 
 
 const Fade = ({in: inProps, children, type, onExited, ...otherProps}) => {
     return (
-        <Transition in={inProps} timeout={100} { ...otherProps } onExited={() => {}}>
+        <Transition in={inProps} timeout={100} { ...otherProps } onExited={onExited}>
             {(state) => ([
                 <Breakpoint key="dablet" name="dablet">
                     <MessageElement 
@@ -156,7 +150,7 @@ const Fade = ({in: inProps, children, type, onExited, ...otherProps}) => {
 
 function mapStateToProps({ update }){
     return {
-        update,
+        message: update.updateMessage,
     }
 }
 

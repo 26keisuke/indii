@@ -93,9 +93,16 @@ export function fmtDate(time) {
     }
 }
 
-// onClick event
-export function checkAuth(e, context) {
-    const isAuthenticated = context.auth.loggedIn
+// 後でこいつを消すこと
+export function checkAuth(e, context, loggedIn) {
+    var isAuthenticated;
+
+    if(loggedIn){
+        isAuthenticated = context.auth.loggedIn
+    } else {
+        isAuthenticated = loggedIn
+    }
+
     if(!isAuthenticated) {
         e.preventDefault() // こいつはこのbranchの中！！
         context.showLogin()

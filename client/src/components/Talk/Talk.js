@@ -69,7 +69,7 @@ const TalkBox = styled.div`
 
 function mapStateToProps({ auth, talk }){
     return {
-        auth,
+        // auth,
         selected: talk.selected,
     }
 }

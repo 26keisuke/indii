@@ -61,7 +61,7 @@ class List extends Component {
             name !== "home" ? (url = "/" + name) : (url = "/")
 
             return (
-                <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name, this.props)}>
+                <ListElement key={name} to={url} onClick={(e) => this.props.handleClick(e, name, this.props.loggedIn)}>
                     <NudgeMark nudge={nudge[name]}/>
                     {renderIcon(name, cate[name].selected)}
                     <Breakpoint name="desktop">
@@ -205,7 +205,7 @@ const TextSelected = styled.p`
 
 function mapStateToProps({ auth, category }) {
     return{
-        auth,
+        loggedIn: auth.loggedIn,
         category,
     }
 }

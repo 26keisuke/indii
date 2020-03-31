@@ -13,6 +13,7 @@ import { Space } from "../Theme"
 import TextArea from "../Util/TextArea/TextArea"
 import Breakpoint from "../Breakpoint"
 import Mobile from "./Mobile/Mobile"
+import Scroll from "../Util/Scroll"
 
 import { arrObjLookUp, getEditorContent } from "../Util/util"
 
@@ -257,6 +258,7 @@ const TopicPage = ({ fetched, ...props}) => {
                 <meta name="description" content={description}/>
                 <meta name="keywords" content={`${titleName}`}/>
             </Helmet>
+            <Scroll/>
             <Breakpoint name="mobile">
                 <Mobile
                     selected={toggle}
@@ -548,7 +550,7 @@ const TriggerFill = styled.div`
 
 function mapStateToProps({auth, topic}){
     return {
-        auth,
+        /* auth, */
         fetched: topic.fetched,
     }
 }

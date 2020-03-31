@@ -1,24 +1,20 @@
 import React from "react"
+import styled from "styled-components"
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        position: "fixed",
-        left: "50%",
-        top: "40%",
-        zIndex: 100,
-        transform: "translate(-50%, 0)",
-    },
-}));
   
+const Wrapper = styled.div`
+    position: fixed;
+    left: 50%;
+    top: 40%;
+    z-index: 100;
+    transform: translate(-50%, 0);
+`
   
 const Loading = () => {
-    const classes = useStyles();
     return (
-        <div className={classes.root}>
+        <Wrapper>
             <CircularProgress color="primary"/>
-        </div>
+        </Wrapper>
     )
 }
 
