@@ -48,7 +48,6 @@ router.get("/logout", (req, res) => {
     .catch(err => console.log(err))
 })
 
-
 router.get("/google", passport.authenticate("google", {scope: ["profile", "email"]}))
 
 router.get("/google/callback", passport.authenticate("google", {failureRedirect: "/"}), 
