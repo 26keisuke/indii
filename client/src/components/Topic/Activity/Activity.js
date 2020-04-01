@@ -347,7 +347,6 @@ const Left = styled.div`
         padding: 15px;
         margin-right: 30px;
         background: #FDFDFD;
-        box-shadow: 0px 1px 1px rgba(0,0,0,0.25);
         box-sizing: border-box;
         margin-bottom: 3px;
     }
@@ -361,7 +360,7 @@ const Left = styled.div`
     padding-right: 45px;
     margin-right: 20px;
     background-color: white;
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 1px;
     border-radius: 3px;
 
     & > div:nth-child(1){
@@ -376,7 +375,6 @@ const Right = styled.div`
     @media only screen and (max-width: 670px) {
         width: 100%;
         background: #FDFDFD;
-        box-shadow: 0px 1px 1px rgba(0,0,0,0.25);
     }
 
     @media only screen and (min-width: 670px) {
@@ -385,7 +383,7 @@ const Right = styled.div`
     }
 
     background-color: white;
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 1px;
     border-radius: 3px;
     padding: 20px;
 

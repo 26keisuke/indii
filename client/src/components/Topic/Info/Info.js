@@ -102,7 +102,7 @@ const ContentSkeleton = styled.div`
 const TopicTop = styled.div`
     background-color: white;
     min-width: 770px;
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 1px;
     border-radius: 4px;
     display: flex;
     flex-direction: row;

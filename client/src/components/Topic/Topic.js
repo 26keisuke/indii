@@ -418,7 +418,7 @@ const PostWrapper = styled.div`
     padding-top: 15px;
     padding-bottom: 20px;
     background-color: white;
-    box-shadow: 1px 10px 10px #d2d2d2;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 1px;
     margin-bottom: 6px;
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
@@ -452,7 +452,7 @@ const Column = styled.div`
     }
 
     background-color: white;
-    box-shadow: 1px 1px 10px #d2d2d2;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 1px;
     margin-bottom: 1px;
     height: 50px;
     display: flex;
