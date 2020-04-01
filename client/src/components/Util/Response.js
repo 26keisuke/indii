@@ -173,8 +173,10 @@ const Response = ({ info, loggedIn, postId, isOpened, postStar, postEmoji, ...pr
                 show={showMore}
                 left="-110px"
                 bottom="23px"
-                actionName={["フィードバックをする", "この投稿を削除する"]}
-                action={[reportPost, deletePost]}
+                // actionName={["フィードバックをする", "この投稿を削除する"]}
+                actionName={["フィードバックをする"]}
+                // action={[reportPost, deletePost]}
+                action={[reportPost]}
                 shadow={true}
             />
         </div>

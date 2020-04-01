@@ -135,9 +135,9 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
         return (
             <div>
                 <New/>
-                <TrendWrapper>
+                {/* <TrendWrapper>
                     <Trend/>
-                </TrendWrapper>
+                </TrendWrapper> */}
             </div>
         )
     }

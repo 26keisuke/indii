@@ -117,7 +117,7 @@ const Message = ({ message, ...props }) => {
 
 const Fade = ({in: inProps, children, type, onExited, ...otherProps}) => {
     return (
-        <Transition in={inProps} timeout={100} { ...otherProps } onExited={onExited}>
+        <Transition in={inProps} timeout={100} { ...otherProps } onExited={() => {}}>
             {(state) => ([
                 <Breakpoint key="dablet" name="dablet">
                     <MessageElement 

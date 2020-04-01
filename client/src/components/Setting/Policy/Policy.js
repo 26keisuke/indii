@@ -5,6 +5,20 @@ export const Wrapper = styled.div`
     padding: 100px;
     padding-top: 30px;
 
+    & ol,
+    & ul{
+        padding-left: 30px;
+        margin: 12px 0px;
+    }
+
+    & ul {
+        list-style: outside;
+    }
+
+    & ol {
+        list-style: decimal;
+    }
+
     & > h1 {
         margin-bottom: 5px;
         font-size: 19px;

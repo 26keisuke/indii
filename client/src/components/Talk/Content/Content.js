@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect} from "react"
+import React, { useMemo, useRef, useState, useEffect} from "react"
 import styled from "styled-components"
 import { GoComment } from "react-icons/go"
 import { withRouter } from "react-router-dom"
@@ -21,6 +21,8 @@ import { fmtDate } from "../../Util/util"
 
 import { Space } from "../../Theme"
 
+
+// ここの最適化を後でやる（いらんものがrenderされてる）
 const Content = ({ loggedIn, userId, transition, setTransition, talk, ...props}) => {
 
     var refId, refImg, refTitle, refTags, refContent, refCount, refLikes, refLastEdited, refTopicName;
@@ -118,6 +120,30 @@ const Content = ({ loggedIn, userId, transition, setTransition, talk, ...props})
 
     const flag = !!title
 
+    const renderedComment = useMemo(() => {
+        if(!comments) return null
+        const res = comments.map(comment =>
+            <Element
+                key={comment._id}
+                user={comment.user}
+                date={fmtDate(comment.timeStamp)}
+                content={comment.content}
+            />
+        )
+        return res
+    }, [comments])
+
+    const renderedInfo = useMemo(() => {
+        if(!creator || !timeStamp) return null
+        return (
+            <UserName>
+                <Link to={`/profile/${creator && creator._id}`}>
+                    {creator && creator.userName}
+                </Link> ・　{fmtDate(timeStamp)}
+            </UserName>
+        )
+    }, [creator, timeStamp])
+
     return([
         <Wrapper key="mobileTalkContentWrapper">
             <Box>
@@ -125,13 +151,8 @@ const Content = ({ loggedIn, userId, transition, setTransition, talk, ...props})
                     <Breakpoint name="mobile">
                         <MobileBack top={-31} left={-5} handleClick={handleBack}/>
                     </Breakpoint>
-                    {
-                    flag
-                    ?
-                    <UserName><Link to={`/profile/${creator && creator._id}`}>{creator && creator.userName}</Link> ・　{fmtDate(timeStamp)}</UserName>
-                    :
-                    <UserName><Skeleton width={180} height={15}/></UserName>
-                    }
+                    { renderedInfo }
+                    { !flag && <UserName><Skeleton width={180} height={15}/></UserName> }
                     {
                     flag
                     ?
@@ -205,17 +226,8 @@ const Content = ({ loggedIn, userId, transition, setTransition, talk, ...props})
                     <Space height={"30px"}/>
 
                     <div>
-                        { 
-                        flag 
-                        ? comments.map(comment =>
-                            <Element
-                                key={comment._id}
-                                user={comment.user}
-                                date={fmtDate(comment.timeStamp)}
-                                content={comment.content}
-                            />
-                        )
-                        :
+                        { renderedComment }
+                        { !flag &&
                         <div>
                             <Element skeleton={true}/>
                             <Element skeleton={true}/>
@@ -241,7 +253,7 @@ const Content = ({ loggedIn, userId, transition, setTransition, talk, ...props})
                 </Wrapper>
             </Box>
         </Wrapper>,
-        <Breakpoint name="mobile">
+        <Breakpoint key="talkContentMobile" name="mobile">
             { flag && loggedIn && transition &&
             <MobileComment 
                 key="mobileCommentTalk" 

@@ -255,10 +255,10 @@ const Post = ({ post, recommend, ...props}) => {
 
 const LeftWrapper = styled.div`
     padding: 28px 65px;
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     margin-top: -10px;
 
-    box-shadow: 1px 1px 3px #eaeaea;
+    /* box-shadow: 1px 1px 3px #eaeaea; */
 `
 
 const TitleWrapper = styled.div`

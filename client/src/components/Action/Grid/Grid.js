@@ -65,7 +65,7 @@ const GridTop = styled.div`
 const Grid = ({config}) => {
 
     return ([
-        <Breakpoint name="dablet">
+        <Breakpoint key="gridDablet" name="dablet">
             <GridBox>
                     <GridTop>
                         <Icon/>
@@ -91,7 +91,7 @@ const Grid = ({config}) => {
                     }
             </GridBox>
         </Breakpoint>,
-        <Breakpoint name="mobile">
+        <Breakpoint key="gridMobile" name="mobile">
             <Header/>
             <MobileBox>
                 {

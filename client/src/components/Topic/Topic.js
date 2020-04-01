@@ -154,8 +154,6 @@ const TopicPage = ({ fetched, ...props}) => {
 
     const renderPost = useMemo(() => {
 
-        console.log(currentIdx)
-
         if(!fetched.order || !fetched.posts || !fetched.column) return
 
         const { order, posts } = fetched
@@ -234,9 +232,11 @@ const TopicPage = ({ fetched, ...props}) => {
 
     }, [currentIdx, fetched.order, fetched.column, fetched.posts])
 
-    const { tags, likes, postCount, _id, topicName, order, column, activity, mobileImg } = fetched
+    const { likes, postCount, _id, topicName, order, column, activity, mobileImg } = fetched
 
     const flag = _id
+
+    const tags = fetched.tags || []
 
     const posts = fetched.posts || {}
     const squareImg = fetched.squareImg || {}
@@ -249,14 +249,15 @@ const TopicPage = ({ fetched, ...props}) => {
 
     const titleName = topicName || " "
     const descriptionPost = posts[0] || {}
-    const description = getEditorContent(descriptionPost.content, 150) || `${topicName}に関するトピックです。`
+    const subDescriptionPost = posts[1] || {}
+    const description = getEditorContent(descriptionPost.content, 150) || getEditorContent(subDescriptionPost.content, 150) || `${topicName}に関するトピックです。`
 
     return (
         <TopicBox>
             <Helmet>
                 <title>{titleName + " | Indii"}</title>
                 <meta name="description" content={description}/>
-                <meta name="keywords" content={`${titleName}`}/>
+                <meta name="keywords" content={`${titleName},${tags.join(",")}`}/>
             </Helmet>
             <Scroll/>
             <Breakpoint name="mobile">
@@ -484,7 +485,7 @@ const Post = styled.div`
     }
 
     background-color: white;
-    padding: 0px 50px;
+    padding: 0px 30px;
     padding-top: 15px;
     box-sizing: border-box;
 

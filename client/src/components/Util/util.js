@@ -97,10 +97,10 @@ export function fmtDate(time) {
 export function checkAuth(e, context, loggedIn) {
     var isAuthenticated;
 
-    if(loggedIn){
-        isAuthenticated = context.auth.loggedIn
-    } else {
+    if(typeof(loggedIn) === "boolean"){
         isAuthenticated = loggedIn
+    } else {
+        isAuthenticated = context.auth.loggedIn
     }
 
     if(!isAuthenticated) {
