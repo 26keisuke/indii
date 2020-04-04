@@ -47,8 +47,9 @@ const ToolbarAbs = styled(Toolbar)`
 
 const EditableWrapper = styled.div`
 
-    font-size: 12px !important;
-    color: #222222;
+    font-size: 13px !important;
+    line-height: 22px;
+    color: #353535;
 
     ${props => !props.readOnly && css`
         & > div {

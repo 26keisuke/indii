@@ -16,7 +16,6 @@ const NavBar = styled.nav`
     justify-content: space-between;
     height: 55px;
     align-items: center;
-    border-bottom: 1px solid #eaeaea;
     background-color: #ffffff;
     position: fixed;
     top: 0px;
