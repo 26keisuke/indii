@@ -83,7 +83,9 @@ router.get("/new/topic", (req, res) => {
     .populate("squareImg")
     .populate("posts")
     .exec()
-    .then(topic => res.send(topic))
+    .then(topic => {
+        res.send(topic.reverse())
+    })
     .catch(err => console.log(err))
 })
 

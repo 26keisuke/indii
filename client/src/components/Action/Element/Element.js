@@ -214,7 +214,6 @@ export const PreviewTitle = styled.p`
     margin-bottom: 7px;
     font-size: 14px;
     max-height: 50px;
-    /* overflow: scroll; */
 `
 
 export const FinalCheck = styled.p`
@@ -384,7 +383,6 @@ export const EclipseWrapper = styled.div`
     height: 38px;
     display: inline-block;
     overflow: hidden;
-    background: #ffffff;
     position: absolute;
     left: 398px;
     top: 18px;
