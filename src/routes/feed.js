@@ -4,6 +4,7 @@ import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
 
+// import { performance } from "perf_hooks"
 import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
@@ -11,14 +12,26 @@ const router = express.Router()
 const postsPerReq = 10
 
 router.get("/post/:pageId", (req, res) => {
+    // var t0 = performance.now()
     const page = parseInt(req.params.pageId) + 1
     Post
-    .find({lastEdited: { $exists: true }}) // 概要のポストを省いている
+    .find({lastEdited: { $exists: true }}, { // 概要のポストを省いている
+        _id: 1,
+        creator: 1,
+        lastEdited: 1,
+        topic: 1,
+        topicName: 1,
+        postName: 1,
+        content: 1, // <= こいつがボトルネックになっている（postsPerReq=10で数秒ほど）
+        rating: 1,
+    }) 
     .sort({lastEdited: -1})
     .skip(postsPerReq * page - postsPerReq)
     .limit(postsPerReq)
+    .lean()
     .populate("creator")
     .then(posts => {
+        // console.log("POST", performance.now() - t0)
         res.send(posts)
     })
     .catch(err => {
@@ -79,11 +92,21 @@ router.get("/recommend", (req, res) => {
 })
 
 router.get("/new/topic", (req, res) => {
-    Topic.find().sort({timeStamp: -1})
+    // var t0 = performance.now()
+    Topic.find({}, {
+        _id: 1,
+        squareImg: 1,
+        tags: 1,
+        topicName: 1,
+        "posts.0": 1,
+        likes: 1,
+    })
+    .lean()
     .populate("squareImg")
     .populate("posts")
     .exec()
     .then(topic => {
+        // console.log("TOPIC", performance.now() - t0)
         res.send(topic.reverse())
     })
     .catch(err => console.log(err))

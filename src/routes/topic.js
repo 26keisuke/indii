@@ -17,6 +17,7 @@ router.get("/:topicId/:type", (req, res) => {
     switch(type){
         case "ALL":
             Topic.findById(req.params.topicId)
+                .lean()
                 .populate("rectangleImg")
                 .populate("mobileImg")
                 .populate("squareImg")
@@ -32,7 +33,10 @@ router.get("/:topicId/:type", (req, res) => {
                 })
             return
         case "INDEX":
-            Topic.findById(req.params.topicId).populate("column.posts").exec()
+            Topic.findById(req.params.topicId)
+                .lean()
+                .populate("column.posts")
+                .exec()
                 .then(topic => {
                     res.send(topic)
                 })
@@ -42,6 +46,7 @@ router.get("/:topicId/:type", (req, res) => {
             return
         case "IMAGE":
             Topic.findById(req.params.topicId)
+                .lean()
                 .populate("rectangleImg")
                 .populate("mobileImg")
                 .populate("squareImg")

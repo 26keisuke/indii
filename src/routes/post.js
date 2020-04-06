@@ -12,6 +12,7 @@ const router = express.Router()
 
 router.get("/:postId", (req, res) => {
     Post.findById(req.params.postId)
+    .lean()
     .populate({path: "topic", populate: [{ path: "rectangleImg" }, { path: "squareImg" }, { path: "mobileImg" }, { path: "posts" }]})
     .populate("creator")
     .exec()
@@ -291,7 +292,9 @@ router.get("/search/:type/:term", (req, res) => {
     const type = req.params.type
     const value = type === "MATCH" ? '^' + req.params.term : '^' + req.params.term + '$' 
 
-    Post.find({"postName": {$regex: value, $options: 'i'}}).populate("postImg").populate("topicSquareImg")
+    Post.find({"postName": {$regex: value, $options: 'i'}})
+        .populate("postImg")
+        .populate("topicSquareImg")
         .exec()
         .then(post => {
             if(post.length === 0){

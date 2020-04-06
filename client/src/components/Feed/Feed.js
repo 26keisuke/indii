@@ -62,7 +62,7 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
                     topicName={feed[page][i].topicName}
                     title={feed[page][i].postName}
                     content={feed[page][i].content}
-                    star={feed[page][i].star.lookUp}
+                    // star={feed[page][i].star.lookUp}
                     rating={feed[page][i].rating}
                 />
             )

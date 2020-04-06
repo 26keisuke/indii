@@ -15,11 +15,8 @@ import axios from "axios"
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
-// import CropFreeIcon from '@material-ui/icons/CropFree';
-
 import Image from "./Image/Image"
 
-// import { customeBeforeInput } from "./Plugin/Plugin"
 import * as actions from "../../../actions"
 
 import { renderIcon, renderTitle } from "../util"
@@ -183,7 +180,6 @@ const TextArea = ({ readOnly, content, ...props }) => {
         }
 
     }, [readOnly, props.katex, props.url])
-
 
     const renderElement = useCallback(props => <Element readOnly={readOnly} {...props}/>, [])
     const renderLeaf = useCallback(props => <Leaf {...props}/>, [])
