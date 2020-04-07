@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 
 import People from "../../People/People"
@@ -12,7 +12,7 @@ const Box = styled.div`
 
 const BoxWrapper = styled.div`
     background-color: #fafafa;
-    min-height: 100%;
+    min-height: 50vh;
     padding: 30px 40px;
     display: flex;
     flex-direction: column;
@@ -26,29 +26,35 @@ const Wrapper = styled.div`
 
 `
 
-class Follow extends Component {
+const Follow = ({ follower, fetchFollows, users }) => {
 
-    render() {
-        return (
-            <BoxWrapper>
-                <Box>
-                    {
-                        this.props.users && this.props.users.map(user => 
-                            <Wrapper key={user.user._id}>
+    useEffect(() => {
+        fetchFollows()
+    }, [])
+
+    return (
+        <BoxWrapper>
+            <Box>
+                {
+                    users.map(user => {
+                        if(!user.photo) return null;
+                        return (
+                            <Wrapper key={user._id}>
                                 <People
-                                    id={user.user._id}
-                                    photo={user.user.photo}
-                                    name={user.user.userName} 
-                                    job={user.user.comment} 
-                                    intro={user.user.intro}
+                                    id={user._id}
+                                    photo={user.photo}
+                                    name={user.userName} 
+                                    job={user.comment} 
+                                    intro={user.intro}
                                 />
                             </Wrapper>
                         )
-                    }
-                </Box>
-            </BoxWrapper>
-        )
-    }
+                    })
+                        
+                }
+            </Box>
+        </BoxWrapper>
+    )
 }
 
 export default Follow

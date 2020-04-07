@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
 
@@ -8,33 +8,43 @@ import ShowMore from "./ShowMore"
 import Emoji from "./Emoji"
 import Star from "./Star"
 
+import { useUpdater } from "../Util/util"
+
 // localStorageは保存用
 // stateは使用用
-const Response = ({ info, loggedIn, postId, isOpened, postStar, postEmoji, ...props }) => {
+const Response = ({ loggedIn, postId, isOpened, postStar, postEmoji, ...props }) => {
+
+    const [emojiId, setEmojiId] = useState()
+    const [showStar, handleStarClick] = useUpdater(loggedIn, postStar, "post", postId, "INDII_POST_STAR", props.setPostStar)
+    const [chosenEmoji, handleEmojiClick] = useUpdater(loggedIn, postEmoji, "post", postId, "INDII_POST_EMOJI", 
+        (set) => {
+            props.setPostEmoji(set)
+            setEmoji(false)
+        },
+        [
+        (found, set) => {
+            const { index } = found
+            set[index].timeStamp = Date.now()
+            set[index].rate = emojiId
+            return set
+        },
+        (set) => {
+            set.push({timeStamp: Date.now(), post: postId, rate: emojiId})
+            return set
+        }],
+        (found) => {
+            return found && found.data && found.data.rate
+        }
+    )
 
     const [showMore, setMore] = useState(false)
     const [showEmoji, setEmoji] = useState(false)
     const emojiRef = useRef()
     const moreRef = useRef()
 
-    const find = (type) => {
-        var res;
-        const isStar = type === "STAR"
-        const item = isStar ? postStar : postEmoji
-
-        item.map((obj,index) => {
-            if(obj.post === postId){
-                res = {
-                    data: obj,
-                    index: index,
-                }
-            }
-        })
-
-        if(!!res) return res
-
-        return ""
-    }
+    useEffect(() => {
+        emojiId && handleEmojiClick()
+    }, [emojiId])
 
     useEffect(() => {
         if(!isOpened){
@@ -70,46 +80,10 @@ const Response = ({ info, loggedIn, postId, isOpened, postStar, postEmoji, ...pr
         setMore(false)
     }
 
-    const handleStarClick = (e) => {
-        e.preventDefault()
-
-        var set = postStar.slice()
-
-        const found = find("STAR")
-        if(!!found){
-            set.splice(found.index, 1)
-        } else {
-            set.push({timeStamp: Date.now(), post: postId})
-        }
-
-        props.setPostStar(set)
-        localStorage.setItem("INDII_POST_STAR", JSON.stringify(set))
-    }
-
     const handleResponseClick = (e) => {
         e.preventDefault()
         setMore(false)
         setEmoji(!showEmoji)
-    }
-
-    const handleEmojiClick = (e, id) => {
-        e.preventDefault()
-
-        const set = postEmoji.slice()
-
-        const found = find("EMOJI")
-        if(!!found){
-            const { index } = found
-            set[index].timeStamp = Date.now()
-            set[index].rate = id
-        } else {
-            set.push({timeStamp: Date.now(), post: postId, rate: id})
-        }
-
-        props.setPostEmoji(set)
-        localStorage.setItem("INDII_POST_EMOJI", JSON.stringify(set))
-        
-        setEmoji(false)
     }
 
     const handleMoreClick = (e) => {
@@ -122,9 +96,6 @@ const Response = ({ info, loggedIn, postId, isOpened, postStar, postEmoji, ...pr
         e.preventDefault()
         props.showLogin()
     }
-
-    const chosenEmoji = useMemo(() => loggedIn && find("EMOJI").data && find("EMOJI").data.rate, [postEmoji, postId])
-    const showStar = useMemo(() => loggedIn && !!(find("STAR")), [postStar, postId])
 
     const deletePost = () => {
         setMore(false)
@@ -162,7 +133,7 @@ const Response = ({ info, loggedIn, postId, isOpened, postStar, postEmoji, ...pr
             <Emoji
                 ref={emojiRef}
                 handleResponseClick={loggedIn ? handleResponseClick : handleNoAuthClick}
-                handleEmojiClick={handleEmojiClick}
+                handleEmojiClick={(e, id) => { e.preventDefault(); setEmojiId(id) }}
                 chosenEmoji={chosenEmoji}
                 showEmoji={showEmoji}
                 shadow={true}
@@ -191,8 +162,6 @@ Response.propTypes = {
 function mapStateToProps({ auth, post }) {
     return {
         loggedIn: auth.loggedIn,
-        info: auth.info,
-
         postStar: post.postStar,
         postEmoji: post.postEmoji
     }

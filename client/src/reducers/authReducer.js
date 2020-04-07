@@ -2,7 +2,8 @@ import {
     FETCH_USER, FETCH_NOTIF, FETCH_CONFIRM,
     SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
     FETCH_AFTER_TOPIC_LIKE,
-    UPDATE_POST_EMOJI, UPDATE_POST_STAR, UPDATE_TOPIC_LIKE
+    UPDATE_POST_EMOJI, UPDATE_POST_STAR, UPDATE_TOPIC_LIKE, UPDATE_USER_FOLLOW,
+    SET_USER_FOLLOW,
 } from "../actions/types/types"
 
 import update from "immutability-helper"
@@ -16,13 +17,20 @@ export default function authReducer(state={
     info: {
         notif: [],
         nounce: "",
-    }
+    },
+    follows: [] // updateのためのtemporary storage
 
 }, action) {
     
     var newObj;
 
     switch(action.type) {
+        case SET_USER_FOLLOW:
+            newObj = update(state, {follows: {$set: action.payload}})
+            return newObj
+        case UPDATE_USER_FOLLOW:
+            newObj = update(state, {info: {follows: {$set: action.payload}}})
+            return newObj
         case UPDATE_TOPIC_LIKE:
             newObj = update(state, {info: {likedTopic: {$set: action.payload}}})
             return newObj

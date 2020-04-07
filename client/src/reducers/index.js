@@ -37,9 +37,6 @@ const initialState = {
     image: {
         revert: false,
     },
-    profile: {
-        user: {},
-    }
 }
 
 function imageReducer(state=initialState.image, action) {
@@ -54,12 +51,72 @@ function imageReducer(state=initialState.image, action) {
     }
 }
 
-function profileReducer(state=initialState.profile, action) {
+function profileReducer(state={
+    user: {
+        post: [],
+        followers: [],
+        follows: [],
+        likedTopic: [],
+        likedPost: [],
+    },
+}, action) {
     switch(action.type) {
         case FETCH_PROFILE:
-            return {
-                ...state,
-                user: action.payload
+
+            const data = action.payload.data[0]
+
+            if(!data) return state
+
+            switch(action.payload.type){
+                case "general":
+                    return {
+                        ...state,
+                        user: data
+                    }
+                case "likedPost":
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            likedPost: data.likedPost,
+                        }
+                    }
+                case "likedTopic":
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            likedTopic: data.likedTopic,
+                        }
+                    }
+                case "post":
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            post: data.post,
+                        }
+                    }
+                case "follows":
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            follows: data.follows,
+                        }
+                    }
+                case "followers":
+                    return {
+                        ...state,
+                        user: {
+                            ...state.user,
+                            followers: data.followers,
+                        }
+                    }
+                default:
+                    return {
+                        ...state,
+                    }
             }
         default:
             return state

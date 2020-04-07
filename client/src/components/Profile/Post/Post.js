@@ -1,40 +1,39 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 
 import Post from "../../Post/Element/Element"
 
-class ProfileHome extends Component {
+const ProfileHome = ({ fetchPosts, favorite, posts }) => {
 
-    render() {
-        return (
-            <Wrapper>
-                {this.props.posts.map(elem =>{
+    useEffect(() => {
+        fetchPosts()
+    }, [])
 
-                    const post = this.props.favorite ? elem.post : elem
-
-                    return (
-                        <Box key={post._id}>
-                            <Post
-                                id={post._id}
-                                topic={post.topicName}
-                                title={post.postName}
-                                content={post.content}
-                                count={post.star.counter}
-                                date={post.lastEdited}
-                                img={post.postImg ? post.postImg.image : post.topicSquareImg.image }
-                            />
-                        </Box>
-                    )
-                })}
-            </Wrapper>
-        )
-    }
+    return (
+        <Wrapper>
+            {posts.map(post =>{
+                if(!post.postName) return null // まだfetchが完了していない時（_idはpopulateする前からあるからstar）
+                return (
+                    <Box key={post._id}>
+                        <Post
+                            id={post._id}
+                            topic={post.topicName}
+                            title={post.postName}
+                            content={post.content}
+                            count={post.star.counter}
+                            date={post.lastEdited}
+                            img={post.postImg[0] ? post.postImg[0].image : post.topicSquareImg[0].image }
+                        />
+                    </Box>
+                )
+            })}
+        </Wrapper>
+    )
 }
 
 const Wrapper = styled.div`
     background-color: #fafafa;
-    min-height: 100%;
+    min-height: 50vh;
     padding: 30px 60px;
     padding-bottom: 200px;
     display: flex;
@@ -48,10 +47,4 @@ const Box = styled.div`
     margin-bottom: 12px;
 `
 
-// function mapStateToProps({profile}) {
-//     return {
-//         profile
-//     }
-// }
-
-export default connect(null, null)(ProfileHome)
+export default ProfileHome

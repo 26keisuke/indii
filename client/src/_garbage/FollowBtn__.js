@@ -1,0 +1,223 @@
+import React, { Component } from "react"
+import styled, { css } from "styled-components"
+import { connect } from "react-redux"
+import PropTypes from "prop-types"
+import axios from "axios"
+
+import * as actions from "../../../actions"
+
+import { TiUserAddOutline } from 'react-icons/ti';
+import { FiCheck } from 'react-icons/fi';
+
+let ct = 0;
+
+class FollowBtn extends Component {
+    
+    constructor(props){
+        super(props)
+        this.state = {
+            follow: false,
+            madeFollowAction: false,
+        }
+    }
+
+    componentDidMount() {
+        // こいつが５回もコールされてるから、グローバルカウンターで一回にしてる
+        if(this.props.loggedIn && (ct == 0)) {
+            this.checkIfFollows()
+            this.setUpdater() 
+            ct++
+        }
+    }
+
+    componentWillUnmount() {
+        ct = 0;
+    }
+
+    setUpdater = () => {
+
+        window.addEventListener("beforeunload", this.handleWindowClose);
+
+        this.autoUpdate = setInterval(() => {
+            if (this.state.madeFollowAction) {
+                const url = `/api/profile/${this.props.id}/follow`
+                axios.post(url, {follow: this.state.follow})
+                .then(()=>{
+                    this.setState({
+                        madeFollowAction: false,
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+        }, 10000)
+    }
+
+    handleWindowClose = () => {
+        if(this.state.madeStarAction) {
+            const url = `/api/profile/${this.props.id}/follow`
+            axios.post(url, {follow: this.state.follow})
+        }
+    }
+
+    checkIfFollows = () => {
+        const ls = this.props.follows;
+        var followed = false;
+        for(var i = 0; i < ls.length; i++) {
+            if(ls[i].user === this.props.id) {
+                followed = true
+                break
+            };
+        };
+        this.setState({ follow: followed })
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!prevProps.loggedIn && this.props.loggedIn){
+            this.setUpdater()
+        }
+
+        if((!prevProps.follows || !prevProps.id) && (this.props.id && this.props.follows)) {
+            this.checkIfFollows()
+        }
+
+        if (prevProps.follows && (prevProps.follows.length !== this.props.follows.length)){
+            this.checkIfFollows()
+        }
+    }
+
+    componentWillUnmount() {
+
+        if (this.props.loggedIn){
+            if(this.state.madeFollowAction) {
+                const url = `/api/profile/${this.props.id}/follow`
+                axios.post(url, {follow: this.state.follow})
+            }
+            window.removeEventListener("beforeunload", this.handleWindowClose);
+        }
+
+        clearInterval(this.autoUpdate)
+    }
+
+    handleFollowClick = (e) => {
+        e.preventDefault()
+        this.setState({ 
+            follow: !this.state.follow ? true : false,
+            madeFollowAction: true,
+        })
+    }
+
+    handleAuthClick = (e) => {
+        e.preventDefault()
+        this.props.showLogin()
+    }
+
+    render() {
+
+        const { follow } = this.state
+        const { id, userId, show } = this.props
+
+        return (
+            <div>
+                {   ((id !== userId) && (show === true)) &&
+                <Follow 
+                    follow={follow} 
+                    onClick={!userId ? this.handleAuthClick : this.handleFollowClick}
+                >
+                    {
+                        follow 
+                        ? <FollowedIcon/>
+                        : <FollowIcon/>
+                    }  
+                    <FollowText follow={follow}>{follow ? "フォロー中" : "フォロー"}</FollowText>
+                </Follow>
+                }
+            </div>
+        ) 
+    }
+}
+
+const Follow = styled.div`
+    height: 22px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right:15px;
+    border-radius: 20px;
+    justify-content: center;
+    align-self: center;
+    margin-left:40px;
+    cursor: pointer;
+    min-width: 72px;
+    position: relative;
+
+    ${props => props.follow 
+    ? css`
+        background-color: ${props => props.theme.secondary};
+        padding: 2px 1px;
+        padding-left: 9px;
+    `
+    : css`
+        border: 1px solid ${props => props.theme.primary};
+        padding: 1px 0px;
+        padding-left: 8px;
+
+        &:hover {
+            border:1px solid ${props => props.theme.secondary};
+        }
+
+        &:hover > svg{
+            color: ${props => props.theme.secondary};
+        }
+
+        &:hover > p{
+            color: ${props => props.theme.secondary};
+        }
+
+    `}
+`
+
+const FollowIcon = styled(TiUserAddOutline)`
+    width: 14px;
+    height: 14px;
+    color:#636480;
+    position: absolute;
+    top: 4px;
+    left: 11px;
+`
+
+const FollowedIcon = styled(FiCheck)`
+    width: 13px;
+    height: 13px;
+    color:#ffffff;
+    position: absolute;
+    top: 6px;
+    left: 7px;
+    
+`
+
+const FollowText = styled.p`
+    font-size: ${props => props.follow ? "10px" : "10px"};
+    color: ${props => props.follow ? "#ffffff" : "#636480"};
+    margin-left: 7px;
+`
+
+FollowBtn.defaultProps = {
+    show: true,
+}
+
+FollowBtn.propTypes = {
+    id: PropTypes.string,
+    show: PropTypes.bool,
+}
+
+function mapStateToProps({auth}) {
+    return {
+        follows: auth.info.follows,
+        userId: auth.info._id,
+        loggedIn: auth.loggedIn
+    }
+}
+
+export default connect(mapStateToProps, actions)(FollowBtn)

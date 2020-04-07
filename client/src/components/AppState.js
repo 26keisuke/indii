@@ -43,15 +43,14 @@ class AppState extends Component {
 
     setUpdater = () => {
         this.autoUpdate = setInterval(() => {
-    
             this.sendDiff("POST_STAR", "INDII_POST_STAR", this.props.auth.info.likedPost, "post", ["post"])
             this.sendDiff("POST_EMOJI", "INDII_POST_EMOJI", this.props.auth.info.postRating, "post", ["post", "rate"])
             this.sendDiff("TOPIC_LIKE", "INDII_TOPIC_LIKE", this.props.auth.info.likedTopic, "topic", ["topic"])
-
+            this.sendDiff("USER_FOLLOW", "INDII_USER_FOLLOW", this.props.auth.info.follows, "user", ["topic"])
         }, 5000)
     }
 
-    sendDiff = (type, storageName, intialVal, idLookUp, lookUpArr) => {
+    sendDiff = (type, storageName, initialVal, idLookUp, lookUpArr) => {
         var changedArr, diff;
 
         const changed = localStorage.getItem(storageName)
@@ -62,8 +61,8 @@ class AppState extends Component {
             console.log(e)
         }
 
-        if(changed && !equal(intialVal, changedArr)){ // もしtoggleした場合は_idが追加されないので!equalになる
-            diff = this.getDiff(intialVal, changedArr, lookUpArr) 
+        if(changed && !equal(initialVal, changedArr)){ // もしtoggleした場合は_idが追加されないので!equalになる
+            diff = this.getDiff(initialVal, changedArr, lookUpArr) 
             if(diff){ // そのため、diffが本当に揃っているかを確認する分岐が必要
                 this.props.saveAsync(type, diff, idLookUp)
             }
@@ -72,6 +71,7 @@ class AppState extends Component {
 
     // こいつの呼ばれる回数が異常（arr.lengthが2で8msかかる）
     getDiff = (initial, changed, lookUpArr) => {
+
         var i, j;
 
         var tempInitial = initial.slice();

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { Node } from 'slate'
 
 import response from "../../images/response.png";
@@ -217,4 +217,52 @@ export const renderTitle = (format) => {
         default:
             return ""
     }
+}
+// customFoundAction:: [ifFound::function(found, set){ return newSet }, ifNotFound::function(set){ return newSet }]
+// fmt:: function(found){ return any }
+export const useUpdater = (loggedIn, lookUpArr, idLookUp, targetId, storageName, postAction, customFoundAction, fmtValue) => {
+    const find = () => {
+        var res;
+
+        lookUpArr.map((obj,index) => {
+            if(obj[idLookUp] === targetId){
+                res = {
+                    data: obj,
+                    index: index,
+                }
+            }
+        })
+
+        if(!!res) return res
+
+        return ""
+    }
+
+    const handleClick = (e) => {
+        e && e.preventDefault()
+
+        var set = lookUpArr.slice()
+
+        const found = find()
+        if(!!found){
+            if(customFoundAction && customFoundAction[0]){
+                set = customFoundAction[0](found, set)
+            } else {
+                set.splice(found.index, 1)
+            }
+        } else {
+            if(customFoundAction && customFoundAction[1]){
+                set = customFoundAction[1](set)
+            } else {
+                set.push({timeStamp: Date.now(), [idLookUp]: targetId})
+            }
+        }
+
+        postAction(set)
+        localStorage.setItem(storageName, JSON.stringify(set))
+    }
+
+    const isTrue = useMemo(() => loggedIn && fmtValue ? fmtValue(find()) : !!(find()), [loggedIn, lookUpArr, idLookUp])
+
+    return [isTrue, handleClick]
 }

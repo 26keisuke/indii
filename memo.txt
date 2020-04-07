@@ -1,0 +1,3 @@
+1. fetchUserでもしuserがあったならば、auth（redux/action）ですべての値がlocalStorageと仮のreduxで初期化される。つまり、reduxには二つ同じ値のものが存在することになる（一つは参照用、もう一つはアップデート用）
+2. もしボタンが押されたら、reduxとlocalStorage（アップデート用のもの）の両方がアップデートされる。
+3. AppState上のgetDiffで定期的に差分をチェックし、差分があるのならばreduxのactionでsaveAsyncが呼ばれる。

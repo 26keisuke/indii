@@ -10,24 +10,37 @@ import {
     FETCH_USER, FETCH_NOTIF, FETCH_CONFIRM,
     SHOW_LOGIN, HIDE_LOGIN, LOG_IN_ERROR,
     FETCH_AFTER_TOPIC_LIKE,
-    SET_POST_EMOJI, SET_POST_STAR, SET_TOPIC_LIKE
+    SET_POST_EMOJI, SET_POST_STAR, SET_TOPIC_LIKE, SET_USER_FOLLOW,
 } from "../types/types";
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get("/api/current_user");
 
-    // initialize localstorage
+    var copy;
+
+    // バグ： SETした先のvalueを変えるとauth.infoの値も一緒に変わってしまう。Copyを作ってもうまくいかない。
+    // このせいでEmojiを変更できない。
+    
+    // initialize localstorage and redux
     if(res.data.likedPost) {
         localStorage.setItem("INDII_POST_STAR", JSON.stringify(res.data.likedPost))
-        dispatch({ type: SET_POST_STAR, payload: res.data.likedPost })
+        copy = res.data.likedPost.slice()
+        dispatch({ type: SET_POST_STAR, payload: copy })
     }
     if(res.data.postRating) {
         localStorage.setItem("INDII_POST_EMOJI", JSON.stringify(res.data.postRating))
-        dispatch({ type: SET_POST_EMOJI, payload: res.data.postRating })
+        copy = res.data.postRating.slice()
+        dispatch({ type: SET_POST_EMOJI, payload: copy })
     }
     if(res.data.likedTopic) {
         localStorage.setItem("INDII_TOPIC_LIKE", JSON.stringify(res.data.likedTopic))
-        dispatch({ type: SET_TOPIC_LIKE, payload: res.data.likedTopic })
+        copy = res.data.likedTopic.slice()
+        dispatch({ type: SET_TOPIC_LIKE, payload: copy })
+    }
+    if(res.data.follows) {
+        localStorage.setItem("INDII_USER_FOLLOW", JSON.stringify(res.data.follows))
+        copy = res.data.follows.slice()
+        dispatch({ type: SET_USER_FOLLOW, payload: copy })
     }
 
     dispatch({type: FETCH_USER, payload: res.data});

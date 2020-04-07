@@ -31,7 +31,10 @@ class Profile extends Component {
                 followers: false,
             }
         }
-        this.getProfile()
+    }
+
+    componentDidMount() {
+        this.props.fetchProfile(this.props.match.params.id, "general")
     }
 
     componentDidUpdate(prevProps) {
@@ -65,12 +68,6 @@ class Profile extends Component {
         })
     }
 
-    getProfile = () => {
-        if(this.props.match.params.id) {
-            this.props.fetchProfile(this.props.match.params.id)
-        }
-    }
-
     render() {
 
         const { isThisUser, toggle } = this.state
@@ -99,11 +96,46 @@ class Profile extends Component {
                     toggle={toggle}
                 />
                 }
-                { toggle.owner ? <Post posts={this.props.profile.user.post || []}/> : "" }
-                { toggle.favoriteTopic ? <Topic topics={this.props.profile.user.likedTopic || []}/> : "" }
-                { toggle.favoritePost ? <Post favorite={true} posts={this.props.profile.user.likedPost || []}/> : "" }
-                { toggle.follows ? <Follow users={this.props.profile.user.follows}/> : "" }
-                { toggle.followers ? <Follow users={this.props.profile.user.followers}/> : "" }
+
+                { toggle.owner ? 
+                <Post 
+                    fetchPosts={() => this.props.fetchProfile(this.props.match.params.id, "post")} 
+                    posts={this.props.profile.user.post || []}/> 
+                : "" 
+                }
+
+                { toggle.favoriteTopic ? 
+                <Topic 
+                    fetchTopics={() => this.props.fetchProfile(this.props.match.params.id, "likedTopic")} 
+                    topics={this.props.profile.user.likedTopic || []}
+                /> 
+                : "" 
+                }
+
+                { toggle.favoritePost ? 
+                <Post 
+                    fetchPosts={() => this.props.fetchProfile(this.props.match.params.id, "likedPost")} 
+                    favorite={true} posts={this.props.profile.user.likedPost || []}
+                /> 
+                : "" 
+                }
+
+                { toggle.follows ? 
+                <Follow 
+                    fetchFollows={() => this.props.fetchProfile(this.props.match.params.id, "follows")} 
+                    users={this.props.profile.user.follows}
+                /> 
+                : "" 
+                }
+
+                { toggle.followers ? 
+                <Follow 
+                    follower={true}
+                    fetchFollows={() => this.props.fetchProfile(this.props.match.params.id, "followers")} 
+                    users={this.props.profile.user.followers}
+                /> 
+                : "" 
+                }
             </Wrapper>
         )
     }

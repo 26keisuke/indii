@@ -12,13 +12,10 @@ import PeopleFollow from "../../People/FollowBtn/FollowBtn"
 
 class ProfileTop extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            userName: "",
-            comment: "",
-            intro: "",
-        }
+    state = {
+        userName: "",
+        comment: "",
+        intro: "",
     }
 
     componentDidUpdate(prevProps) {

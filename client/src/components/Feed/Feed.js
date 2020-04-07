@@ -53,16 +53,15 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
                 <PostFeed
                     key={feed[page][i]._id}
                     id={feed[page][i]._id}
-                    userId={feed[page][i].creator._id}
-                    photo={feed[page][i].creator.photo}
-                    name={feed[page][i].creator.userName}
+                    userId={feed[page][i].creator[0]._id}
+                    photo={feed[page][i].creator[0].photo}
+                    name={feed[page][i].creator[0].userName}
                     action={"CREATE_POST"}
                     date={feed[page][i].lastEdited}
                     topicId={feed[page][i].topic}
                     topicName={feed[page][i].topicName}
                     title={feed[page][i].postName}
                     content={feed[page][i].content}
-                    // star={feed[page][i].star.lookUp}
                     rating={feed[page][i].rating}
                 />
             )

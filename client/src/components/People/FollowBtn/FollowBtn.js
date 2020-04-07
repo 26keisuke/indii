@@ -1,141 +1,40 @@
-import React, { Component } from "react"
+import React from "react"
 import styled, { css } from "styled-components"
 import { connect } from "react-redux"
 import PropTypes from "prop-types"
-import axios from "axios"
 
 import * as actions from "../../../actions"
 
 import { TiUserAddOutline } from 'react-icons/ti';
 import { FiCheck } from 'react-icons/fi';
 
-let ct = 0;
+import { useUpdater } from "../../Util/util" 
 
-class FollowBtn extends Component {
+const FollowBtn = ({ loggedIn, follows, id, userId, show, ...props }) => {
+    const [isFollowed, handleFollowClick] = useUpdater(loggedIn, follows, "user", id, "INDII_USER_FOLLOW", props.setUserFollow)
     
-    constructor(props){
-        super(props)
-        this.state = {
-            follow: false,
-            madeFollowAction: false,
-        }
-    }
-
-    componentDidMount() {
-        // こいつが５回もコールされてるから、グローバルカウンターで一回にしてる
-        if(this.props.loggedIn && (ct == 0)) {
-            this.checkIfFollows()
-            this.setUpdater() 
-            ct++
-        }
-    }
-
-    componentWillUnmount() {
-        ct = 0;
-    }
-
-    setUpdater = () => {
-
-        window.addEventListener("beforeunload", this.handleWindowClose);
-
-        this.autoUpdate = setInterval(() => {
-            if (this.state.madeFollowAction) {
-                const url = `/api/profile/${this.props.id}/follow`
-                axios.post(url, {follow: this.state.follow})
-                .then(()=>{
-                    this.setState({
-                        madeFollowAction: false,
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            }
-        }, 10000)
-    }
-
-    handleWindowClose = () => {
-        if(this.state.madeStarAction) {
-            const url = `/api/profile/${this.props.id}/follow`
-            axios.post(url, {follow: this.state.follow})
-        }
-    }
-
-    checkIfFollows = () => {
-        const ls = this.props.follows;
-        var followed = false;
-        for(var i = 0; i < ls.length; i++) {
-            if(ls[i].user === this.props.id) {
-                followed = true
-                break
-            };
-        };
-        this.setState({ follow: followed })
-    }
-
-    componentDidUpdate(prevProps) {
-        if (!prevProps.loggedIn && this.props.loggedIn){
-            this.setUpdater()
-        }
-
-        if((!prevProps.follows || !prevProps.id) && (this.props.id && this.props.follows)) {
-            this.checkIfFollows()
-        }
-
-        if (prevProps.follows && (prevProps.follows.length !== this.props.follows.length)){
-            this.checkIfFollows()
-        }
-    }
-
-    componentWillUnmount() {
-
-        if (this.props.loggedIn){
-            if(this.state.madeFollowAction) {
-                const url = `/api/profile/${this.props.id}/follow`
-                axios.post(url, {follow: this.state.follow})
-            }
-            window.removeEventListener("beforeunload", this.handleWindowClose);
-        }
-
-        clearInterval(this.autoUpdate)
-    }
-
-    handleFollowClick = (e) => {
+    const handleAuthClick = (e) => {
         e.preventDefault()
-        this.setState({ 
-            follow: !this.state.follow ? true : false,
-            madeFollowAction: true,
-        })
+        props.showLogin()
     }
 
-    handleAuthClick = (e) => {
-        e.preventDefault()
-        this.props.showLogin()
-    }
-
-    render() {
-
-        const { follow } = this.state
-        const { id, userId, show } = this.props
-
-        return (
-            <div>
-                {   ((id !== userId) && (show === true)) &&
-                <Follow 
-                    follow={follow} 
-                    onClick={!userId ? this.handleAuthClick : this.handleFollowClick}
-                >
-                    {
-                        follow 
-                        ? <FollowedIcon/>
-                        : <FollowIcon/>
-                    }  
-                    <FollowText follow={follow}>{follow ? "フォロー中" : "フォロー"}</FollowText>
-                </Follow>
-                }
-            </div>
-        ) 
-    }
+    return (
+        <div>
+            {   ((id !== userId) && (show === true)) &&
+            <Follow 
+                follow={isFollowed} 
+                onClick={!userId ? handleAuthClick : handleFollowClick}
+            >
+                {
+                    isFollowed
+                    ? <FollowedIcon/>
+                    : <FollowIcon/>
+                }  
+                <FollowText follow={isFollowed}>{isFollowed ? "フォロー中" : "フォロー"}</FollowText>
+            </Follow>
+            }
+        </div>
+    ) 
 }
 
 const Follow = styled.div`
@@ -193,8 +92,7 @@ const FollowedIcon = styled(FiCheck)`
     color:#ffffff;
     position: absolute;
     top: 6px;
-    left: 7px;
-    
+    left: 7px;   
 `
 
 const FollowText = styled.p`
@@ -212,9 +110,9 @@ FollowBtn.propTypes = {
     show: PropTypes.bool,
 }
 
-function mapStateToProps({auth}) {
+function mapStateToProps({ auth }) {
     return {
-        follows: auth.info.follows,
+        follows: auth.follows,
         userId: auth.info._id,
         loggedIn: auth.loggedIn
     }

@@ -45,6 +45,8 @@ export const FETCH_CONFIRM = "FETCH_CONFIRM"
 export const SHOW_LOGIN = "SHOW_LOGIN"
 export const HIDE_LOGIN = "HIDE_LOGIN"
 export const LOG_IN_ERROR = "LOG_IN_ERROR"
+export const SET_USER_FOLLOW = "SET_USER_FOLLOW"
+export const UPDATE_USER_FOLLOW = "UPDATE_USER_FOLLOW"
 
 // TALK 
 export const CREATE_TALK = "CREATE_TALK"

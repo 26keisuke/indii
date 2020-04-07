@@ -5,7 +5,7 @@ import {
     ENABLE_GRAY, DISABLE_GRAY, 
     UPDATE_MESSAGE, RESET_MESSAGE, HIDE_MESSAGE,
     SHOW_CONFIRMATION, HIDE_CONFIRMATION, RESET_CONFIRMATION, CHANGE_CONFIRMATION,
-    UPDATE_POST_EMOJI, UPDATE_POST_STAR, UPDATE_TOPIC_LIKE,
+    UPDATE_POST_EMOJI, UPDATE_POST_STAR, UPDATE_TOPIC_LIKE, UPDATE_USER_FOLLOW,
 } from "../types/types"
 
 export const isFetching = () => (dispatch) => {
@@ -109,6 +109,11 @@ function getType(type) {
             return {
                 baseUrl: (id) => `/api/topic/${id}/like`,
                 dispatchType: UPDATE_TOPIC_LIKE
+            }
+        case "USER_FOLLOW":
+            return {
+                baseUrl: (id) => `/api/profile/${id}/follow`,
+                dispatchType: UPDATE_USER_FOLLOW
             }
         default:
             return

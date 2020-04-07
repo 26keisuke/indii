@@ -19,7 +19,7 @@ class Trend extends Component {
                     <Topic
                         key={topic._id}
                         id={topic._id}
-                        img={topic.squareImg.image}
+                        img={topic.squareImg[0].image}
                         tags={topic.tags}
                         topicName={topic.topicName}
                         description={topic.posts[0] && topic.posts[0].content}

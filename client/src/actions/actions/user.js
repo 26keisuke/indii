@@ -12,14 +12,19 @@ import {
 import { 
     SEARCH_FETCHING,
     SEARCH_FOLLOWER,
-    FETCH_PROFILE 
+    FETCH_PROFILE,
+    SET_USER_FOLLOW,
 } from "../types/types";
 
 import { cancelOnMultipleSearch } from "../util"
 
-export const fetchProfile = (id) => async (dispatch) => {
-    const res = await axios.get(`/api/profile/${id}`)
-    dispatch({type: FETCH_PROFILE, payload: res.data})
+export const setUserFollow = (followArr) => dispatch => {
+    dispatch({ type: SET_USER_FOLLOW, payload: followArr })
+}
+
+export const fetchProfile = (id, type) => async (dispatch) => {
+    const res = await axios.get(`/api/profile/${id}/${type}`)
+    dispatch({type: FETCH_PROFILE, payload: {data: res.data, type: type}})
 }
 
 export const searchFollower = (name) => async (dispatch) => {
@@ -30,7 +35,6 @@ export const searchFollower = (name) => async (dispatch) => {
         dispatch({type: SEARCH_FOLLOWER, payload: {suggestions: res}})
     }
 }
-
 
 export const updateImage = (id, value) => async (dispatch) => {
     const url = `/api/profile/${id}/photo`

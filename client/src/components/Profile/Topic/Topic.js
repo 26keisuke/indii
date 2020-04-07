@@ -1,35 +1,39 @@
-import React, { Component } from "react"
-import { connect } from "react-redux"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 
 import TopicElement from "../../Topic/Element/Element"
 
-class ProfileTopic extends Component {
+const ProfileTopic = ({ topics, fetchTopics }) => {
 
-    render() {
-        return (
-            <Wrapper>
-                { 
-                this.props.topics.map(elem =>
-                <Box key={elem.topic._id}>
-                    <TopicElement
-                        id={elem.topic._id}
-                        title={elem.topic.topicName}
-                        img={elem.topic.squareImg.image}
-                        content={elem.topic.posts[0].content}
-                        likes={elem.topic.likes.counter}
-                        tags={elem.topic.tags}
-                    />
-                </Box>
-                )}
-            </Wrapper>
-        )
-    }
+    useEffect(() => {
+        fetchTopics();
+    }, [])
+
+    return (
+        <Wrapper>
+            { 
+            topics.map(topic=> {
+                if(!topic.topicName) return null
+                return (
+                    <Box key={topic._id}>
+                        <TopicElement
+                            id={topic._id}
+                            title={topic.topicName}
+                            img={topic.squareImg[0].image}
+                            content={topic.posts[0].content}
+                            likes={topic.likes.counter}
+                            tags={topic.tags}
+                        />
+                    </Box>
+                )
+            })}
+        </Wrapper>
+    )
 }
 
 const Wrapper = styled.div`
     background-color: #fafafa;
-    min-height: 100%;
+    min-height: 50vh;
     padding: 30px 60px;
     padding-bottom: 200px;
     display: flex;
@@ -43,10 +47,4 @@ const Box = styled.div`
     margin-bottom: 12px;
 `
 
-function mapStateToProps({profile}) {
-    return {
-        profile
-    }
-}
-
-export default connect(mapStateToProps, null)(ProfileTopic)
+export default ProfileTopic

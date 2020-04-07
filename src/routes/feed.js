@@ -14,22 +14,30 @@ const postsPerReq = 10
 router.get("/post/:pageId", (req, res) => {
     // var t0 = performance.now()
     const page = parseInt(req.params.pageId) + 1
-    Post
-    .find({lastEdited: { $exists: true }}, { // 概要のポストを省いている
-        _id: 1,
-        creator: 1,
-        lastEdited: 1,
-        topic: 1,
-        topicName: 1,
-        postName: 1,
-        content: 1, // <= こいつがボトルネックになっている（postsPerReq=10で数秒ほど）
-        rating: 1,
-    }) 
-    .sort({lastEdited: -1})
-    .skip(postsPerReq * page - postsPerReq)
-    .limit(postsPerReq)
-    .lean()
-    .populate("creator")
+
+    Post.aggregate([
+        {$match: {lastEdited: { $exists: true }}},
+        {$sort: {lastEdited: -1}},
+        {$skip: postsPerReq * page - postsPerReq},
+        {$limit: postsPerReq},
+        {$project: {
+            _id: 1,
+            creator: 1,
+            lastEdited: 1,
+            topic: 1,
+            topicName: 1,
+            postName: 1,
+            content: 1,
+            rating: 1,
+        }},
+        {$lookup: {
+            "from": "users",
+            "localField": "creator",
+            "foreignField": "_id",
+            "as": "creator",
+        }},
+    ])
+    .exec()
     .then(posts => {
         // console.log("POST", performance.now() - t0)
         res.send(posts)
@@ -93,17 +101,28 @@ router.get("/recommend", (req, res) => {
 
 router.get("/new/topic", (req, res) => {
     // var t0 = performance.now()
-    Topic.find({}, {
-        _id: 1,
-        squareImg: 1,
-        tags: 1,
-        topicName: 1,
-        "posts.0": 1,
-        likes: 1,
-    })
-    .lean()
-    .populate("squareImg")
-    .populate("posts")
+    Topic.aggregate([
+        {$project: {
+            _id: 1,
+            squareImg: 1,
+            tags: 1,
+            topicName: 1,
+            posts: { $arrayElemAt: [ "$posts", 0 ] },
+            likes: 1,
+        }},
+        {$lookup: {
+            "from": "images",
+            "localField": "squareImg",
+            "foreignField": "_id",
+            "as": "squareImg"
+        }},
+        {$lookup: {
+            "from": "posts",
+            "localField": "posts",
+            "foreignField": "_id",
+            "as": "posts"
+        }},
+    ])
     .exec()
     .then(topic => {
         // console.log("TOPIC", performance.now() - t0)
