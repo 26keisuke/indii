@@ -4,7 +4,7 @@ import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
 
-// import { performance } from "perf_hooks"
+import { performance } from "perf_hooks"
 import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
@@ -12,7 +12,7 @@ const router = express.Router()
 const postsPerReq = 10
 
 router.get("/post/:pageId", (req, res) => {
-    // var t0 = performance.now()
+    var t0 = performance.now()
     const page = parseInt(req.params.pageId) + 1
 
     Post.aggregate([
@@ -27,19 +27,31 @@ router.get("/post/:pageId", (req, res) => {
             topic: 1,
             topicName: 1,
             postName: 1,
-            content: 1,
+            content: 1, // こいつを足すことで2秒~5秒ほどのロス
             rating: 1,
         }},
-        {$lookup: {
+        {$lookup: { // こいつを足すことで2秒ほどのロス
             "from": "users",
             "localField": "creator",
             "foreignField": "_id",
             "as": "creator",
         }},
+        {$project: {
+            _id: 1,
+            lastEdited: 1,
+            topic: 1,
+            topicName: 1,
+            postName: 1,
+            content: 1,
+            rating: 1,
+            "creator._id": 1,
+            "creator.photo": 1,
+            "creator.userName": 1,
+        }}
     ])
     .exec()
     .then(posts => {
-        // console.log("POST", performance.now() - t0)
+        console.log("POST", performance.now() - t0)
         res.send(posts)
     })
     .catch(err => {
