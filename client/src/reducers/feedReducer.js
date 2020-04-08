@@ -7,7 +7,8 @@ import {
     SEARCH_TERM,
     RESTORE_SCROLL,
     SET_PAGE,
-    RENDER_FEED
+    RENDER_FEED,
+    LAST_FEED,
 } from "../actions/types/types"
 
 import update from "immutability-helper"
@@ -21,12 +22,18 @@ export default function feedReducer(state={
     recommend: [],
     newTopic: [],
     user: [],
+    done: false, // 最後のフィードまで行った場合
     scroll: 0,
     page: 0,
     rendered: [],
     renderedCt: -1,
 }, action) {
     switch(action.type) {
+        case LAST_FEED:
+            return {
+                ...state,
+                done: true,
+            }
         case RENDER_FEED:
             return {
                 ...state,

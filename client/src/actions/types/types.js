@@ -65,6 +65,7 @@ export const FETCH_FEED_USER = "FETCH_FEED_USER"
 export const RESTORE_SCROLL = "RESTORE_SCROLL"
 export const SET_PAGE = "SET_PAGE"
 export const RENDER_FEED = "RENDER_FEED"
+export const LAST_FEED = "LAST_FEED"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"

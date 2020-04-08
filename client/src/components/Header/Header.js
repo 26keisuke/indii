@@ -36,7 +36,7 @@ const Logo = styled(Link)`
     }
 
     & > p {
-        text-shadow: 1px 1px 2px #a2a2a2;
+        /* text-shadow: 1px 1px 2px #a2a2a2; */
         font-size:24px;
         color: #222222;
         margin-right: 50px;

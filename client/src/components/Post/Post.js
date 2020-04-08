@@ -209,7 +209,7 @@ const Post = ({ post, recommend, ...props}) => {
                         reference={ref || []}
                     />
                 </ListWrapper>
-                <TitleWrapper>
+                {/* <TitleWrapper>
                     <SlashTitle>
                         <p>関連するポスト</p>
                         <p>{"///////////////////////"}</p>
@@ -229,7 +229,7 @@ const Post = ({ post, recommend, ...props}) => {
                         postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
                     />
                 )
-                }
+                } */}
                 <Space height={"200px"}/>
             </div>
         )

@@ -1,6 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 import CircularProgress from '@material-ui/core/CircularProgress';
+// import PropTypes from "prop-types"
   
 const Wrapper = styled.div`
     position: fixed;
@@ -13,9 +14,13 @@ const Wrapper = styled.div`
 const Loading = () => {
     return (
         <Wrapper>
-            <CircularProgress color="primary"/>
+            <CircularProgress 
+                color="primary"
+            />
         </Wrapper>
     )
 }
+
+// Loading.propTypes
 
 export default Loading

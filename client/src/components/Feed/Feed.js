@@ -12,6 +12,7 @@ import People from "./People/People"
 import Header from "../Header/Header"
 import Breakpoint from "../Breakpoint"
 import Screen from "../Util/Screen"
+import Loading from "../Util/Loading"
 import { Space, Border } from "../Theme"
 
 const TrendWrapper = styled.div`
@@ -24,10 +25,30 @@ const HeaderWrapper = styled.div`
     }
 `
 
+const LoadingWrapper = styled.div`
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    padding: 40px 0px;
+
+    & > div {
+        position: relative;
+        z-index: 10;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+
+        & > div {
+            width: 30px !important;
+            height: 30px !important;
+        }
+    }
+`
+
 const numOfUsers = 3;
 
-const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...props }) => {
-
+const Feed = ({ done, renderedCt, rendered, page, scroll, feed, user, recommend, ...props }) => {
+    
     const [lock, setLock] = useState(1)
 
     useScroll(scroll, props.restoreScroll)
@@ -35,7 +56,7 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
     useEffect(() => {
         props.fetchNewTopic()
         if(!feed.length) props.fetchFeed(0)
-        if(!recommend.length) props.fetchRecommend()
+        // if(!recommend.length) props.fetchRecommend()
         if(!user.length) props.fetchPeople()
 
         if(scroll > 0){
@@ -95,11 +116,7 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
     }
 
     useEffect(() => {
-        if(
-            !feed[0] || 
-            !feed[page] || 
-            renderedCt >= page
-        ) return
+        if(!feed[0] || !feed[page] || renderedCt >= page) return
 
         var temp = rendered.slice()
         props.renderFeed(temp.concat(render()))
@@ -111,20 +128,23 @@ const Feed = ({ renderedCt, rendered, page, scroll, feed, user, recommend, ...pr
                 <Border bottom={true}/>
                 {feed.length > 0
                 ?
-                    ([rendered, 
-                    <Waypoint 
-                        key={"waypointFeed"} 
-                        scrollableAncestor={window}
-                        fireOnRapidScroll
-                        onEnter={handleEnter} 
-                    />
-                    ])
+                    <>
+                        { rendered }
+                        <LoadingWrapper>
+                            {!done && !lock && <Loading determinate={false}/>}
+                        </LoadingWrapper>
+                        <Waypoint 
+                            scrollableAncestor={window}
+                            fireOnRapidScroll
+                            onEnter={handleEnter} 
+                        />
+                    </>
                 :
-                    ([
-                    <PostFeed key={"s1"} skeleton={true}/>,
-                    <PostFeed key={"s2"} skeleton={true}/>,
-                    <PostFeed key={"s3"} skeleton={true}/>
-                    ])
+                    <>
+                        <PostFeed skeleton={true}/>,
+                        <PostFeed skeleton={true}/>,
+                        <PostFeed skeleton={true}/>
+                    </>
                 }
             </div>
         )
@@ -189,6 +209,7 @@ function mapStateToProps({ feed }) {
         feed: feed.feed,
         recommend: feed.recommend,
         user: feed.user,
+        done: feed.done,
     }
 }
 
