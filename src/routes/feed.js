@@ -4,21 +4,21 @@ import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
 
-// import { performance } from "perf_hooks"
+import { performance } from "perf_hooks"
 import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
-const postsPerReq = 8
+const postsPerReq = 3
 
 router.get("/post/:pageId", (req, res) => {
-    // var t0 = performance.now()
-    const page = parseInt(req.params.pageId) + 1
+    var t0 = performance.now()
+    const page = parseInt(req.params.pageId)
 
     Post.aggregate([
         {$match: {lastEdited: { $exists: true }}},
         {$sort: {lastEdited: -1}},
-        {$skip: postsPerReq * page - postsPerReq},
+        {$skip: postsPerReq * page},
         {$limit: postsPerReq},
         {$project: {
             _id: 1,
@@ -51,7 +51,7 @@ router.get("/post/:pageId", (req, res) => {
     ])
     .exec()
     .then(posts => {
-        // console.log("POST", performance.now() - t0)
+        console.log(performance.now() - t0)
         res.send(posts)
     })
     .catch(err => {

@@ -47,7 +47,9 @@ const LoadingWrapper = styled.div`
 
 const numOfUsers = 3;
 
-const Feed = ({ done, renderedCt, rendered, page, scroll, feed, user, recommend, ...props }) => {
+const sequentialRequests = 3
+
+const Feed = ({ done, rendered, page, scroll, feed, user, recommend, ...props }) => {
     
     const [lock, setLock] = useState(1)
 
@@ -55,7 +57,11 @@ const Feed = ({ done, renderedCt, rendered, page, scroll, feed, user, recommend,
     
     useEffect(() => {
         props.fetchNewTopic()
-        if(!feed.length) props.fetchFeed(0)
+        if(!feed.length) {
+            for(var i=0; i < sequentialRequests; i++){
+                props.fetchFeed(i)
+            } 
+        }
         // if(!recommend.length) props.fetchRecommend()
         if(!user.length) props.fetchPeople()
 
@@ -66,61 +72,81 @@ const Feed = ({ done, renderedCt, rendered, page, scroll, feed, user, recommend,
         }
     }, [])
 
-    const render = () => {
-        var res = [];
-
-        for(var i=0; i < feed[page].length; i++){
-            res.push(
-                <PostFeed
-                    key={feed[page][i]._id}
-                    id={feed[page][i]._id}
-                    userId={feed[page][i].creator[0]._id}
-                    photo={feed[page][i].creator[0].photo}
-                    name={feed[page][i].creator[0].userName}
-                    action={"CREATE_POST"}
-                    date={feed[page][i].lastEdited}
-                    topicId={feed[page][i].topic}
-                    topicName={feed[page][i].topicName}
-                    title={feed[page][i].postName}
-                    content={feed[page][i].content}
-                    rating={feed[page][i].rating}
-                />
-            )
-        }
-
-        const recommendedUser = user.slice(page*numOfUsers, page+numOfUsers-1)
-
-        if(!!recommendedUser.length) {
-            res.push([
-                <Space key={"spaceHead"+i} height={"10px"} backgroundColor={"#F9F9F9"}/>,
-                <People 
-                    key={"people"+i}
-                    user={recommendedUser}
-                />,
-                <Space key={"spaceTail"+i} height={"10px"} backgroundColor={"#F9F9F9"}/>,
-            ])
-        }
-
-        
-        setLock(1)
-
-        return res
-    }
-
     const handleEnter = () => {
-        if(lock) {
-            setLock(0)
+        if(lock && !done) {
+            setLock(1-sequentialRequests)
             props.setPage(page+1)
-            props.fetchFeed(page+1)
         }
     }
+
+    // ↓ // ここは分けなくてもいいけどこっちの方が見やすい
 
     useEffect(() => {
-        if(!feed[0] || !feed[page] || renderedCt >= page) return
+        if(page > 0){
+            for(var i=0; i < sequentialRequests; i++){
+                props.fetchFeed(page*sequentialRequests+i)
+            }
+        }
+    }, [page])
+
+    // ↓
+
+    useEffect(() => {
+        if(
+            !feed[0] || 
+            !feed[page]
+        ) return
 
         var temp = rendered.slice()
         props.renderFeed(temp.concat(render()))
     }, [feed])
+
+    // ↓
+
+    const render = () => {
+        var res = [];
+
+        for(var i=0; i < feed[feed.length-1].length; i++){
+            res.push(
+                <PostFeed
+                    key={feed[feed.length-1][i]._id}
+                    id={feed[feed.length-1][i]._id}
+                    userId={feed[feed.length-1][i].creator[0]._id}
+                    photo={feed[feed.length-1][i].creator[0].photo}
+                    name={feed[feed.length-1][i].creator[0].userName}
+                    action={"CREATE_POST"}
+                    date={feed[feed.length-1][i].lastEdited}
+                    topicId={feed[feed.length-1][i].topic}
+                    topicName={feed[feed.length-1][i].topicName}
+                    title={feed[feed.length-1][i].postName}
+                    content={feed[feed.length-1][i].content}
+                    rating={feed[feed.length-1][i].rating}
+                />
+            )
+        }
+
+        if(feed.length % sequentialRequests === 0){
+
+            const getIndexAt = parseInt(feed.length/sequentialRequests-1)
+            const recommendedUser = user.slice(getIndexAt*numOfUsers, getIndexAt+numOfUsers)
+
+            if(!!recommendedUser.length) {
+                res.push([
+                    <Space key={"spaceHead"+i} height={"10px"} backgroundColor={"#F9F9F9"}/>,
+                    <People 
+                        key={"people"+i}
+                        user={recommendedUser}
+                    />,
+                    <Space key={"spaceTail"+i} height={"10px"} backgroundColor={"#F9F9F9"}/>,
+                ])
+            }
+
+        }
+
+        setLock(lock+1) // すべてのリクエストが完了した時に1に戻る
+
+        return res
+    }
 
     const renderLeft = () => {
         return(
@@ -202,7 +228,6 @@ const useScroll = (initVal, postAction) => {
 
 function mapStateToProps({ feed }) {
     return {
-        renderedCt: feed.renderedCt,
         rendered: feed.rendered,
         page: feed.page,
         scroll: feed.scroll,

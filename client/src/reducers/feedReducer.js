@@ -26,7 +26,6 @@ export default function feedReducer(state={
     scroll: 0,
     page: 0,
     rendered: [],
-    renderedCt: -1,
 }, action) {
     switch(action.type) {
         case LAST_FEED:
@@ -38,7 +37,6 @@ export default function feedReducer(state={
             return {
                 ...state,
                 rendered: action.payload.feed,
-                renderedCt: state.renderedCt + 1,
             }
         case SET_PAGE:
             return {

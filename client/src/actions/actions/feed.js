@@ -59,7 +59,6 @@ export const searchTerm = (term) => async (dispatch) => {
 
 export const fetchFeed = (page) =>  async (dispatch) => {
     const res = await axios.get(`/api/feed/post/${page}`)
-    console.log(res.data)
     if(!res.data.length) { dispatch({type: LAST_FEED}) }
     dispatch({type: FETCH_FEED, payload: res.data})
 }
