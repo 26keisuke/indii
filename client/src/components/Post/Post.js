@@ -150,7 +150,7 @@ const Post = ({ post, recommend, ...props}) => {
                         intro={intro}
                         skeleton={!creator}
                     />
-                    <MobileTitle><div/><span>関連するポスト</span></MobileTitle>
+                    {/* <MobileTitle><div/><span>関連するポスト</span></MobileTitle>
                     {
                     recommend && recommend.slice(0,3).map(recom => 
                         <Recommend
@@ -165,7 +165,7 @@ const Post = ({ post, recommend, ...props}) => {
                             postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
                         />
                     )
-                    }
+                    } */}
                     <MobileTitle><div/><span>参照</span></MobileTitle>
                     <List
                         readOnly={true}

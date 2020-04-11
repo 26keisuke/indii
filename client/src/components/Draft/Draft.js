@@ -48,6 +48,8 @@ class DraftNavigation extends Component {
     componentDidMount() {
         // Every fetch needs unique id. => reduxで{fetched: true}とかにするとfalseにしなくちゃいけないから面倒
         this.props.fetchDraft(this.state.id)
+        
+        this.props.updateContentImmediate()
     }
 
     componentDidUpdate() {

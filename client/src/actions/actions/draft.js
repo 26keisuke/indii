@@ -16,6 +16,7 @@ import {
     DRAFT_ADD_REF,
     SELECT_DRAFT,
     DRAFT_ADD_KATEX, DRAFT_ADD_URL,
+    DRAFT_ONE_UPDATE,
     // DRAFT_ONE_UPDATED, DRAFT_ONE_READ
 } from "../types/types";
 
@@ -41,10 +42,6 @@ export const fetchOneDraft = (id) => async (dispatch) => {
     dispatch(endAction())
 }
 
-export const draftUpdated = () => (dispatch) => {
-    dispatch({type: DRAFT_UPDATED})
-}
-
 export const draftRead = () => (dispatch) => {
     dispatch({type: DRAFT_READ})
 }
@@ -53,9 +50,21 @@ export const draftAddRef = (id, data) => async (dispatch) => {
     const url = `/api/draft/${id}/ref`
     const res = await axios.post(url, {ref: data})
     dispatch({type: DRAFT_ADD_REF, payload: res.data})
-} 
+}
 
-//  ============ ここからの範囲のものはdraftOneUpdateに置き換えるべき ============ 
+export const draftOneUpdate = (id, content, timeStamp) => async (dispatch) => {
+    dispatch({type: DRAFT_ONE_UPDATE, payload: {id, content: JSON.stringify(content), timeStamp}})
+    const res = await axios.post(`/api/draft/${id}`, {timeUpdate: timeStamp, content: JSON.stringify(content)})
+    if(res.data) return true
+}
+
+//  ============ ここからの範囲のものはserverからのresultで直接reduxを書き換えるべき ============ 
+
+// そしたらこいつが消せる
+
+export const draftUpdated = () => (dispatch) => {
+    dispatch({type: DRAFT_UPDATED})
+}
 
 export const changeDraftName = (draftId, value, revert) => async (dispatch) => {
     const url = `/api/draft/${draftId}/name`
@@ -119,8 +128,6 @@ export const deleteRef = (id) => async (dispatch) => {
         })
 }
 
-// ============ ここまでの ============ 
-
 export const deleteDraft = (id) => async (dispatch) => {
     dispatch(beginAction())
     const url = "/api/draft/delete"
@@ -166,6 +173,8 @@ export const uploadDraft = (value) => async (dispatch) => {
         return
     })
 }
+
+// ============ ここまでの ============ 
 
 export const confirmDraft = (value) => async (dispatch) => {
     dispatch(beginAction())

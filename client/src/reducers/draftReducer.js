@@ -6,7 +6,8 @@ import {
     DRAFT_READ,
     DRAFT_ADD_REF,
     SELECT_DRAFT,
-    DRAFT_ADD_KATEX, DRAFT_ADD_URL
+    DRAFT_ADD_KATEX, DRAFT_ADD_URL,
+    DRAFT_ONE_UPDATE
 } from "../actions/types/types"
 
 import { findArrObjIndex } from "./util"
@@ -29,9 +30,14 @@ export default function draftReducer(state={
         return state
     }
 
-    var newObj;
+    var newObj, index;
 
     switch(action.type) {
+        case DRAFT_ONE_UPDATE:
+            index = findArrObjIndex(state.onEdit, "_id", action.payload.id)
+            newObj = update(state, {onEdit: {[index]: {content: {$set: action.payload.content}}}})
+            newObj = update(newObj, {onEdit: {[index]: {editDate: {$push: [action.payload.timeStamp]}}}})
+            return newObj
         case SELECT_DRAFT:
             return {
                 ...state,
@@ -60,7 +66,7 @@ export default function draftReducer(state={
             }
         case DRAFT_ADD_REF:
 
-            const index = findArrObjIndex(state.onEdit, "_id", action.payload.id)
+            index = findArrObjIndex(state.onEdit, "_id", action.payload.id)
 
             newObj = update(state, {onEdit: {[index]: {ref: {$set: action.payload.ref}}}})
             newObj = update(newObj, {selected: {ref: {$set: action.payload.ref}}})

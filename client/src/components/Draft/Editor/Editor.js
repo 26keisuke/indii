@@ -1,10 +1,12 @@
-import React, { Component } from "react"
-import styled from "styled-components"
+import React, { useState, useEffect, useMemo, useCallback } from "react"
+import styled, { keyframes } from "styled-components"
 import { connect } from "react-redux"
 import { withRouter } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { Helmet } from "react-helmet"
+
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 import * as actions from "../../../actions"
 
@@ -23,12 +25,6 @@ const BackWrapper = styled.div`
 const EditorNavi = styled.div`
     display: flex;
     flex-direction: row;
-    & > p {
-        font-size: 10px;
-        color: #767676;
-        margin-right: 10px;
-        margin-bottom: 5px;
-    }
 `
 
 const EditorTop = styled.div`
@@ -37,6 +33,7 @@ const EditorTop = styled.div`
     padding: 20px 0px;
     margin-top: 13px;
     margin-bottom: 100px;
+    position: relative;
 
     & > div:nth-child(1) {
 
@@ -52,129 +49,180 @@ const EditorTop = styled.div`
         display: flex;
         justify-content: center;
 
-        & > div {
+        & > p {
             position: relative;
             z-index: 1;
-
-            & p:nth-child(1) {
-                font-size: 19px;
-                color: #1C1C1C;
-                font-weight: bold;
-            }
+            font-size: 19px;
+            color: #1C1C1C;
+            font-weight: bold;
         }
     }
 `
 
-const Hopper = ( props ) => {
-    return (
-        <div>
-            <Breadcrumbs>
-                <p>ポスト</p>
-                <p>{props.type}</p>
-                <Link to={props.link}>{props.name}</Link>
-            </Breadcrumbs>
-        </div>
-    )
-}
+const fade = keyframes`
+    0%, 100% { opacity: 0; margin-top: 10px; }
+    20%, 90% { opacity: 1; margin-top: 0px; }
+`
 
-class Editor extends Component {
+const UpdateIcon = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 55px;
+    right: 20px;
+    opacity: 0;
+    animation-name: ${fade};
+    animation-duration: 2500ms;
+    margin-top: 0px;
+
+    & svg {
+        color: ${props => props.theme.green};
+    }
+
+    & > span {
+        margin-left: 5px;
+        color: #333333;
+        font-size: 11px;
+    }
+`
+
+const Editor = ({ selected, onEdit, nounce, isUpdated, userId, updatedCt, setUpdatedCt, updateContentArr, ...props }) => {
+
+    const [showUpdate, setShowUpdate] = useState(false)
 
     // retrieve draft and check for ownership
-    componentDidMount() {
-        this.fetchTargetDraft(true)
-    }
+    useEffect(() => {
+        fetchTargetDraft(true)
+        return () => {
+            clearTimeout(timeId)
+        }
+    }, [])
 
-    componentDidUpdate(prevProps) {
-        if(this.props.draft.isUpdated) {
+    useEffect(() => {
+        if(isUpdated) {
             // これdraft全部を取得しているから時間かかるし無駄
-            this.props.fetchDraft(Math.random().toString(36).substring(2, 15))
+            props.fetchDraft(Math.random().toString(36).substring(2, 15))
         }
-        // ↑が呼ばれた後に↓が呼ばれる
-        if(prevProps.draft.nounce !== this.props.draft.nounce){
-            this.fetchTargetDraft()
-        }
-    }
+        
+    }, [isUpdated])
 
-    fetchTargetDraft = (initial) => {
-        const { draft, auth, history } = this.props
+    // ↑が呼ばれた後に↓が呼ばれる
 
-        for (var key in draft.onEdit) {
-            if(draft.onEdit[key]._id === this.props.match.params.id) {
+    useEffect(() => {
+        if(nounce){ fetchTargetDraft() }
+    }, [nounce])
+
+    const fetchTargetDraft = (initial) => {
+        for (var key in onEdit) {
+            if(onEdit[key]._id === props.match.params.id) {
                 if(initial){
-                    if(draft.onEdit[key].user === auth.info._id) {
-                        this.props.selectDraft(draft.onEdit[key])
+                    if(onEdit[key].user === userId) {
+                        props.selectDraft(onEdit[key])
                         return;
                     }
                 } else {
-                    this.props.selectDraft(draft.onEdit[key])
+                    props.selectDraft(onEdit[key])
                     return;
                 }
             }
         }
-        
-        history.push('/')
+        props.history.push('/')
     }
 
-    renderLeft() {
-
-        const { selected } = this.props.draft
-
+    const back = useMemo(() => {
         return (
-           
-            <EditorTop>
-                <BackWrapper>
-                    <Back
-                        back={() => this.props.history.goBack()}
-                        name="下書き一覧へ戻る"
-                    />
-                </BackWrapper>
-                <div>
-                    <EditorNavi>
-                        <Hopper type={renderType(selected.type)} name={selected.topicName} link={`/topic/${selected.topic}`}/>
-                    </EditorNavi>
-                </div>
-                <div>
-                    <div>
-                        <p>{selected.postName}</p>
-                    </div>
-                </div>
-                <TextArea/>
-            </EditorTop>
+            <BackWrapper>
+                <Back
+                    back={props.history.goBack}
+                    name="下書き一覧へ戻る"
+                />
+            </BackWrapper>
         )
-    }
+    }, [props.history.goBack])
 
-    renderRight() {
+    const hopper = useMemo(() => {
         return (
             <div>
-                <Tool/>
+                <EditorNavi>
+                    <Breadcrumbs>
+                        <p>ポスト</p>
+                        <p>{selected.type}</p>
+                        <Link to={`/topic/${selected.topic}`}>{selected.topicName}</Link>
+                    </Breadcrumbs>
+                </EditorNavi>
             </div>
         )
-    }
+    }, [selected.type, selected.topic, selected.topicName])
 
-    render() {
-
-        const { selected } = this.props.draft
-
-        return(
+    const title = useMemo(() => {
+        return (
             <div>
-                <Helmet>
-                    <title>{'"' + selected.postName + "\"の編集"} | Indii</title>
-                    <meta name="description" content={`"${selected.postName}"の${renderType(selected.type)}をします。`}/>
-                    <meta name="keywords" content={`${selected.postName},${renderType(selected.type)},ポスト,下書き`}/>
-                </Helmet>
-                <Screen withBack={true} space={false} post={true} noHeader={true} noHeaderSpace={true} noBorder={true}>
-                    {this.renderLeft()}
-                    {this.renderRight()}
-                </Screen>
+                <p>{selected.postName}</p>
             </div>
         )
-    }
+    }, [selected.postName])
+
+    var timeId;
+
+    useEffect(() => {
+        if(updatedCt){
+            setShowUpdate(true)
+            timeId = setTimeout(() => {
+                setShowUpdate(false)
+            }, 3000)
+        }
+    }, [updatedCt])
+
+    const update = useMemo(() => {
+        if(showUpdate){
+            return (
+                <UpdateIcon>
+                    <CheckCircleOutlineIcon/>
+                    <span>内容を保存しました。</span>
+                </UpdateIcon>
+            )
+        }
+        return null
+    }, [showUpdate])
+
+    const renderLeft = () => (
+        <EditorTop>
+            { back }
+            { hopper }    
+            { title }
+            <TextArea updateContentArr={updateContentArr}/>
+            { update }
+        </EditorTop>
+    )
+
+    const renderRight = () => (
+        <div>
+            <Tool/>
+        </div>
+    )
+
+    return(
+        <div>
+            <Helmet>
+                <title>{'"' + selected.postName + "\"の編集"} | Indii</title>
+                <meta name="description" content={`"${selected.postName}"の${renderType(selected.type)}をします。`}/>
+                <meta name="keywords" content={`${selected.postName},${renderType(selected.type)},ポスト,下書き`}/>
+            </Helmet>
+            <Screen withBack={true} space={false} post={true} noHeader={true} noHeaderSpace={true} noBorder={true}>
+                {renderLeft()}
+                {renderRight()}
+            </Screen>
+        </div>
+    )
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ auth, draft }) {
     return {
-        draft: state.draft,
-        auth: state.auth,
+        isUpdated: draft.isUpdated,
+        selected: draft.selected,
+        onEdit: draft.onEdit,
+        nounce: draft.nounce,
+        userId: auth.info._id,
     }
 }
 

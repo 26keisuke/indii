@@ -10,7 +10,6 @@ import { connect } from "react-redux"
 import imageExtensions from 'image-extensions'
 import { Waypoint } from "react-waypoint"
 import isUrl from 'is-url'
-import axios from "axios"
 
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -85,9 +84,7 @@ const ToolWrapper = styled.div`
     }
 `
 
-const TextArea = ({ readOnly, content, ...props }) => {
-
-    var autoSave;
+const TextArea = ({ updateContentArr, readOnly, content, ...props }) => {
 
     const [value, setValue] = useState([
         {
@@ -98,17 +95,6 @@ const TextArea = ({ readOnly, content, ...props }) => {
     const [abs, setAbs] = useState(false)
 
     const editor = useMemo(() => withHistory(withImages(withKatex(withReact(createEditor())))), [])
-
-    const sendUpdate = (timeUpdate) => {
-        const url = "/api/draft/" + props.draftId
-        axios.post(url, {timeUpdate: timeUpdate, content: JSON.stringify(editor)})
-            .then(() => {
-                if(timeUpdate){
-                    props.draftUpdated()
-                }
-            })
-            .catch(err => console.error(err))
-    }
 
     const katexClick = (e) => {
         e.preventDefault()
@@ -154,18 +140,6 @@ const TextArea = ({ readOnly, content, ...props }) => {
     }, [content, props.draftContent])
 
     useEffect(() => {
-        if(readOnly) return
-
-        autoSave = setInterval(() => {
-            sendUpdate(false)
-        }, 5000)
-
-        return () => {
-            clearInterval(autoSave)
-        }
-    }, [readOnly, props.draftId])
-
-    useEffect(() => {
 
         if(readOnly) return
 
@@ -189,48 +163,44 @@ const TextArea = ({ readOnly, content, ...props }) => {
 
     const isZero = props.type === "Zero"
 
+    const handleChange = useCallback((value) => {
+        if(updateContentArr) updateContentArr(props.draftId, editor); // changeをaxiosで送るためのコピー（ContentStateからpropsで降りてきている）
+        setValue(value)
+    })
+
+    const toolBar = (
+        <>
+            {/* <MarkButton format="bold"/>
+            <MarkButton format="italic"/>
+            <MarkButton format="underline"/>
+            <MarkButton format="code"/>
+            <MarkButton format="superscript"/> */}
+            <BlockButton format="heading-one"/>
+            <BlockButton format="heading-two"/>
+            <BlockButton format="code"/>
+            <BlockButton format="block-quote"/>
+            <BlockButton format="numbered-list"/>
+            <BlockButton format="bulleted-list"/>
+            <KatexButton handleClick={(e) => katexClick(e)}/>
+            <ImageButton handleClick={(e) => imageClick(e)}/>
+        </>
+    )
+
     return (
         <Slate 
             editor={editor} 
             value={value} 
-            onChange={value => {
-                localStorage.setItem(`${props.draftId}`, JSON.stringify({value: editor, timeStamp: Date.now()}))
-                setValue(value)
-            }}
+            onChange={value => handleChange(value)}
         >
             { !readOnly && <Waypoint scrollableAncestor={window} onEnter={handleEnter} onLeave={handleLeave} fireOnRapidScroll/>}
             { !isZero && !readOnly && abs &&
             <ToolbarAbs>
-                {/* <MarkButton format="bold"/>
-                <MarkButton format="italic"/>
-                <MarkButton format="underline"/>
-                <MarkButton format="code"/>
-                <MarkButton format="superscript"/> */}
-                <BlockButton format="heading-one"/>
-                <BlockButton format="heading-two"/>
-                <BlockButton format="code"/>
-                <BlockButton format="block-quote"/>
-                <BlockButton format="numbered-list"/>
-                <BlockButton format="bulleted-list"/>
-                <KatexButton handleClick={(e) => katexClick(e)}/>
-                <ImageButton handleClick={(e) => imageClick(e)}/>
+                { toolBar }
             </ToolbarAbs>
             }
             { !isZero && !readOnly &&
             <Toolbar>
-                {/* <MarkButton format="bold"/>
-                <MarkButton format="italic"/>
-                <MarkButton format="underline"/>
-                <MarkButton format="code"/>
-                <MarkButton format="superscript"/> */}
-                <BlockButton format="heading-one"/>
-                <BlockButton format="heading-two"/>
-                <BlockButton format="code"/>
-                <BlockButton format="block-quote"/>
-                <BlockButton format="numbered-list"/>
-                <BlockButton format="bulleted-list"/>
-                <KatexButton handleClick={(e) => katexClick(e)}/>
-                <ImageButton handleClick={(e) => imageClick(e)}/>
+                { toolBar }
             </Toolbar>
             }
             <EditableWrapper readOnly={readOnly}>

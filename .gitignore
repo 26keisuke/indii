@@ -1,6 +1,5 @@
 node_modules/
 dist/
-ssl/
 src/config/dev.js
 .DS_STORE
 .vscode/

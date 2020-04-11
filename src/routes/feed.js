@@ -4,7 +4,7 @@ import User from "../models/User"
 import Topic from "../models/Topic"
 import Post from "../models/Post"
 
-import { performance } from "perf_hooks"
+// import { performance } from "perf_hooks"
 import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
@@ -12,7 +12,7 @@ const router = express.Router()
 const postsPerReq = 3
 
 router.get("/post/:pageId", (req, res) => {
-    var t0 = performance.now()
+    // var t0 = performance.now()
     const page = parseInt(req.params.pageId)
 
     Post.aggregate([
@@ -51,7 +51,7 @@ router.get("/post/:pageId", (req, res) => {
     ])
     .exec()
     .then(posts => {
-        console.log(performance.now() - t0)
+        // console.log(performance.now() - t0)
         res.send(posts)
     })
     .catch(err => {

@@ -167,8 +167,8 @@ const Feed = ({ done, rendered, page, scroll, feed, user, recommend, ...props })
                     </>
                 :
                     <>
-                        <PostFeed skeleton={true}/>,
-                        <PostFeed skeleton={true}/>,
+                        <PostFeed skeleton={true}/>
+                        <PostFeed skeleton={true}/>
                         <PostFeed skeleton={true}/>
                     </>
                 }
