@@ -67,9 +67,8 @@ const TalkBox = styled.div`
     background-color: #f9f9f9;
 `
 
-function mapStateToProps({ auth, talk }){
+function mapStateToProps({ talk }){
     return {
-        // auth,
         selected: talk.selected,
     }
 }

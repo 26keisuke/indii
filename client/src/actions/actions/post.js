@@ -23,9 +23,9 @@ export const setPostEmoji = (emojiArr) => dispatch => {
     dispatch({ type: SET_POST_EMOJI, payload: emojiArr })
 }
 
-export const fetchPost = (id) => async (dispatch) => {
+export const fetchPost = (id, type) => async (dispatch) => {
     if(!id) { dispatch({type: FETCH_POST, payload: {}}); return }
-    const res = await axios.get(`/api/post/${id}`)
+    const res = await axios.get(`/api/post/${id}/${type}`)
     dispatch({type: FETCH_POST, payload: res.data})
 }
 

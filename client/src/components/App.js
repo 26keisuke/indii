@@ -10,7 +10,6 @@ import Notification from "./Notif/Notif"
 import EditConfirm from "./Notif/Confirm/Confirm"
 import Topic from "./Topic/Topic"
 import Post from "./Post/Post"
-// import Draft from "./Draft/Draft"
 import CreateTopic from "./Action/Topic/Create/Controller"
 import Profile from "./Profile/Profile"
 import CreatePost from "./Action/Post/Create/Controller"
@@ -44,8 +43,6 @@ class App extends Component {
                         <AppState>
                             <div className="fakebox">
                                 <Route exact path="/" component={Feed} />
-                                {/* <Route exact path="/draft" render={() => (loggedIn ? <Draft/> : <Redirect to="/"/>)} /> */}
-                                {/* <Route path="/draft/edit/:id" component={DraftEditor} /> */}
                                 <WrappedDraftRoute/>
                                 <Route path="/search" component={SearchResult} />
                                 <Route exact path="/notification" render={() => (loggedIn ? <Notification/> : <Redirect to="/"/>)} />

@@ -11,11 +11,13 @@ import bodyParser from "body-parser";
 import path from "path";
 import bcrypt from "bcrypt";
 import crypto from "crypto"
+import cors from "cors"
 import sgMail from "@sendgrid/mail"
 
 import User from "./models/User"
 import Token from "./models/Token";
 
+import admin from "./routes/admin"
 import sitemap from "./routes/sitemap"
 import auth from "./routes/auth"
 import draft from "./routes/draft"
@@ -39,6 +41,8 @@ mongoose.connect(keys.MONGO_URI, {
 })
 
 const app = express();
+
+app.use(cors())
 
 app.use(session({
     secret: [keys.COOKIE_KEY],
@@ -280,6 +284,7 @@ if(process.env.NODE_ENV === "production"){
 }
 
 app.use("/sitemap", sitemap)
+app.use("/admin", admin)
 
 app.use("/auth", auth)
 app.use("/api", user)

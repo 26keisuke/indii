@@ -15,15 +15,50 @@ const router = express.Router()
 router.get("/:topicId/:type", (req, res) => {
     const type = req.params.type
     switch(type){
-        case "ALL":
+        case "MAIN_DABLET":
+            Topic.findById(req.params.topicId)
+                .lean()
+                .populate("squareImg")
+                .populate({
+                    path: "posts", 
+                    populate: [{path: "creator"}]
+                })
+                .populate("activity.user")
+                .exec()
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        case "MAIN_MOBILE":
+            Topic.findById(req.params.topicId)
+                .lean()
+                .populate("mobileImg")
+                .populate({
+                    path: "posts", 
+                    populate: [{path: "creator"}]
+                })
+                .populate("activity.user")
+                .exec()
+                .then(topic => {
+                    res.send(topic)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        case "EDIT":
             Topic.findById(req.params.topicId)
                 .lean()
                 .populate("rectangleImg")
                 .populate("mobileImg")
                 .populate("squareImg")
-                // .populate({path: "column.posts", populate: {path: "postImg"}})
-                .populate({path: "posts", populate: [{path: "postImg"}, {path: "topicSquareImg"}, {path: "creator"}]})
-                .populate("activity.user")
+                .populate({
+                    path: "posts", 
+                    populate: [{path: "postImg"}, {path: "topicSquareImg"}] // topicSquareImgはpopulateしなくてもいい。後で変える
+                })
                 .exec()
                 .then(topic => {
                     res.send(topic)

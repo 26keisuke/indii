@@ -9,19 +9,39 @@ import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
-
-router.get("/:postId", (req, res) => {
-    Post.findById(req.params.postId)
-    .lean()
-    .populate({path: "topic", populate: [{ path: "rectangleImg" }, { path: "squareImg" }, { path: "mobileImg" }, { path: "posts" }]})
-    .populate("creator")
-    .exec()
-    .then(post => {
-        res.send(post)
-    })
-    .catch(err => {
-        console.log(err)
-    })
+router.get("/:postId/:type", (req, res) => {
+    switch(req.params.type){
+        case "MOBILE":
+            Post.findById(req.params.postId)
+                .lean()
+                .populate({path: "topic", populate: [{ path: "squareImg" }, { path: "mobileImg" }, { path: "posts" }]}) // need to optimize
+                .populate("creator")
+                .exec()
+                .then(post => {
+                    res.send(post)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        case "DABLET":
+            Post.findById(req.params.postId)
+                .lean()
+                .populate({path: "topic", populate: [{ path: "rectangleImg" }, { path: "squareImg" }, { path: "posts" }]}) // need to optimize
+                .populate("creator")
+                .exec()
+                .then(post => {
+                    res.send(post)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            return
+        default:
+            Post.findById(req.params.postId).lean()
+                .then(post => res.send(post))
+                .catch(err => console.log(err))
+    }
 })
 
 router.post("/:postId/edit", isLoggedIn, (req, res) => {

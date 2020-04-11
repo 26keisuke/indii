@@ -12,9 +12,10 @@ class Image extends Component {
 
     render () {
 
-        if(this.props.post.fetched.topic) {
+        const { fetched } = this.props
 
-            const { _id, topicName, tags, rectangleImg, posts } = this.props.post.fetched.topic
+        if(fetched.topic) {
+            const { _id, topicName, tags, rectangleImg, posts } = fetched.topic
 
             return (
                 <Link to={`/topic/${_id}`}>
@@ -118,7 +119,6 @@ const Tag = styled.div`
         justify-content: center;
         align-items: center;
         margin-right: 10px;
-        /* background-color: #626480; */
         border: 1px solid white;
         padding: 1px 8px;
         border-radius: 3px;
@@ -148,9 +148,9 @@ const Content = styled.p`
     overflow: hidden;
 `
 
-function mapStateToProps(state) {
+function mapStateToProps({ post }) {
     return {
-        post: state.post
+        fetched: post.fetched
     }
 }
 

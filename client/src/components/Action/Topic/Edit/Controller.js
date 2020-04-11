@@ -183,7 +183,7 @@ class CreatePost extends Component {
         this.setState({
             topic: topic
         })
-        const url = "/api/topic/" + topic._id + "/ALL"
+        const url = "/api/topic/" + topic._id + "/EDIT"
         axios.get(url)
         .then(res => {
             this.setState({

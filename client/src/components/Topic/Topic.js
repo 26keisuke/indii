@@ -29,21 +29,23 @@ const ColumnElement = ({ index, title, onEnter, onLeave }) => {
         )
     }, [index, title])
 
-    return ([
-        <Breakpoint key={`columnDablet${index}`} name="dablet">
-            <Waypoint 
-                key={String(index)} 
-                scrollableAncestor={window}
-                onEnter={(data) => onEnter(String(index), true, data)} 
-                onLeave={(data) => onLeave(String(index), false, data)}
-            >
+    return (
+        <>
+            <Breakpoint name="dablet">
+                <Waypoint 
+                    key={String(index)} 
+                    scrollableAncestor={window}
+                    onEnter={(data) => onEnter(String(index), true, data)} 
+                    onLeave={(data) => onLeave(String(index), false, data)}
+                >
+                    {children}
+                </Waypoint>
+            </Breakpoint>
+            <Breakpoint name="mobile">
                 {children}
-            </Waypoint>
-        </Breakpoint>,
-         <Breakpoint key={`columnMobile${index}`} name="mobile">
-             {children}
-         </Breakpoint>
-    ])
+            </Breakpoint>
+         </>
+    )
 }
 
 const PostElement = ({ postId, index, postName, content, onEnter, onLeave }) => {
@@ -67,20 +69,22 @@ const PostElement = ({ postId, index, postName, content, onEnter, onLeave }) => 
         )  
     }, [postId, index, postName, content])
 
-    return ([
-        <Breakpoint key={`postDablet${postId + index}`} name="dablet">
-            <Waypoint 
-                scrollableAncestor={window}
-                onEnter={(data) => onEnter(index, true, data)} 
-                onLeave={(data) => onLeave(index, false, data)}
-            >
+    return (
+        <>
+            <Breakpoint name="dablet">
+                <Waypoint 
+                    scrollableAncestor={window}
+                    onEnter={(data) => onEnter(index, true, data)} 
+                    onLeave={(data) => onLeave(index, false, data)}
+                >
+                    {children}
+                </Waypoint>
+            </Breakpoint>
+            <Breakpoint name="mobile">
                 {children}
-            </Waypoint>
-        </Breakpoint>,
-        <Breakpoint key={`postMobile${postId + index}`} name="mobile">
-            {children}
-        </Breakpoint>
-    ])
+            </Breakpoint>
+        </>
+    )
 }
 
 const TOF = ({ selected, index, title, indent }) => {
@@ -114,7 +118,7 @@ const TopicPage = ({ fetched, ...props}) => {
 
     useEffect(() => {
         const id = props.match.params.id;
-        props.fetchTopic(id, "ALL");
+        <Breakpoint name="dablet"/> ? props.fetchTopic(id, "MAIN_DABLET") : props.fetchTopic(id, "MAIN_MOBILE")
         return () => {
             props.fetchTopic()
         }

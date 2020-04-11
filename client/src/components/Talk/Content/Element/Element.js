@@ -3,6 +3,8 @@ import styled from "styled-components"
 import { Link } from "react-router-dom"
 import Skeleton from "react-loading-skeleton"
 
+import TextField from "@material-ui/core/TextField"
+
 class Element extends Component {
     render() {
 
@@ -23,7 +25,7 @@ class Element extends Component {
                     </div>
                     }
                 </Info>
-                <div>
+                <ContentArea>
                     
                     { skeleton 
                     ?
@@ -31,20 +33,47 @@ class Element extends Component {
                     :
                     <ContentWrapper>
                         <Connect/>
-                        <Content>{content}</Content>
+                        <TextField
+                            id="description"
+                            multiline
+                            value={content}
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                        />
                     </ContentWrapper>
                     }
-                </div>
+                </ContentArea>
             </Wrapper>
         )
     }
 }
 
-const ContentWrapper = styled.div`
-    display: flex;
+const ContentArea = styled.div`
+    width: 100%;
 `
 
-const Connect = styled.div`
+const ContentWrapper = styled.div`
+    display: flex;
+    width: 100%;
+
+    & > div {
+        & > div {
+            padding: 5px 0px;
+        }
+    }
+
+    & div {
+        width: 100%;
+    }
+
+    & fieldset {
+        border: none;
+    }
+`
+
+const Connect = styled.span`
     display: flex;
     justify-content: center;
     min-height: 100%;
@@ -54,7 +83,7 @@ const Connect = styled.div`
 `
 
 const Wrapper = styled.div`
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 
     & > div:nth-child(2){
         display: flex;
@@ -83,10 +112,5 @@ const Info = styled.div`
         }
     }
 `
-
-const Content = styled.div`
-    
-`
-
 
 export default Element

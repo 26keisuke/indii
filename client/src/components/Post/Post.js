@@ -12,7 +12,7 @@ import Textarea from "./Textarea/Textarea"
 import { SlashTitle } from "../Feed/Trend/Trend"
 import People from "../People/People"
 import Screen from "../Util/Screen"
-import Recommend from "../Util/Recommend"
+// import Recommend from "../Util/Recommend"
 import List from "../Draft/Editor/Tool/List/List"
 import { Space } from "../Theme"
 import SkeletonBox from "./Skeleton/SkeletonBox"
@@ -24,7 +24,7 @@ import Scroll from "../Util/Scroll"
 import Breakpoint from "../Breakpoint"
 import MobileBack from "../Util/MobileBack"
 
-import { getEditorContent, fmtDate, } from "../Util/util"
+import { getEditorContent } from "../Util/util"
 
 const MobileImg = styled.div`
     height: 40px;
@@ -88,93 +88,91 @@ const Post = ({ post, recommend, ...props}) => {
     const keywords = tags ? titleName + "," + tags.join(",") : ""
 
     useEffect(() => {
-        props.fetchPost(props.match.params.id)
+        <Breakpoint name="dablet"/> ? props.fetchPost(props.match.params.id, "DABLET") : props.fetchPost(props.match.params.id, "MOBILE")
         return () => {
             props.fetchPost()
         }
     }, [])
 
-    useEffect(() => {
-        props.fetchPost(props.match.params.id)
-        document.getElementsByClassName("fakebox")[0].scrollTo(0, 0)
-    }, [props.match.params.id])
-
     const renderLeft = () => {
 
-        return([
-            <Breakpoint key="dabletPostLeft" name="dablet">
-                <LeftWrapper>
-                    { content
-                    ? 
-                    <Textarea
-                        postName={postName}
-                        content={content}
-                        postId={postId}
-                    />
-                    :      
-                    <SkeletonBox/>
-                    }   
-                    <Space height={"100px"}/>
-                </LeftWrapper>
-            </Breakpoint>,
-            <Breakpoint key="mobilePostLeft" name="mobile">
-                <MobileImg>
-                    <MobileBack/>
-                    { !topic
-                    ?
-                    <S1Wrapper>
-                        <Skeleton height={40}/>
-                    </S1Wrapper>
-                    :
-                    <img src={topic.mobileImg.image}/>
-                    }
-                </MobileImg>
-                <MobileWrapper>
-                    <Textarea
-                        topicId={topic && topic._id}
-                        topicName={topicName}
-                        index={index}
-                        postName={postName}
-                        content={content}
-                        postId={postId}
-                    />
-                </MobileWrapper>
-                <Space height={"10px"}/>
-                <MobileInfo>
-                    <MobileTitle><div/><span>このポストの著者</span></MobileTitle>
-                    <People
-                        id={userId}
-                        photo={photo || account}
-                        name={userName} 
-                        job={comment} 
-                        intro={intro}
-                        skeleton={!creator}
-                    />
-                    {/* <MobileTitle><div/><span>関連するポスト</span></MobileTitle>
-                    {
-                    recommend && recommend.slice(0,3).map(recom => 
-                        <Recommend
-                            key={recom._id}
-                            id={recom._id}
-                            title={recom.postName}
-                            content={recom.content}
-                            authorImg={recom.creator[0].photo}
-                            author={recom.creator[0].userName}
-                            editDate={fmtDate(recom.lastEdited)}
-                            topicName={recom.topicName}
-                            postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
+        return(
+            <>
+                <Breakpoint key="dabletPostLeft" name="dablet">
+                    <LeftWrapper>
+                        { content
+                        ? 
+                        <Textarea
+                            postName={postName}
+                            content={content}
+                            postId={postId}
                         />
-                    )
-                    } */}
-                    <MobileTitle><div/><span>参照</span></MobileTitle>
-                    <List
-                        readOnly={true}
-                        reference={ref || []}
-                    />
-                    <Space height={"200px"}/>
-                </MobileInfo>
-            </Breakpoint>
-        ])
+                        :      
+                        <SkeletonBox/>
+                        }   
+                        <Space height={"100px"}/>
+                    </LeftWrapper>
+                </Breakpoint>
+
+                <Breakpoint key="mobilePostLeft" name="mobile">
+                    <MobileImg>
+                        <MobileBack/>
+                        { !topic
+                        ?
+                        <S1Wrapper>
+                            <Skeleton height={40}/>
+                        </S1Wrapper>
+                        :
+                        <img src={topic.mobileImg && topic.mobileImg.image}/>
+                        }
+                    </MobileImg>
+                    <MobileWrapper>
+                        <Textarea
+                            topicId={topic && topic._id}
+                            topicName={topicName}
+                            index={index}
+                            postName={postName}
+                            content={content}
+                            postId={postId}
+                        />
+                    </MobileWrapper>
+                    <Space height={"10px"}/>
+                    <MobileInfo>
+                        <MobileTitle><div/><span>このポストの著者</span></MobileTitle>
+                        <People
+                            id={userId}
+                            photo={photo || account}
+                            name={userName} 
+                            job={comment} 
+                            intro={intro}
+                            skeleton={!creator}
+                        />
+                        {/* <MobileTitle><div/><span>関連するポスト</span></MobileTitle>
+                        {
+                        recommend && recommend.slice(0,3).map(recom => 
+                            <Recommend
+                                key={recom._id}
+                                id={recom._id}
+                                title={recom.postName}
+                                content={recom.content}
+                                authorImg={recom.creator[0].photo}
+                                author={recom.creator[0].userName}
+                                editDate={fmtDate(recom.lastEdited)}
+                                topicName={recom.topicName}
+                                postImg={recom.postImg[0] ? recom.postImg[0].image : recom.topicSquareImg[0].image}
+                            />
+                        )
+                        } */}
+                        <MobileTitle><div/><span>参照</span></MobileTitle>
+                        <List
+                            readOnly={true}
+                            reference={ref || []}
+                        />
+                        <Space height={"200px"}/>
+                    </MobileInfo>
+                </Breakpoint>
+            </>
+        )
     }
 
     const renderRight = () => {

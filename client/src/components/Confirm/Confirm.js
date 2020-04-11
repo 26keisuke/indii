@@ -158,7 +158,7 @@ export class Confirm extends Component {
                     type = subUrl.substring(subUrl.lastIndexOf("/") + 1)
 
                     if(type === "post"){
-                        this.props.fetchPost(id);
+                        this.props.fetchPost(id, "DABLET");
                     } else if(type === "topic"){
                         this.props.fetchTopic(id, "IMAGE")
                     }

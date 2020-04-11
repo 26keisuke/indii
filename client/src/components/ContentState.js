@@ -84,7 +84,6 @@ const WrappedEditorRoute = ({ loggedIn, draftArr, ...props }) => {
                                 setUpdatedCt(0)
                             }
                         }
-                        return
                     }
                 }
             }
