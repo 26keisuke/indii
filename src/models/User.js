@@ -3,6 +3,9 @@ import mongoose from "mongoose"
 const { Schema } = mongoose
 
 const userSchema = new Schema({
+    role: {type: String, default: "User"}, // indii_adminのためのfield
+    adminPassword: String, // indii_adminのためのfield
+
     isVerified: {type: Boolean, default: false},
     verifiedDate: Date,
 

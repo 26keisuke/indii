@@ -5,39 +5,43 @@ import Skeleton from 'react-loading-skeleton';
 class SkeletonBox extends Component {
     render () {
         return (
-            <div>
-                <TitleSkeleton>
-                    <Skeleton width={100} height={18}/>
-                </TitleSkeleton>
+            <>
+                <S0Wrapper>
+                    <Skeleton width={200} height={18}/>
+                    <Skeleton width={360} height={23}/>
+                    <Skeleton width={90} height={15}/>
+                </S0Wrapper>
                 <SkeletonWrapper>
-                    <Skeleton count={5} width={595} height={18}/>
-                    <Skeleton width={300} height={18}/>
+                    <Skeleton count={5} width={651} height={18}/>
+                    <Skeleton width={384} height={18}/>
                     <SkeletonWrapper2>
                         <Skeleton width={250} height={320}/>
                         <SkeletonWrapper4>
                             <SkeletonWrapper3>
-                                <Skeleton count={3} width={330} height={18}/>
+                                <Skeleton count={3} width={384} height={18}/>
                                 <Skeleton width={150} height={18}/>
                             </SkeletonWrapper3>
                             <SkeletonWrapper3>
-                                <Skeleton count={5} width={330} height={18}/>
+                                <Skeleton count={5} width={384} height={18}/>
                                 <Skeleton width={150} height={18}/>
                             </SkeletonWrapper3>
                         </SkeletonWrapper4>
                     </SkeletonWrapper2>
-                    <Skeleton count={5} width={595} height={18}/>
-                    <Skeleton width={300} height={18}/>
+                    <Skeleton count={5} width={651} height={18}/>
+                    <Skeleton width={384} height={18}/>
                 </SkeletonWrapper>
-            </div>
+            </>
         )
     }
 }
 
+const S0Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
 
-const TitleSkeleton = styled.div`
-    margin: 0px 50%;
-    transform: translate(-50%, -50%);
-    width: 100px;
+    & > * {
+        margin: 3px 0px;   
+    }
 `
 
 const SkeletonWrapper = styled.div`
@@ -67,7 +71,6 @@ const SkeletonWrapper = styled.div`
 const SkeletonWrapper2 = styled.div`
     display: flex;
     flex-direction: row;
-    /* margin-left: 38px; */
     margin-bottom: 20px;
 `
 

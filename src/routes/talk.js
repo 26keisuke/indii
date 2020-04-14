@@ -8,7 +8,9 @@ import { isLoggedIn } from "./util/util"
 const router = express.Router()
 
 router.get("/", (req, res) => {
-    Talk.find({isDeleted: {$ne: true}}).sort({timeStamp: -1}).limit(10)
+    Talk.find({isDeleted: {$ne: true}})
+    .sort({timeStamp: -1})
+    .limit(10)
     .populate("creator")
     .populate("comments.user")
     .populate({path: "post", populate: [{path: "postImg"}, {path: "topicSquareImg"}]})

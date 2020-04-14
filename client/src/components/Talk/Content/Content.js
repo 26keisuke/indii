@@ -166,7 +166,8 @@ const Content = ({ loggedIn, userId, transition, setTransition, talk, ...props})
                             id={refId}
                             title={refTitle}
                             content={refContent}
-                            authorImg={creator.photo}
+                            // この二つ間違ってるから後で変えること（creatorはtalkのcreatorだから）
+                            authorImg={creator.photo} 
                             author={creator.userName}
                             editDate={fmtDate(refLastEdited)}
                             postImg={refImg}

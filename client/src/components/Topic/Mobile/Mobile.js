@@ -87,7 +87,7 @@ const toggleToIdx = (selected) => {
 
 const Post = ({ flag, tags, topicName, content, posts }) => {
     return (
-        <div>
+        <>
             <div>
                 <Info>
                     <Tag>
@@ -110,18 +110,19 @@ const Post = ({ flag, tags, topicName, content, posts }) => {
                         { flag 
                         ? <TextArea content={content} readOnly={true}/>
                         : 
-                        ([<S2Wrapper key="s2Wrapper">
+                        <>
+                        <S2Wrapper>
                             <Skeleton count={3} height={16}/>
-                        </S2Wrapper>,
-                        <Skeleton key="s2Skeleton" width={100} height={16}/>
-                        ])
+                        </S2Wrapper>
+                        <Skeleton width={100} height={16}/>
+                        </>
                         }
                     </p>
                 </Info>
             </div>
             { posts }
             <Space height={"200px"}/>
-        </div>
+        </>
     )
 }
 
@@ -189,6 +190,7 @@ const Mobile = ({ order, columns, activity, activityPosts, posts, tags, topicNam
             </ToggleWrapper>
             <Slider
                 ref={thisSlider => (slider = thisSlider)}
+                draggable={false}
                 speed={250}
                 beforeChange={handleChange}
                 infinite={false}

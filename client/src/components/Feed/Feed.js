@@ -7,6 +7,7 @@ import * as actions from "../../actions"
 
 import PostFeed from "./Post/Post";
 import Trend from "./Trend/Trend"
+import Category from "./Category/Category"
 import New from "./New/New"
 import People from "./People/People"
 import Header from "../Header/Header"
@@ -180,6 +181,7 @@ const Feed = ({ done, rendered, page, scroll, feed, user, recommend, ...props })
         return (
             <div>
                 <New/>
+                <Category/>
                 {/* <TrendWrapper>
                     <Trend/>
                 </TrendWrapper> */}

@@ -78,7 +78,7 @@ const Post = ({ post, recommend, ...props}) => {
     const postId = post.fetched._id
     const userId = post.fetched.creator
 
-    const { content, postName, topic, topicName, index, tags, creator, ref } = post.fetched
+    const { lastEdited, content, postName, topic, topicName, index, tags, creator, ref } = post.fetched
     if (post.fetched.creator) {
         var {  userName, photo, comment, intro } = post.fetched.creator 
     }
@@ -103,13 +103,16 @@ const Post = ({ post, recommend, ...props}) => {
                         { content
                         ? 
                         <Textarea
+                            lastEdited={lastEdited}
+                            topicId={topic && topic._id}
+                            topicName={topicName}
                             postName={postName}
                             content={content}
                             postId={postId}
                         />
                         :      
                         <SkeletonBox/>
-                        }   
+                        } 
                         <Space height={"100px"}/>
                     </LeftWrapper>
                 </Breakpoint>
@@ -128,6 +131,7 @@ const Post = ({ post, recommend, ...props}) => {
                     </MobileImg>
                     <MobileWrapper>
                         <Textarea
+                            lastEdited={lastEdited}
                             topicId={topic && topic._id}
                             topicName={topicName}
                             index={index}
@@ -252,7 +256,7 @@ const Post = ({ post, recommend, ...props}) => {
 }
 
 const LeftWrapper = styled.div`
-    padding: 28px 65px;
+    padding: 28px 35px;
     /* background-color: #ffffff; */
     margin-top: -10px;
 

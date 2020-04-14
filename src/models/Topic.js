@@ -26,6 +26,7 @@ const topicSchema = new Schema({
         counter: {type: Number, default: 0},
     },
     postCount: {type: Number, default: 0},
+    category: String,
     
     activity: [{
         type: { type: String, enum: ["EDIT_POST", "CREATE_POST", "EDIT_TOPIC", "CREATE_TOPIC"] },
