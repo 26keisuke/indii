@@ -7,4 +7,5 @@ module.exports = {
     FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     SITEMAP_KEY: process.env.SITEMAP_KEY,
+    ADMIN_KEY: process.env.ADMIN_KEY,
 }
