@@ -147,7 +147,7 @@ router.post("/", isLoggedIn, (req, res) => {
                 posts: [post.id]
             }
             const now = Date.now()
-            var topic = new Topic(Object.assign({_id: topicId, creator: req.user.id}, newBody))
+            var topic = new Topic(Object.assign({_id: topicId, creator: req.user.id, creationDate: now}, newBody))
             topic.column.push(desc)
             topic.order.push(columnId)
             topic.posts.push(post.id)

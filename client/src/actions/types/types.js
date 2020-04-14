@@ -57,6 +57,7 @@ export const EDIT_TALK_DESC = "EDIT_TALK_DESC"
 export const DELETE_TALK = "DELETE_TALK"
 
 // Feed
+export const FETCH_CATEGORY = "FETCH_CATEGORY"
 export const FETCH_FEED = "FETCH_FEED"
 export const FETCH_RECOMMEND = "FETCH_RECOMMEND"
 export const FETCH_NEW_TOPIC = "FETCH_NEW_TOPIC"
@@ -66,6 +67,8 @@ export const RESTORE_SCROLL = "RESTORE_SCROLL"
 export const SET_PAGE = "SET_PAGE"
 export const RENDER_FEED = "RENDER_FEED"
 export const LAST_FEED = "LAST_FEED"
+export const SET_TOPIC_PAGE = "SET_TOPIC_PAGE"
+export const RENDER_NEW_TOPIC = "RENDER_NEW_TOPIC"
 
 // Draft
 export const FETCH_DRAFT = "FETCH_DRAFT"

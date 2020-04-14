@@ -9,21 +9,26 @@ import {
 import { 
     SEARCH_FETCHING,
     SEARCH_TERM,
-    FETCH_FEED,
-    FETCH_RECOMMEND,
-    FETCH_NEW_TOPIC,
-    FETCH_FEED_USER,
+    FETCH_FEED, FETCH_RECOMMEND, FETCH_NEW_TOPIC, FETCH_FEED_USER, FETCH_CATEGORY,
     SEARCH_FEED,
     RESTORE_SCROLL,
-    SET_PAGE,
-    RENDER_FEED,
+    SET_PAGE, SET_TOPIC_PAGE,
+    RENDER_FEED, RENDER_NEW_TOPIC,
     LAST_FEED,
 } from "../types/types";
 
 import { cancelOnMultipleSearch } from "../util"
 
+export const renderNewTopic = (topics) => dispatch => {
+    dispatch({ type: RENDER_NEW_TOPIC, payload: {topics}})
+}
+
 export const renderFeed = (feed) => dispatch => {
     dispatch({ type: RENDER_FEED, payload: {feed}})
+}
+
+export const setTopicPage = (page) => dispatch => {
+    dispatch({ type: SET_TOPIC_PAGE, payload: {page}})
 }
 
 export const setPage = (page) => dispatch => {
@@ -57,6 +62,11 @@ export const searchTerm = (term) => async (dispatch) => {
     dispatch({type: SEARCH_TERM, payload: {...res.data, term}})
 }
 
+export const fetchCategory = () => async (dispatch) => {
+    const res = await axios.get(`/api/feed/category`)
+    dispatch({type: FETCH_CATEGORY, payload: res.data})
+}
+
 export const fetchFeed = (page) =>  async (dispatch) => {
     const res = await axios.get(`/api/feed/post/${page}`)
     if(!res.data.length) { dispatch({type: LAST_FEED}) }
@@ -68,8 +78,8 @@ export const fetchRecommend = () => async (dispatch) => {
     dispatch({type: FETCH_RECOMMEND, payload: res.data})
 }
 
-export const fetchNewTopic = () => async (dispatch) => {
-    const res = await axios.get("/api/feed/new/topic")
+export const fetchNewTopic = (page) => async (dispatch) => {
+    const res = await axios.get(`/api/feed/topic/${page}`)
     dispatch({type: FETCH_NEW_TOPIC, payload: res.data})
 }
 

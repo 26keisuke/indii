@@ -50,14 +50,18 @@ const numOfUsers = 3;
 
 const sequentialRequests = 3
 
-const Feed = ({ done, rendered, page, scroll, feed, user, recommend, ...props }) => {
+const Feed = ({ done, rendered, page, scroll, feed, user, recommend, category, ...props }) => {
     
     const [lock, setLock] = useState(1)
 
     useScroll(scroll, props.restoreScroll)
     
     useEffect(() => {
-        props.fetchNewTopic()
+
+        if(!category.length) {
+            props.fetchCategory()
+        }
+
         if(!feed.length) {
             for(var i=0; i < sequentialRequests; i++){
                 props.fetchFeed(i)
@@ -151,7 +155,7 @@ const Feed = ({ done, rendered, page, scroll, feed, user, recommend, ...props })
 
     const renderLeft = () => {
         return(
-            <div>
+            <>
                 <Border bottom={true}/>
                 {feed.length > 0
                 ?
@@ -171,26 +175,32 @@ const Feed = ({ done, rendered, page, scroll, feed, user, recommend, ...props })
                         <PostFeed skeleton={true}/>
                         <PostFeed skeleton={true}/>
                         <PostFeed skeleton={true}/>
+                        <PostFeed skeleton={true}/>
+                        <PostFeed skeleton={true}/>
                     </>
                 }
-            </div>
+            </>
         )
     }
 
     const renderRight = () => {
         return (
-            <div>
-                <New/>
-                <Category/>
+            <>
+                <Category category={category}/>
+                <New
+                    renderNewTopic={props.renderNewTopic}
+                    setTopicPage={props.setTopicPage}
+                    fetchTopics={props.fetchNewTopic}
+                />
                 {/* <TrendWrapper>
                     <Trend/>
                 </TrendWrapper> */}
-            </div>
+            </>
         )
     }
 
     return(
-        <div>
+        <>
             <Breakpoint name="mobile">
                 <HeaderWrapper>
                     <Header/>
@@ -200,7 +210,7 @@ const Feed = ({ done, rendered, page, scroll, feed, user, recommend, ...props })
                 {renderLeft()}
                 {renderRight()}
             </Screen>
-        </div>
+        </>
     )
 }
 
@@ -235,6 +245,7 @@ function mapStateToProps({ feed }) {
         scroll: feed.scroll,
         feed: feed.feed,
         recommend: feed.recommend,
+        category: feed.category,
         user: feed.user,
         done: feed.done,
     }

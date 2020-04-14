@@ -111,9 +111,60 @@ router.get("/recommend", (req, res) => {
     .catch(err => console.log(err))
 })
 
-router.get("/new/topic", (req, res) => {
+router.get("/category", (req, res) => {
+    Topic.aggregate([
+        {$limit: 10},
+        {$project: {
+            _id: 1,
+            squareImg: 1,
+            tags: 1,
+            topicName: 1,
+            posts: { $arrayElemAt: [ "$posts", 0 ] },
+            likes: 1,
+            category: 1,
+        }},
+        {$lookup: {
+            "from": "images",
+            "localField": "squareImg",
+            "foreignField": "_id",
+            "as": "squareImg"
+        }},
+        {$lookup: {
+            "from": "posts",
+            "localField": "posts",
+            "foreignField": "_id",
+            "as": "posts"
+        }},
+        {$group: {
+            _id: "$category", 
+            topics: {
+                $push: {
+                    _id: "$_id",
+                    squareImg: "$squareImg",
+                    tags: "$tags",
+                    topicName: "$topicName",
+                    posts: "$posts",
+                    likes: "$likes",
+                    category: "$category"
+                }
+            }
+        }}
+    ])
+    .exec()
+    .then(topic => {
+        res.send(topic)
+    })
+    .catch(err => console.log(err))
+})
+
+const topicsPerReq = 6
+
+router.get("/topic/:pageId", (req, res) => {
     // var t0 = performance.now()
     Topic.aggregate([
+        {$sort: {creationDate: -1}},
+        {$skip: topicsPerReq * req.params.pageId},
+        {$limit: topicsPerReq},
         {$project: {
             _id: 1,
             squareImg: 1,

@@ -6,6 +6,7 @@ const topicSchema = new Schema({
     topicName: String,
     
     creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    creationDate: Date,
     
     squareImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
     rectangleImg: { type: mongoose.Schema.Types.ObjectId, ref: "Image"}, 
@@ -26,7 +27,7 @@ const topicSchema = new Schema({
         counter: {type: Number, default: 0},
     },
     postCount: {type: Number, default: 0},
-    category: String,
+    category: [String],
     
     activity: [{
         type: { type: String, enum: ["EDIT_POST", "CREATE_POST", "EDIT_TOPIC", "CREATE_TOPIC"] },

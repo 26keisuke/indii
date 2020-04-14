@@ -1,13 +1,10 @@
 import {
-    FETCH_FEED,
-    FETCH_RECOMMEND,
-    FETCH_NEW_TOPIC,
-    FETCH_FEED_USER,
+    FETCH_FEED, FETCH_RECOMMEND, FETCH_NEW_TOPIC, FETCH_FEED_USER, FETCH_CATEGORY,
     SEARCH_FEED,
     SEARCH_TERM,
     RESTORE_SCROLL,
-    SET_PAGE,
-    RENDER_FEED,
+    SET_PAGE, SET_TOPIC_PAGE,
+    RENDER_FEED, RENDER_NEW_TOPIC,
     LAST_FEED,
 } from "../actions/types/types"
 
@@ -21,10 +18,13 @@ export default function feedReducer(state={
     feed: [],
     recommend: [],
     newTopic: [],
+    category: [],
     user: [],
     done: false, // 最後のフィードまで行った場合
     scroll: 0,
     page: 0,
+    topicPage: 0,
+    renderedTopics: [],
     rendered: [],
 }, action) {
     switch(action.type) {
@@ -33,10 +33,20 @@ export default function feedReducer(state={
                 ...state,
                 done: true,
             }
+        case RENDER_NEW_TOPIC:
+            return {
+                ...state,
+                renderedTopics: action.payload.topics
+            }
         case RENDER_FEED:
             return {
                 ...state,
                 rendered: action.payload.feed,
+            }
+        case SET_TOPIC_PAGE:
+            return {
+                ...state,
+                topicPage: action.payload.page,
             }
         case SET_PAGE:
             return {
@@ -60,10 +70,19 @@ export default function feedReducer(state={
                 ...state,
                 search: action.payload.suggestions
             }
-        case FETCH_NEW_TOPIC:
+        case FETCH_CATEGORY:
             return {
                 ...state,
-                newTopic: action.payload
+                category: action.payload.map(cat => {
+                    return {catId: cat._id[0], topics: cat.topics}
+                })
+            }
+        case FETCH_NEW_TOPIC:
+            if(!action.payload[0]) return state
+            const newTopics = update(state.newTopic, {$push: [action.payload]})
+            return {
+                ...state,
+                newTopic: newTopics
             }
         case FETCH_FEED:
             if(!action.payload[0]) return state

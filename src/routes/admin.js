@@ -1,7 +1,8 @@
 import express from "express"
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import crypto from "crypto"
+import crypto from "crypto";
+import equal from "deep-equal"
 
 import keys from "../config/keys"
 
@@ -108,10 +109,13 @@ router.get("/:key/users", (req, res) => {
             $project: {
                 _id: 1,
                 role: 1,
+                adminPassword: 1,
                 userId: "$_id",
                 userName: 1,
                 comment: 1,
                 intro: 1,
+                googleId: 1,
+                facebookId: 1,
                 posts: {$size: "$post"},
                 drafts: {$size: "$draft"},
                 followers: {$size: "$followers"},
@@ -158,6 +162,7 @@ router.put("/:key/topics/:id", (req, res) => {
             _id,
             topicName,
             category,
+            creationDate,
         } = req.body
 
         Topic.findById(_id)
@@ -166,7 +171,7 @@ router.put("/:key/topics/:id", (req, res) => {
                 topic.topicName = topicName
             }
 
-            if(category !== topic.category) {
+            if(!equal(category, topic.category)) {
                 topic.category = category
             }
 
@@ -183,6 +188,7 @@ router.get("/:key/topics/:id", (req, res) => {
             $project: {
                 _id: 1,
                 topicId: "$_id",
+                creationDate: 1,
                 tags: 1,
                 topicName: 1,
                 category: 1,
@@ -202,6 +208,7 @@ router.get("/:key/topics", (req, res) => {
                 _id: 1,
                 topicId: "$_id",
                 creator: 1,
+                creationDate: 1,
                 topicName: 1,
                 tags: 1,
                 likes: "$likes.counter",
@@ -223,21 +230,27 @@ function wrapHeader(res, schema, name, query, range, includeHeader) {
 
         if(includeHeader) {
             objs = objs.map((obj, index) => {
-                obj.id = index
+                obj.id = index + range[0] + 1
                 return obj
             })
 
-            res.header("Access-Control-Expose-Headers", "Content-Range")
-            res.header("Content-Range", `${name} ${range[0]}-${range[1]}/${objs.length}`)
+            schema.countDocuments({}).exec()
+            .then(ct => {
+                res.header("Access-Control-Expose-Headers", "Content-Range")
+                res.header("Content-Range", `${name} ${range[0]}-${range[1]}/${ct}`)   
+                
+                res.send(objs)
+            })
+
         } else {
             // これをしないとreferenceが表示されない
             objs = objs.map(obj => {
                 obj.id = obj.userId
                 return obj
             })
-        }
 
-        res.send(objs)
+            res.send(objs)
+        }
     })
     .catch(err => console.log(err))
 }
@@ -283,7 +296,7 @@ function parseOptions(query, projection) {
         firstIdx = parseInt(range[0])
         lastIdx = parseInt(range[1])
 
-        q = q.concat([{$skip: firstIdx}, {$limit: lastIdx-firstIdx}])
+        q = q.concat([{$skip: firstIdx-1 <= 0 ? 0 : firstIdx-1}, {$limit: lastIdx-firstIdx+1}])
     }
 
     const includeHeader = !!query.filter && !!query.sort && !!query.range
