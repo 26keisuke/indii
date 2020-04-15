@@ -1,6 +1,7 @@
 import express from "express"
 import mongoose from "mongoose";
 import equal from "deep-equal";
+// import { performance } from "perf_hooks"
 
 import User from "../models/User"
 import Topic from "../models/Topic"
@@ -12,20 +13,82 @@ import { isLoggedIn } from "./util/util"
 
 const router = express.Router()
 
+router.get("/:topicId/creator", (req, res) => {
+    Topic.aggregate([
+        {$match: {"_id": mongoose.Types.ObjectId(req.params.topicId)}},
+        {$project: {
+            posts: 1,
+        }},
+        {$lookup: {
+            "from": "posts",
+            "localField": "posts",
+            "foreignField": "_id",
+            "as": "posts",
+        }},
+        {$unwind: {
+            path: "$posts",
+        }},
+        {$project: {
+            creator: "$posts.creator",
+        }},
+        {$lookup: {
+            "from": "users",
+            "localField": "creator",
+            "foreignField": "_id",
+            "as": "creator",
+        }},
+        {$unwind: {
+            path: "$creator",
+            preserveNullAndEmptyArrays: true,
+        }},
+    ]).exec()
+    .then(info => {
+        res.send(info)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
+router.get("/:topicId/activity", (req, res) => {
+    Topic.aggregate([
+        {$match: {"_id": mongoose.Types.ObjectId(req.params.topicId)}},
+        {$project: {
+            activityUser: "$activity.user",
+        }},
+        {$unwind: {
+            path: "$activityUser",
+        }},
+        {$lookup: {
+            "from": "users",
+            "localField": "activityUser",
+            "foreignField": "_id",
+            "as": "activityUser",
+        }},
+        {$unwind: {
+            path: "$activityUser",
+        }},
+    ]).exec()
+    .then(info => {
+        res.send(info)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
 router.get("/:topicId/:type", (req, res) => {
+    // var t0 = performance.now()
     const type = req.params.type
     switch(type){
         case "MAIN_DABLET":
             Topic.findById(req.params.topicId)
                 .lean()
                 .populate("squareImg")
-                .populate({
-                    path: "posts", 
-                    populate: [{path: "creator"}]
-                })
-                .populate("activity.user")
+                .populate("posts")
                 .exec()
                 .then(topic => {
+                    // console.log(performance.now() - t0)
                     res.send(topic)
                 })
                 .catch(err => {
@@ -36,11 +99,8 @@ router.get("/:topicId/:type", (req, res) => {
             Topic.findById(req.params.topicId)
                 .lean()
                 .populate("mobileImg")
-                .populate({
-                    path: "posts", 
-                    populate: [{path: "creator"}]
-                })
-                .populate("activity.user")
+                .populate("posts")
+                .populate("activity.user") // ここのoptimization
                 .exec()
                 .then(topic => {
                     res.send(topic)

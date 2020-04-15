@@ -108,6 +108,8 @@ const TOF = ({ selected, index, title, indent }) => {
 
 const TopicPage = ({ fetched, ...props}) => {
 
+    const id = props.match.params.id;
+
     const [toggle, setToggle] = useState({
         topic: true,
         talk: false,
@@ -117,7 +119,6 @@ const TopicPage = ({ fetched, ...props}) => {
     const [currentIdx, setCurrentIdx] = useState("1")
 
     useEffect(() => {
-        const id = props.match.params.id;
         <Breakpoint name="dablet"/> ? props.fetchTopic(id, "MAIN_DABLET") : props.fetchTopic(id, "MAIN_MOBILE")
         return () => {
             props.fetchTopic()
@@ -336,6 +337,7 @@ const TopicPage = ({ fetched, ...props}) => {
                 { toggle["activity"] &&
                 <div>
                     <Activity
+                        fetchTopic={() => props.fetchActivity(id)}
                         order={order}
                         columns={column}
                         posts={posts}

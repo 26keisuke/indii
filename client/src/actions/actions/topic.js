@@ -3,7 +3,7 @@ import axios from "axios"
 import { 
     SEARCH_FETCHING,
     SEARCH_TOPIC,
-    FETCH_TOPIC,
+    FETCH_TOPIC, FETCH_ACTIVITY,
     ADD_COLUMN, REVERT_COLUMN, DELETE_COLUMN,
     REVERT_IMG,
     SET_TOPIC_LIKE
@@ -13,6 +13,14 @@ import { cancelOnMultipleSearch } from "../util"
 
 export const setTopicLike = (topicLikeArr) => dispatch => {
     dispatch({ type: SET_TOPIC_LIKE, payload: topicLikeArr })
+}
+
+export const fetchActivity = (id) => async (dispatch) => {
+    const p1 = axios.get("/api/topic/" + id + "/activity")
+    const p2 = axios.get("/api/topic/" + id + "/creator")
+
+    const [res1, res2] = await Promise.all([p1, p2])
+    dispatch({type: FETCH_ACTIVITY, payload: [res1.data, res2.data]})
 }
 
 export const fetchTopic = (id, type) => async (dispatch) => {

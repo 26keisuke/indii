@@ -74,8 +74,6 @@ export const RENDER_NEW_TOPIC = "RENDER_NEW_TOPIC"
 export const FETCH_DRAFT = "FETCH_DRAFT"
 export const DRAFT_UPDATED = "DRAFT_UPDATED"
 export const DRAFT_READ = "DRAFT_READ"
-// export const DRAFT_ONE_UPDATED = "DRAFT_ONE_UPDATED"
-// export const DRAFT_ONE_READ = "DRAFT_ONE_READ"
 export const DRAFT_ONE_UPDATE = "DRAFT_ONE_UPDATE"
 export const CHANGE_DRAFTNAME = "CHANGE_DRAFTNAME"
 export const CHANGE_DRAFTCONFIG = "CHANGE_DRAFTCONFIG"
@@ -92,6 +90,7 @@ export const CLEAR_TOPIC = "CLEAR_TOPIC"
 export const FETCH_AFTER_TOPIC_LIKE = "FETCH_AFTER_TOPIC_LIKE" // こいつはauthに行く
 export const UPDATE_TOPIC_LIKE = "UPDATE_TOPIC_LIKE" // こいつはauthに行く
 export const SET_TOPIC_LIKE = "SET_TOPIC_LIKE" 
+export const FETCH_ACTIVITY = "FETCH_ACTIVITY"
 
 // POST
 export const SEARCH_POST = "SEARCH_POST"

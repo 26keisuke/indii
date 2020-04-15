@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from "react"
+import React, { useEffect, Component, PureComponent } from "react"
 import styled from "styled-components"
 import { IoMdDocument } from "react-icons/io"
 import StarIcon from '@material-ui/icons/Star';
@@ -26,7 +26,6 @@ class Element extends PureComponent {
                     <h3>
                         { tags.map(tag => 
                             <div key={tag}># {tag}</div>
-
                         )}
                     </h3>
                     <h2>{postName}</h2>
@@ -109,15 +108,15 @@ class Action extends Component {
     }
 }
 
-class Activity extends Component {
+const Activity = ({ fetchTopic, posts, columns, order, activity }) => {
 
+    useEffect(() => {
+        !posts[1]?.creator?._id && fetchTopic();
+    },[])
 
-    renderElement = () => {
-        const { posts, columns, order } = this.props
-
+    const renderElement = () => {
         var arr = [];
-        var column;
-        var post;
+        var post, column;
 
         for(var i=1; i < order.length; i++){
             column = arrObjLookUp(columns, "_id", order[i]);
@@ -142,48 +141,35 @@ class Activity extends Component {
         return arr;
     }
 
-    renderActivity = () => {
-        const { activity } = this.props
+    const renderActivity = () => {
+        if(!activity[0].user.userName) return null
 
-        const arr = [];
-
-        for(var i=0; i < activity.length; i++){
-            arr.push(
-                <Action
-                    key={i + activity[i].timeStamp}
-                    userName={activity[i].user.userName}
-                    photo={activity[i].user.photo}
-                    timeStamp={activity[i].timeStamp}
-                    type={activity[i].type}
-                    postName={activity[i].postName}
-                />
-            )
-        }
-
-        return arr;
-    }
-
-    render() {
-
-        const flag = this.props.posts
-
-        return (
-            <Wrapper>
-                <Left>
-                    <div>
-                        ポスト一覧
-                    </div>
-                    { flag && this.renderElement() }
-                </Left>
-                <Right>
-                    <div>
-                        アクティビティー 
-                    </div>
-                    { flag && this.renderActivity() }
-                </Right>
-            </Wrapper>
+        return activity.map(action => 
+            <Action
+                key={action.timeStamp}
+                userName={action.user.userName}
+                photo={action.user.photo}
+                timeStamp={action.timeStamp}
+                type={action.type}
+                postName={action.postName}
+            />
         )
     }
+
+    const flag = !!posts
+
+    return (
+        <Wrapper>
+            <Left>
+                <div>ポスト一覧</div>
+                { flag && renderElement() }
+            </Left>
+            <Right>
+                <div>アクティビティー </div>
+                { flag && renderActivity() }
+            </Right>
+        </Wrapper>
+    )
 }
 
 
