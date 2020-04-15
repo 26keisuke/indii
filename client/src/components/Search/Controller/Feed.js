@@ -125,6 +125,7 @@ const focusStyle = {
     padding: "0px 40px",
     border: "0.5px solid #9EAEE6",
     backgroundColor: "white",
+    transition: "100ms",
 }
 
 const blurStyle = {

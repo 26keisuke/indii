@@ -113,6 +113,7 @@ router.get("/recommend", (req, res) => {
 
 router.get("/category", (req, res) => {
     Topic.aggregate([
+        {$match: {$and: [{category: {$exists: true}}, {category: {$ne: []}}]}},
         {$limit: 10},
         {$project: {
             _id: 1,

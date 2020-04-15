@@ -45,7 +45,7 @@ const TopicContent = styled.div`
     color: #333333;
     margin-bottom: 6px;
     font-size: 10px;
-    height: 43px;
+    height: 32px;
     overflow: hidden;
     margin-top: 5px;
 `

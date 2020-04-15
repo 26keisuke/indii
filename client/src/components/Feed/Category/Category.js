@@ -12,7 +12,7 @@ import deep from "../../../images/deep_learning.png"
 const Box = styled.div`
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 
     & > img {
         width: 100%;
@@ -51,23 +51,23 @@ const Category = ({ category }) => {
         <>
         {category.length !== 0 && category.map(cat => {
             return (
-                <>
-                { getCategoryThumb(cat.catId) }
-                { 
-                cat.topics.map(topic => 
-                    <Topic
-                        key={topic._id}
-                        id={topic._id}
-                        img={topic.squareImg[0].image}
-                        tags={topic.tags}
-                        topicName={topic.topicName}
-                        description={topic.posts[0] && topic.posts[0].content}
-                        likes={topic.likes.counter}
-                    />
-                )
-                }
-                <Space height={"30px"}/>
-                </>
+                <React.Fragment key={cat.catId}>
+                    { getCategoryThumb(cat.catId) }
+                    { 
+                    cat.topics.map(topic => 
+                        <Topic
+                            key={topic._id}
+                            id={topic._id}
+                            img={topic.squareImg[0].image}
+                            tags={topic.tags}
+                            topicName={topic.topicName}
+                            description={topic.posts[0] && topic.posts[0].content}
+                            likes={topic.likes.counter}
+                        />
+                    )
+                    }
+                    <Space height={"30px"}/>
+                </React.Fragment>
             )
         })
         }
