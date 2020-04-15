@@ -43,7 +43,7 @@ const ToolbarAbs = styled(Toolbar)`
 
 const EditableWrapper = styled.div`
 
-    font-size: 13px !important;
+    font-size: 12px !important;
     line-height: 22px;
     color: #353535;
 

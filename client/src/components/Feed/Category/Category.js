@@ -66,7 +66,7 @@ const Category = ({ category }) => {
                     />
                 )
                 }
-                <Space height={"50px"}/>
+                <Space height={"30px"}/>
                 </>
             )
         })
